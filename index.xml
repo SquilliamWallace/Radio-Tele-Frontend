@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>YCP Radio Telescope Knowledge Base on YCPRT Front-End Knowledge Base</title>
+    <link>/radio-tele-frontend/</link>
+    <description>Recent content in YCP Radio Telescope Knowledge Base on YCPRT Front-End Knowledge Base</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    
+	<atom:link href="/radio-tele-frontend/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+  </channel>
+</rss>
