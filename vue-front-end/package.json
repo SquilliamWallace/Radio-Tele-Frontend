@@ -1,5 +1,5 @@
 {
-  "name": "vue-front-end",
+  "name": "package.json",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -16,9 +16,13 @@
     "@vue/cli-plugin-eslint": "^3.0.4",
     "@vue/cli-plugin-unit-mocha": "^3.0.4",
     "@vue/cli-service": "^3.0.4",
+    "@vue/component-compiler-utils": "^2.2.0",
     "@vue/eslint-config-standard": "^3.0.4",
     "@vue/test-utils": "^1.0.0-beta.20",
+    "babel-preset-env": "^1.7.0",
     "chai": "^4.1.2",
+    "parcel-bundler": "^1.10.1",
+    "parcel-plugin-vue": "^1.5.0",
     "vue-template-compiler": "^2.5.17"
   },
   "eslintConfig": {
@@ -44,5 +48,17 @@
     "> 1%",
     "last 2 versions",
     "not ie <= 8"
-  ]
+  ],
+  "description": "Repository for the front end team on the radio telescope project",
+  "main": "/src/main.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SquilliamWallace/Radio-Tele-Frontend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SquilliamWallace/Radio-Tele-Frontend/issues"
+  },
+  "homepage": "https://github.com/SquilliamWallace/Radio-Tele-Frontend#readme"
 }
