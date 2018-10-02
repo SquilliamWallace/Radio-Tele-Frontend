@@ -2,15 +2,21 @@
   "name": "package.json",
   "version": "0.1.0",
   "private": true,
+  "description": "Repository for the front end team on the radio telescope project",
+  "author": "",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "dev": "webpack-dev-server --mode=development",
     "lint": "vue-cli-service lint",
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
+    "css-loader": "^1.0.0",
     "vue": "^2.5.17",
-    "vue-router": "^3.0.1"
+    "vue-router": "^3.0.1",
+    "vue-style-loader": "^4.1.2",
+    "vuetify": "^1.2.5"
   },
   "devDependencies": {
     "@vue/cli-plugin-eslint": "^3.0.4",
@@ -19,11 +25,19 @@
     "@vue/component-compiler-utils": "^2.2.0",
     "@vue/eslint-config-standard": "^3.0.4",
     "@vue/test-utils": "^1.0.0-beta.20",
+    "babel-plugin-transform-imports": "^1.5.0",
     "babel-preset-env": "^1.7.0",
     "chai": "^4.1.2",
+    "html-webpack-plugin": "^3.2.0",
     "parcel-bundler": "^1.10.1",
     "parcel-plugin-vue": "^1.5.0",
-    "vue-template-compiler": "^2.5.17"
+    "stylus": "^0.54.5",
+    "stylus-loader": "^3.0.1",
+    "vue-cli-plugin-vuetify": "^0.2.0",
+    "vue-template-compiler": "^2.5.17",
+    "webpack": "^4.20.2",
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.9"
   },
   "eslintConfig": {
     "root": true,
@@ -49,16 +63,14 @@
     "last 2 versions",
     "not ie <= 8"
   ],
-  "description": "Repository for the front end team on the radio telescope project",
+  "bugs": {
+    "url": "https://github.com/SquilliamWallace/Radio-Tele-Frontend/issues"
+  },
+  "homepage": "https://github.com/SquilliamWallace/Radio-Tele-Frontend#readme",
+  "license": "ISC",
   "main": "/src/main.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/SquilliamWallace/Radio-Tele-Frontend.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/SquilliamWallace/Radio-Tele-Frontend/issues"
-  },
-  "homepage": "https://github.com/SquilliamWallace/Radio-Tele-Frontend#readme"
+  }
 }
