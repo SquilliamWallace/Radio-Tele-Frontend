@@ -5,8 +5,10 @@ import Vuetify from 'vuetify'
 
 Vue.config.productionTip = false
 Vue.use(Vuetify)
-
-new Vue({
-  router,
-  render: h => h(App)
-}).$mount('#app')
+window.onload = function() {
+  var app = new Vue({
+    el: '#app',
+    router,
+    render: h => h(App)
+  })
+}
