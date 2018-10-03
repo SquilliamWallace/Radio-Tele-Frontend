@@ -52,6 +52,31 @@
                         required
                         ></v-select>
                     </v-flex>
+                    <v-flex xs12 sm6>
+                        <v-text-field
+                        v-model="form.password"
+                        :append-icon="show1 ? 'visibility_off' : 'visibility'"
+                        :rules="rules.password"
+                        :type="show1 ? 'text' : 'password'"
+                        color="blue darken-2"
+                        label="Password"
+                        @click:append="show1 = !show1"
+                        required
+                        ></v-text-field>
+                    </v-flex>
+                    <v-flex xs12 sm6>
+                        <v-text-field
+                        v-model="form.passwordMatch"
+                        :append-icon="show2 ? 'visibility_off' : 'visibility'"
+                        
+                        :type="show2 ? 'text' : 'password'"
+                        color="blue darken-2"
+                        label="Re-Type Password"
+                        :error-messages='passwordMatchError()'
+                        @click:append="show2 = !show2"
+                        required
+                        ></v-text-field>
+                    </v-flex>
                     <v-flex xs12>
                         <v-textarea
                         v-model="form.affiliates"
@@ -106,7 +131,7 @@
                     <v-spacer></v-spacer>
                     <v-btn
                         flat
-                        color="purple"
+                        color="blue darken-2"
                         @click="terms = false"
                     >Ok</v-btn>
                     </v-card-actions>
@@ -122,7 +147,7 @@
                     <v-spacer></v-spacer>
                     <v-btn
                         flat
-                        color="purple"
+                        color="blue darken-2"
                         @click="conditions = false"
                     >Ok</v-btn>
                     </v-card-actions>
@@ -146,20 +171,37 @@
         affiliates: '',
         accountType: '',
         phoneNumber: '',
+        show1: false,
+        show2: false,
         terms: false
       })
 
       return {
         form: Object.assign({}, defaultForm),
         rules: {
-          email: [
-              val => /.+@.+.\.+./.test(val) || 'Needs Valid Email'
-          ],
-          account: [val => (val || '').length > 0 || 'This field is required'],
-          name: [val => (val || '').length > 0 || 'This field is required']
+            email: [
+                val => /.+@.+.\.+./.test(val) || 'Needs Valid Email'
+            ],
+            account: [
+                val => (val || '').length > 0 || 'This field is required'
+            ],
+            name: [
+                val => (val || '').length > 0 || 'This field is required'
+            ],
+            password: [
+                val => (val || '').length >= 8 || 'Password must be atleast 8 Characters Long',
+                val => /.*[0-9].*/.test(val) || 'Password must have atleast 1 Number',
+                val => /.*[A-Z].*/.test(val) || 'Password must have atleast 1 Capital',
+                val => /.*[!@#$%^&*()].*/.test(val) || 'Password must have atleast 1 Special Character'
+            ],
+            passMatch: [
+                val => val == this.password || 'Passwords must match'
+            ]
         },
-        accountTypes: ['Free', 'Member', 'Student', 'Researcher'],
+        accountTypes: ['Guest', 'Member', 'Student', 'Researcher'],
         conditions: false,
+        show1: false,
+        show2: false,
         snackbar: false,
         terms: false,
         phoneMask: 'phone',
@@ -168,7 +210,7 @@
         defaultForm
       }
     },
-
+    //Check each required section has input.
     computed: {
       formIsValid () {
         return (
@@ -176,19 +218,30 @@
           this.form.last &&
           this.form.email &&
           this.form.accountType &&
+          this.form.password && 
+          this.form.passwordMatch &&
           this.form.terms
+          
         )
       }
     },
 
     methods: {
+      //If cancel clear the form. (Maybe switch back to log in screen)
       resetForm () {
         this.form = Object.assign({}, this.defaultForm)
         this.$refs.form.reset()
       },
       submit () {
+        // Update this.accountType to full Uppercase lettering on submit
+        this.form.accountType = this.form.accountType.toUpperCase()
+        console.log(this.form)
+        //Set snackbar to true to display success message. Then reset form. (will eventually be link to login Page)
         this.snackbar = true
         this.resetForm()
+      },
+      passwordMatchError() {
+          return (this.form.password === this.form.passwordMatch) ? '' : 'Passwords must match'
       }
     }
   }
