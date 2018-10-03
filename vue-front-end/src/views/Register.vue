@@ -12,7 +12,7 @@
                 <span>Registration successful!</span>
                 <v-icon dark>check_circle</v-icon>
                 </v-snackbar>
-                <v-form ref="form" @submit.prevent="submit">
+                <v-form ref="form" @submit.prevent="submit" refs="form">
                 <v-container grid-list-xl fluid>
                     <v-layout wrap>
                     <v-flex xs12 sm6>
@@ -235,10 +235,12 @@
       submit () {
         // Update this.accountType to full Uppercase lettering on submit
         this.form.accountType = this.form.accountType.toUpperCase()
-        console.log(this.form)
+        if (this.$refs.form.validate()) {
+            console.log(this.form)
         //Set snackbar to true to display success message. Then reset form. (will eventually be link to login Page)
-        this.snackbar = true
-        this.resetForm()
+            this.snackbar = true
+            this.resetForm()
+        }
       },
       passwordMatchError() {
           return (this.form.password === this.form.passwordMatch) ? '' : 'Passwords must match'
