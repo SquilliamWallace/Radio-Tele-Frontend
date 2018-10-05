@@ -1,10 +1,6 @@
 <template>
   <v-app dark>
   <div id="app">
-      <router-link :to="{ name: 'home'}">Home</router-link>
-      <router-link :to ="{ name: 'login'}">Login</router-link>
-      <router-link :to="{ name: 'register'}">Register</router-link>
-      <router-link to="/about">About</router-link>
       <router-view></router-view>
   </div>
   </v-app>
