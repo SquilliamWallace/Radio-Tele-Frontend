@@ -6,7 +6,7 @@ import Register from './views/Register.vue'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   mode: 'hash',
   base: process.env.BASE_URL,
   routes: [
@@ -27,3 +27,6 @@ export default new Router({
     }
   ]
 })
+
+router.replace('/home');
+export default router;
