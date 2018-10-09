@@ -1,7 +1,7 @@
 <template>
 <div>
-    <v-parallax style = "height:100%;" src="https://images.pexels.com/photos/110854/pexels-photo-110854.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260">
     <navigation-bar></navigation-bar>
+    <v-parallax style = "height:100%;" src="https://images.pexels.com/photos/110854/pexels-photo-110854.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260">
     <v-spacer></v-spacer>
     <v-card>
           <v-img

@@ -46,7 +46,7 @@
           </v-card-actions>
         </v-card>
         </v-menu>
-      <v-toolbar-title>YCAS Radio Telescope</v-toolbar-title>
+      <v-toolbar-title class="title-style" @click="homeRedirect">YCAS Radio Telescope</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-sm-and-down">
         <v-btn to="/login" flat>Login</v-btn>
@@ -58,16 +58,24 @@
 </template>
 
 <script>
+import router from '../router';
 export default {
     name: 'NavigationBar',
     data() {
         return {
             menuShow: false
         }
+    },
+    methods:{
+        homeRedirect(){
+            router.push('/home');
+        }
     }
 }
 </script>
 
 <style scoped>
-
+.title-style{
+    cursor: pointer;
+}
 </style>
