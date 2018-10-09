@@ -1,11 +1,15 @@
 <template>
-<v-app light>
-    <full-calendar :events="events" class='overcast' id="calendar"></full-calendar>
-</v-app>
+    <div>
+        <navigation-bar></navigation-bar>
+        <v-app light>
+            <full-calendar :events="events" class='overcast' id="calendar"></full-calendar>
+        </v-app>
+    </div>
 </template>
 
 <script>
 import {FullCalendar} from 'vue-full-calendar'
+import NavigationBar from '../components/NavigationBar.vue'
 export default {
     name: 'Scheduler',
     data() {
@@ -30,7 +34,8 @@ export default {
         }
     },
     components: {
-        FullCalendar
+        FullCalendar,
+        NavigationBar
     }    
 }
 $(function() {
