@@ -40,7 +40,6 @@ export default {
     name: "Home",
     data() {
         return {
-            menuShow: false,
             show: false
         }
     },

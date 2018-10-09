@@ -52,13 +52,19 @@
         <v-btn to="/login" flat>Login</v-btn>
         <v-btn to="/register">Register</v-btn>
         <v-btn to="/profile">Profile</v-btn>
+        <v-btn to="/scheduler">Scheduler</v-btn>
       </v-toolbar-items>
     </v-toolbar>
 </template>
 
 <script>
 export default {
-    name: 'Navigation Bar'
+    name: 'NavigationBar',
+    data() {
+        return {
+            menuShow: false
+        }
+    }
 }
 </script>
 
