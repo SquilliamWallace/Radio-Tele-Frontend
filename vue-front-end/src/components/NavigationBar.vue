@@ -1,60 +1,27 @@
 <template>
-    <v-toolbar style="width:100%;">
-          <v-menu
-            v-model="menuShow"
-            :close-on-content-click="false"
-            :nudge-width="200"
-            offset-x>
-            <v-toolbar-side-icon slot="activator"></v-toolbar-side-icon>
-            <v-card>
-            <v-list>
-                <v-list-tile avatar>
-                <v-list-tile-avatar>
-                    <img src="https://i.kym-cdn.com/entries/icons/original/000/009/803/spongebob-squarepants-patrick-spongebob-patrick-star-background-225039.jpg" alt="Patrick">
-                </v-list-tile-avatar>
-    
-                <v-list-tile-content>
-                    <v-list-tile-title>Patrick Star</v-list-tile-title>
-                    <v-list-tile-sub-title>Founder of the Big Rock Club</v-list-tile-sub-title>
-                </v-list-tile-content>
-                </v-list-tile>
-
-                <v-spacer></v-spacer>
-                <v-subheader inset>Navigation</v-subheader>
-                <v-divider inset></v-divider>
-
-                <v-list-tile-content style="padding-left: 10px;">
-                    <v-list-tile-title>Link 1</v-list-tile-title>
-                    <v-list-tile-sub-title>This will be a link</v-list-tile-sub-title>
-                </v-list-tile-content>
-
-                <v-list-tile-content style="padding-left: 10px;">
-                    <v-list-tile-title>Link 2</v-list-tile-title>
-                    <v-list-tile-sub-title>This, too, will be a link</v-list-tile-sub-title>
-                </v-list-tile-content>
-
-                <v-list-tile-content style="padding-left: 10px;">
-                    <v-list-tile-title>Link 3</v-list-tile-title>
-                    <v-list-tile-sub-title>And this also</v-list-tile-sub-title>
-                </v-list-tile-content>
-            </v-list>
-  
-          <v-divider></v-divider>
-  
-          <v-card-actions>
-            <v-spacer></v-spacer>
-          </v-card-actions>
-        </v-card>
-        </v-menu>
+<div>
+    <v-toolbar class="bar-style">
+      <v-toolbar-side-icon @click="showDrawer=!showDrawer"></v-toolbar-side-icon>    
       <v-toolbar-title class="title-style" @click="homeRedirect">YCAS Radio Telescope</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-sm-and-down">
         <v-btn to="/login" flat>Login</v-btn>
         <v-btn to="/register">Register</v-btn>
         <v-btn to="/profile">Profile</v-btn>
-        <v-btn to="/scheduler">Scheduler</v-btn>
       </v-toolbar-items>
     </v-toolbar>
+    <v-navigation-drawer hide-overlay="true" style="max-height:200px;" v-model="showDrawer">
+        <v-list>
+            <v-list-tile v-for = "item in items"
+            :key = "item.title"
+            router
+            :to = "item.path"
+            color = "white">
+                <v-list-tile-title color = "white">{{ item.title }}</v-list-tile-title>
+            </v-list-tile>
+        </v-list>
+    </v-navigation-drawer>
+    </div>
 </template>
 
 <script>
@@ -63,7 +30,10 @@ export default {
     name: 'NavigationBar',
     data() {
         return {
-            menuShow: false
+            showDrawer: false,
+            items: [
+              { title: 'Scheduling Calendar', icon: 'dashboard', path: "/scheduler" }
+            ],
         }
     },
     methods:{
@@ -77,5 +47,8 @@ export default {
 <style scoped>
 .title-style{
     cursor: pointer;
+}
+.bar-style{
+    width: 100%;
 }
 </style>

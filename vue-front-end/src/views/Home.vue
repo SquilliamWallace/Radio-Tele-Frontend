@@ -1,7 +1,7 @@
 <template>
 <div>
-    <navigation-bar></navigation-bar>
     <v-parallax style = "height:100%;" src="https://images.pexels.com/photos/110854/pexels-photo-110854.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260">
+    <navigation-bar class="nav-style"></navigation-bar>
     <v-spacer></v-spacer>
     <v-card>
           <v-img
@@ -38,20 +38,20 @@
 import NavigationBar from '../components/NavigationBar.vue'
 export default {
     name: "Home",
-    data() {
+    data () {
         return {
             show: false
         }
     },
     components: {
       NavigationBar
-    },
-    methods: {
     }
 }
 </script>
 
 <style scoped>
-
+.nav-style{
+  margin-left: -1rem;
+  margin-right: -1rem;
+}
 </style>
-
