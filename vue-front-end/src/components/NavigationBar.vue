@@ -43,8 +43,7 @@
       </v-app>
      
     </v-toolbar>
-<<<<<<< HEAD
-    <v-navigation-drawer hide-overlay="true" style="max-height:200px;" v-model="showDrawer">
+    <v-navigation-drawer :temporary=true :floating=true :hide-overlay=true style="max-height:200px;" v-if = "showDrawer" v-model="showDrawer">
         <v-list>
             <v-list-tile v-for = "item in items"
             :key = "item.title"
@@ -56,15 +55,11 @@
         </v-list>
     </v-navigation-drawer>
     </div>
-=======
-    
->>>>>>> login-modal
 </template>
 
 <script>
 import router from '../router';
 export default {
-<<<<<<< HEAD
     name: 'NavigationBar',
     data() {
         return {
@@ -72,6 +67,7 @@ export default {
             items: [
               { title: 'Scheduling Calendar', icon: 'dashboard', path: "/scheduler" }
             ],
+            dialog: false
         }
     },
     methods:{
@@ -89,17 +85,4 @@ export default {
 .bar-style{
     width: 100%;
 }
-=======
-  name: "NavigationBar",
-  data() {
-    return {
-      dialog: false,
-      menuShow: false
-    };
-  }
-};
-</script>
-
-<style scoped>
->>>>>>> login-modal
 </style>
