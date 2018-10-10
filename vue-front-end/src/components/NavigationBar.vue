@@ -43,7 +43,7 @@
       </v-app>
      
     </v-toolbar>
-    <v-navigation-drawer :temporary=true :floating=true :hide-overlay=true style="max-height:200px;" v-if = "showDrawer" v-model="showDrawer">
+    <v-navigation-drawer :temporary=true :floating=true :hide-overlay=true style="max-height:200px;" v-model="showDrawer">
         <v-list>
             <v-list-tile v-for = "item in items"
             :key = "item.title"
