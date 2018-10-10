@@ -1,5 +1,5 @@
 <template>
-  <v-app dark>
+  <v-app :dark="goDark">
   <div id="app">
       <router-view></router-view>
   </div>
@@ -8,7 +8,12 @@
 
 <script>
 export default {
-  name: 'app'
+  name: 'app',
+  data() {
+    return {
+      goDark: true
+    }
+  }
 }
 </script>
 
