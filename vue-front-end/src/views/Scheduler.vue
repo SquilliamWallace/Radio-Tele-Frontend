@@ -2,7 +2,7 @@
     <div>
         <navigation-bar></navigation-bar>
         <v-app light>
-            <full-calendar @event-selected="openEvent" :events="events" class='overcast' id="calendar"></full-calendar>
+            <full-calendar @event-created="createEvent" @event-selected="openEvent" :events="events" id="calendar"></full-calendar>
         </v-app>
     </div>
 </template>
@@ -41,9 +41,19 @@ export default {
     methods: {
         openEvent() {
             router.push('/appointmentView')
+        },
+        createEvent(time) {
+            var title = prompt ("Enter a title");
+            var event = {
+                title: title,
+                start: time.start.format(),
+                end: time.end.format()
+            };
+            this.$data.events.push(event);
         }
     }    
 }
+
 $(function() {
 $('#calendar').fullCalendar({
     themeSystem: 'jquery-ui',
