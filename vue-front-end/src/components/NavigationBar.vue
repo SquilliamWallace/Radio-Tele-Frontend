@@ -5,8 +5,7 @@
       <v-toolbar-title class="title-style" @click="homeRedirect">YCAS Radio Telescope</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-sm-and-down">
-        <v-btn @click = "dialog = !dialog" flat>Login</v-btn>
-        <v-btn to="/register">Register</v-btn>
+        <v-btn @click = "dialog = !dialog" flat>Log in</v-btn>
         <v-btn to="/profile">Profile</v-btn>
       </v-toolbar-items>
       <v-app>
@@ -27,6 +26,10 @@
               </v-flex>
               <v-flex xs12>
                 <v-text-field label="Password" type="password" required></v-text-field>
+              </v-flex>
+              <v-flex xs12>
+                  <div>Don't have an account?</div>
+                  <a @click="registerRedirect">Register Here!</a>
               </v-flex>
               
             </v-layout>
@@ -73,6 +76,9 @@ export default {
     methods:{
         homeRedirect(){
             router.push('/home');
+        },
+        registerRedirect(){
+            router.push('/register');
         }
     }
 }
