@@ -2,7 +2,12 @@
     <div>
         <navigation-bar></navigation-bar>
         <v-app light>
-            <full-calendar @event-selected="openEvent" :events="events" class='overcast' id="calendar"></full-calendar>
+            <full-calendar @event-created="createEvent" @event-selected="openEvent" :events="events" class='overcast' id="calendar"></full-calendar>
+            <v-layout justify-center>
+                <v-dialog fullscreen hide-overlay v-model="openCreateModal">
+                    <create-appointment v-on:close-modal="closeEventModal"></create-appointment>
+                </v-dialog>
+            </v-layout>
         </v-app>
     </div>
 </template>
@@ -11,6 +16,7 @@
 import {FullCalendar} from 'vue-full-calendar'
 import NavigationBar from '../components/NavigationBar.vue'
 import router from '../router'
+import CreateAppointment from '../components/Appointment.vue'
 export default {
     name: 'Scheduler',
     data() {
@@ -31,18 +37,26 @@ export default {
                     start: '2018-10-11T05:00:00',
                     end: '2018-10-11T10:00:00'
                 }
-            ]
+            ],
+            openCreateModal: false,
         }
     },
     components: {
         FullCalendar,
-        NavigationBar
+        NavigationBar,
+        CreateAppointment
     },
     methods: {
         openEvent() {
             router.push('/appointmentView')
+        },
+        createEvent() {
+            this.openCreateModal = true;
+        },
+        closeEventModal() {
+            this.openCreateModal = false;
         }
-    }    
+    }  
 }
 $(function() {
 $('#calendar').fullCalendar({
