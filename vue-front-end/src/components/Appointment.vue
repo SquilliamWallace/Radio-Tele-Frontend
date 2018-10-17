@@ -39,7 +39,7 @@
                         required
                         ></v-text-field>
                     </v-flex>
-                    <v-flex xs12 sm6>
+                    <!-- <v-flex xs12 sm6>
                         <v-select
                         v-model="form.appointmentType"
                         :items="appointmentTypes"
@@ -47,7 +47,7 @@
                         label="Appointment Type"
                         required
                         ></v-select>
-                    </v-flex>
+                    </v-flex> -->
                     </v-layout>
                 </v-container>
                 <v-card-actions>
@@ -67,11 +67,41 @@
 </template>
 
 <script>
+import Event from '../main.js'
 export default {
     data() {
         name: 'Appointment'
         return {
             accountTypes: ['Guest', 'Member', 'Student', 'Researcher'],
+            form: {
+                start: '2018-10-09T00:00:01',
+                end: '2018-10-10T15:00:00',
+                username: 'patrick_star'
+            },
+            snackbar: false,
+        }
+    },
+    methods: {
+        resetForm() {
+            this.form = {
+                start: null,
+                end: null,
+                username: null
+            }
+            this.$emit('close-modal');
+        },
+        submit() {
+            this.snackbar = true;
+        }
+    },
+    computed: {
+        formIsValid() {
+            if(this.form.start && this.form.end && this.form.username){
+                return true;
+            }
+            else{
+                return false;
+            }
         }
     }
 }

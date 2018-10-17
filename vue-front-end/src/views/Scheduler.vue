@@ -2,7 +2,12 @@
     <div>
         <navigation-bar></navigation-bar>
         <v-app light>
-            <full-calendar @event-created="createEvent" @event-selected="openEvent" :events="events" id="calendar"></full-calendar>
+            <full-calendar @event-created="createEvent" @event-selected="openEvent" :events="events" class='overcast' id="calendar"></full-calendar>
+            <v-layout justify-center>
+                <v-dialog fullscreen hide-overlay v-model="openCreateModal">
+                    <create-appointment v-on:close-modal="closeEventModal"></create-appointment>
+                </v-dialog>
+            </v-layout>
         </v-app>
     </div>
 </template>
@@ -11,6 +16,7 @@
 import {FullCalendar} from 'vue-full-calendar'
 import NavigationBar from '../components/NavigationBar.vue'
 import router from '../router'
+import CreateAppointment from '../components/Appointment.vue'
 export default {
     name: 'Scheduler',
     data() {
@@ -31,27 +37,30 @@ export default {
                     start: '2018-10-11T05:00:00',
                     end: '2018-10-11T10:00:00'
                 }
-            ]
+            ],
+            openCreateModal: false,
+            newStartTime: "",
+            newEndTime: "",
         }
     },
     components: {
         FullCalendar,
-        NavigationBar
+        NavigationBar,
+        CreateAppointment
     },
     methods: {
         openEvent() {
             router.push('/appointmentView')
         },
-        createEvent(time) {
-            var title = prompt ("Enter a title");
-            var event = {
-                title: title,
-                start: time.start.format(),
-                end: time.end.format()
-            };
-            this.$data.events.push(event);
+        createEvent(Obj) {
+            this.$data.newStartTime = Obj.start.format();
+            this.$data.newEndTime = Obj.end.format();
+            this.openCreateModal = true;
+        },
+        closeEventModal() {
+            this.openCreateModal = false;
         }
-    }    
+    }  
 }
 
 $(function() {

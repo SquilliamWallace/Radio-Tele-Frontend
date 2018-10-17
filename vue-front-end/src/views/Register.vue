@@ -160,6 +160,7 @@
 
 <script>
 // import Navbar from "../components/Navbar.vue"
+import router from '../router';
     export default {
     data () {
       const defaultForm = Object.freeze({
@@ -231,6 +232,7 @@
       resetForm () {
         this.form = Object.assign({}, this.defaultForm)
         this.$refs.form.reset()
+        router.go(-1);
       },
       submit () {
         // Update this.accountType to full Uppercase lettering on submit

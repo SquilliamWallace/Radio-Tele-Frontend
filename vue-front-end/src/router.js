@@ -5,6 +5,7 @@ import Login from './views/Login.vue'
 import Register from './views/Register.vue'
 import Scheduler from './views/Scheduler.vue'
 import AppointmentView from './views/AppointmentView.vue'
+import viewProfile from './views/viewProfile.vue'
 
 Vue.use(Router)
 
@@ -36,6 +37,11 @@ const router = new Router({
       path: '/appointmentView',
       name: 'appointmentView',
       component: AppointmentView
+    },
+    {
+      path: '/Profile',
+      name: 'viewProfile',
+      component: viewProfile
     }
   ]
 })
