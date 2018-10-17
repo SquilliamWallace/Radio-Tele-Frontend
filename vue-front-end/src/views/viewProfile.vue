@@ -30,7 +30,7 @@
             </v-flex>
             <v-flex xs6>
                 <div>
-                    <v-btn>Edit</v-btn>
+                    <v-btn @click="editRedirect">Edit</v-btn>
                 </div>
             </v-flex>
             
@@ -41,6 +41,7 @@
 
 <script>
 import NavigationBar from '../components/NavigationBar.vue'
+import router from '../router'
 export default {
     name: "ViewProfile",
     data() {
@@ -59,6 +60,9 @@ export default {
       NavigationBar
     },
     methods: {
+        editRedirect() {
+            router.push('/editProfile')
+        }
     }
 }
 </script>
