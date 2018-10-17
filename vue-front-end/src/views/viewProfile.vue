@@ -42,7 +42,7 @@
 <script>
 import NavigationBar from '../components/NavigationBar.vue'
 export default {
-    name: "viewProfile",
+    name: "ViewProfile",
     data() {
         return {
             profile: {
