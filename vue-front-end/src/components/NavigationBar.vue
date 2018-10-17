@@ -1,6 +1,6 @@
 <template>
 <div>
-    <v-toolbar class="bar-style">
+    <v-toolbar class="bar-style" id="titleBar">
       <v-toolbar-side-icon @click="showDrawer=!showDrawer"></v-toolbar-side-icon>    
       <v-toolbar-title class="title-style" @click="homeRedirect">YCAS Radio Telescope</v-toolbar-title>
       <v-spacer></v-spacer>
@@ -9,7 +9,7 @@
         <v-btn to="/profile">Profile</v-btn>
       </v-toolbar-items>
       <v-app>
-           <v-dialog dark v-model = "dialog"  max-width="500px" max-height="100px" >
+           <v-dialog dark v-model = "dialog"  max-width="500px" max-height="100px">
         <v-card>
             <v-container>
                 <v-layout row wrap>
@@ -46,7 +46,7 @@
       </v-app>
      
     </v-toolbar>
-    <v-navigation-drawer :temporary=true :floating=true :hide-overlay=true style="max-height:200px;" v-model="showDrawer">
+    <v-navigation-drawer :temporary=true :floating=true :hide-overlay=true style="max-height:200px; position:absolute;" v-model="showDrawer">
         <v-list>
             <v-list-tile v-for = "item in items"
             :key = "item.title"
@@ -80,6 +80,10 @@ export default {
         registerRedirect(){
             router.push('/register');
         }
+    },
+    mounted: function () {
+        var d = $('.v-navigation-drawer')
+        d.css('top', document.getElementById('titleBar').offsetHeight)
     }
 }
 </script>
