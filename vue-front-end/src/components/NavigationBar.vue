@@ -30,11 +30,9 @@
               <v-flex xs12>
                   <div>Don't have an account?</div>
                   <a @click="registerRedirect">Register Here!</a>
-              </v-flex>
-              
+              </v-flex>      
             </v-layout>
-          </v-container>
-          
+          </v-container> 
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -44,7 +42,6 @@
         </v-card>
         </v-dialog>
       </v-app>
-     
     </v-toolbar>
     <v-navigation-drawer :temporary=true :floating=true :hide-overlay=true style="max-height:200px; position:absolute;" v-model="showDrawer">
         <v-list>
