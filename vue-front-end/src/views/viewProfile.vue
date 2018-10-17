@@ -8,23 +8,23 @@
                    <v-avatar size = "200">
                         <img src="https://i.kym-cdn.com/entries/icons/original/000/009/803/spongebob-squarepants-patrick-spongebob-patrick-star-background-225039.jpg" alt="Patrick">
                     </v-avatar>
-                    <div class = "headline">{{ firstName }} {{lastName}}</div>
+                    <div class = "headline">{{ profile.firstName }} {{profile.lastName}}</div>
                </v-card>
             </v-flex>
             <v-flex xs6>
                 <v-card class = "elevation-0" color = "transparent">
                     <v-divider></v-divider>
                     <div class = "headline text-xs-left">Email <v-icon>email</v-icon></div>
-                    <div id = "profileInfo" class = "text-xs-left">{{ email }}</div>
+                    <div id = "profileInfo" class = "text-xs-left">{{ profile.email }}</div>
                     <v-divider></v-divider>
                     <div class = "headline text-xs-left">Phone <v-icon>phone</v-icon></div>
-                    <div id = "profileInfo" class = "text-xs-left">{{ phone }}</div>
+                    <div id = "profileInfo" class = "text-xs-left">{{ profile.phone }}</div>
                     <v-divider></v-divider>
                     <div class = "headline text-xs-left">Company  <v-icon>business</v-icon></div>
-                    <div id = "profileInfo" class = "text-xs-left">{{ company }}</div>
+                    <div id = "profileInfo" class = "text-xs-left">{{ profile.company }}</div>
                     <v-divider></v-divider>
                     <div class = "headline text-xs-left">Membership <v-icon>person</v-icon></div>
-                    <div id = "profileInfo" class = "text-xs-left">{{ type }}</div>
+                    <div id = "profileInfo" class = "text-xs-left">{{ profile.type }}</div>
                     <v-divider></v-divider>
                 </v-card>
             </v-flex>
@@ -45,12 +45,14 @@ export default {
     name: "viewProfile",
     data() {
         return {
-            firstName: "Patrick",
-            lastName: "Star",
-            email: "patStar@gmail.com",
-            phone: "717-887-4339",
-            company: "Crusty Crab",
-            type: "student"
+            profile: {
+                firstName: "Patrick",
+                lastName: "Star",
+                email: "patStar@gmail.com",
+                phone: "717-887-4339",
+                company: "Crusty Crab",
+                type: "student"
+            }
         }
     },
     components: {
