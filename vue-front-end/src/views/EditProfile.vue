@@ -54,6 +54,7 @@
                 </v-form>
             </v-card>
         </v-container>
+        <!--Modal to confirm cancellation of form input-->
         <v-dialog max-width="250px" dark v-model="confirmModal" persistent>
                 <v-card>
                     <v-card-title class="headline">Are you sure you wish to cancel?</v-card-title>

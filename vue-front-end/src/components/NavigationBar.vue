@@ -9,6 +9,7 @@
         <v-btn to="/profile">Profile</v-btn>
       </v-toolbar-items>
       <v-app>
+          <!-- login modal -->
            <v-dialog dark v-model = "dialog"  max-width="500px" max-height="100px">
         <v-card>
             <v-container>
@@ -43,6 +44,7 @@
         </v-dialog>
       </v-app>
     </v-toolbar>
+    <!-- Define drawer menu and populate it with items-->
     <v-navigation-drawer :temporary=true :floating=true :hide-overlay=true style="max-height:200px; position:absolute;" v-model="showDrawer">
         <v-list>
             <v-list-tile v-for = "item in items"
