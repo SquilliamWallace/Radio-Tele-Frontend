@@ -39,7 +39,7 @@ const router = new Router({
       component: AppointmentView
     },
     {
-      path: '/viewProfile',
+      path: '/Profile',
       name: 'viewProfile',
       component: viewProfile
     }
