@@ -7,8 +7,7 @@
                 absolute
                 top
                 right
-                color="success"
-                >
+                color="success">
                 <span>Appointment Created</span>
                 <v-icon dark>check_circle</v-icon>
                 </v-snackbar>
