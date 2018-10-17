@@ -6,6 +6,7 @@ import Register from './views/Register.vue'
 import Scheduler from './views/Scheduler.vue'
 import AppointmentView from './views/AppointmentView.vue'
 import ViewProfile from './views/ViewProfile.vue'
+import EditProfile from './views/EditProfile'
 
 Vue.use(Router)
 
@@ -42,6 +43,11 @@ const router = new Router({
       path: '/Profile',
       name: 'viewProfile',
       component: ViewProfile
+    },
+    {
+      path: '/editProfile',
+      name: 'editProfile',
+      component: EditProfile
     }
   ]
 })
