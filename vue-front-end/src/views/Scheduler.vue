@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <v-app>
         <navigation-bar></navigation-bar>
         <v-app light>
             <full-calendar @event-created="createEvent" @event-selected="openEvent" :events="events" class='overcast' id="calendar"></full-calendar>
@@ -9,7 +9,7 @@
                 </v-dialog>
             </v-layout>
         </v-app>
-    </div>
+    </v-app>
 </template>
 
 <script>

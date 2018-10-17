@@ -51,7 +51,7 @@ export default {
                 lastName: "Star",
                 email: "patStar@gmail.com",
                 phone: "717-887-4339",
-                company: "Crusty Crab",
+                company: "Krusty Krab",
                 type: "student"
             }
         }
