@@ -161,6 +161,7 @@
 <script>
 // import Navbar from "../components/Navbar.vue"
 import router from '../router';
+import ApiDriver from '../ApiDriver'
     export default {
     data () {
       const defaultForm = Object.freeze({
@@ -239,9 +240,23 @@ import router from '../router';
         this.form.accountType = this.form.accountType.toUpperCase()
         if (this.$refs.form.validate()) {
             console.log(this.form)
-        //Set snackbar to true to display success message. Then reset form. (will eventually be link to login Page)
-            this.snackbar = true
-            this.resetForm()
+
+            // Spring requires JSON strings
+            let data = JSON.stringify({
+                firstName: this.form.first,
+                lastName: this.form.last,
+                email: this.form.email,
+                phoneNumber: this.form.phoneNumber,
+                password: this.form.password,
+                passwordConfirm: this.form.passwordMatch,
+                company: this.form.affiliates,
+                categoryOfService: this.form.accountType
+            })
+        
+            // This will need changed to properly handle success or failure scenarios
+            ApiDriver.User.register(data).then((response) => {
+                console.log(response)
+            });
         }
       },
       passwordMatchError() {

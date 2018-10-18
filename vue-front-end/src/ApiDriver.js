@@ -22,4 +22,10 @@ function wrapPromise(promise) {
 
 export default {
     //API endpoints go here
+    
+    User: {
+      register: function (data) {
+        return axios.post("/api/users/register", data, { headers: {'Content-Type': 'application/json' }});
+      }
+    }
 }
