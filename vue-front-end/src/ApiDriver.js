@@ -28,7 +28,7 @@ export default {
         return axios.post("/api/users", data, { headers: {'Content-Type': 'application/json' }});
       },
       login: function (data) {
-        return axios.post("/api/login?email=" + data.username + "&password=" +data.password, JSON.stringify(data), { headers: {'Content-Type': 'application/json' }})
+        return axios.post("/api/login?email=" + data.username + "&password=" + data.password, JSON.stringify(data), { headers: {'Content-Type': 'application/json' }})
           .then(function (response) {
             console.log(response);
           })
