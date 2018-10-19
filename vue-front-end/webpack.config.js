@@ -8,8 +8,14 @@ module.exports = {
     devServer: {
         port: 8081,
         proxy: {
-          '/api': 'http://localhost:8080',
-          secure: false
+          '/api': {
+            target: 'http://localhost:8080',
+            secure: false
+          },
+          '/login': {
+            target: 'http://localhost:8080',
+            secure: false
+          }
         }
     },
     //specifies the location in which to dump the bundled files and what to name them
