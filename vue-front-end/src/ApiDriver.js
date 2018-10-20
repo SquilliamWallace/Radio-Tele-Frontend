@@ -33,7 +33,7 @@ export default {
           .then(function (response) {
             console.log(response);
             if(response.data.includes("bundle.js")){
-              router.push('/scheduler');
+              router.push('/authHome');
             }
           });
       }
@@ -47,5 +47,8 @@ export default {
 
     Auth : function() {
       return axios.get("/api/auth")
+        .then(function (response) {
+          console.log(response);
+        });
     }
 }

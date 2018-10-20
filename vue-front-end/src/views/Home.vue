@@ -1,7 +1,39 @@
 <template>
 <div>
     <v-parallax style = "height:100%;" src="https://images.pexels.com/photos/110854/pexels-photo-110854.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260">
-    <navigation-bar class="nav-style"></navigation-bar>
+    <v-flex>
+            <v-container>
+                <v-layout row wrap>
+                    <v-flex width = "10px" xs12>
+                        <v-card-text class = "headline">Login</v-card-text>
+                    </v-flex>
+                </v-layout>
+            </v-container>
+        <v-card-text>
+            <v-form>
+                <v-container grid-list-md>
+                    <v-layout wrap>
+                    <v-flex xs12>
+                        <v-text-field name="email" v-model="data.username" label="Email" required></v-text-field>
+                    </v-flex>
+                    <v-flex xs12>
+                        <v-text-field name="password" v-model="data.password" label="Password" type="password" required></v-text-field>
+                    </v-flex>
+                    <v-flex xs12>
+                        <div>Don't have an account?</div>
+                        <a @click="registerRedirect">Register Here!</a>
+                    </v-flex>      
+                    </v-layout>
+                </v-container>
+                <v-btn color="white" flat @click="submit">Login</v-btn>
+            </v-form> 
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="white" flat @click="dialog = false">Cancel</v-btn>
+          <!-- <v-btn type="submit" color="white" flat @click="login">Login</v-btn> -->
+        </v-card-actions>
+    </v-flex>
     <v-spacer></v-spacer>
     <v-card>
           <v-img
@@ -36,22 +68,29 @@
 
 <script>
 import NavigationBar from '../components/NavigationBar.vue'
+import ApiDriver from '../ApiDriver'
 export default {
     name: "Home",
     data () {
         return {
-            show: false
+            show: false,
+            data: {
+                username: "",
+                password: ""
+            }
         }
     },
-    components: {
-      NavigationBar
+    methods: {
+      submit() {
+        ApiDriver.User.login(this.data);
+      },
+      registerRedirect(){
+        router.push('/register');
+      },
     }
 }
 </script>
 
 <style scoped>
-.nav-style{
-  margin-left: -1rem;
-  margin-right: -1rem;
-}
+
 </style>
