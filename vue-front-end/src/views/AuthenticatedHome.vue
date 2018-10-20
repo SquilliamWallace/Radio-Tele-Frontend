@@ -35,26 +35,34 @@
 </template>
 
 <script>
-import NavigationBar from '../components/NavigationBar.vue'
-import ApiDriver from '../ApiDriver'
+import NavigationBar from "../components/NavigationBar.vue";
+import ApiDriver from "../ApiDriver";
 export default {
-    name: "AuthenticatedHome",
-    data () {
-        return {
-            show: false
-        }
-    },
-    components: {
-      NavigationBar
-    },
-    mounted() {
-        ApiDriver.Auth();
+  name: "AuthenticatedHome",
+  data() {
+    return {
+      show: false
+    };
+  },
+  components: {
+    NavigationBar
+  },
+  methods: {
+    handleLoggedIn() {
+      ApiDriver.Auth().then((response) => {
+        console.log(response)
+        this.$store.commit("login", response.data.data);
+      });
     }
-}
+  },
+  mounted() {
+    this.handleLoggedIn();
+  }
+};
 </script>
 
 <style scoped>
-.nav-style{
+.nav-style {
   margin-left: -1rem;
   margin-right: -1rem;
 }
