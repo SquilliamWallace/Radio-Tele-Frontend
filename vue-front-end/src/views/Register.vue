@@ -155,6 +155,7 @@
                 </v-dialog>
             </v-card>
         </v-container>
+        <form-confirmation :confirmation="confirmModal"></form-confirmation>
     </v-app>
 </template>
 
@@ -162,6 +163,7 @@
 // import Navbar from "../components/Navbar.vue"
 import router from '../router';
 import ApiDriver from '../ApiDriver'
+import FormConfirmation from '../components/FormConfirmation'
     export default {
     data () {
       const defaultForm = Object.freeze({
@@ -207,6 +209,7 @@ import ApiDriver from '../ApiDriver'
         snackbar: false,
         terms: false,
         phoneMask: 'phone',
+        confirmModal: false,
         contentTerms: 'TERMS OF SERVICE\n\n----\n\nOVERVIEW\nThis website is operated by YCAS. Throughout the site, the terms “we”, “us” and “our” refer to YCAS. YCAS offers this website, including all information, tools and services available from this site to you, the user, conditioned upon your acceptance of all terms, conditions, policies and notices stated here.\nBy visiting our site and/ or purchasing something from us, you engage in our “Service” and agree to be bound by the following terms and conditions (“Terms of Service”, “Terms”), including those additional terms and conditions and policies referenced herein and/or available by hyperlink. These Terms of Service apply  to all users of the site, including without limitation users who are browsers, vendors, customers, merchants, and/ or contributors of content.\nPlease read these Terms of Service carefully before accessing or using our website. By accessing or using any part of the site, you agree to be bound by these Terms of Service. If you do not agree to all the terms and conditions of this agreement, then you may not access the website or use any services. If these Terms of Service are considered an offer, acceptance is expressly limited to these Terms of Service.\nAny new features or tools which are added to the current store shall also be subject to the Terms of Service. You can review the most current version of the Terms of Service at any time on this page. We reserve the right to update, change or replace any part of these Terms of Service by posting updates and/or changes to our website. It is your responsibility to check this page periodically for changes. Your continued use of or access to the website following the posting of any changes constitutes acceptance of those changes.\nOur store is hosted on Shopify Inc. They provide us with the online e-commerce platform that allows us to sell our products and services to you.',
         contentConditions: 'TERMS OF CONDITIONS\n\n----\n\nOVERVIEW\nThis website is operated by YCAS. Throughout the site, the terms “we”, “us” and “our” refer to YCAS. YCAS offers this website, including all information, tools and services available from this site to you, the user, conditioned upon your acceptance of all terms, conditions, policies and notices stated here.\nBy visiting our site and/ or purchasing something from us, you engage in our “Service” and agree to be bound by the following terms and conditions (“Terms of Service”, “Terms”), including those additional terms and conditions and policies referenced herein and/or available by hyperlink. These Terms of Service apply  to all users of the site, including without limitation users who are browsers, vendors, customers, merchants, and/ or contributors of content.\nPlease read these Terms of Service carefully before accessing or using our website. By accessing or using any part of the site, you agree to be bound by these Terms of Service. If you do not agree to all the terms and conditions of this agreement, then you may not access the website or use any services. If these Terms of Service are considered an offer, acceptance is expressly limited to these Terms of Service.\nAny new features or tools which are added to the current store shall also be subject to the Terms of Service. You can review the most current version of the Terms of Service at any time on this page. We reserve the right to update, change or replace any part of these Terms of Service by posting updates and/or changes to our website. It is your responsibility to check this page periodically for changes. Your continued use of or access to the website following the posting of any changes constitutes acceptance of those changes.\nOur store is hosted on Shopify Inc. They provide us with the online e-commerce platform that allows us to sell our products and services to you.',
         defaultForm
@@ -231,9 +234,7 @@ import ApiDriver from '../ApiDriver'
     methods: {
       //If cancel clear the form. (Maybe switch back to log in screen)
       resetForm () {
-        this.form = Object.assign({}, this.defaultForm)
-        this.$refs.form.reset()
-        router.go(-1);
+        this.confirmModal = !this.confirmModal
       },
       submit () {
         // Update this.accountType to full Uppercase lettering on submit
@@ -262,6 +263,9 @@ import ApiDriver from '../ApiDriver'
       passwordMatchError() {
           return (this.form.password === this.form.passwordMatch) ? '' : 'Passwords must match'
       }
+    },
+    components: {
+        FormConfirmation
     }
   }
 </script>

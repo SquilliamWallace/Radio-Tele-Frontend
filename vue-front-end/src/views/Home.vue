@@ -69,6 +69,7 @@
 <script>
 import NavigationBar from '../components/NavigationBar.vue'
 import ApiDriver from '../ApiDriver'
+import router from '../router'
 export default {
     name: "Home",
     data () {

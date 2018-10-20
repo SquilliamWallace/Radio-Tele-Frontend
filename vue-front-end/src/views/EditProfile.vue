@@ -85,11 +85,6 @@ export default {
     },
     components: {
         FormConfirmation
-    },
-    computed: {
-        getConfirmModal() {
-            return this.confirmModal;
-        }
     }
 }
 </script>
