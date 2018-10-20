@@ -36,5 +36,15 @@ export default {
             console.log(error);
           });
       }
+    },
+
+    Appointment: {
+      view: function () {
+        return axios.get("/api/appointments/1/retrieve")
+       }
+    },
+
+    Auth : function() {
+      return axios.get("/api/auth")
     }
 }

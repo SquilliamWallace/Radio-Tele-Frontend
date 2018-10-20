@@ -8,7 +8,7 @@
                     <v-list-tile-sub-title class = "pl-3">{{ startMonth }}/{{ startDay }}/{{ startYear }} {{ startHour }}:{{ startMinute }} {{ period }}</v-list-tile-sub-title>
                 </v-list-tile-content>
                 <v-list-tile-action>
-                    <v-btn icon ripple>
+                    <v-btn v-on:click="getAppointment" icon ripple>
                         <v-icon>edit</v-icon>
                     </v-btn>
                 </v-list-tile-action>
@@ -71,7 +71,9 @@
     
 </template>
 <script>
+
 import NavigationBar from '../components/NavigationBar.vue'
+import ApiDriver from '../ApiDriver.js'
 export default {
     name: "AppointmentView",
     data() {
@@ -98,6 +100,24 @@ export default {
     },
     components: {
         NavigationBar
+    },
+    methods: {
+        getAppointment () {
+            ApiDriver.Appointment.view().then((response) => {
+                console.log(response)
+            }).catch((error) => {
+                console.log(error)
+            });
+        },
+        auth () {
+            ApiDriver.Auth().then((response) => {
+                console.log(response)
+            })
+        }
+    },
+    mounted: function(){
+        this.auth()
+        this.getAppointment()
     }
 }
 </script>
