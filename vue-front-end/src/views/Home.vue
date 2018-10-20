@@ -28,11 +28,6 @@
                 <v-btn color="white" flat @click="submit">Login</v-btn>
             </v-form> 
         </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="white" flat @click="dialog = false">Cancel</v-btn>
-          <!-- <v-btn type="submit" color="white" flat @click="login">Login</v-btn> -->
-        </v-card-actions>
     </v-flex>
     <v-spacer></v-spacer>
     <v-card>
