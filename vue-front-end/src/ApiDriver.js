@@ -36,6 +36,9 @@ export default {
               router.push('/authHome');
             }
           });
+      },
+      get: function(userId) {
+        return axios.get("/api/users/" + userId)
       }
     },
 
