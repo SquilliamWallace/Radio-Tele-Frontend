@@ -55,23 +55,13 @@
             </v-card>
         </v-container>
         <!--Modal to confirm cancellation of form input-->
-        <v-dialog max-width="250px" dark v-model="confirmModal" persistent>
-                <v-card>
-                    <v-card-title class="headline">Are you sure you wish to cancel?</v-card-title>
-                    <v-card-text>If you cancel, you will lose all progress on this form and will have to fill it out again.</v-card-text>
-                    <v-spacer></v-spacer>
-                    <v-card-actions>
-                        <v-spacer></v-spacer>
-                        <v-btn color="red darken-1" @click="confirmModal = false">No</v-btn>
-                        <v-btn color="green darken-1" @click="homeRedirect">Yes</v-btn>
-                    </v-card-actions>
-                </v-card>
-        </v-dialog>
+        <form-confirmation :confirmation="confirmModal"></form-confirmation>
     </v-app>
 </template>
 
 <script>
 import router from '../router';
+import FormConfirmation from '../components/FormConfirmation'
 export default {
     name: 'EditProfile',
     data() {
@@ -90,10 +80,15 @@ export default {
     },
     methods: {
         cancelEdit() {
-            this.confirmModal = true
-        },
-        homeRedirect() {
-            router.go(-1);
+            this.confirmModal = !this.confirmModal
+        }
+    },
+    components: {
+        FormConfirmation
+    },
+    computed: {
+        getConfirmModal() {
+            return this.confirmModal;
         }
     }
 }
