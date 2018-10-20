@@ -1,5 +1,6 @@
 const axios = require('axios');
 import Promise from 'bluebird';
+import router from './router'
 
 function wrapPromise(promise) {
   return new Promise((resolve, reject) => {
@@ -31,9 +32,9 @@ export default {
         return axios.post("/api/login?email=" + data.username + "&password=" + data.password, JSON.stringify(data), { headers: {'Content-Type': 'application/json' }})
           .then(function (response) {
             console.log(response);
-          })
-          .catch(function (error) {
-            console.log(error);
+            if(response.data.includes("bundle.js")){
+              router.push('/scheduler');
+            }
           });
       }
     },
