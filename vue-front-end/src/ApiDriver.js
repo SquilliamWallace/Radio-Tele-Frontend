@@ -41,14 +41,11 @@ export default {
 
     Appointment: {
       view: function () {
-        return axios.get("/api/appointments/1/retrieve")
+        return axios.get("/api/appointments/2/retrieve")
        }
     },
 
     Auth : function() {
       return axios.get("/api/auth")
-        .then(function (response) {
-          console.log(response);
-        });
     }
 }
