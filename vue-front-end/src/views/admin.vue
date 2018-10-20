@@ -1,51 +1,50 @@
 <template>
     <div>
-    <v-toolbar
-      dark
-      tabs
-    >
       
       <v-tabs
         slot="extension"
-        v-model="tab"
         color="transparent"
         grow
+        icons-and-text
+        centered 
       >
         <v-tabs-slider color="white"></v-tabs-slider>
 
-        <v-tab>User Managment</v-tab>
-        <v-tab>Logging</v-tab>
-        <v-tab>Surveillance</v-tab>
+        <v-tab>
+            User Management
+            <v-icon>account_box</v-icon>
+        </v-tab>
+        <v-tab>
+            Logging
+            <v-icon>work</v-icon>
+        </v-tab>
+        <v-tab>
+            Surveillance
+            <v-icon>videocam</v-icon>
+        </v-tab>
 
         <v-tab-item>
-            <v-card flat width = "100%">
-                <v-card-item>User Management</v-card-item>
-            </v-card>
+                <admin-user-management></admin-user-management>
         </v-tab-item>
 
         <v-tab-item>
-            <v-card flat>
-                <v-card-item>Logging</v-card-item>
-            </v-card>
+            
         </v-tab-item>
 
         <v-tab-item>
-            <v-card flat>
-                <v-card-item>Surveillance</v-card-item>
-            </v-card>
+            
         </v-tab-item>
         
       </v-tabs>
-    </v-toolbar>
 
   </div>
 </template>
 <script>
+import AdminUserManagement from '../components/AdminUserManagement.vue'
  export default {
      name: 'admin',
     data () {
       return {
-        tab: null,
         items: [
           'User Management', 'Logging', 'Surveillance',
         ],
@@ -53,6 +52,9 @@
             'This is user management', 'This is logging', 'This is surveillance'
         ]
       }
+    },
+    components: {
+        AdminUserManagement
     }
   }
 </script>
