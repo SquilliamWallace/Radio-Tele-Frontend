@@ -47,8 +47,5 @@ export default {
 
     Auth : function() {
       return axios.get("/api/auth")
-        .then(function (response) {
-          console.log(response);
-        });
     }
 }
