@@ -7,7 +7,7 @@ import Scheduler from './views/Scheduler.vue'
 import AppointmentView from './views/AppointmentView.vue'
 import ViewProfile from './views/ViewProfile.vue'
 import EditProfile from './views/EditProfile'
-import Administration from './views/Administration'
+import admin from './views/admin'
 
 Vue.use(Router)
 
@@ -53,8 +53,9 @@ const router = new Router({
     {
       path: '/admin',
       name: 'admin',
-      component: Administration
+      component: admin
     }
+  
   ]
 })
 
