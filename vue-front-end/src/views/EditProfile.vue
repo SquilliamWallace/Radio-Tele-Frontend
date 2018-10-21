@@ -113,6 +113,8 @@ export default {
         },
         retrieveInformation() {
            if (!this.$store.state.currentUserId) {
+               console.log(this.$store.state)
+               alert("You must log in first!")
                 router.push('/home')
             } else {    
                 ApiDriver.User.get(this.$store.state.currentUserId).then((response) => {
