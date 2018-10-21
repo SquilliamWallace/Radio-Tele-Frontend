@@ -6,8 +6,8 @@
             <v-spacer></v-spacer>
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="red darken-1" @click="toggleModal">No</v-btn>
                 <v-btn color="green darken-1" @click="goBack">Yes</v-btn>
+                <v-btn color="red darken-1" @click="toggleModal">No</v-btn>
             </v-card-actions>
         </v-card>
     </v-dialog>
