@@ -1,4 +1,4 @@
-<template>
+<template dark>
     <v-toolbar style="width:100%;">
         <v-container v-bind:style="{ padding:'50px' }">
             <v-card flat>
@@ -16,7 +16,7 @@
                     <v-layout wrap>
                     <v-flex xs12 sm6>
                         <v-text-field
-                        v-model="form.start"
+                        v-model="eventObj.start"
                         color="blue darken-2"
                         label="Start Time"
                         required
@@ -24,29 +24,21 @@
                     </v-flex>
                     <v-flex xs12 sm6>
                         <v-text-field
-                        v-model="form.end"
+                        v-model="eventObj.end"
                         color="blue darken-2"
                         label="End Time"
                         required
                         ></v-text-field>
                     </v-flex>
                     <v-flex xs12 sm6>
-                        <v-text-field
-                        v-model="form.username"
-                        color="blue darken-2"
-                        label="Name"
-                        required
-                        ></v-text-field>
-                    </v-flex>
-                    <!-- <v-flex xs12 sm6>
                         <v-select
-                        v-model="form.appointmentType"
-                        :items="appointmentTypes"
+                        v-model="this.appointmentType"
+                        :items="this.appointmentTypes"
                         color="blue darken-2"
                         label="Appointment Type"
                         required
                         ></v-select>
-                    </v-flex> -->
+                    </v-flex>
                     </v-layout>
                 </v-container>
                 <v-card-actions>
@@ -71,14 +63,18 @@ export default {
     data() {
         name: 'Appointment'
         return {
-            accountTypes: ['Guest', 'Member', 'Student', 'Researcher'],
+            
             form: {
                 start: '2018-10-09T00:00:01',
                 end: '2018-10-10T15:00:00',
                 username: 'patrick_star'
             },
+            appointmentType: "Public",
             snackbar: false,
         }
+    },
+    props: {
+        eventObj: {}
     },
     methods: {
         resetForm() {
@@ -95,7 +91,7 @@ export default {
     },
     computed: {
         formIsValid() {
-            if(this.form.start && this.form.end && this.form.username){
+            if(this.eventObj.start && this.eventObj.end){
                 return true;
             }
             else{
