@@ -52,7 +52,7 @@
                         </v-flex>
                     </v-container>
                     <v-card-actions>
-                        <v-btn color="primary" type="submit" @click="updateInformation">Save</v-btn>
+                        <v-btn color="primary" @click="updateInformation">Save</v-btn>
                         <v-btn color="red darken-1" @click="cancelEdit">Cancel</v-btn>
                     </v-card-actions>
                 </v-form>
@@ -68,11 +68,8 @@ import router from "../router";
 import NavigationBar from "../components/NavigationBar.vue";
 import FormConfirmation from "../components/FormConfirmation";
 import ApiDriver from "../ApiDriver";
-import HttpResponse from "../utils/httpResponse";
-import CustomErrorHandler from "../utils/customErrorHandler";
-import { error } from "util";
-import customErrorHandler from "../utils/customErrorHandler";
 import httpResponse from "../utils/httpResponse";
+import CustomErrorHandler from "../utils/customErrorHandler";
 
 export default {
   name: "EditProfile",
@@ -118,14 +115,14 @@ export default {
       let that = this;
 
       if (!this.$route.params.userId) {
-        router.push("/home");
+        router.push("/");
       } else {
         ApiDriver.User.get(this.$route.params.userId)
-          .then(response => {
+        .then(response => {
             httpResponse.then(
               response,
               data => {
-                that.populateData(data.data);
+                  that.populateData(data.data);
               },
               (status, errors) => {
                 if (parseInt(status) === 403) {
@@ -133,10 +130,10 @@ export default {
                   if (that.$store.state.currentUserId) {
                     router.push("/authHome");
                   } else {
-                    router.push("/home");
+                    router.push("/");
                   }
                 } else {
-                  handleErrors(errors);
+                    handleErrors(errors);
                 }
               }
             );
@@ -159,10 +156,10 @@ export default {
 
       ApiDriver.User.update(data.id, JSON.stringify(data))
         .then(response => {
-          HttpResponse.then(
+          httpResponse.then(
             response,
             function(data) {
-              router.push("/profile");
+              router.push("/users/" + data.data + "/view");
             },
             this.handleErrors
           );
