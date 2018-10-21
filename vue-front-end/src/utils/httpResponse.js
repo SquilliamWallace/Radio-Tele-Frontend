@@ -6,7 +6,7 @@ export default {
         let statusCode = data.statusCode
 
         if (!statusCode) {
-            router.push("/home")
+            router.push("/")
         } else if (parseInt(statusCode) === 200) {
             successHandler(data);
         } else if (data.errors) {
