@@ -10,7 +10,7 @@ export default {
         } else if (parseInt(statusCode) === 200) {
             successHandler(data);
         } else if (data.errors) {
-            errorHandler(data.errors)
+            errorHandler(statusCode, data.errors)
         }
     }
 }

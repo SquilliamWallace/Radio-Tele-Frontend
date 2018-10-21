@@ -43,6 +43,7 @@
 import NavigationBar from '../components/NavigationBar.vue'
 import ApiDriver from '../ApiDriver'
 import router from '../router'
+import httpResponse from '../utils/httpResponse';
 export default {
     name: "ViewProfile",
     data() {
@@ -62,14 +63,26 @@ export default {
     },
     methods: {
         editRedirect() {
-            router.push('/editProfile')
+            router.push('/users/' + this.$route.params.userId + '/edit')
         },
         retrieveInformation() {
-            if (!this.$store.state.currentUserId) {
+            let that = this;
+            if (!this.$route.params.userId) {
                 router.push('/home')
             } else {    
-                ApiDriver.User.get(this.$store.state.currentUserId).then((response) => {
-                    this.populateData(response.data.data)
+                ApiDriver.User.get(this.$route.params.userId).then((response) => {
+                    httpResponse.then(response, (data) => {
+                        that.populateData(data.data)
+                    }, (status, errors) => {
+                        if (parseInt(status) === 403) {
+                            alert("Access Denied");
+                            if (that.$store.state.currentUserId) {
+                                router.push('/authHome')
+                            } else {
+                                router.push('/home')
+                            }
+                        }
+                    })
                 }).catch((errors) => {
                     alert("An error occurred loading this user's information");
                     console.log(errors)

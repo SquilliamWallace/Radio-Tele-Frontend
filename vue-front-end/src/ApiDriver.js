@@ -24,7 +24,6 @@ function wrapPromise(promise) {
 
 export default {
     //API endpoints go here
-    
     User: {
       register: function (data) {
         return axios.post("/api/users", data, headers.retrieveHeaders());
@@ -47,8 +46,8 @@ export default {
     },
 
     Appointment: {
-      view: function () {
-        return axios.get("/api/appointments/1/retrieve")
+      view: function (appointmentId) {
+        return axios.get("/api/appointments/" + appointmentId + "/retrieve")
        }
     },
 

@@ -70,6 +70,7 @@ import HttpResponse from "../utils/httpResponse";
 import CustomErrorHandler from "../utils/customErrorHandler";
 import { error } from 'util';
 import customErrorHandler from '../utils/customErrorHandler';
+import httpResponse from '../utils/httpResponse';
 
 export default {
     name: 'EditProfile',
@@ -112,13 +113,26 @@ export default {
             this.profile.company.value = data.company;
         },
         retrieveInformation() {
-           if (!this.$store.state.currentUserId) {
-               console.log(this.$store.state)
-               alert("You must log in first!")
-                router.push('/home')
+            let that = this;
+
+           if (!this.$route.params.userId) {
+               router.push('/home')
             } else {    
-                ApiDriver.User.get(this.$store.state.currentUserId).then((response) => {
-                    this.populateData(response.data.data)
+                ApiDriver.User.get(this.$route.params.userId).then((response) => {
+                    httpResponse.then(response, (data) => {
+                        that.populateData(data.data)
+                    }, (status, errors) => {
+                        if (parseInt(status) === 403) {
+                            alert("Access Denied")
+                            if (that.$store.state.currentUserId) {
+                                router.push('/authHome')
+                            } else {
+                                router.push('/home')
+                            }
+                        } else {
+                            handleErrors(errors)
+                        }
+                    })
                 }).catch((errors) => {
                     alert("An error occurred loading this user's information");
                     console.log(errors)

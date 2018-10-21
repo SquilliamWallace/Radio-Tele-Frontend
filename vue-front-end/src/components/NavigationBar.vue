@@ -5,7 +5,7 @@
       <v-toolbar-title class="title-style" @click="homeRedirect">YCAS Radio Telescope</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-sm-and-down">
-        <v-btn to="/profile">Profile</v-btn>
+        <v-btn @click="viewProfile">Profile</v-btn>
       </v-toolbar-items>
     </v-toolbar>
     <!-- Define drawer menu and populate it with items-->
@@ -42,6 +42,9 @@ export default {
         },
         submit() {
             ApiDriver.User.login(this.data);
+        },
+        viewProfile() {
+            router.push('/users/' + this.$store.state.currentUserId + '/view')
         }
     },
     mounted: function () {
