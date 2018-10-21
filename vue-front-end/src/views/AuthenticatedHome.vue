@@ -37,6 +37,8 @@
 <script>
 import NavigationBar from "../components/NavigationBar.vue";
 import ApiDriver from "../ApiDriver";
+import router from '../router';
+import httpResponse from '../utils/httpResponse';
 export default {
   name: "AuthenticatedHome",
   data() {
@@ -50,8 +52,12 @@ export default {
   methods: {
     handleLoggedIn() {
       ApiDriver.Auth().then((response) => {
-        console.log(response)
-        this.$store.commit("login", response.data.data);
+        httpResponse.then(response, (data) => {
+          this.$store.commit("login", data.data);
+        console.log(this.$store.state);
+        }, (status, errors) => {
+          router.push('/home')
+        })
       });
     }
   },

@@ -1,6 +1,7 @@
 const axios = require('axios');
 import Promise from 'bluebird';
-import router from './router'
+import router from './router';
+import headers from './utils/headers';
 
 function wrapPromise(promise) {
   return new Promise((resolve, reject) => {
@@ -23,26 +24,30 @@ function wrapPromise(promise) {
 
 export default {
     //API endpoints go here
-    
     User: {
       register: function (data) {
-        return axios.post("/api/users", data, { headers: {'Content-Type': 'application/json' }});
+        return axios.post("/api/users", data, headers.retrieveHeaders());
       },
       login: function (data) {
-        return axios.post("/api/login?email=" + data.username + "&password=" + data.password, JSON.stringify(data), { headers: {'Content-Type': 'application/json' }})
+        return axios.post("/api/login?email=" + data.username + "&password=" + data.password, JSON.stringify(data), headers.retrieveHeaders())
           .then(function (response) {
             console.log(response);
             if(response.data.includes("bundle.js")){
               router.push('/authHome');
             }
           });
+      },
+      get: function(userId) {
+        return axios.get("/api/users/" + userId)
+      },
+      update: function(userId, data) {
+        return axios.put("/api/users/" + userId, data, headers.retrieveHeaders())
       }
     },
 
     Appointment: {
-      view: function () {
-        return axios.get("/api/appointments/2/retrieve")
-       }
+      view: function (appointmentId) {
+        return axios.get("/api/appointments/" + appointmentId + "/retrieve")
     },
 
     Auth : function() {

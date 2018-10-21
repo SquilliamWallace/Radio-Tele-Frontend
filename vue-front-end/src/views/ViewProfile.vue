@@ -8,23 +8,23 @@
                    <v-avatar size = "200">
                         <img src="https://i.kym-cdn.com/entries/icons/original/000/009/803/spongebob-squarepants-patrick-spongebob-patrick-star-background-225039.jpg" alt="Patrick">
                     </v-avatar>
-                    <div class = "headline">{{ profile.firstName }} {{profile.lastName}}</div>
+                    <div class = "headline">{{ profile.firstName.value }} {{ profile.lastName.value }}</div>
                </v-card>
             </v-flex>
             <v-flex xs6>
                 <v-card class = "elevation-0" color = "transparent">
                     <v-divider></v-divider>
                     <div class = "headline text-xs-left">Email <v-icon>email</v-icon></div>
-                    <div id = "profileInfo" class = "text-xs-left">{{ profile.email }}</div>
+                    <div id = "profileInfo" class = "text-xs-left">{{ profile.email.value }}</div>
                     <v-divider></v-divider>
-                    <div class = "headline text-xs-left">Phone <v-icon>phone</v-icon></div>
-                    <div id = "profileInfo" class = "text-xs-left">{{ profile.phone }}</div>
+                    <div v-show="profile.phone.value" class = "headline text-xs-left">Phone <v-icon>phone</v-icon></div>
+                    <div v-show="profile.phone.value" gid = "profileInfo" class = "text-xs-left">{{ profile.phone.value }}</div>
                     <v-divider></v-divider>
-                    <div class = "headline text-xs-left">Company  <v-icon>business</v-icon></div>
-                    <div id = "profileInfo" class = "text-xs-left">{{ profile.company }}</div>
+                    <div v-show="profile.company.value" class = "headline text-xs-left">Company  <v-icon>business</v-icon></div>
+                    <div v-show="profile.company.value" id = "profileInfo" class = "text-xs-left">{{ profile.company.value }}</div>
                     <v-divider></v-divider>
                     <div class = "headline text-xs-left">Membership <v-icon>person</v-icon></div>
-                    <div id = "profileInfo" class = "text-xs-left">{{ profile.type }}</div>
+                    <div id = "profileInfo" class = "text-xs-left">{{ profile.type.value }}</div>
                     <v-divider></v-divider>
                 </v-card>
             </v-flex>
@@ -41,18 +41,20 @@
 
 <script>
 import NavigationBar from '../components/NavigationBar.vue'
+import ApiDriver from '../ApiDriver'
 import router from '../router'
+import httpResponse from '../utils/httpResponse';
 export default {
     name: "ViewProfile",
     data() {
         return {
             profile: {
-                firstName: "Patrick",
-                lastName: "Star",
-                email: "patStar@gmail.com",
-                phone: "717-887-4339",
-                company: "Krusty Krab",
-                type: "student"
+                firstName: { value: "" },
+                lastName: { value: "" },
+                email: { value: "" },
+                phone: { value: "" },
+                company: { value: "" },
+                type: { value: "" }
             }
         }
     },
@@ -61,8 +63,43 @@ export default {
     },
     methods: {
         editRedirect() {
-            router.push('/editProfile')
+            router.push('/users/' + this.$route.params.userId + '/edit')
+        },
+        retrieveInformation() {
+            let that = this;
+            if (!this.$route.params.userId) {
+                router.push('/home')
+            } else {    
+                ApiDriver.User.get(this.$route.params.userId).then((response) => {
+                    httpResponse.then(response, (data) => {
+                        that.populateData(data.data)
+                    }, (status, errors) => {
+                        if (parseInt(status) === 403) {
+                            alert("Access Denied");
+                            if (that.$store.state.currentUserId) {
+                                router.push('/authHome')
+                            } else {
+                                router.push('/home')
+                            }
+                        }
+                    })
+                }).catch((errors) => {
+                    alert("An error occurred loading this user's information");
+                    console.log(errors)
+                })
+            }
+        },
+        populateData(data) {
+            this.profile.firstName.value = data.firstName;
+            this.profile.lastName.value = data.lastName;
+            this.profile.email.value = data.email;
+            this.profile.phone.value = data.phoneNumber;
+            this.profile.company.value = data.company;
+            this.profile.type.value = data.membershipRole;
         }
+    },
+    mounted() {
+        this.retrieveInformation()
     }
 }
 </script>
