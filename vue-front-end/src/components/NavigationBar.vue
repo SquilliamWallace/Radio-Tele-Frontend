@@ -5,7 +5,7 @@
       <v-toolbar-title class="title-style" @click="homeRedirect">YCAS Radio Telescope</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-sm-and-down">
-        <v-btn @click="viewProfile">Profile</v-btn>
+        <v-btn v-show="isLoggedIn" @click="viewProfile">Profile</v-btn>
       </v-toolbar-items>
     </v-toolbar>
     <!-- Define drawer menu and populate it with items-->
@@ -33,7 +33,8 @@ export default {
             showDrawer: false,
             items: [
               { title: 'Scheduling Calendar', icon: 'dashboard', path: "/scheduler" }
-            ]
+            ],
+            isLoggedIn: this.$store.state.currentUserId !== null
         }
     },
     methods:{

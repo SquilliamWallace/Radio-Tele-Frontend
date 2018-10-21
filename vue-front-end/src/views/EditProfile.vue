@@ -1,5 +1,6 @@
 <template>
-    <v-app>
+    <div>
+        <navigation-bar></navigation-bar>
         <v-container style="{ padding:'50px' }">
             <v-card flat>
                 <v-form>
@@ -58,128 +59,142 @@
             </v-card>
         </v-container>
         <!--Modal to confirm cancellation of form input-->
-        <form-confirmation :confirmation="confirmModal"></form-confirmation>
-    </v-app>
+    <form-confirmation :confirmation="confirmModal"></form-confirmation>
+    </div>    
 </template>
 
 <script>
-import router from '../router';
-import FormConfirmation from '../components/FormConfirmation';
+import router from "../router";
+import NavigationBar from "../components/NavigationBar.vue";
+import FormConfirmation from "../components/FormConfirmation";
 import ApiDriver from "../ApiDriver";
 import HttpResponse from "../utils/httpResponse";
 import CustomErrorHandler from "../utils/customErrorHandler";
-import { error } from 'util';
-import customErrorHandler from '../utils/customErrorHandler';
-import httpResponse from '../utils/httpResponse';
+import { error } from "util";
+import customErrorHandler from "../utils/customErrorHandler";
+import httpResponse from "../utils/httpResponse";
 
 export default {
-    name: 'EditProfile',
-    data() {
-        return {
-            profile: {
-                firstName: { 
-                    value: "", 
-                    hasError: false
-                    },
-                lastName: { 
-                    value: "", 
-                    hasError: false
-                    },
-                email: { 
-                    value: "", 
-                    hasError: false
-                    },
-                phone: { 
-                    value: "", 
-                    hasError: false
-                    },
-                company: { 
-                    value: "", 
-                    hasError: false
-                    }
+  name: "EditProfile",
+  data() {
+    return {
+      profile: {
+        firstName: {
+          value: "",
+          hasError: false
+        },
+        lastName: {
+          value: "",
+          hasError: false
+        },
+        email: {
+          value: "",
+          hasError: false
+        },
+        phone: {
+          value: "",
+          hasError: false
+        },
+        company: {
+          value: "",
+          hasError: false
+        }
+      },
+      confirmModal: false
+    };
+  },
+  methods: {
+    cancelEdit() {
+      this.confirmModal = !this.confirmModal;
+    },
+    populateData(data) {
+      this.profile.firstName.value = data.firstName;
+      this.profile.lastName.value = data.lastName;
+      this.profile.email.value = data.email;
+      this.profile.phone.value = data.phoneNumber;
+      this.profile.company.value = data.company;
+    },
+    retrieveInformation() {
+      let that = this;
+
+      if (!this.$route.params.userId) {
+        router.push("/home");
+      } else {
+        ApiDriver.User.get(this.$route.params.userId)
+          .then(response => {
+            httpResponse.then(
+              response,
+              data => {
+                that.populateData(data.data);
+              },
+              (status, errors) => {
+                if (parseInt(status) === 403) {
+                  alert("Access Denied");
+                  if (that.$store.state.currentUserId) {
+                    router.push("/authHome");
+                  } else {
+                    router.push("/home");
+                  }
+                } else {
+                  handleErrors(errors);
+                }
+              }
+            );
+          })
+          .catch(errors => {
+            alert("An error occurred loading this user's information");
+            console.log(errors);
+          });
+      }
+    },
+    updateInformation() {
+      let data = {
+        id: this.$store.state.currentUserId,
+        firstName: this.profile.firstName.value,
+        lastName: this.profile.lastName.value,
+        email: this.profile.email.value,
+        phoneNumber: this.profile.phone.value,
+        company: this.profile.company.value
+      };
+
+      ApiDriver.User.update(data.id, JSON.stringify(data))
+        .then(response => {
+          HttpResponse.then(
+            response,
+            function(data) {
+              router.push("/profile");
             },
-            confirmModal: false
+            this.handleErrors
+          );
+        })
+        .catch(errors => {
+          console.log(errors);
+        });
+    },
+    handleErrors(errors) {
+      console.log(errors);
+      for (var field in errors) {
+        let message = errors[field][0];
+
+        if (field === "FIRST_NAME") {
+          CustomErrorHandler.populateError(this.profile.firstName, message);
+        } else if (field === "LAST_NAME") {
+          CustomErrorHandler.populateError(this.profile.lastName, message);
+        } else if (field === "EMAIL") {
+          CustomErrorHandler.populateError(this.profile.email, message);
         }
-    },
-    methods: {
-        cancelEdit() {
-            this.confirmModal = !this.confirmModal
-        },
-        populateData(data) {
-            this.profile.firstName.value = data.firstName;
-            this.profile.lastName.value = data.lastName;
-            this.profile.email.value = data.email;
-            this.profile.phone.value = data.phoneNumber;
-            this.profile.company.value = data.company;
-        },
-        retrieveInformation() {
-            let that = this;
-
-           if (!this.$route.params.userId) {
-               router.push('/home')
-            } else {    
-                ApiDriver.User.get(this.$route.params.userId).then((response) => {
-                    httpResponse.then(response, (data) => {
-                        that.populateData(data.data)
-                    }, (status, errors) => {
-                        if (parseInt(status) === 403) {
-                            alert("Access Denied")
-                            if (that.$store.state.currentUserId) {
-                                router.push('/authHome')
-                            } else {
-                                router.push('/home')
-                            }
-                        } else {
-                            handleErrors(errors)
-                        }
-                    })
-                }).catch((errors) => {
-                    alert("An error occurred loading this user's information");
-                    console.log(errors)
-                })
-            }
-        },
-        updateInformation() {
-            let data = {
-                id: this.$store.state.currentUserId,
-                firstName: this.profile.firstName.value,
-                lastName: this.profile.lastName.value,
-                email: this.profile.email.value,
-                phoneNumber: this.profile.phone.value,
-                company: this.profile.company.value
-            }
-
-            ApiDriver.User.update(data.id, JSON.stringify(data)).then((response) => {
-                HttpResponse.then(response, function(data) {
-                        router.push('/profile')
-                    }, this.handleErrors)
-            }).catch((errors) => {
-                console.log(errors)
-            });
-        }, handleErrors(errors) {
-            console.log(errors)
-            for (var field in errors) {
-                let message = errors[field][0]
-
-                if (field === "FIRST_NAME") {
-                    CustomErrorHandler.populateError(this.profile.firstName, message)
-                } else if (field === "LAST_NAME") {
-                    CustomErrorHandler.populateError(this.profile.lastName, message)
-                } else if (field === "EMAIL") {
-                    CustomErrorHandler.populateError(this.profile.email, message)
-                } 
-            }
-        }
-    },
-    components: {
-        FormConfirmation
-    },
-    mounted() {
-        this.retrieveInformation()
+      }
     }
-}
+  },
+  components: {
+    FormConfirmation,
+    NavigationBar
+  },
+  mounted() {
+    this.retrieveInformation();
+  }
+};
 </script>
 
 <style scoped>
-
 </style>
