@@ -154,14 +154,13 @@ export default {
         company: this.profile.company.value
       };
 
-      ApiDriver.User.update(data.id, JSON.stringify(data))
-        .then(response => {
-          httpResponse.then(
-            response,
-            function(data) {
+      ApiDriver.User.update(data.id, JSON.stringify(data)).then(response => {
+        let that = this;
+          httpResponse.then(response, function(data) {
               router.push("/users/" + data.data + "/view");
-            },
-            this.handleErrors
+          }, function(status, errors) {
+              that.handleErrors(errors);
+            }
           );
         })
         .catch(errors => {
@@ -169,7 +168,6 @@ export default {
         });
     },
     handleErrors(errors) {
-      console.log(errors);
       for (var field in errors) {
         let message = errors[field][0];
 
@@ -181,6 +179,11 @@ export default {
           CustomErrorHandler.populateError(this.profile.email, message);
         }
       }
+    },
+    clearErrors() {
+      CustomErrorHandler.clearError(this.profile.firstName);
+      CustomErrorHandler.clearError(this.profile.lastName);
+      CustomErrorHandler.clearError(this.profile.email);
     }
   },
   components: {

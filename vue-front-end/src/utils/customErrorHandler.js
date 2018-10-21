@@ -1,9 +1,10 @@
 export default {
     populateError: function(field, msg) {
-        console.log(msg)
-        field.hasError = true
-        field.errorMessage = msg
-
-        console.log(field)
+        field.hasError = true;
+        field.errorMessage = msg;
+    },
+    clearError: function(field) {
+        field.hasError = false;
+        field.errorMessage = "";
     }
 }
