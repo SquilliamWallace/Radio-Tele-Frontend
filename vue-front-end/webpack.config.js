@@ -5,6 +5,20 @@ module.exports = {
   //defines the place at which the parser enters the application to begin execution, can be a single point 
   //or an array of multiple points
     entry: './src/main.js',
+    devServer: {
+        port: 8081,
+        historyApiFallback: true,
+        proxy: {
+          '/api': {
+            target: 'http://localhost:8080',
+            secure: false
+          },
+          '/login': {
+            target: 'http://localhost:8080',
+            secure: false
+          }
+        }
+    },
     //specifies the location in which to dump the bundled files and what to name them
     output: {
         path: __dirname + '/app/assets/javascripts',

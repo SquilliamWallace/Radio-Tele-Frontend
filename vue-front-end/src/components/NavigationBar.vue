@@ -5,44 +5,8 @@
       <v-toolbar-title class="title-style" @click="homeRedirect">YCAS Radio Telescope</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-sm-and-down">
-        <v-btn @click = "dialog = !dialog" flat>Log in</v-btn>
-        <v-btn to="/profile">Profile</v-btn>
+        <v-btn v-show="isLoggedIn" @click="viewProfile">Profile</v-btn>
       </v-toolbar-items>
-      <v-app>
-          <!-- login modal -->
-           <v-dialog dark v-model = "dialog"  max-width="500px" max-height="100px">
-        <v-card>
-            <v-container>
-                <v-layout row wrap>
-                    <v-flex width = "10px" xs12>
-                        <v-card-text class = "headline">Login</v-card-text>
-                    </v-flex>
-                </v-layout>
-            </v-container>
-        <v-card-text>
-          <v-container grid-list-md>
-            <v-layout wrap>
-              <v-flex xs12>
-                <v-text-field label="Email" required></v-text-field>
-              </v-flex>
-              <v-flex xs12>
-                <v-text-field label="Password" type="password" required></v-text-field>
-              </v-flex>
-              <v-flex xs12>
-                  <div>Don't have an account?</div>
-                  <a @click="registerRedirect">Register Here!</a>
-              </v-flex>      
-            </v-layout>
-          </v-container> 
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="white" flat @click="dialog = false">Cancel</v-btn>
-          <v-btn color="white" flat @click="dialog = false">Login</v-btn>
-        </v-card-actions>
-        </v-card>
-        </v-dialog>
-      </v-app>
     </v-toolbar>
     <!-- Define drawer menu and populate it with items-->
     <v-navigation-drawer :temporary=true :floating=true :hide-overlay=true style="max-height:200px; position:absolute;" v-model="showDrawer">
@@ -61,6 +25,7 @@
 
 <script>
 import router from '../router';
+import ApiDriver from '../ApiDriver'
 export default {
     name: 'NavigationBar',
     data() {
@@ -69,15 +34,18 @@ export default {
             items: [
               { title: 'Scheduling Calendar', icon: 'dashboard', path: "/scheduler" }
             ],
-            dialog: false
+            isLoggedIn: this.$store.state.currentUserId !== null
         }
     },
     methods:{
         homeRedirect(){
-            router.push('/home');
+            router.push('/authHome');
         },
-        registerRedirect(){
-            router.push('/register');
+        submit() {
+            ApiDriver.User.login(this.data);
+        },
+        viewProfile() {
+            router.push('/users/' + this.$store.state.currentUserId + '/view')
         }
     },
     mounted: function () {

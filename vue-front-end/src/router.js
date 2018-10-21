@@ -8,15 +8,16 @@ import AppointmentView from './views/AppointmentView.vue'
 import ViewProfile from './views/ViewProfile.vue'
 import EditProfile from './views/EditProfile'
 import admin from './views/admin'
+import AuthenticatedHome from './views/AuthenticatedHome'
 
 Vue.use(Router)
 
 const router = new Router({
-  mode: 'hash',
+  mode: 'history',
   base: process.env.BASE_URL,
   routes: [
     {
-      path: '/home',
+      path: '/',
       name: 'home',
       component: Home
     },
@@ -26,7 +27,7 @@ const router = new Router({
       component: Login
     },
     {
-      path: '/register',
+      path: '/users/register',
       name: 'register',
       component: Register
     },
@@ -36,17 +37,17 @@ const router = new Router({
       component: Scheduler
     },
     {
-      path: '/appointmentView',
+      path: '/appointments/:appointmentId/view',
       name: 'appointmentView',
       component: AppointmentView
     },
     {
-      path: '/Profile',
+      path: '/users/:userId/view',
       name: 'viewProfile',
       component: ViewProfile
     },
     {
-      path: '/editProfile',
+      path: '/users/:userId/edit',
       name: 'editProfile',
       component: EditProfile
     },
@@ -54,10 +55,14 @@ const router = new Router({
       path: '/admin',
       name: 'admin',
       component: admin
+    },
+    {
+      path: '/authHome',
+      name: 'authHome',
+      component: AuthenticatedHome
     }
   
   ]
 })
 
-router.replace('/home');
 export default router;
