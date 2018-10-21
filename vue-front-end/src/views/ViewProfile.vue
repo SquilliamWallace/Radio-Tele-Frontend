@@ -18,7 +18,7 @@
                     <div id = "profileInfo" class = "text-xs-left">{{ profile.email.value }}</div>
                     <v-divider></v-divider>
                     <div v-show="profile.phone.value" class = "headline text-xs-left">Phone <v-icon>phone</v-icon></div>
-                    <div v-show="profile.phone.value" id = "profileInfo" class = "text-xs-left">{{ profile.phone.value }}</div>
+                    <div v-show="profile.phone.value" gid = "profileInfo" class = "text-xs-left">{{ profile.phone.value }}</div>
                     <v-divider></v-divider>
                     <div v-show="profile.company.value" class = "headline text-xs-left">Company  <v-icon>business</v-icon></div>
                     <div v-show="profile.company.value" id = "profileInfo" class = "text-xs-left">{{ profile.company.value }}</div>

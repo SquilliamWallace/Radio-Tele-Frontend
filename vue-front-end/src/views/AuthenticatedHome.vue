@@ -50,8 +50,9 @@ export default {
   methods: {
     handleLoggedIn() {
       ApiDriver.Auth().then((response) => {
-        console.log(response)
+        console.log(response);
         this.$store.commit("login", response.data.data);
+        console.log(this.$store.state);
       });
     }
   },
