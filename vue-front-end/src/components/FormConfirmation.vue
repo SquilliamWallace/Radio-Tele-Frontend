@@ -1,5 +1,5 @@
 <template>
-    <v-dialog max-width="250px" dark v-model="confirmation" persistent>
+    <v-dialog class="confirmation-modal" width="50%" dark v-model="confirmation" persistent>
         <v-card>
             <v-card-title class="headline">Are you sure you wish to cancel?</v-card-title>
             <v-card-text>If you cancel, you will lose all progress on this form and will have to fill it out again.</v-card-text>
@@ -32,5 +32,7 @@ export default {
 </script>
 
 <style scoped>
-
+.confirmation-modal {
+    width: 50%
+}
 </style>
