@@ -4,8 +4,8 @@
         <v-app light>
             <full-calendar @event-created="createEvent" @event-selected="openEvent" :events="events" class='overcast' id="calendar"></full-calendar>
             <v-layout justify-center>
-                <v-dialog fullscreen hide-overlay v-model="openCreateModal">
-                    <create-appointment v-on:close-modal="closeEventModal"></create-appointment>
+                <v-dialog dark fullscreen hide-overlay v-model="openCreateModal">
+                    <create-appointment :eventObj="event" v-on:close-modal="closeEventModal"></create-appointment>
                 </v-dialog>
             </v-layout>
         </v-app>
@@ -39,8 +39,12 @@ export default {
                 }
             ],
             openCreateModal: false,
-            newStartTime: "",
-            newEndTime: "",
+            event: {
+                title: "",
+                allDay: false,
+                start: "",
+                end: ""
+            }
         }
     },
     components: {
@@ -53,8 +57,12 @@ export default {
             router.push('/appointmentView')
         },
         createEvent(Obj) {
-            this.$data.newStartTime = Obj.start.format();
-            this.$data.newEndTime = Obj.end.format();
+            this.event.allDay = Obj.allDay
+            this.event.start = Obj.start.format()
+            this.event.end = Obj.end.format()
+            
+            // this.$data.newStartTime = Obj.start.format();
+            // this.$data.newEndTime = Obj.end.format();
             this.openCreateModal = true;
         },
         closeEventModal() {
