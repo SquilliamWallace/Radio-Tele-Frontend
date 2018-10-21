@@ -81,7 +81,7 @@ export default {
         ApiDriver.User.login(this.data);
       },
       registerRedirect(){
-        router.push('/register');
+        router.push('/users/register');
       },
     }
 }
