@@ -256,7 +256,10 @@ import FormConfirmation from '../components/FormConfirmation'
         
             // This will need changed to properly handle success or failure scenarios
             ApiDriver.User.register(data).then((response) => {
-                console.log(response)
+                console.log(response);
+                if (response.status == 200 && response.statusText == "OK"){
+                    router.push('/')
+                }
             });
         }
       },

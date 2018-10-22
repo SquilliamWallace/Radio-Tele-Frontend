@@ -56,7 +56,7 @@ export default {
           this.$store.commit("login", data.data);
         console.log(this.$store.state);
         }, (status, errors) => {
-          router.push('/home')
+          router.push('/')
         })
       });
     }

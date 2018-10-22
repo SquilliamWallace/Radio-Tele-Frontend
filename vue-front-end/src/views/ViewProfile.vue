@@ -68,7 +68,7 @@ export default {
         retrieveInformation() {
             let that = this;
             if (!this.$route.params.userId) {
-                router.push('/home')
+                router.push('/')
             } else {    
                 ApiDriver.User.get(this.$route.params.userId).then((response) => {
                     httpResponse.then(response, (data) => {
@@ -79,7 +79,7 @@ export default {
                             if (that.$store.state.currentUserId) {
                                 router.push('/authHome')
                             } else {
-                                router.push('/home')
+                                router.push('/')
                             }
                         }
                     })
