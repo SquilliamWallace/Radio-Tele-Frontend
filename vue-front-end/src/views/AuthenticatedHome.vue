@@ -63,6 +63,7 @@ export default {
   },
   mounted() {
     this.handleLoggedIn();
+    this.$forceUpdate();
   }
 };
 </script>
