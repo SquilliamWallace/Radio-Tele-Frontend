@@ -28,7 +28,10 @@ export default {
     Appointment: {
       view: function (appointmentId) {
         return axios.get("/api/appointments/" + appointmentId + "/retrieve")
-    },
+      },
+      create: function (data) {
+        return axios.post("/api/appointment", data, headers.retrieveHeaders())
+      },
   },
     Auth: function() {
       return axios.get("/api/auth")
