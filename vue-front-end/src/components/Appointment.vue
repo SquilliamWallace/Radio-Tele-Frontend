@@ -1,4 +1,4 @@
-<template>
+<template dark>
     <v-toolbar style="width:100%;">
         <v-container v-bind:style="{ padding:'50px' }">
             <v-card flat>
@@ -16,7 +16,7 @@
                     <v-layout wrap>
                     <v-flex xs12 sm6>
                         <v-text-field
-                        v-model="form.start"
+                        v-model="eventObj.start"
                         color="blue darken-2"
                         label="Start Time"
                         required
@@ -24,29 +24,20 @@
                     </v-flex>
                     <v-flex xs12 sm6>
                         <v-text-field
-                        v-model="form.end"
+                        v-model="eventObj.end"
                         color="blue darken-2"
                         label="End Time"
                         required
                         ></v-text-field>
                     </v-flex>
-                    <v-flex xs12 sm6>
-                        <v-text-field
-                        v-model="form.username"
-                        color="blue darken-2"
-                        label="Name"
-                        required
-                        ></v-text-field>
+                    <v-flex v-if="this.$store.state.isResearcher" xs12>
+                        <v-checkbox
+                        v-model="form.isPrivate"
+                        color="green"
+                        label="Private"
+                        >
+                        </v-checkbox>
                     </v-flex>
-                    <!-- <v-flex xs12 sm6>
-                        <v-select
-                        v-model="form.appointmentType"
-                        :items="appointmentTypes"
-                        color="blue darken-2"
-                        label="Appointment Type"
-                        required
-                        ></v-select>
-                    </v-flex> -->
                     </v-layout>
                 </v-container>
                 <v-card-actions>
@@ -67,35 +58,67 @@
 
 <script>
 import Event from '../main.js'
+import ApiDriver from '../ApiDriver'
+import HttpResponse from '../utils/HttpResponse'
+import CurrentUserValidation from '../utils/CurrentUserValidation'
+import router from '../router';
 export default {
     data() {
         name: 'Appointment'
         return {
-            accountTypes: ['Guest', 'Member', 'Student', 'Researcher'],
+            
             form: {
-                start: '2018-10-09T00:00:01',
-                end: '2018-10-10T15:00:00',
-                username: 'patrick_star'
+                isPrivate: false
             },
             snackbar: false,
         }
     },
+    props: {
+        eventObj: {}
+    },
     methods: {
         resetForm() {
             this.form = {
-                start: null,
-                end: null,
-                username: null
+                isPrivate: false
             }
             this.$emit('close-modal');
         },
         submit() {
-            this.snackbar = true;
+
+            let data = JSON.stringify({
+                userId: this.$store.state.currentUserId,
+                startTime: this.eventObj.start,
+                endTime: this.eventObj.end,
+                telescopeId: 1,
+                isPublic: !this.form.isPrivate
+            })
+
+            // This will need changed to properly handle success or failure scenarios
+            ApiDriver.Appointment.create(data).then((response) => {
+                console.log(response);
+                HttpResponse.then(response, (data) => {
+                        this.snackbar = true;
+                        this.form = {
+                            isPrivate: false
+                        }
+                        this.$emit('close-modal');
+
+                    }, (status, errors) => {
+                        if (parseInt(status) === 403) {
+                            alert("Access Denied");
+                            CurrentUserValidation.validateCurrentUser(this.$store);
+                        } else {
+                            console.log(status)
+                            console.log(errors)
+                        }
+                    })
+            });
+            
         }
     },
     computed: {
         formIsValid() {
-            if(this.form.start && this.form.end && this.form.username){
+            if(this.eventObj.start && this.eventObj.end){
                 return true;
             }
             else{
