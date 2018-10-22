@@ -65,6 +65,7 @@ export default {
   mounted() {
     // Handle the log in when the DOM is loaded
     this.handleLoggedIn();
+    this.$forceUpdate();
   }
 };
 </script>

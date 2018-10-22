@@ -5,7 +5,8 @@
       <v-toolbar-title class="title-style" @click="homeRedirect">YCAS Radio Telescope</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-sm-and-down">
-        <v-btn v-show="isLoggedIn" @click="viewProfile">Profile</v-btn>
+          <v-btn v-show="isLoggedIn" @click="viewProfile">Profile</v-btn>
+          <v-btn v-show="isLoggedIn" @click="logout">Logout</v-btn>
       </v-toolbar-items>
     </v-toolbar>
     <!-- Define drawer menu and populate it with items-->
@@ -26,6 +27,7 @@
 <script>
 import router from '../router';
 import ApiDriver from '../ApiDriver'
+import CurrentUserValidation from '../utils/CurrentUserValidation'
 export default {
     name: 'NavigationBar',
     data() {
@@ -39,13 +41,17 @@ export default {
     },
     methods:{
         homeRedirect(){
-            router.push('/authHome');
+            CurrentUserValidation.validateCurrentUser(this.$store);
         },
         submit() {
             ApiDriver.User.login(this.data);
         },
         viewProfile() {
             router.push('/users/' + this.$store.state.currentUserId + '/view')
+        },
+        logout() {
+            this.$store.commit("logout");
+            router.push('/');
         }
     },
     mounted: function () {

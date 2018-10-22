@@ -43,7 +43,8 @@
 import NavigationBar from '../components/NavigationBar.vue'
 import ApiDriver from '../ApiDriver'
 import router from '../router'
-import HttpResponse from '../utils/HttpResponse';
+import HttpResponse from '../utils/HttpResponse'
+import CurrentUserValidation from '../utils/CurrentUserValidation'
 export default {
     name: "ViewProfile",
     data() {
@@ -76,11 +77,7 @@ export default {
                     }, (status, errors) => {
                         if (parseInt(status) === 403) {
                             alert("Access Denied");
-                            if (that.$store.state.currentUserId) {
-                                router.push('/authHome')
-                            } else {
-                                router.push('/')
-                            }
+                            CurrentUserValidation.validateCurrentUser(this.$store);
                         }
                     })
                 }).catch((errors) => {

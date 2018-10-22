@@ -1,8 +1,8 @@
 <template>
   <v-app :dark="goDark">
-  <div id="app">
-      <router-view></router-view>
-  </div>
+    <div id="app">
+        <router-view></router-view>
+    </div>
   </v-app>
 </template>
 

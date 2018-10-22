@@ -1,17 +1,20 @@
 <template>
     <v-app>
+        <v-snackbar
+            v-model="snackbar"
+            top
+            color="success"
+            >
+            <span>Registration successful!</span>
+            <v-btn
+                flat
+                @click="registerSuccess()"
+                >
+                Okay
+            </v-btn>
+        </v-snackbar>
         <v-container v-bind:style="{ padding:'50px' }">
             <v-card flat>
-                <v-snackbar
-                v-model="snackbar"
-                absolute
-                top
-                right
-                color="success"
-                >
-                <span>Registration successful!</span>
-                <v-icon dark>check_circle</v-icon>
-                </v-snackbar>
                 <v-form ref="form" @submit.prevent="submit" refs="form">
                 <v-container grid-list-xl fluid>
                     <v-layout wrap>
@@ -166,7 +169,7 @@
                 </v-dialog>
             </v-card>
         </v-container>
-        <form-confirmation :confirmation="confirmModal"></form-confirmation>
+        <form-confirmation v-model="confirmModal"></form-confirmation>
     </v-app>
 </template>
 

@@ -59,7 +59,7 @@
             </v-card>
         </v-container>
         <!--Modal to confirm cancellation of form input-->
-    <form-confirmation :confirmation="confirmModal"></form-confirmation>
+    <form-confirmation v-model="confirmModal"></form-confirmation>
     </div>    
 </template>
 
@@ -70,6 +70,7 @@ import FormConfirmation from "../components/FormConfirmation";
 import ApiDriver from "../ApiDriver";
 import HttpResponse from "../utils/HttpResponse";
 import CustomErrorHandler from "../utils/CustomErrorHandler";
+import CurrentUserValidation from '../utils/CurrentUserValidation'
 
 export default {
   name: "EditProfile",
@@ -113,7 +114,6 @@ export default {
     },
     retrieveInformation() {
         let that = this;
-
         // If a route param was not supplied, return to the
         // home page
         if (!this.$route.params.userId) {
@@ -128,15 +128,9 @@ export default {
                 }, (status, errors) => {
                     // Check if the user is forbidden from accessing the endpoint
                     if (parseInt(status) === 403) {
-                        // If so, return them to the respective home page
                         alert("Access Denied");
-                        if (that.$store.state.currentUserId) {
-                            router.push("/authHome");
-                        } else {
-                            router.push("/");
-                        }
+                        CurrentUserValidation.validateCurrentUser(this.$store);
                     } else {
-                        // Otherwise handle the errors
                         handleErrors(errors);
                     }
                 });
@@ -156,6 +150,10 @@ export default {
             phoneNumber: this.profile.phone.value,
             company: this.profile.company.value
         };
+
+        console.log(this.profile.phone);
+        console.log(this.profile.company)
+        console.log(data)
 
         // Call the update api method
         ApiDriver.User.update(data.id, JSON.stringify(data)).then(response => {
