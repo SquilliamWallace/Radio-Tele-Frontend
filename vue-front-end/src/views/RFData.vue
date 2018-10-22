@@ -1,5 +1,6 @@
 <template>
   <v-app>
+    <navigation-bar></navigation-bar>
     <v-data-table
       :headers="headers"
       :items="RFData"
@@ -16,6 +17,7 @@
 </template>
 
 <script>
+import NavigationBar from "../components/NavigationBar.vue";
 export default {
     name: 'RFData',
     data() {
@@ -33,6 +35,9 @@ export default {
                 {rfId: 5, appointmentId: 2, intensity: 'zoinks'}
             ]
         }
+    },
+    components: {
+        NavigationBar
     }
 }
 </script>
