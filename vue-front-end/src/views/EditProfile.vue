@@ -59,7 +59,7 @@
             </v-card>
         </v-container>
         <!--Modal to confirm cancellation of form input-->
-    <form-confirmation :confirmation="confirmModal"></form-confirmation>
+    <form-confirmation v-model="confirmModal"></form-confirmation>
     </div>    
 </template>
 

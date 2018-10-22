@@ -155,7 +155,7 @@
                 </v-dialog>
             </v-card>
         </v-container>
-        <form-confirmation :confirmation="confirmModal"></form-confirmation>
+        <form-confirmation v-model="confirmModal"></form-confirmation>
     </v-app>
 </template>
 
