@@ -39,7 +39,12 @@ export default {
     },
     methods:{
         homeRedirect(){
-            router.push('/authHome');
+            if(this.$store.state.currentUserId) {
+                router.push('/authHome');    
+            }
+            else{
+                router.push('/');
+            }
         },
         submit() {
             ApiDriver.User.login(this.data);
