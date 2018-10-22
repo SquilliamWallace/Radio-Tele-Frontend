@@ -174,8 +174,8 @@
 import router from '../router';
 import ApiDriver from '../ApiDriver';
 import FormConfirmation from '../components/FormConfirmation';
-import httpResponse from '../utils/httpResponse';
-import CustomErrorHandler from "../utils/customErrorHandler";
+import HttpResponse from '../utils/HttpResponse';
+import CustomErrorHandler from "../utils/CustomErrorHandler";
     export default {
     data () {
       return {
@@ -274,7 +274,7 @@ import CustomErrorHandler from "../utils/customErrorHandler";
                 this.clearErrors();
 
                 // Handle the response
-                httpResponse.then(response, function(data) {
+                HttpResponse.then(response, function(data) {
                     // If the call was a success, redirect to the home page
                     if (data.statusCode == 200 && data.statusReason == "OK"){
                         router.push('/')

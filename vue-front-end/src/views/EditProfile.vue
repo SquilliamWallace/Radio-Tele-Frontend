@@ -68,8 +68,8 @@ import router from "../router";
 import NavigationBar from "../components/NavigationBar.vue";
 import FormConfirmation from "../components/FormConfirmation";
 import ApiDriver from "../ApiDriver";
-import httpResponse from "../utils/httpResponse";
-import CustomErrorHandler from "../utils/customErrorHandler";
+import HttpResponse from "../utils/HttpResponse";
+import CustomErrorHandler from "../utils/CustomErrorHandler";
 
 export default {
   name: "EditProfile",
@@ -122,7 +122,7 @@ export default {
             // Otherwise call the retrieve method
             ApiDriver.User.get(this.$route.params.userId).then(response => {
                 // Handle the response
-                httpResponse.then(response, data => {
+                HttpResponse.then(response, data => {
                     // If it was a success, populate the user information fields
                     that.populateData(data.data);
                 }, (status, errors) => {
@@ -163,7 +163,7 @@ export default {
             // Clear any field errors
             this.clearErrors();
             // Handle the response
-            httpResponse.then(response, data => {
+            HttpResponse.then(response, data => {
                 // If it was a success, return to the profile page
                 router.push("/users/" + data.data + "/view");
             }, (status, errors) => {

@@ -38,7 +38,7 @@
 import NavigationBar from "../components/NavigationBar.vue";
 import ApiDriver from "../ApiDriver";
 import router from '../router';
-import httpResponse from '../utils/httpResponse';
+import HttpResponse from '../utils/HttpResponse';
 export default {
   name: "AuthenticatedHome",
   data() {
@@ -54,7 +54,7 @@ export default {
         // Call the auth api endpoint so we can populate
         // the Vue store with user information
         ApiDriver.Auth().then((response) => {
-          httpResponse.then(response, (data) => {
+          HttpResponse.then(response, (data) => {
             this.$store.commit("login", data.data);
           }, (status, errors) => {
               router.push('/')

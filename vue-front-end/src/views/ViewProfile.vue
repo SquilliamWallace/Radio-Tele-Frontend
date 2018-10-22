@@ -43,7 +43,7 @@
 import NavigationBar from '../components/NavigationBar.vue'
 import ApiDriver from '../ApiDriver'
 import router from '../router'
-import httpResponse from '../utils/httpResponse';
+import HttpResponse from '../utils/HttpResponse';
 export default {
     name: "ViewProfile",
     data() {
@@ -71,7 +71,7 @@ export default {
                 router.push('/')
             } else {    
                 ApiDriver.User.get(this.$route.params.userId).then((response) => {
-                    httpResponse.then(response, (data) => {
+                    HttpResponse.then(response, (data) => {
                         that.populateData(data.data)
                     }, (status, errors) => {
                         if (parseInt(status) === 403) {

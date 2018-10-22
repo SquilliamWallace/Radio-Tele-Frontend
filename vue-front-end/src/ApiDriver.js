@@ -1,15 +1,15 @@
 const axios = require('axios');
 import router from './router';
-import headers from './utils/headers';
+import Headers from './utils/Headers';
 
 export default {
     //API endpoints go here
     User: {
       register: function (data) {
-        return axios.post("/api/users", data, headers.retrieveHeaders());
+        return axios.post("/api/users", data, Headers.retrieveHeaders());
       },
       login: function (data) {
-        return axios.post("/api/login?email=" + data.username + "&password=" + data.password, JSON.stringify(data), headers.retrieveHeaders())
+        return axios.post("/api/login?email=" + data.username + "&password=" + data.password, JSON.stringify(data), Headers.retrieveHeaders())
           .then(function (response) {
             if(response.data.includes("bundle.js")){
               router.push('/authHome');
@@ -20,7 +20,7 @@ export default {
         return axios.get("/api/users/" + userId)
       },
       update: function(userId, data) {
-        return axios.put("/api/users/" + userId, data, headers.retrieveHeaders())
+        return axios.put("/api/users/" + userId, data, Headers.retrieveHeaders())
       }
     },
 
