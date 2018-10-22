@@ -16,6 +16,9 @@ export default {
             }
           });
       },
+      logout: function () {
+        return axios.post("/logout", {}, Headers.retrieveHeaders())
+      },
       get: function(userId) {
         return axios.get("/api/users/" + userId)
       },

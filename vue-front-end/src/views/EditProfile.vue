@@ -150,11 +150,6 @@ export default {
             phoneNumber: this.profile.phone.value,
             company: this.profile.company.value
         };
-
-        console.log(this.profile.phone);
-        console.log(this.profile.company)
-        console.log(data)
-
         // Call the update api method
         ApiDriver.User.update(data.id, JSON.stringify(data)).then(response => {
             let that = this;

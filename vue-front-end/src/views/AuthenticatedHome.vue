@@ -57,6 +57,7 @@ export default {
           HttpResponse.then(response, (data) => {
             this.$store.commit("login", data.data);
           }, (status, errors) => {
+              console.log(errors);
               router.push('/')
           })
         });
