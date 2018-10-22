@@ -28,7 +28,7 @@
             <v-divider></v-divider>
             <v-list-tile>
                 <v-list-tile-content class="white--text">
-                    <v-list-tile-title>Privacy:</v-list-tile-title>
+                    <v-list-tile-title>Public:</v-list-tile-title>
                     <v-list-tile-sub-title class = "pl-3">{{ privacy }}</v-list-tile-sub-title>
                 </v-list-tile-content>
                 <v-list-tile-action>
@@ -84,9 +84,9 @@ export default {
                 errors: [],
 
                 startDay: 6,
-                startMonth: '10',
+                startMonth: '',
                 startYear: '2018',
-                endDay: '6', endMonth: '10', endYear: '2018',
+                endDay: '6', endMonth: '', endYear: '2018',
                 startHour: '6', startMinute: '30', period: 'am',
                 endHour: '1', endMinute: '45', endPeriod: 'pm',
                 privacy: 'private',
@@ -107,7 +107,7 @@ export default {
     },
     methods: {
         getAppointment () {
-            ApiDriver.Appointment.view().then((response) => {
+            ApiDriver.Appointment.view(2).then((response) => {
                 console.log(response)
                 this.populateData(response.data.data)
             
