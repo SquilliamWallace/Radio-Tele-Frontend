@@ -5,8 +5,8 @@
       <v-toolbar-title class="title-style" @click="homeRedirect">YCAS Radio Telescope</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-sm-and-down">
-        <v-btn v-show="isLoggedIn" @click="logout">Logout</v-btn>
-        <v-btn v-show="isLoggedIn" @click="viewProfile">Profile</v-btn>
+          <v-btn v-show="isLoggedIn" @click="viewProfile">Profile</v-btn>
+          <v-btn v-show="isLoggedIn" @click="logout">Logout</v-btn>
       </v-toolbar-items>
     </v-toolbar>
     <!-- Define drawer menu and populate it with items-->
@@ -50,6 +50,7 @@ export default {
             router.push('/users/' + this.$store.state.currentUserId + '/view')
         },
         logout() {
+            ApiDriver.User.logout();
             this.$store.commit("logout");
             router.push('/');
         }
