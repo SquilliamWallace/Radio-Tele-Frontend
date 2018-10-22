@@ -35,7 +35,7 @@ export default {
         return axios.post("/api/appointments/schedule", data, Headers.retrieveHeaders())
       },
       load: function(telescopeID) {
-        return axios.post("api/appointments/telescopes/" + telescopeID + "/retrieve")
+        return axios.get("api/appointments/telescopes/" + telescopeID + "/retrieve")
       }
   },
     Auth: function() {

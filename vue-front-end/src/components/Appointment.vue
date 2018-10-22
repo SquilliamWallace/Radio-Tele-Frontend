@@ -34,10 +34,8 @@
                         <v-checkbox
                         v-model="form.isPrivate"
                         color="green"
+                        label="Private"
                         >
-                        <div slot="label" @click.stop="">
-                            Private
-                        </div>
                         </v-checkbox>
                     </v-flex>
                     </v-layout>
