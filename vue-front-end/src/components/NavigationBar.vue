@@ -26,6 +26,7 @@
 <script>
 import router from '../router';
 import ApiDriver from '../ApiDriver'
+import CurrentUserValidation from '../utils/CurrentUserValidation'
 export default {
     name: 'NavigationBar',
     data() {
@@ -39,12 +40,7 @@ export default {
     },
     methods:{
         homeRedirect(){
-            if(this.$store.state.currentUserId) {
-                router.push('/authHome');    
-            }
-            else{
-                router.push('/');
-            }
+            CurrentUserValidation.validateCurrentUser(this.$store);
         },
         submit() {
             ApiDriver.User.login(this.data);

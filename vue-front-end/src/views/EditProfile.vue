@@ -70,6 +70,7 @@ import FormConfirmation from "../components/FormConfirmation";
 import ApiDriver from "../ApiDriver";
 import httpResponse from "../utils/httpResponse";
 import CustomErrorHandler from "../utils/customErrorHandler";
+import CurrentUserValidation from '../utils/CurrentUserValidation'
 
 export default {
   name: "EditProfile",
@@ -127,11 +128,7 @@ export default {
               (status, errors) => {
                 if (parseInt(status) === 403) {
                   alert("Access Denied");
-                  if (that.$store.state.currentUserId) {
-                    router.push("/authHome");
-                  } else {
-                    router.push("/");
-                  }
+                  CurrentUserValidation.validateCurrentUser(this.$store);
                 } else {
                     handleErrors(errors);
                 }
