@@ -50,18 +50,20 @@ export default {
     NavigationBar
   },
   methods: {
-    handleLoggedIn() {
-      ApiDriver.Auth().then((response) => {
-        httpResponse.then(response, (data) => {
-          this.$store.commit("login", data.data);
-        console.log(this.$store.state);
-        }, (status, errors) => {
-          router.push('/')
-        })
-      });
-    }
+      handleLoggedIn() {
+        // Call the auth api endpoint so we can populate
+        // the Vue store with user information
+        ApiDriver.Auth().then((response) => {
+          httpResponse.then(response, (data) => {
+            this.$store.commit("login", data.data);
+          }, (status, errors) => {
+              router.push('/')
+          })
+        });
+      }
   },
   mounted() {
+    // Handle the log in when the DOM is loaded
     this.handleLoggedIn();
   }
 };
