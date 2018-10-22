@@ -11,7 +11,6 @@ export default {
       login: function (data) {
         return axios.post("/api/login?email=" + data.username + "&password=" + data.password, JSON.stringify(data), headers.retrieveHeaders())
           .then(function (response) {
-            console.log(response);
             if(response.data.includes("bundle.js")){
               router.push('/authHome');
             }
