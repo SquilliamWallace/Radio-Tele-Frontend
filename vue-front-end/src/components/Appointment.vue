@@ -91,7 +91,7 @@ export default {
         submit() {
 
             let data = JSON.stringify({
-                userId: 1, //Grab from vuex after figuring out how to implement. 
+                userId: this.$store.currentUserId,
                 startTime: this.eventObj.start,
                 endTime: this.eventObj.end,
                 telescopeId: 1,
