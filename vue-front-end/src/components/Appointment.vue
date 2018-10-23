@@ -1,4 +1,5 @@
 <template dark>
+    <v-dialog dark fullscreen hide-overlay :value="value" @input="$emit('input')" persistent>
         <v-container v-bind:style="{ padding:'50px' }">
             <v-card flat>
                 <v-snackbar
@@ -52,6 +53,7 @@
                 </v-form>
             </v-card>
         </v-container>
+    </v-dialog>
 </template>
 
 <script>
@@ -72,7 +74,8 @@ export default {
         }
     },
     props: {
-        eventObj: {}
+        eventObj: {},
+        value: false
     },
     methods: {
         resetForm() {
