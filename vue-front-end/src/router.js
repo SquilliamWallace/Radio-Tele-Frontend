@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
-import Login from './views/Login.vue'
 import Register from './views/Register.vue'
 import Scheduler from './views/Scheduler.vue'
 import AppointmentView from './views/AppointmentView.vue'
@@ -9,6 +8,7 @@ import ViewProfile from './views/ViewProfile.vue'
 import EditProfile from './views/EditProfile'
 import admin from './views/admin'
 import AuthenticatedHome from './views/AuthenticatedHome'
+import RFData from './views/RFData'
 
 Vue.use(Router)
 
@@ -20,11 +20,6 @@ const router = new Router({
       path: '/',
       name: 'home',
       component: Home
-    },
-    {
-      path: '/login',
-      name: 'login',
-      component: Login
     },
     {
       path: '/users/register',
@@ -60,6 +55,11 @@ const router = new Router({
       path: '/authHome',
       name: 'authHome',
       component: AuthenticatedHome
+    },
+    {
+      path: '/RFData',
+      name: 'RFData',
+      component: RFData
     }
   
   ]
