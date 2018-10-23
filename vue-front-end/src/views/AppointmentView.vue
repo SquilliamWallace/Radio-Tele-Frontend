@@ -107,7 +107,7 @@ export default {
     },
     methods: {
         getAppointment () {
-            ApiDriver.Appointment.view(2).then((response) => {
+            ApiDriver.Appointment.view(this.$route.params.appointmentId).then((response) => {
                 console.log(response)
                 this.populateData(response.data.data)
             
