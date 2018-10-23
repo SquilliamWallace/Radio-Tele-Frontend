@@ -1,5 +1,4 @@
 <template dark>
-    <v-toolbar style="width:100%;">
         <v-container v-bind:style="{ padding:'50px' }">
             <v-card flat>
                 <v-snackbar
@@ -53,7 +52,6 @@
                 </v-form>
             </v-card>
         </v-container>
-    </v-toolbar>
 </template>
 
 <script>
