@@ -4,9 +4,7 @@
         <v-app light>
             <full-calendar @event-created="createEvent" @event-selected="openEvent" :events="events" class='overcast' id="calendar"></full-calendar>
             <v-layout justify-center>
-                <v-dialog dark fullscreen hide-overlay v-model="openCreateModal">
-                    <create-appointment :eventObj="event" v-on:close-modal="closeEventModal"></create-appointment>
-                </v-dialog>
+                <create-appointment :eventObj="event" v-model="openCreateModal" v-on:close-modal="openCreateModal = false"></create-appointment>
             </v-layout>
         </v-app>
     </v-app>
@@ -17,27 +15,14 @@ import {FullCalendar} from 'vue-full-calendar'
 import NavigationBar from '../components/NavigationBar.vue'
 import router from '../router'
 import CreateAppointment from '../components/Appointment.vue'
+import ApiDriver from '../ApiDriver'
+import HttpResponse from '../utils/HttpResponse'
+import CurrentUserValidation from '../utils/CurrentUserValidation'
 export default {
     name: 'Scheduler',
     data() {
         return {
-            events: [
-                {
-                    title: 'watch them stars',
-                    start: '2018-10-09T00:00:01',
-                    allDay: true
-                },
-                {
-                    title: 'do it again but for less time',
-                    start: '2018-10-10T12:00:00',
-                    end: '2018-10-10T15:00:00'
-                },
-                {
-                    title: 'i guess ill go again',
-                    start: '2018-10-11T05:00:00',
-                    end: '2018-10-11T10:00:00'
-                }
-            ],
+            events: [],
             openCreateModal: false,
             event: {
                 title: "",
@@ -53,8 +38,16 @@ export default {
         CreateAppointment
     },
     methods: {
-        openEvent() {
-            router.push('/appointmentView')
+        openEvent(event) {
+            console.log(event)
+            if (event.public) {
+                router.push('/appointments/' + event.id + "/view" )
+            }
+            else if (this.$store.state.isAdmin || (this.$store.state.currentUserId == event.userId)){
+                router.push('/appointments/' + event.id + "/view" )
+            } else {
+                prompt("Sorry you dont have permission to view that event")
+            }
         },
         createEvent(Obj) {
             this.event.allDay = Obj.allDay
@@ -67,7 +60,49 @@ export default {
         },
         closeEventModal() {
             this.openCreateModal = false;
+        },
+        populateData() {
+            ApiDriver.Appointment.futureAppointmentsByTelescopeID(1, 0, 100).then((response) => {
+                //console.log(response.data.data.content);
+                HttpResponse.then(response, (data) => {
+                        for (var index in response.data.data.content) {
+                            var element = response.data.data.content[index]
+                            var backgroundColor= "";
+                            var title = "";
+                            console.log(element.public);
+                            if (element.public) {
+                                backgroundColor = "";
+                                title = element.userFirstName + " " + element.userLastName;
+                            } else {
+                                backgroundColor = "black";
+                            }
+                            var eventData = {
+                                title: title,
+                                start: element.startTime,
+                                end: element.endTime,
+                                backgroundColor: backgroundColor,
+                                id: element.id,
+                                telescopeId: element.telescopeId,
+                                userId: element.userId,
+                                public: element.public
+                            }
+
+                            this.events.push(eventData)
+                        }
+                    }, (status, errors) => {
+                        if (parseInt(status) === 403) {
+                            alert("Access Denied");
+                            CurrentUserValidation.validateCurrentUser(this.$store);
+                        } else {
+                            console.log(status)
+                            console.log(errors)
+                        }
+                    })
+            });
         }
+    },
+    mounted() {
+        this.populateData();
     }  
 }
 
@@ -84,5 +119,7 @@ $('#calendar').fullCalendar({
 </script>
 
 <style scoped>
-
+.loading-dialog {
+   background-color: #303030; 
+}
 </style>
