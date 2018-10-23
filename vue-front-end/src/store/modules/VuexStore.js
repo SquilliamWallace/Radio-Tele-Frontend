@@ -11,6 +11,7 @@ const vuexLocal = new VuexPersistence({
 export default {
     StoreFactory: function () {
         return new Vuex.Store({
+            strict: true,
             state: {
                 currentUserId: null,
                 isUser: false,

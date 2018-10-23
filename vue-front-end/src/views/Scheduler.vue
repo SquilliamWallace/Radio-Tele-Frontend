@@ -4,9 +4,7 @@
         <v-app light>
             <full-calendar @event-created="createEvent" @event-selected="openEvent" :events="events" class='overcast' id="calendar"></full-calendar>
             <v-layout justify-center>
-                <v-dialog dark fullscreen v-model="openCreateModal">
-                    <create-appointment :eventObj="event" v-on:close-modal="closeEventModal"></create-appointment>
-                </v-dialog>
+                <create-appointment :eventObj="event" v-model="openCreateModal" v-on:close-modal="openCreateModal = false"></create-appointment>
             </v-layout>
         </v-app>
     </v-app>
