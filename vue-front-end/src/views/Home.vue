@@ -65,6 +65,7 @@
 import NavigationBar from '../components/NavigationBar.vue'
 import ApiDriver from '../ApiDriver'
 import router from '../router'
+import CurrentUserValidation from '../utils/CurrentUserValidation'
 export default {
     name: "Home",
     data () {
@@ -83,6 +84,9 @@ export default {
       registerRedirect(){
         router.push('/users/register');
       },
+    },
+    mounted() {
+        CurrentUserValidation.validateCurrentUser(this.$store);
     }
 }
 </script>
