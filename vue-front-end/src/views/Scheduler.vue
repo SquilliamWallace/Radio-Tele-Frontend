@@ -22,19 +22,7 @@ export default {
     name: 'Scheduler',
     data() {
         return {
-            events: [
-                {
-                    endTime: "2018-10-24T12:30:00.000+0000",
-                    id: 1,
-                    public: true,
-                    startTime: "2018-10-24T09:00:00.000+0000",
-                    status: "Scheduled",
-                    telescopeId: 1,
-                    userFirstName: "Matthew",
-                    userId: 1,
-                    userLastName: "Hasz"
-                }
-],
+            events: [],
             openCreateModal: false,
             event: {
                 title: "",
@@ -50,8 +38,16 @@ export default {
         CreateAppointment
     },
     methods: {
-        openEvent() {
-            router.push('/appointmentView')
+        openEvent(event) {
+            console.log(event)
+            if (event.public) {
+                router.push('/appointments/' + event.id + "/view" )
+            }
+            else if (this.$store.state.isAdmin || (this.$store.state.currentUserId == event.userId)){
+                router.push('/appointments/' + event.id + "/view" )
+            } else {
+                prompt("Sorry you dont have permission to view that event")
+            }
         },
         createEvent(Obj) {
             this.event.allDay = Obj.allDay
@@ -71,11 +67,26 @@ export default {
                 HttpResponse.then(response, (data) => {
                         for (var index in response.data.data.content) {
                             var element = response.data.data.content[index]
-                            var eventData = {
-                                title: element.userFirstName + " " + element.userLastName,
-                                start: element.startTime,
-                                end: element.endTime
+                            var backgroundColor= "";
+                            var title = "";
+                            console.log(element.public);
+                            if (element.public) {
+                                backgroundColor = "";
+                                title = element.userFirstName + " " + element.userLastName;
+                            } else {
+                                backgroundColor = "black";
                             }
+                            var eventData = {
+                                title: title,
+                                start: element.startTime,
+                                end: element.endTime,
+                                backgroundColor: backgroundColor,
+                                id: element.id,
+                                telescopeId: element.telescopeId,
+                                userId: element.userId,
+                                public: element.public
+                            }
+
                             this.events.push(eventData)
                         }
                     }, (status, errors) => {
@@ -108,5 +119,7 @@ $('#calendar').fullCalendar({
 </script>
 
 <style scoped>
-
+.loading-dialog {
+   background-color: #303030; 
+}
 </style>
