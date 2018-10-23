@@ -101,6 +101,7 @@ export default {
                         this.form = {
                             isPrivate: false
                         }
+                        this.$emit('populateData');
                         this.$emit('close-modal');
 
                     }, (status, errors) => {
