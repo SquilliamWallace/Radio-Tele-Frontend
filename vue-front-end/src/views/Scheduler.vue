@@ -17,27 +17,26 @@ import {FullCalendar} from 'vue-full-calendar'
 import NavigationBar from '../components/NavigationBar.vue'
 import router from '../router'
 import CreateAppointment from '../components/Appointment.vue'
+import ApiDriver from '../ApiDriver'
+import HttpResponse from '../utils/HttpResponse'
+import CurrentUserValidation from '../utils/CurrentUserValidation'
 export default {
     name: 'Scheduler',
     data() {
         return {
             events: [
                 {
-                    title: 'watch them stars',
-                    start: '2018-10-09T00:00:01',
-                    allDay: true
-                },
-                {
-                    title: 'do it again but for less time',
-                    start: '2018-10-10T12:00:00',
-                    end: '2018-10-10T15:00:00'
-                },
-                {
-                    title: 'i guess ill go again',
-                    start: '2018-10-11T05:00:00',
-                    end: '2018-10-11T10:00:00'
+                    endTime: "2018-10-24T12:30:00.000+0000",
+                    id: 1,
+                    public: true,
+                    startTime: "2018-10-24T09:00:00.000+0000",
+                    status: "Scheduled",
+                    telescopeId: 1,
+                    userFirstName: "Matthew",
+                    userId: 1,
+                    userLastName: "Hasz"
                 }
-            ],
+],
             openCreateModal: false,
             event: {
                 title: "",
@@ -67,7 +66,34 @@ export default {
         },
         closeEventModal() {
             this.openCreateModal = false;
+        },
+        populateData() {
+            ApiDriver.Appointment.futureAppointmentsByTelescopeID(1, 0, 100).then((response) => {
+                //console.log(response.data.data.content);
+                HttpResponse.then(response, (data) => {
+                        for (var index in response.data.data.content) {
+                            var element = response.data.data.content[index]
+                            var eventData = {
+                                title: element.userFirstName + " " + element.userLastName,
+                                start: element.startTime,
+                                end: element.endTime
+                            }
+                            this.events.push(eventData)
+                        }
+                    }, (status, errors) => {
+                        if (parseInt(status) === 403) {
+                            alert("Access Denied");
+                            CurrentUserValidation.validateCurrentUser(this.$store);
+                        } else {
+                            console.log(status)
+                            console.log(errors)
+                        }
+                    })
+            });
         }
+    },
+    mounted() {
+        this.populateData();
     }  
 }
 
