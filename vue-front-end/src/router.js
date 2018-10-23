@@ -6,6 +6,7 @@ import Scheduler from './views/Scheduler.vue'
 import AppointmentView from './views/AppointmentView.vue'
 import ViewProfile from './views/ViewProfile.vue'
 import EditProfile from './views/EditProfile'
+import admin from './views/admin'
 import AuthenticatedHome from './views/AuthenticatedHome'
 import RFData from './views/RFData'
 
@@ -46,6 +47,11 @@ const router = new Router({
       component: EditProfile
     },
     {
+      path: '/admin',
+      name: 'admin',
+      component: admin
+    },
+    {
       path: '/authHome',
       name: 'authHome',
       component: AuthenticatedHome
@@ -55,6 +61,7 @@ const router = new Router({
       name: 'RFData',
       component: RFData
     }
+  
   ]
 })
 
