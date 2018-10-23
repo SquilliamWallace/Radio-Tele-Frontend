@@ -40,8 +40,16 @@ export default {
         CreateAppointment
     },
     methods: {
-        openEvent() {
-            router.push('/appointmentView')
+        openEvent(event) {
+            console.log(event)
+            if (event.public) {
+                router.push('/appointments/' + event.id + "/view" )
+            }
+            else if (this.$store.state.isAdmin || (this.$store.state.currentUserId == event.userId)){
+                router.push('/appointments/' + event.id + "/view" )
+            } else {
+                prompt("Sorry you dont have permission to view that event")
+            }
         },
         createEvent(Obj) {
             this.event.allDay = Obj.allDay
@@ -76,7 +84,9 @@ export default {
                                 end: element.endTime,
                                 backgroundColor: backgroundColor,
                                 id: element.id,
-                                telescopeId: element.telescopeId
+                                telescopeId: element.telescopeId,
+                                userId: element.userId,
+                                public: element.public
                             }
 
                             this.events.push(eventData)
