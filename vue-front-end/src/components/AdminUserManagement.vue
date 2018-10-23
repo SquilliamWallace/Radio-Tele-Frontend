@@ -1,7 +1,18 @@
 <template>
     <v-card flat>
         <v-card-title>
-            
+            <v-list>
+                <v-list-tile v-for="user in users" :key = "user.Firstname" v-bind:href = "'http://localhost:8081/users/' + user.id + '/view'">
+                    <v-list-tile-content>
+                        <v-list-tile-title>
+                            {{user.firstName}} {{user.lastName}}: {{user.membershipRole}}
+                        </v-list-tile-title>
+                        <v-list-tile-sub-title>
+                            {{user.email}}
+                        </v-list-tile-sub-title>
+                    </v-list-tile-content>
+                </v-list-tile>
+            </v-list>
         </v-card-title>
     </v-card>
 </template>
@@ -16,7 +27,9 @@ export default {
                pageNumber: 0,
                pageSize: 50 
             },
-
+            users: [],
+            viewUserId:''
+            
         }
     },
     methods:{
@@ -28,14 +41,15 @@ export default {
                 console.log(error)
             });
         },
-        populateData(){
-            
-        }
+        populateData(data){
+            this.users = data.content
+        },
+        
     },
     
     mounted: function(){
-    this.getUsers()
-}
+        this.getUsers()
+    }
 }
 
 </script>
