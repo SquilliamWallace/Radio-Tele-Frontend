@@ -7,6 +7,7 @@
                 <create-appointment :eventObj="event" v-model="openCreateModal" v-on:close-modal="openCreateModal = false"></create-appointment>
             </v-layout>
         </v-app>
+         <private-event v-model="privateEventModal"></private-event>
     </v-app>
 </template>
 
@@ -18,6 +19,7 @@ import CreateAppointment from '../components/Appointment.vue'
 import ApiDriver from '../ApiDriver'
 import HttpResponse from '../utils/HttpResponse'
 import CurrentUserValidation from '../utils/CurrentUserValidation'
+import PrivateEvent from "../components/PrivateEvent";
 export default {
     name: 'Scheduler',
     data() {
@@ -29,13 +31,15 @@ export default {
                 allDay: false,
                 start: "",
                 end: ""
-            }
+            },
+            privateEventModal: false
         }
     },
     components: {
         FullCalendar,
         NavigationBar,
-        CreateAppointment
+        CreateAppointment,
+        PrivateEvent
     },
     methods: {
         openEvent(event) {
@@ -46,7 +50,8 @@ export default {
             else if (this.$store.state.isAdmin || (this.$store.state.currentUserId == event.userId)){
                 router.push('/appointments/' + event.id + "/view" )
             } else {
-                prompt("Sorry you dont have permission to view that event")
+                this.privateEventModal = true;
+                //alert("Sorry you dont have permission to view that event")
             }
         },
         createEvent(Obj) {
@@ -99,6 +104,9 @@ export default {
                         }
                     })
             });
+        },
+        closeModal() {
+            this.privateEventModal = false
         }
     },
     mounted() {
