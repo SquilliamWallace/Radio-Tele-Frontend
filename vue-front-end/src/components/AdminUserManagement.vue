@@ -2,7 +2,7 @@
     <v-card flat>
         <v-card-title>
             <v-list>
-                <v-list-tile v-for="user in users" :key = "user.Firstname" v-bind:href = "'http://localhost:8081/users/' + user.id + '/view'">
+                <v-list-tile v-for="user in users" :key = "user.id" v-bind:href = "'http://localhost:8081/users/' + user.id + '/view'">
                     <v-list-tile-content>
                         <v-list-tile-title>
                             {{user.firstName}} {{user.lastName}}: {{user.membershipRole}}
@@ -19,6 +19,8 @@
 <script>
 import router from '../router';
 import ApiDriver from '../ApiDriver';
+import HttpResponse from '../utils/HttpResponse';
+import CurrentUserValidation from  '../utils/CurrentUserValidation';
 export default {
     name: 'AdminUserManagement',
     data(){
@@ -35,18 +37,33 @@ export default {
     methods:{
         getUsers(){
             ApiDriver.User.allUsers(this.data).then((response) => {
-                console.log(response)
-                this.populateData(response.data.data)
+                let that = this;
+                HttpResponse.then(response, (data) => {
+                    this.populateData(data.data)
+                    console.log(that.users)
+                }, (status, errors) => {
+                    if (parseInt(status) === 403) {
+                        alert("Access Denied");
+                        CurrentUserValidation.validateCurrentUser(this.$store);
+                    }
+                })
             }).catch((error) => {
+                alert("An error occurred loading in the list of users")
                 console.log(error)
             });
         },
         populateData(data){
-            this.users = data.content
-        },
-        
+            for (var index in data.content) {
+                let user = data.content[index];
+                if (!user.membershipRole) {
+                    user.membershipRole = 'Pending Approval';
+                }
+                this.users.push(user);
+            }
+
+            console.log(this.users)
+        }
     },
-    
     mounted: function(){
         this.getUsers()
     }
