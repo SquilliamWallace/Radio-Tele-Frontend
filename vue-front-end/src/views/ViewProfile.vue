@@ -92,7 +92,12 @@ export default {
             this.profile.email.value = data.email;
             this.profile.phone.value = data.phoneNumber;
             this.profile.company.value = data.company;
-            this.profile.type.value = data.membershipRole;
+            if (data.membershipRole) {
+                this.profile.type.value = data.membershipRole;
+            } else {
+                this.profile.type.value = "Pending Approval";
+            }
+            
         }
     },
     mounted() {
