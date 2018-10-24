@@ -23,7 +23,7 @@ export default {
         return axios.get("/api/users/" + userId)
       },
       update: function(userId, data) {
-        return axios.put("/api/users/" + userId, data, headers.retrieveHeaders())
+        return axios.put("/api/users/" + userId, data, Headers.retrieveHeaders())
       },
       allUsers: function(data) {
         return axios.get("/api/users?page=" + data.pageNumber + "&size=" + data.pageSize)
