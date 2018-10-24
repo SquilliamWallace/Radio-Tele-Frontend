@@ -84,9 +84,6 @@ export default {
       registerRedirect(){
         router.push('/users/register');
       },
-    },
-    mounted() {
-        CurrentUserValidation.validateCurrentUser(this.$store);
     }
 }
 </script>
