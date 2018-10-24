@@ -62,10 +62,10 @@
                     </v-btn>
                 </v-list-tile-action>
             </v-list-tile>
-            <v-divider></v-divider>
-            
-            
-        
+            <v-divider>
+                <v-divider></v-divider>
+            </v-divider>
+            <v-btn v-if="status === 'Completed'" color="primary" v-bind:href="'/appointments/' + id + '/rf-data'">View Data</v-btn>
     </v-container>
     </div>
     
@@ -74,6 +74,8 @@
 
 import NavigationBar from '../components/NavigationBar.vue'
 import ApiDriver from '../ApiDriver.js'
+import HttpResponse from '../utils/HttpResponse';
+import CurrentUserValidation from  '../utils/CurrentUserValidation';
 import moment from 'moment'
 export default {
     name: "AppointmentView",
@@ -90,6 +92,7 @@ export default {
                 startHour: '6', startMinute: '30', period: 'am',
                 endHour: '1', endMinute: '45', endPeriod: 'pm',
                 privacy: 'private',
+                status: '',
                 celestialBody: 'Alpha Centauri',
                 Tele: 1,
 
@@ -108,22 +111,41 @@ export default {
     methods: {
         getAppointment () {
             ApiDriver.Appointment.view(this.$route.params.appointmentId).then((response) => {
-                console.log(response)
-                this.populateData(response.data.data)
-            
+                HttpResponse.then(response, (data) => {
+                    this.populateData(data.data)
+                }, (status, errors) => {
+                    if (parseInt(status) === 403) {
+                        alert("Access Denied");
+                        CurrentUserValidation.validateCurrentUser(this.$store);
+                    }
+                })
             }).catch((error) => {
                 console.log(error)
             });
         },
         auth () {
             ApiDriver.Auth().then((response) => {
-                console.log(response)
+                HttpResponse.then(response, (data) => {
+                    
+                }, (status, errors) => {
+                    if (parseInt(status) === 403) {
+                        alert("Access Denied");
+                        CurrentUserValidation.validateCurrentUser(this.$store);
+                    }
+                })
+            }).catch((error) => {
+                alert("Error loading this appointments data")
+                console.log(error)
             })
         },
         populateData(data){
+            this.id = data.id
             this.privacy = data.public
             this.startMonth = moment(data.startTime).add(4, 'hours').format('MM/DD/YYYY hh:mm A')
             this.endMonth = moment(data.endTime).add(4, 'hours').format('MM/DD/YYYY hh:mm A')
+            this.status = data.status
+
+            console.log(this.status)
         }
     },
     mounted: function(){
