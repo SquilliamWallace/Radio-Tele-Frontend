@@ -37,10 +37,8 @@ export default {
     methods:{
         getUsers(){
             ApiDriver.User.allUsers(this.data).then((response) => {
-                let that = this;
                 HttpResponse.then(response, (data) => {
                     this.populateData(data.data)
-                    console.log(that.users)
                 }, (status, errors) => {
                     if (parseInt(status) === 403) {
                         alert("Access Denied");
@@ -60,8 +58,6 @@ export default {
                 }
                 this.users.push(user);
             }
-
-            console.log(this.users)
         }
     },
     mounted: function(){

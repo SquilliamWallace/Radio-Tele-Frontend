@@ -39,7 +39,10 @@ export default {
       },
       load: function(telescopeID) {
         return axios.get("api/appointments/telescopes/" + telescopeID + "/retrieve")
-      }
+      },
+      data: function(appointmentId) {
+        return axios.get("/api/appointments/" + appointmentId + "/rf-data")
+      } 
   },
     Auth: function() {
       return axios.get("/api/auth")

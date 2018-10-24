@@ -57,7 +57,7 @@ const router = new Router({
       component: AuthenticatedHome
     },
     {
-      path: '/RFData',
+      path: '/appointments/:appointmentId/rf-data',
       name: 'RFData',
       component: RFData
     }

@@ -34,8 +34,7 @@ export default {
         return {
             showDrawer: false,
             items: [
-              { title: 'Scheduling Calendar', icon: 'dashboard', path: "/scheduler" },
-              { title: 'Radio Frequency Data', path: '/RFData' }
+              { title: 'Scheduling Calendar', icon: 'dashboard', path: "/scheduler" }
             ],
             isLoggedIn: this.$store.state.currentUserId !== null
         }
