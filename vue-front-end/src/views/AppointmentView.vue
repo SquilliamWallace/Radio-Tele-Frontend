@@ -122,8 +122,8 @@ export default {
         },
         populateData(data){
             this.privacy = data.public
-            this.startMonth = moment(data.startTime).format('MM/DD/YYYY hh:mm A')
-            this.endMonth = moment(data.endTime).format('MM/DD/YYYY hh:mm A')
+            this.startMonth = moment(data.startTime).add(4, 'hours').format('MM/DD/YYYY hh:mm A')
+            this.endMonth = moment(data.endTime).add(4, 'hours').format('MM/DD/YYYY hh:mm A')
         }
     },
     mounted: function(){
