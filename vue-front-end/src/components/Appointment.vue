@@ -1,7 +1,7 @@
 <template dark>
-    <v-dialog dark fullscreen hide-overlay :value="value" @input="$emit('input')" persistent>
-        <v-container v-bind:style="{ padding:'50px' }">
+    <v-dialog dark hide-overlay :value="value" @input="$emit('input')" persistent width="50%">
             <v-card flat>
+                <v-card-title class="headline">Schedule Appointment</v-card-title>
                 <v-snackbar
                 v-model="snackbar"
                 absolute
@@ -52,7 +52,6 @@
                 </v-card-actions>
                 </v-form>
             </v-card>
-        </v-container>
     </v-dialog>
 </template>
 
