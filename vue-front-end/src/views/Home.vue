@@ -14,10 +14,10 @@
                 <v-container grid-list-md>
                     <v-layout wrap>
                     <v-flex xs12>
-                        <v-text-field name="email" v-model="data.username" label="Email" required></v-text-field>
+                        <v-text-field name="email" v-model="data.username" label="Email" required v-on:keyup.enter="submit"></v-text-field>
                     </v-flex>
                     <v-flex xs12>
-                        <v-text-field name="password" v-model="data.password" label="Password" type="password" required></v-text-field>
+                        <v-text-field name="password" v-model="data.password" label="Password" type="password" required v-on:keyup.enter="submit"></v-text-field>
                     </v-flex>
                     <v-flex xs12>
                         <div>Don't have an account?</div>
