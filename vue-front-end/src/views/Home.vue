@@ -40,7 +40,7 @@ import ApiDriver from "../ApiDriver";
 import router from '../router';
 import HttpResponse from '../utils/HttpResponse';
 export default {
-  name: "AuthenticatedHome",
+  name: "Home",
   data() {
     return {
       show: false

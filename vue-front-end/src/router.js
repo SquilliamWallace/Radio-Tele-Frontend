@@ -7,7 +7,7 @@ import AppointmentView from './views/AppointmentView.vue'
 import ViewProfile from './views/ViewProfile.vue'
 import EditProfile from './views/EditProfile'
 import admin from './views/admin'
-import AuthenticatedHome from './views/AuthenticatedHome'
+import Home from './views/Home'
 import RFData from './views/RFData'
 
 Vue.use(Router)
@@ -52,9 +52,9 @@ const router = new Router({
       component: admin
     },
     {
-      path: '/authHome',
-      name: 'authHome',
-      component: AuthenticatedHome
+      path: '/home',
+      name: 'home',
+      component: Home
     },
     {
       path: '/appointments/:appointmentId/rf-data',

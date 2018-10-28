@@ -12,7 +12,7 @@ export default {
         return axios.post("/api/login?email=" + data.username + "&password=" + data.password, JSON.stringify(data), Headers.retrieveHeaders())
           .then(function (response) {
             if(response.data.includes("bundle.js")){
-              router.push('/authHome');
+              router.push('/home');
             }
           });
       },
