@@ -1,64 +1,65 @@
 <template>
- 
-<v-container id = "loginBox" class = "elevation-15">
-    <v-toolbar>
-        <v-toolbar-title id = "toolbar">YCAS Radio Telescope</v-toolbar-title>
-    </v-toolbar>
-    <div id = "login"> 
-        <v-form>
-            <v-flex>
-                <v-text-field
-                    label="Email"
-                    color=white
-                ></v-text-field>
-            </v-flex>
-            <v-flex>
-                <v-text-field
-                    label="Password"
-                    color=white
-                ></v-text-field>
-            </v-flex>
-        </v-form>
-        <v-btn flat id = "loginButton">Login</v-btn>
-    </div>
-</v-container>
+<div>
+    <v-parallax style = "height:100%;" src="https://images.pexels.com/photos/110854/pexels-photo-110854.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260">
+    <v-flex>
+            <v-container>
+                <v-layout row wrap>
+                    <v-flex width = "10px" xs12>
+                        <v-card-text class = "headline">Login</v-card-text>
+                    </v-flex>
+                </v-layout>
+            </v-container>
+        <v-card-text>
+            <v-form>
+                <v-container grid-list-md>
+                    <v-layout wrap>
+                    <v-flex xs12>
+                        <v-text-field name="email" v-model="data.username" label="Email" required v-on:keyup.enter="submit"></v-text-field>
+                    </v-flex>
+                    <v-flex xs12>
+                        <v-text-field name="password" v-model="data.password" label="Password" type="password" required v-on:keyup.enter="submit"></v-text-field>
+                    </v-flex>
+                    <v-flex xs12>
+                        <div>Don't have an account?</div>
+                        <a @click="registerRedirect">Register Here!</a>
+                    </v-flex>      
+                    </v-layout>
+                </v-container>
+                <v-btn color="white" flat @click="submit">Login</v-btn>
+            </v-form> 
+        </v-card-text>
+    </v-flex>
+    </v-parallax>
+</div>
 </template>
 
 <script>
+import NavigationBar from '../components/NavigationBar.vue'
+import ApiDriver from '../ApiDriver'
+import router from '../router'
+import CurrentUserValidation from '../utils/CurrentUserValidation'
 export default {
     name: "Login",
-    data() {
+    data () {
         return {
-            input: {
+            show: false,
+            data: {
                 username: "",
                 password: ""
             }
         }
     },
     methods: {
-        login(){
-
-        }
+      submit() {
+        ApiDriver.User.login(this.data);
+      },
+      registerRedirect(){
+        router.push('/users/register');
+      },
     }
 }
 </script>
 
 <style scoped>
-    #login {
-        align-content: center;
-    }
-    #loginBox {
-        border:rgb(83, 83, 83), 0 px;
-        margin-top: 200px;
-        width: 400px;
-        height: 300px;
-        background-color: black;
-        border: 1px solid white
-    }
-    #toolbar {
-        padding-left: 4rem;
-    }
-    #loginButton{
-        margin-top: 15px;
-    }
+
 </style>

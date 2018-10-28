@@ -278,7 +278,7 @@ import CustomErrorHandler from "../utils/CustomErrorHandler";
 
                 // Handle the response
                 HttpResponse.then(response, function(data) {
-                    // If the call was a success, redirect to the home page
+                    // If the call was a success, redirect to the login page
                     if (data.statusCode == 200 && data.statusReason == "OK"){
                         router.push('/')
                     }

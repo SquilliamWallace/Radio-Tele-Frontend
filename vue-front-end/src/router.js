@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from './views/Home.vue'
+import Login from './views/Login.vue'
 import Register from './views/Register.vue'
 import Scheduler from './views/Scheduler.vue'
 import AppointmentView from './views/AppointmentView.vue'
@@ -18,8 +18,8 @@ const router = new Router({
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: Home
+      name: 'login',
+      component: Login
     },
     {
       path: '/users/register',

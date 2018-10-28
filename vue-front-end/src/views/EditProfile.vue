@@ -115,7 +115,7 @@ export default {
     retrieveInformation() {
         let that = this;
         // If a route param was not supplied, return to the
-        // home page
+        // login page
         if (!this.$route.params.userId) {
             router.push("/");
         } else {
