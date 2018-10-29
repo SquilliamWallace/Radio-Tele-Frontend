@@ -14,10 +14,25 @@
                 <v-container grid-list-md>
                     <v-layout wrap>
                     <v-flex xs12>
-                        <v-text-field name="email" v-model="data.username" label="Email" required v-on:keyup.enter="submit"></v-text-field>
+                        <v-text-field
+                         name="email"
+                         v-model="data.username.value"
+                         :error=data.username.hasError
+                         :error-messages=data.username.errorMessage
+                         label="Email" 
+                         required 
+                         v-on:keyup.enter="submit"></v-text-field>
                     </v-flex>
                     <v-flex xs12>
-                        <v-text-field name="password" v-model="data.password" label="Password" type="password" required v-on:keyup.enter="submit"></v-text-field>
+                        <v-text-field 
+                        name="password" 
+                        v-model="data.password.value"
+                        :error=data.password.hasError
+                        :error-messages=data.password.errorMessage 
+                        label="Password" 
+                        type="password" 
+                        required 
+                        v-on:keyup.enter="submit"></v-text-field>
                     </v-flex>
                     <v-flex xs12>
                         <div>Don't have an account?</div>
@@ -34,28 +49,49 @@
 </template>
 
 <script>
-import NavigationBar from '../components/NavigationBar.vue'
-import ApiDriver from '../ApiDriver'
-import router from '../router'
-import CurrentUserValidation from '../utils/CurrentUserValidation'
+import NavigationBar from '../components/NavigationBar.vue';
+import ApiDriver from '../ApiDriver';
+import router from '../router';
+import CurrentUserValidation from '../utils/CurrentUserValidation';
+import CustomErrorHandler from '../utils/CustomErrorHandler';
 export default {
     name: "Login",
     data () {
         return {
             show: false,
             data: {
-                username: "",
-                password: ""
-            }
+                username: {
+                    value: "",
+                    hasError: false
+                },
+                password: {
+                    value: "",
+                    hasError: false
+                }
+            },
+            generalErrorMessage: "Invalid Email or Password"
         }
     },
     methods: {
       submit() {
-        ApiDriver.User.login(this.data);
+        ApiDriver.User.login(this.data).then(response => {
+            this.clearErrors();
+
+            if(response.data.includes("bundle.js")){
+              router.push('/home');
+            } else {
+                CustomErrorHandler.populateError(this.data.username, this.generalErrorMessage);
+                CustomErrorHandler.populateError(this.data.password, this.generalErrorMessage);
+            }
+          });
       },
       registerRedirect(){
         router.push('/users/register');
       },
+      clearErrors() {
+          CustomErrorHandler.clearError(this.data.username);
+          CustomErrorHandler.clearError(this.data.password);
+      }
     }
 }
 </script>
