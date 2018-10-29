@@ -273,15 +273,20 @@ import CustomErrorHandler from "../utils/CustomErrorHandler";
         
             // This will need changed to properly handle success or failure scenarios
             ApiDriver.User.register(data).then((response) => {
+                let that = this;
                 // After each submit, clear any errors
                 this.clearErrors();
-
                 // Handle the response
                 HttpResponse.then(response, function(data) {
                     // If the call was a success, redirect to the login page
-                    if (data.statusCode == 200 && data.statusReason == "OK"){
-                        router.push('/')
-                    }
+                    that.$swal({
+                        title: '<span style="color:#f0ead6">Account Created!<span>',
+                        html: '<span style="color:#f0ead6">Your account has been created. Please check your email to activate it.<span>',
+                        type: 'success',
+                        background: '#302f2f'
+                    }).then(response => {
+                        router.push('/');
+                    });
                 }, function(status, errors) {
                     // Otherwise handle errors
                     that.handleErrors(errors)

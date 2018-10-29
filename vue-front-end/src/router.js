@@ -4,6 +4,7 @@ import Login from './views/Login.vue'
 import Register from './views/Register.vue'
 import Scheduler from './views/Scheduler.vue'
 import AppointmentView from './views/AppointmentView.vue'
+import ActivateAccount from './views/ActivateAccount.vue'
 import ViewProfile from './views/ViewProfile.vue'
 import EditProfile from './views/EditProfile'
 import admin from './views/admin'
@@ -60,8 +61,13 @@ const router = new Router({
       path: '/appointments/:appointmentId/rf-data',
       name: 'RFData',
       component: RFData
+    },
+    {
+      path: '/activateAccount',
+      name: 'ActivateAccount',
+      component: ActivateAccount,
+      query: { token: 'private' }
     }
-  
   ]
 })
 

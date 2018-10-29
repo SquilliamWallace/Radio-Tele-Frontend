@@ -5,6 +5,9 @@ import Headers from './utils/Headers';
 export default {
     //API endpoints go here
     User: {
+      activate: function(token) {
+        return axios.put("/api/users/activate?token=" + token, {}, Headers.retrieveHeaders());
+      },
       register: function (data) {
         return axios.post("/api/users", data, Headers.retrieveHeaders());
       },
