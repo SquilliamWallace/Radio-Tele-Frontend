@@ -9,12 +9,7 @@ export default {
         return axios.post("/api/users", data, Headers.retrieveHeaders());
       },
       login: function (data) {
-        return axios.post("/api/login?email=" + data.username + "&password=" + data.password, JSON.stringify(data), Headers.retrieveHeaders())
-          .then(function (response) {
-            if(response.data.includes("bundle.js")){
-              router.push('/home');
-            }
-          });
+        return axios.post("/api/login?email=" + data.username.value + "&password=" + data.password.value, JSON.stringify(data), Headers.retrieveHeaders())
       },
       logout: function () {
         return axios.post("/api/logout", {}, Headers.retrieveHeaders())
