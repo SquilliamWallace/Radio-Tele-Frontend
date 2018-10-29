@@ -1,6 +1,6 @@
 <template>
     <div>
-      
+      <navigation-bar></navigation-bar>
       <v-tabs
         slot="extension"
         color="transparent"
@@ -45,6 +45,7 @@
 </template>
 <script>
 import AdminUserManagement from '../components/AdminUserManagement.vue'
+import NavigationBar from '../components/NavigationBar.vue'
  export default {
      name: 'admin',
     data () {
@@ -58,7 +59,8 @@ import AdminUserManagement from '../components/AdminUserManagement.vue'
       }
     },
     components: {
-        AdminUserManagement
+        AdminUserManagement,
+        NavigationBar
     }
   }
 </script>
