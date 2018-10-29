@@ -22,6 +22,10 @@
             Surveillance
             <v-icon>videocam</v-icon>
         </v-tab>
+        <v-tab>
+          Appointment Management
+          <v-icon>event</v-icon>
+        </v-tab>
 
         <v-tab-item>
                 <admin-user-management></admin-user-management>
