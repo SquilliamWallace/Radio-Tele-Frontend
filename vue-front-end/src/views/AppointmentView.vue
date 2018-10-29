@@ -115,7 +115,12 @@ export default {
                     this.populateData(data.data)
                 }, (status, errors) => {
                     if (parseInt(status) === 403) {
-                        alert("Access Denied");
+                        this.$swal({
+                            title: '<span style="color:#f0ead6">Error!<span>',
+                            html: '<span style="color:#f0ead6">Access Denied<span>',
+                            type: 'error',
+                            background: '#302f2f'
+                        });
                         CurrentUserValidation.validateCurrentUser(this.$store);
                     }
                 })
@@ -129,12 +134,22 @@ export default {
                     
                 }, (status, errors) => {
                     if (parseInt(status) === 403) {
-                        alert("Access Denied");
+                        this.$swal({
+                            title: '<span style="color:#f0ead6">Error!<span>',
+                            html: '<span style="color:#f0ead6">Access Denied<span>',
+                            type: 'error',
+                            background: '#302f2f'
+                        });
                         CurrentUserValidation.validateCurrentUser(this.$store);
                     }
                 })
             }).catch((error) => {
-                alert("Error loading this appointments data")
+                this.$swal({
+                            title: '<span style="color:#f0ead6">Error!<span>',
+                            html: '<span style="color:#f0ead6">An error occurred when loading this appointment data<span>',
+                            type: 'error',
+                            background: '#302f2f'
+                        });
                 console.log(error)
             })
         },

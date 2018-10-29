@@ -76,12 +76,22 @@ export default {
                         that.populateData(data.data)
                     }, (status, errors) => {
                         if (parseInt(status) === 403) {
-                            alert("Access Denied");
+                            this.$swal({
+                            title: '<span style="color:#f0ead6">Error!<span>',
+                            html: '<span style="color:#f0ead6">Access Denied<span>',
+                            type: 'error',
+                            background: '#302f2f'
+                        });
                             CurrentUserValidation.validateCurrentUser(this.$store);
                         }
                     })
                 }).catch((errors) => {
-                    alert("An error occurred loading this user's information");
+                    this.$swal({
+                            title: '<span style="color:#f0ead6">Error!<span>',
+                            html: '<span style="color:#f0ead6">An error occurred when loading the user information<span>',
+                            type: 'error',
+                            background: '#302f2f'
+                        });
                     console.log(errors)
                 })
             }
