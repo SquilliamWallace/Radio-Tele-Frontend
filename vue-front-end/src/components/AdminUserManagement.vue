@@ -1,8 +1,7 @@
 <template>
-    <v-card flat>
-        <v-card-title>
-            <v-list>
-                <v-list-tile v-for="user in users" :key = "user.id" v-bind:href = "'http://localhost:8081/users/' + user.id + '/view'">
+    <v-card  width = "100%">
+            <v-list >
+                <v-list-tile v-for="user in users" :key = "user.id" >
                     <v-list-tile-content>
                         <v-list-tile-title>
                             {{user.firstName}} {{user.lastName}}: {{user.membershipRole}}
@@ -11,9 +10,16 @@
                             {{user.email}}
                         </v-list-tile-sub-title>
                     </v-list-tile-content>
+                    <v-spacer></v-spacer>
+                    <v-btn icon v-bind:href = "'http://localhost:8081/users/' + user.id + '/view'">
+                        <v-icon>account_circle</v-icon>
+                    </v-btn>
+                    <v-btn icon @click="banUser(user.id)">
+                        <v-icon>gavel</v-icon>
+                    </v-btn>
                 </v-list-tile>
             </v-list>
-        </v-card-title>
+        
     </v-card>
 </template>
 <script>
@@ -30,7 +36,8 @@ export default {
                pageSize: 50 
             },
             users: [],
-            viewUserId:''
+            viewUserId: ''
+        
             
         }
     },
@@ -60,8 +67,17 @@ export default {
                 }
                 this.users.push(user);
             }
+<<<<<<< Updated upstream
 
             console.log(this.users)
+=======
+        },
+        banUser(userId){
+            ApiDriver.User.ban(userId).then((response) => {
+                console.log(response)
+                
+            })
+>>>>>>> Stashed changes
         }
     },
     mounted: function(){

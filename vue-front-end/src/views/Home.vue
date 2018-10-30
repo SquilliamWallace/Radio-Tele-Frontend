@@ -66,6 +66,7 @@ import NavigationBar from '../components/NavigationBar.vue'
 import ApiDriver from '../ApiDriver'
 import router from '../router'
 export default {
+<<<<<<< Updated upstream
     name: "Home",
     data () {
         return {
@@ -85,6 +86,38 @@ export default {
       },
     }
 }
+=======
+  name: "Home",
+  data() {
+    return {
+      show: false
+    };
+  },
+  components: {
+    NavigationBar
+  },
+  methods: {
+      handleLoggedIn() {
+        // Call the auth api endpoint so we can populate
+        // the Vue store with user information
+        ApiDriver.Auth().then((response) => {
+          console.log(response)
+          HttpResponse.then(response, (data) => {
+            this.$store.commit("login", data.data);
+          }, (status, errors) => {
+              console.log(errors);
+              router.push('/')
+          })
+        });
+      }
+  },
+  mounted() {
+    // Handle the log in when the DOM is loaded
+    this.handleLoggedIn();
+    this.$forceUpdate();
+  }
+};
+>>>>>>> Stashed changes
 </script>
 
 <style scoped>
