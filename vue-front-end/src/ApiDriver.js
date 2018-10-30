@@ -42,8 +42,13 @@ export default {
         return axios.get("/api/appointments/" + appointmentId + "/rf-data")
       } 
   },
-    Auth: function() {
-      return axios.get("/api/auth")
+    Auth: {
+      User: function() {
+        return axios.get("/api/auth")
+      },
+      Admin: function() {
+        return axios.get("/api/authAdmin")
+      }
     }
 
 }
