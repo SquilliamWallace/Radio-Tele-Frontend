@@ -67,17 +67,14 @@ export default {
                 }
                 this.users.push(user);
             }
-<<<<<<< Updated upstream
 
             console.log(this.users)
-=======
         },
         banUser(userId){
             ApiDriver.User.ban(userId).then((response) => {
                 console.log(response)
                 
             })
->>>>>>> Stashed changes
         }
     },
     mounted: function(){

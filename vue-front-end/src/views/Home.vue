@@ -66,27 +66,6 @@ import NavigationBar from '../components/NavigationBar.vue'
 import ApiDriver from '../ApiDriver'
 import router from '../router'
 export default {
-<<<<<<< Updated upstream
-    name: "Home",
-    data () {
-        return {
-            show: false,
-            data: {
-                username: "",
-                password: ""
-            }
-        }
-    },
-    methods: {
-      submit() {
-        ApiDriver.User.login(this.data);
-      },
-      registerRedirect(){
-        router.push('/users/register');
-      },
-    }
-}
-=======
   name: "Home",
   data() {
     return {
@@ -117,7 +96,6 @@ export default {
     this.$forceUpdate();
   }
 };
->>>>>>> Stashed changes
 </script>
 
 <style scoped>
