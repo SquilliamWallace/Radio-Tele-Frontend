@@ -129,7 +129,7 @@ export default {
             });
         },
         auth () {
-            ApiDriver.Auth().then((response) => {
+            ApiDriver.Auth.User().then((response) => {
                 HttpResponse.then(response, (data) => {
                     
                 }, (status, errors) => {
