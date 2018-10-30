@@ -18,11 +18,11 @@
 </template>
 
 <script>
-import router from '../router';
-import ApiDriver from '../ApiDriver';
-import HttpResponse from '../utils/HttpResponse';
-import CurrentUserValidation from  '../utils/CurrentUserValidation';
-import NavigationBar from "../components/NavigationBar.vue";
+import router from '../../router';
+import ApiDriver from '../../ApiDriver';
+import HttpResponse from '../../utils/HttpResponse';
+import CurrentUserValidation from  '../../utils/CurrentUserValidation';
+import NavigationBar from "../../components/NavigationBar.vue";
 import moment from 'moment';
 export default {
     name: 'RFData',

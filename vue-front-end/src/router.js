@@ -1,14 +1,14 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Login from './views/Login.vue'
-import Register from './views/Register.vue'
-import Scheduler from './views/Scheduler.vue'
-import AppointmentView from './views/AppointmentView.vue'
-import ViewProfile from './views/ViewProfile.vue'
-import EditProfile from './views/EditProfile'
+import Login from './views/User/Login'
+import Register from './views/User/Register'
+import Scheduler from './views/Appointment/Scheduler'
+import AppointmentView from './views/Appointment/AppointmentView'
+import ViewProfile from './views/Profile/ViewProfile'
+import EditProfile from './views/Profile/EditProfile'
 import admin from './views/admin'
 import Home from './views/Home'
-import RFData from './views/RFData'
+import RFData from './views/Appointment/RFData'
 
 Vue.use(Router)
 

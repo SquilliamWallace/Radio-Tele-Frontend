@@ -64,13 +64,13 @@
 </template>
 
 <script>
-import router from "../router";
-import NavigationBar from "../components/NavigationBar.vue";
-import FormConfirmation from "../components/FormConfirmation";
-import ApiDriver from "../ApiDriver";
-import HttpResponse from "../utils/HttpResponse";
-import CustomErrorHandler from "../utils/CustomErrorHandler";
-import CurrentUserValidation from '../utils/CurrentUserValidation'
+import router from "../../router";
+import NavigationBar from "../../components/NavigationBar.vue";
+import FormConfirmation from "../../components/FormConfirmation";
+import ApiDriver from "../../ApiDriver";
+import HttpResponse from "../../utils/HttpResponse";
+import CustomErrorHandler from "../../utils/CustomErrorHandler";
+import CurrentUserValidation from '../../utils/CurrentUserValidation'
 
 export default {
   name: "EditProfile",

@@ -13,13 +13,13 @@
 
 <script>
 import {FullCalendar} from 'vue-full-calendar'
-import NavigationBar from '../components/NavigationBar.vue'
-import router from '../router'
-import CreateAppointment from '../components/Appointment.vue'
-import ApiDriver from '../ApiDriver'
-import HttpResponse from '../utils/HttpResponse'
-import CurrentUserValidation from '../utils/CurrentUserValidation'
-import PrivateEvent from "../components/PrivateEvent";
+import NavigationBar from '../../components/NavigationBar.vue'
+import router from '../../router'
+import CreateAppointment from '../../components/Appointment.vue'
+import ApiDriver from '../../ApiDriver'
+import HttpResponse from '../../utils/HttpResponse'
+import CurrentUserValidation from '../../utils/CurrentUserValidation'
+import PrivateEvent from "../../components/PrivateEvent";
 export default {
     name: 'Scheduler',
     data() {

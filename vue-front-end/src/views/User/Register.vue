@@ -174,11 +174,11 @@
 </template>
 
 <script>
-import router from '../router';
-import ApiDriver from '../ApiDriver';
-import FormConfirmation from '../components/FormConfirmation';
-import HttpResponse from '../utils/HttpResponse';
-import CustomErrorHandler from "../utils/CustomErrorHandler";
+import router from '../../router';
+import ApiDriver from '../../ApiDriver';
+import FormConfirmation from '../../components/FormConfirmation';
+import HttpResponse from '../../utils/HttpResponse';
+import CustomErrorHandler from "../../utils/CustomErrorHandler";
     export default {
     data () {
       return {

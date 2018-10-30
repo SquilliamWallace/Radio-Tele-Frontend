@@ -49,11 +49,11 @@
 </template>
 
 <script>
-import NavigationBar from '../components/NavigationBar.vue';
-import ApiDriver from '../ApiDriver';
-import router from '../router';
-import CurrentUserValidation from '../utils/CurrentUserValidation';
-import CustomErrorHandler from '../utils/CustomErrorHandler';
+import NavigationBar from '../../components/NavigationBar.vue';
+import ApiDriver from '../../ApiDriver';
+import router from '../../router';
+import CurrentUserValidation from '../../utils/CurrentUserValidation';
+import CustomErrorHandler from '../../utils/CustomErrorHandler';
 export default {
     name: "Login",
     data () {

@@ -26,7 +26,10 @@ module.exports = {
       },
       resolve: {
         //automatically resolves file extensions, removes the need to include file extension on import
-        extensions: ['*', '.js', '.json', '.vue']
+        extensions: ['*', '.js', '.json', '.vue'],
+        alias: {
+          'src'
+        }
       },
       module: {
         //defines what type of files can be handled by the webpack parser and bundling service
