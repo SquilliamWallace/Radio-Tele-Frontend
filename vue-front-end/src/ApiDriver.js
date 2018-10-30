@@ -41,7 +41,13 @@ export default {
       data: function(appointmentId) {
         return axios.get("/api/appointments/" + appointmentId + "/rf-data")
       } 
-  },
+    },
+    Log: {
+      viewLogs: function(data){
+        console.log(data)
+        return axios.get("/api/logs?pageNumber=" + data.pageNumber + "&pageSize=" + data.pageSize)
+      }
+    },
     Auth: function() {
       return axios.get("/api/auth")
     }

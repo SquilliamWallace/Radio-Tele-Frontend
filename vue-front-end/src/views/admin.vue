@@ -28,11 +28,11 @@
         </v-tab>
 
         <v-tab-item>
-                <admin-user-management></admin-user-management>
+          <admin-user-management></admin-user-management>
         </v-tab-item>
-
+        
         <v-tab-item>
-            
+          <admin-log></admin-log>
         </v-tab-item>
 
         <v-tab-item>
@@ -46,6 +46,7 @@
 <script>
 import AdminUserManagement from '../components/AdminUserManagement.vue'
 import NavigationBar from '../components/NavigationBar.vue'
+import AdminLog from '../components/AdminLog.vue'
  export default {
      name: 'admin',
     data () {
@@ -60,7 +61,8 @@ import NavigationBar from '../components/NavigationBar.vue'
     },
     components: {
         AdminUserManagement,
-        NavigationBar
+        NavigationBar,
+        AdminLog
     }
   }
 </script>
