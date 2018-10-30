@@ -53,12 +53,18 @@ export default {
       handleLoggedIn() {
         // Call the auth api endpoint so we can populate
         // the Vue store with user information
-        ApiDriver.Auth().then((response) => {
+        ApiDriver.Auth.User().then((response) => {
           HttpResponse.then(response, (data) => {
             this.$store.commit("login", data.data);
           }, (status, errors) => {
-              console.log(errors);
-              router.push('/')
+              this.$swal({
+                title: '<span style="color:#f0ead6">Error!<span>',
+                html: '<span style="color:#f0ead6">Access Denied<span>',
+                type: 'error',
+                background: '#302f2f'
+              }).then(response => {
+                router.push('/')
+              });
           })
         });
       }
