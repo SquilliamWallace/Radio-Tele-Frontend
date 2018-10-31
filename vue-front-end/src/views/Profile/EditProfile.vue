@@ -133,8 +133,9 @@ export default {
                             html: '<span style="color:#f0ead6">Access Denied<span>',
                             type: 'error',
                             background: '#302f2f'
+                        }).then(response => {
+                            CurrentUserValidation.validateCurrentUser(this.$store);
                         });
-                        CurrentUserValidation.validateCurrentUser(this.$store);
                     } else {
                         handleErrors(errors);
                     }
@@ -145,6 +146,8 @@ export default {
                             html: '<span style="color:#f0ead6">An error occurred when loading the user information<span>',
                             type: 'error',
                             background: '#302f2f'
+                        }).then(response => {
+                            CurrentUserValidation.validateCurrentUser(this.$store);
                         });
               console.log(errors);
           });
