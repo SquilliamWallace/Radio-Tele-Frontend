@@ -39,18 +39,7 @@ export default {
             ApiDriver.User.allUsers(this.data).then((response) => {
                 HttpResponse.then(response, (data) => {
                     this.populateData(data.data)
-                }, (status, errors) => {
-                    if (parseInt(status) === 403) {
-                        this.$swal({
-                            title: '<span style="color:#f0ead6">Error!<span>',
-                            html: '<span style="color:#f0ead6">Access Denied<span>',
-                            type: 'error',
-                            background: '#302f2f'
-                        }).then(response => {
-                            CurrentUserValidation.validateCurrentUser(this.$store);
-                        });
-                    }
-                })
+                }, (status, errors) => {})
             }).catch((error) => {
                 this.$swal({
                             title: '<span style="color:#f0ead6">Error!<span>',
