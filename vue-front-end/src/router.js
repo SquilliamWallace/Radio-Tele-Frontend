@@ -9,6 +9,7 @@ import EditProfile from './views/Profile/EditProfile'
 import admin from './views/admin'
 import Home from './views/Home'
 import RFData from './views/Appointment/RFData'
+import UnderConstruction from './views/UnderConstruction'
 
 Vue.use(Router)
 
@@ -60,8 +61,12 @@ const router = new Router({
       path: '/appointments/:appointmentId/rf-data',
       name: 'RFData',
       component: RFData
+    },
+    {
+      path: '/underConstruction',
+      name: 'underConstruction',
+      component: UnderConstruction  
     }
-  
   ]
 })
 

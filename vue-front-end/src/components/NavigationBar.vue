@@ -34,7 +34,8 @@ export default {
             showDrawer: false,
             items: [
               { title: 'Scheduling Calendar', icon: 'dashboard', path: "/scheduler" },
-              { title: 'Administration', path: '/admin'}
+              { title: 'Administration', path: '/admin'},
+              { title: 'Under Construction', path: '/underConstruction'}
             ],
             isLoggedIn: this.$store.state.currentUserId !== null
         }
