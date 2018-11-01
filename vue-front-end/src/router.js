@@ -10,6 +10,7 @@ import admin from './views/admin'
 import Home from './views/Home'
 import RFData from './views/Appointment/RFData'
 import UnderConstruction from './views/UnderConstruction'
+import CompletedAppointments from './views/Appointment/CompletedAppointments'
 
 Vue.use(Router)
 
@@ -66,6 +67,11 @@ const router = new Router({
       path: '/underConstruction',
       name: 'underConstruction',
       component: UnderConstruction  
+    },
+    {
+      path: '/users/:userId/appointments/completed',
+      name: 'CompletedAppointments',
+      component: CompletedAppointments
     }
   ]
 })
