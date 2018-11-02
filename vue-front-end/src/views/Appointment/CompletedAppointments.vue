@@ -1,10 +1,13 @@
 <template>
 <div>
     <v-card flat>
-        <v-card-title v-if="completedAppointments.length === 0" primary-title class="justify-center">
+        <v-card-title v-if="completedAppointments.length === 0 && !loading" primary-title class="justify-center">
             <span class="headline">No Completed Observations!</span>
         </v-card-title>
-        <v-card-text v-if="completedAppointments.length === 0">
+        <v-card-title v-else primary-title class="justify-center">
+            <span class="headline">Completed Observations</span>
+        </v-card-title>
+        <v-card-text v-if="completedAppointments.length === 0 && !loading">
             <div>You do not have any completed observations.
                 <a href="/scheduler">Click here to schedule an observation</a>
             </div>
@@ -28,7 +31,14 @@
         </v-card-title>
     </v-card>
     <br>
-    <v-btn v-if="!last" class="justify-center" @click="loadMore">Load More Appointments</v-btn>
+    <div class="text-xs-center">
+            <v-pagination
+            circle
+            v-model="pageDisplay"
+            :length="numPages"
+            @input="next"
+            ></v-pagination>
+        </div>
 </div>
 </template>
 <script>
@@ -42,13 +52,17 @@ export default {
     data() {
         return {
             pageNumber: 0,
-            pageSize: 5,
+            pageDisplay: 1,
+            pageSize: 25,
+            numPages: 0,
             last: false,
-            completedAppointments: []
+            completedAppointments: [],
+            loading: true
         }
     },
     methods: {
         getCompletedAppointments() {
+            this.loading = true;
             ApiDriver.Appointment.completedAppointments(this.$route.params.userId, this.pageNumber, this.pageSize)
                 .then(response => {
                     HttpResponse.then(response, data => {
@@ -79,18 +93,22 @@ export default {
                 })
         },
         populateData(data) {
-            console.log(data.content)
+            console.log(data)
             for (var index in data.content) {
                 let appointment = data.content[index];
                 appointment.celestialBody = "Alpha Centauri";
                 appointment.startTime = moment(appointment.startTime).add(4, 'hours').format('MM/DD/YYYY hh:mm:ss A');
                 appointment.endTime = moment(appointment.endTime).add(4, 'hours').format('MM/DD/YYYY hh:mm:ss A');
                 this.completedAppointments.push(appointment);
+                this.numPages = data.totalPages;
+                this.loading = false;
             }
         },
-        loadMore() {
-            this.pageNumber++;
-            this.getCompletedAppointments();
+        next(page) {
+            this.pageNumber = page - 1;
+            this.pageDisplay = page;
+            this.completedAppointments = [];
+            this.getCompletedAppointments()
         }
     },
     mounted: function() {
