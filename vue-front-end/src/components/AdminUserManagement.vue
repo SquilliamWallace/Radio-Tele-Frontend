@@ -1,7 +1,7 @@
 <template>
     <v-card  width = "100%">
             <v-list >
-                <v-list-tile v-for="user in users" :key = "user.id"  >
+                <v-list-tile v-for="user in users" :key = "user.id"  @click="hover = !hover">
                     <v-list-tile-content>
                         <v-list-tile-title>
                             {{user.firstName}} {{user.lastName}}: {{user.membershipRole}}
@@ -44,6 +44,7 @@ export default {
             },
             users: [],
             viewUserId: '',
+            hover: false,
            
         
             
