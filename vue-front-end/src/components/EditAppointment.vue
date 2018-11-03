@@ -1,22 +1,13 @@
 <template dark>
     <v-dialog dark hide-overlay :value="value" @input="$emit('input')" persistent width="50%">
             <v-card flat>
-                <v-card-title class="headline">Schedule Appointment</v-card-title>
-                <v-snackbar
-                v-model="snackbar"
-                absolute
-                top
-                right
-                color="success">
-                <span>Appointment Created</span>
-                <v-icon dark>check_circle</v-icon>
-                </v-snackbar>
+                <v-card-title class="headline">Edit Appointment</v-card-title>
                 <v-form ref="form" @submit.prevent="submit" refs="form">
                 <v-container grid-list-xl fluid>
                     <v-layout wrap>
                     <v-flex xs12 sm6>
                         <v-text-field
-                        v-model="eventObj.start"
+                        v-model="appointmentObj.start"
                         color="blue darken-2"
                         label="Start Time"
                         required
@@ -24,15 +15,15 @@
                     </v-flex>
                     <v-flex xs12 sm6>
                         <v-text-field
-                        v-model="eventObj.end"
+                        v-model="appointmentObj.end"
                         color="blue darken-2"
                         label="End Time"
                         required
                         ></v-text-field>
                     </v-flex>
-                    <v-flex v-if="this.$store.state.isResearcher" xs12>
+                    <v-flex v-if="$store.state.isResearcher | $store.state.isAdmin" xs12>
                         <v-checkbox
-                        v-model="form.isPrivate"
+                        v-model="appointmentObj.privacy"
                         color="green"
                         label="Private"
                         >
@@ -41,14 +32,13 @@
                     </v-layout>
                 </v-container>
                 <v-card-actions>
-                    <v-btn flat @click="resetForm">Cancel</v-btn>
+                    <v-btn flat @click="$emit('input')">Cancel</v-btn>
                     <v-spacer></v-spacer>
                     <v-btn
-                    :disabled="!formIsValid"
                     flat
                     color="primary"
                     type="submit"
-                    >Schedule</v-btn>
+                    >Update</v-btn>
                 </v-card-actions>
                 </v-form>
             </v-card>
@@ -60,49 +50,27 @@ import Event from '../main.js'
 import ApiDriver from '../ApiDriver'
 import HttpResponse from '../utils/HttpResponse'
 import CurrentUserValidation from '../utils/CurrentUserValidation'
-import router from '../router';
 export default {
-    data() {
-        name: 'Appointment'
-        return {
-            
-            form: {
-                isPrivate: false
-            },
-            snackbar: false,
-        }
-    },
     props: {
-        eventObj: {},
+        appointmentObj: {},
         value: false
     },
     methods: {
-        resetForm() {
-            this.form = {
-                isPrivate: false
-            }
-            this.$emit('close-modal');
-        },
         submit() {
-            var date = new Date(this.eventObj.start)
-            let data = JSON.stringify({
-                userId: this.$store.state.currentUserId,
-                startTime: new Date(this.eventObj.start).toUTCString(),
-                endTime: new Date(this.eventObj.end).toUTCString(),
-                telescopeId: 1,
-                isPublic: !this.form.isPrivate
-            })
 
+            let data = JSON.stringify({
+                startTime: new Date(this.appointmentObj.start).toUTCString(),
+                endTime: new Date(this.appointmentObj.end).toUTCString(),
+                telescopeId: this.appointmentObj.Tele,
+                isPublic: !this.appointmentObj.privacy
+            })
+//
             // This will need changed to properly handle success or failure scenarios
-            ApiDriver.Appointment.create(data).then((response) => {
+            ApiDriver.Appointment.update(this.appointmentObj.id, data).then((response) => {
                 console.log(response);
                 HttpResponse.then(response, (data) => {
-                        this.snackbar = true;
-                        this.form = {
-                            isPrivate: false
-                        }
                         this.$emit('populateData');
-                        this.$emit('close-modal');
+                        this.$emit('input');
 
                     }, (status, errors) => {
                         if (parseInt(status) === 403) {
@@ -120,16 +88,6 @@ export default {
                     })
             });
             
-        }
-    },
-    computed: {
-        formIsValid() {
-            if(this.eventObj.start && this.eventObj.end){
-                return true;
-            }
-            else{
-                return false;
-            }
         }
     }
 }
