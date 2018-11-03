@@ -1,14 +1,15 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from './views/Home.vue'
-import Register from './views/Register.vue'
-import Scheduler from './views/Scheduler.vue'
-import AppointmentView from './views/AppointmentView.vue'
-import ViewProfile from './views/ViewProfile.vue'
-import EditProfile from './views/EditProfile'
+import Login from './views/User/Login'
+import Register from './views/User/Register'
+import Scheduler from './views/Appointment/Scheduler'
+import AppointmentView from './views/Appointment/AppointmentView'
+import ViewProfile from './views/Profile/ViewProfile'
+import EditProfile from './views/Profile/EditProfile'
 import admin from './views/admin'
-import AuthenticatedHome from './views/AuthenticatedHome'
-import RFData from './views/RFData'
+import Home from './views/Home'
+import RFData from './views/Appointment/RFData'
+import UnderConstruction from './views/UnderConstruction'
 
 Vue.use(Router)
 
@@ -18,8 +19,8 @@ const router = new Router({
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: Home
+      name: 'login',
+      component: Login
     },
     {
       path: '/users/register',
@@ -52,16 +53,20 @@ const router = new Router({
       component: admin
     },
     {
-      path: '/authHome',
-      name: 'authHome',
-      component: AuthenticatedHome
+      path: '/home',
+      name: 'home',
+      component: Home
     },
     {
-      path: '/RFData',
+      path: '/appointments/:appointmentId/rf-data',
       name: 'RFData',
       component: RFData
+    },
+    {
+      path: '/underConstruction',
+      name: 'underConstruction',
+      component: UnderConstruction  
     }
-  
   ]
 })
 

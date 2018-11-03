@@ -174,11 +174,11 @@
 </template>
 
 <script>
-import router from '../router';
-import ApiDriver from '../ApiDriver';
-import FormConfirmation from '../components/FormConfirmation';
-import HttpResponse from '../utils/HttpResponse';
-import CustomErrorHandler from "../utils/CustomErrorHandler";
+import router from '../../router';
+import ApiDriver from '../../ApiDriver';
+import FormConfirmation from '../../components/FormConfirmation';
+import HttpResponse from '../../utils/HttpResponse';
+import CustomErrorHandler from "../../utils/CustomErrorHandler";
     export default {
     data () {
       return {
@@ -278,7 +278,7 @@ import CustomErrorHandler from "../utils/CustomErrorHandler";
 
                 // Handle the response
                 HttpResponse.then(response, function(data) {
-                    // If the call was a success, redirect to the home page
+                    // If the call was a success, redirect to the login page
                     if (data.statusCode == 200 && data.statusReason == "OK"){
                         router.push('/')
                     }

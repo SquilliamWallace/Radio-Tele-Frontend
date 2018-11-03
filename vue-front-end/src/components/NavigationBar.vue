@@ -27,7 +27,6 @@
 <script>
 import router from '../router';
 import ApiDriver from '../ApiDriver'
-import CurrentUserValidation from '../utils/CurrentUserValidation'
 export default {
     name: 'NavigationBar',
     data() {
@@ -35,14 +34,20 @@ export default {
             showDrawer: false,
             items: [
               { title: 'Scheduling Calendar', icon: 'dashboard', path: "/scheduler" },
-              { title: 'Radio Frequency Data', path: '/RFData' }
+              { title: 'Administration', path: '/admin'},
+              { title: 'Under Construction', path: '/underConstruction'}
             ],
             isLoggedIn: this.$store.state.currentUserId !== null
         }
     },
     methods:{
         homeRedirect(){
-            CurrentUserValidation.validateCurrentUser(this.$store);
+            if (this.$store.state.currentUserId){
+                router.push('/home')
+            }
+            else{
+                router.push('/')
+            }
         },
         submit() {
             ApiDriver.User.login(this.data);

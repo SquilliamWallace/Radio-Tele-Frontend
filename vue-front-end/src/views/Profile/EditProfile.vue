@@ -64,13 +64,13 @@
 </template>
 
 <script>
-import router from "../router";
-import NavigationBar from "../components/NavigationBar.vue";
-import FormConfirmation from "../components/FormConfirmation";
-import ApiDriver from "../ApiDriver";
-import HttpResponse from "../utils/HttpResponse";
-import CustomErrorHandler from "../utils/CustomErrorHandler";
-import CurrentUserValidation from '../utils/CurrentUserValidation'
+import router from "../../router";
+import NavigationBar from "../../components/NavigationBar.vue";
+import FormConfirmation from "../../components/FormConfirmation";
+import ApiDriver from "../../ApiDriver";
+import HttpResponse from "../../utils/HttpResponse";
+import CustomErrorHandler from "../../utils/CustomErrorHandler";
+import CurrentUserValidation from '../../utils/CurrentUserValidation'
 
 export default {
   name: "EditProfile",
@@ -115,7 +115,7 @@ export default {
     retrieveInformation() {
         let that = this;
         // If a route param was not supplied, return to the
-        // home page
+        // login page
         if (!this.$route.params.userId) {
             router.push("/");
         } else {
@@ -128,14 +128,27 @@ export default {
                 }, (status, errors) => {
                     // Check if the user is forbidden from accessing the endpoint
                     if (parseInt(status) === 403) {
-                        alert("Access Denied");
-                        CurrentUserValidation.validateCurrentUser(this.$store);
+                        this.$swal({
+                            title: '<span style="color:#f0ead6">Error!<span>',
+                            html: '<span style="color:#f0ead6">Access Denied<span>',
+                            type: 'error',
+                            background: '#302f2f'
+                        }).then(response => {
+                            CurrentUserValidation.validateCurrentUser(this.$store);
+                        });
                     } else {
                         handleErrors(errors);
                     }
                 });
           }).catch(errors => {
-              alert("An error occurred loading this user's information");
+              this.$swal({
+                            title: '<span style="color:#f0ead6">Error!<span>',
+                            html: '<span style="color:#f0ead6">An error occurred when loading the user information<span>',
+                            type: 'error',
+                            background: '#302f2f'
+                        }).then(response => {
+                            CurrentUserValidation.validateCurrentUser(this.$store);
+                        });
               console.log(errors);
           });
       }

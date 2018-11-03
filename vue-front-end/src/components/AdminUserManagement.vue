@@ -1,7 +1,7 @@
 <template>
     <v-card  width = "100%">
             <v-list >
-                <v-list-tile v-for="user in users" :key = "user.id" >
+                <v-list-tile v-for="user in users" :key = "user.id"  >
                     <v-list-tile-content>
                         <v-list-tile-title>
                             {{user.firstName}} {{user.lastName}}: {{user.membershipRole}}
@@ -14,9 +14,16 @@
                     <v-btn icon v-bind:href = "'http://localhost:8081/users/' + user.id + '/view'">
                         <v-icon>account_circle</v-icon>
                     </v-btn>
-                    <v-btn icon @click="banUser(user.id)">
-                        <v-icon>gavel</v-icon>
-                    </v-btn>
+                    <div v-if = "user.status === 'Active'">
+                        <v-btn icon @click="banUser(user.id)">
+                            <v-icon>gavel</v-icon>
+                        </v-btn>  
+                    </div>
+                    <div v-if = "user.status === 'Banned'">
+                        <v-btn icon @click="unbanUser(user.id)">
+                            <v-icon>lock_open</v-icon>
+                        </v-btn> 
+                    </div>
                 </v-list-tile>
             </v-list>
         
@@ -36,7 +43,8 @@ export default {
                pageSize: 50 
             },
             users: [],
-            viewUserId: ''
+            viewUserId: '',
+           
         
             
         }
@@ -44,18 +52,19 @@ export default {
     methods:{
         getUsers(){
             ApiDriver.User.allUsers(this.data).then((response) => {
-                let that = this;
+                console.log(response)
                 HttpResponse.then(response, (data) => {
                     this.populateData(data.data)
-                    console.log(that.users)
-                }, (status, errors) => {
-                    if (parseInt(status) === 403) {
-                        alert("Access Denied");
-                        CurrentUserValidation.validateCurrentUser(this.$store);
-                    }
-                })
+                }, (status, errors) => {})
             }).catch((error) => {
-                alert("An error occurred loading in the list of users")
+                this.$swal({
+                            title: '<span style="color:#f0ead6">Error!<span>',
+                            html: '<span style="color:#f0ead6">An error occurred when loading the list of users<span>',
+                            type: 'error',
+                            background: '#302f2f'
+                        }).then(response => {
+                            CurrentUserValidation.validateCurrentUser(this.$store);
+                        });
                 console.log(error)
             });
         },
@@ -68,12 +77,17 @@ export default {
                 this.users.push(user);
             }
 
-            console.log(this.users)
+           
         },
         banUser(userId){
             ApiDriver.User.ban(userId).then((response) => {
                 console.log(response)
                 
+            })
+        },
+        unbanUser(userId){
+            ApiDriver.User.unban(userId).then((response) => {
+                console.log(response)
             })
         }
     },
