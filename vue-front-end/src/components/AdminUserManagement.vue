@@ -26,6 +26,14 @@
                     </div>
                 </v-list-tile>
             </v-list>
+             <div class="text-xs-center">
+            <v-pagination
+            circle
+            v-model="pageDisplay"
+            :length="numPages"
+            @input="next"
+            ></v-pagination>
+        </div>
         
     </v-card>
 </template>
@@ -38,10 +46,12 @@ export default {
     name: 'AdminUserManagement',
     data(){
         return{
-            data: {
+            
                pageNumber: 0,
-               pageSize: 50 
-            },
+               pageSize: 10 ,
+               numPages: 0,
+               pageDisplay: 1,
+            
             users: [],
             viewUserId: '',
            
@@ -51,7 +61,7 @@ export default {
     },
     methods:{
         getUsers(){
-            ApiDriver.User.allUsers(this.data).then((response) => {
+            ApiDriver.User.allUsers(this.pageNumber, this.pageSize).then((response) => {
                 console.log(response)
                 HttpResponse.then(response, (data) => {
                     this.populateData(data.data)
@@ -75,10 +85,12 @@ export default {
                     user.membershipRole = 'Pending Approval';
                 }
                 this.users.push(user);
+                this.numPages = data.totalPages;
             }
 
            
         },
+        
         banUser(userId){
             ApiDriver.User.ban(userId).then((response) => {
                 console.log(response)
@@ -89,7 +101,14 @@ export default {
             ApiDriver.User.unban(userId).then((response) => {
                 console.log(response)
             })
+        },
+        next(page){
+            this.pageNumber = page -1;
+            this.pageDisplay = page;
+            this.users = [];
+            this.getUsers()
         }
+        
     },
     mounted: function(){
         this.getUsers()

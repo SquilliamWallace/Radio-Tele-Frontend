@@ -20,8 +20,8 @@ export default {
       update: function(userId, data) {
         return axios.put("/api/users/" + userId, data, Headers.retrieveHeaders())
       },
-      allUsers: function(data) {
-        return axios.get("/api/users?page=" + data.pageNumber + "&size=" + data.pageSize)
+      allUsers: function(pageNumber,pageSize) {
+        return axios.get("/api/users?page=" + pageNumber + "&size=" + pageSize)
       },
       ban: function(userId){
         return axios.put("/api/users/" + userId + "/ban")
