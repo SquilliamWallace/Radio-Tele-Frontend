@@ -158,9 +158,12 @@ export default {
                 let log = data.content[index];
                 if (!log.userId) {
                     log.userId = 'N/a';
-                    log.userFirtName = 'N/a'
-                    log.userLastName = "N/a"
-                    log.affectedRecordId = "N/a"
+                    log.userFirtName = 'N/a';
+                    log.userLastName = "N/a";
+                    
+                }
+                if(!log.affectedRecordId){
+                    log.affectedRecordId = 'N/a';
                 }
                 this.logs.push(log);
             }
