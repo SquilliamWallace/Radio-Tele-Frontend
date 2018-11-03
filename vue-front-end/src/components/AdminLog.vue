@@ -63,8 +63,10 @@
         <div class="text-xs-center">
             <v-pagination
             circle
-            v-model="data.pageNumber"
-            :length="6"
+            v-model="pageDisplay"
+            :length="numPages"
+            @input = "next"
+            :total-visible="7"
             ></v-pagination>
         </div>
     </v-container>
@@ -108,10 +110,12 @@ export default {
     name: 'AdminLog',
     data() {
         return {
-            data: {
-                pageNumber: 0,
-                pageSize: 50,
-            },
+            
+            pageNumber: 0,
+            pageSize: 50,
+            pageDisplay: 1,
+            numPages: 0,
+            
             logs: [],
             headers: [
                 {header: 'Log ID'},
@@ -127,7 +131,7 @@ export default {
     },
     methods: {
         getLogs() {
-            ApiDriver.Log.viewLogs(this.data).then((response) => {
+            ApiDriver.Log.viewLogs(this.pageNumber, this.pageSize).then((response) => {
                 console.log(response)
                 HttpResponse.then(response, (data) => {
                     this.populateData(data.data)
@@ -166,7 +170,15 @@ export default {
                     log.affectedRecordId = 'N/a';
                 }
                 this.logs.push(log);
+                
             }
+            this.numPages = data.totalPages;
+        },
+        next(page) {
+            this.pageNumber = page - 1;
+            this.pageDisplay = page;
+            this.logs = [];
+            this.getLogs();
         }
         
     },

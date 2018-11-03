@@ -43,9 +43,8 @@ export default {
       } 
     },
     Log: {
-      viewLogs: function(data){
-        console.log(data)
-        return axios.get("/api/logs?pageNumber=" + data.pageNumber + "&pageSize=" + data.pageSize)
+      viewLogs: function(pageNumber, pageSize){
+        return axios.get("/api/logs?pageNumber=" + pageNumber + "&pageSize=" + pageSize)
       }
     },
     Auth: function() {
