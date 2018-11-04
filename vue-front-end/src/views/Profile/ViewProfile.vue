@@ -1,7 +1,8 @@
 <template>
     <div>
         <navigation-bar></navigation-bar>
-        <v-container id = "profile" width = "700px" >
+        <loading v-show="$store.state.isLoading"></loading>
+        <v-container v-show="!$store.state.isLoading" id = "profile" width = "700px" >
             <v-layout row wrap>
             <v-flex xs6>
                <v-card class = "elevation-0" color = "transparent">
@@ -45,6 +46,7 @@ import ApiDriver from '../../ApiDriver'
 import router from '../../router'
 import HttpResponse from '../../utils/HttpResponse'
 import CurrentUserValidation from '../../utils/CurrentUserValidation'
+import Loading from "../../components/Loading"
 export default {
     name: "ViewProfile",
     data() {
@@ -60,7 +62,8 @@ export default {
         }
     },
     components: {
-      NavigationBar
+      NavigationBar,
+      Loading
     },
     methods: {
         editRedirect() {
@@ -71,6 +74,7 @@ export default {
             if (!this.$route.params.userId) {
                 router.push('/')
             } else {    
+                this.$store.commit("loading", true);
                 ApiDriver.User.get(this.$route.params.userId).then((response) => {
                     HttpResponse.then(response, (data) => {
                         that.populateData(data.data)
@@ -86,6 +90,7 @@ export default {
                         });
                         }
                     })
+                    this.$store.commit("loading", false);
                 }).catch((errors) => {
                     this.$swal({
                             title: '<span style="color:#f0ead6">Error!<span>',

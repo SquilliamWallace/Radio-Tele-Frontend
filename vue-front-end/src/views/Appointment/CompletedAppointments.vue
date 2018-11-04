@@ -1,14 +1,15 @@
 <template>
 <div>
     <navigation-bar></navigation-bar>
-    <v-card flat>
-        <v-card-title v-if="completedAppointments.length === 0 && !loading" primary-title class="justify-center">
+    <loading v-show="$store.state.isLoading"></loading>
+    <v-card v-show="!$store.state.isLoading" flat>
+        <v-card-title v-if="completedAppointments.length === 0" primary-title class="justify-center">
             <span class="headline">No Completed Observations!</span>
         </v-card-title>
         <v-card-title v-else primary-title class="justify-center">
             <span class="headline">Completed Observations</span>
         </v-card-title>
-        <v-card-text v-if="completedAppointments.length === 0 && !loading">
+        <v-card-text v-if="completedAppointments.length === 0">
             <div>You do not have any completed observations.
                 <a href="/scheduler">Click here to schedule an observation</a>
             </div>
@@ -49,6 +50,7 @@ import HttpResponse from '../../utils/HttpResponse';
 import CurrentUserValidation from '../../utils/CurrentUserValidation';
 import moment from 'moment';
 import NavigationBar from '../../components/NavigationBar.vue'
+import Loading from "../../components/Loading"
 export default {
     name: 'CompletedAppointments',
     data() {
@@ -58,19 +60,19 @@ export default {
             pageSize: 25,
             numPages: 0,
             last: false,
-            completedAppointments: [],
-            loading: true
+            completedAppointments: []
         }
     },
     methods: {
         getCompletedAppointments() {
-            this.loading = true;
+            this.$store.commit("loading", true);
             ApiDriver.Appointment.completedAppointments(this.$route.params.userId, this.pageNumber, this.pageSize)
                 .then(response => {
                     HttpResponse.then(response, data => {
                         this.last = data.data.last;
                         console.log(this.last)
                         this.populateData(data.data);
+                        this.$store.commit("loading", false);
                     }, (status, errors) => {
                         if (parseInt(status) === 403) {
                             this.$swal({
@@ -104,7 +106,6 @@ export default {
                 this.completedAppointments.push(appointment);
                 this.numPages = data.totalPages;
             }
-            this.loading = false;
         },
         next(page) {
             this.pageNumber = page - 1;
@@ -117,7 +118,8 @@ export default {
         this.getCompletedAppointments();
     },
     components: {
-        NavigationBar
+        NavigationBar,
+        Loading
     }
 }
 </script>

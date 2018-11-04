@@ -1,7 +1,8 @@
 <template>
     <div>
         <navigation-bar></navigation-bar>
-        <v-container style="{ padding:'50px' }">
+        <loading v-show="$store.state.isLoading"></loading>
+        <v-container v-show="!$store.state.isLoading" style="{ padding:'50px' }">
             <v-card flat>
                 <v-form>
                     <v-container grid-list-xl fluid>
@@ -71,7 +72,7 @@ import ApiDriver from "../../ApiDriver";
 import HttpResponse from "../../utils/HttpResponse";
 import CustomErrorHandler from "../../utils/CustomErrorHandler";
 import CurrentUserValidation from '../../utils/CurrentUserValidation'
-
+import Loading from "../../components/Loading"
 export default {
   name: "EditProfile",
   data() {
@@ -119,12 +120,14 @@ export default {
         if (!this.$route.params.userId) {
             router.push("/");
         } else {
+            this.$store.commit("loading", true);
             // Otherwise call the retrieve method
             ApiDriver.User.get(this.$route.params.userId).then(response => {
                 // Handle the response
                 HttpResponse.then(response, data => {
                     // If it was a success, populate the user information fields
                     that.populateData(data.data);
+                    this.$store.commit("loading", false);
                 }, (status, errors) => {
                     // Check if the user is forbidden from accessing the endpoint
                     if (parseInt(status) === 403) {
@@ -204,7 +207,8 @@ export default {
   },
   components: {
     FormConfirmation,
-    NavigationBar
+    NavigationBar,
+    Loading
   },
   mounted() {
       // Retrieve the information when the DOM is loaded

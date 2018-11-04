@@ -1,10 +1,11 @@
 <template>
     <div>
         <v-progress-circular
+            class="circle-style"
             indeterminate
             color="primary"
         ></v-progress-circular>
-        <div>Loading...</div>
+        <h3 style="color:white;">Loading...</h3>
     </div>    
 </template>
 
@@ -15,5 +16,7 @@ export default {
 </script>
 
 <style scoped>
-
+.circle-style{
+    margin: 1rem;
+}
 </style>
