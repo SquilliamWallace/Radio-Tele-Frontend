@@ -103,7 +103,7 @@ export default {
                         }
                         this.$emit('populateData');
                         this.$emit('close-modal');
-
+                        document.location.reload(true);
                     }, (status, errors) => {
                         if (parseInt(status) === 403) {
                             this.$swal({

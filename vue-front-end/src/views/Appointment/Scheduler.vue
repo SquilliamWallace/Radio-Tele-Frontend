@@ -91,8 +91,7 @@ export default {
                                 userId: element.userId,
                                 public: element.public
                             }
-
-                            this.events.push(eventData)
+                            this.events.push(eventData);
                         }
                     }, (status, errors) => {
                         if (parseInt(status) === 403) {
