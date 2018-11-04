@@ -1,5 +1,6 @@
 <template>
 <div>
+    <navigation-bar></navigation-bar>
     <v-card flat>
         <v-card-title v-if="completedAppointments.length === 0 && !loading" primary-title class="justify-center">
             <span class="headline">No Completed Observations!</span>
@@ -47,6 +48,7 @@ import ApiDriver from '../../ApiDriver';
 import HttpResponse from '../../utils/HttpResponse';
 import CurrentUserValidation from '../../utils/CurrentUserValidation';
 import moment from 'moment';
+import NavigationBar from '../../components/NavigationBar.vue'
 export default {
     name: 'CompletedAppointments',
     data() {
@@ -101,8 +103,8 @@ export default {
                 appointment.endTime = moment(appointment.endTime).add(4, 'hours').format('MM/DD/YYYY hh:mm:ss A');
                 this.completedAppointments.push(appointment);
                 this.numPages = data.totalPages;
-                this.loading = false;
             }
+            this.loading = false;
         },
         next(page) {
             this.pageNumber = page - 1;
@@ -113,6 +115,9 @@ export default {
     },
     mounted: function() {
         this.getCompletedAppointments();
+    },
+    components: {
+        NavigationBar
     }
 }
 </script>
