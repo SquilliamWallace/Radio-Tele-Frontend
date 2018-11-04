@@ -36,7 +36,7 @@ export default {
               { title: 'Scheduling Calendar', icon: 'dashboard', path: "/scheduler" },
               { title: 'Administration', path: '/admin'},
               { title: 'Completed Appointments', path: '/users/' + this.$store.state.currentUserId + '/appointments/completed'},
-              { title: 'Under Construction', path: '/underConstruction'}
+              { title: 'Past Appointments', path: '/underConstruction'}
             ]
         }
     },
