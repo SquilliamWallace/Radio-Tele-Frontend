@@ -22,6 +22,9 @@ export default {
       },
       allUsers: function(data) {
         return axios.get("/api/users?page=" + data.pageNumber + "&size=" + data.pageSize)
+      },
+      ban: function(userId){
+        return axios.put("/api/users/" + userId + "/ban")
       }
     },
 
