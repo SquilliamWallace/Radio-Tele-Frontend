@@ -31,6 +31,9 @@ export default {
       },
       resetPassword(data, token) {
         return axios.post("/api/resetPassword?token=" + token, data, Headers.retrieveHeaders())
+      },
+      ban: function(userId){
+        return axios.put("/api/users/" + userId + "/ban")
       }
     },
 
@@ -49,10 +52,18 @@ export default {
       },
       data: function(appointmentId) {
         return axios.get("/api/appointments/" + appointmentId + "/rf-data")
-      } 
+      },
+      completedAppointments: function(userId, pageNumber, pageSize) {
+        return axios.get("/api/users/" + userId + "/appointments/completedList?page=" + pageNumber + "&size=" + pageSize);
+      }
   },
-    Auth: function() {
-      return axios.get("/api/auth")
+    Auth: {
+      User: function() {
+        return axios.get("/api/auth")
+      },
+      Admin: function() {
+        return axios.get("/api/authAdmin")
+      }
     }
 
 }

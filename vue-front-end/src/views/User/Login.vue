@@ -39,7 +39,7 @@
                         <a @click="registerRedirect">Register Here!</a>
                     </v-flex>
                     <v-flex xs12>
-                        <v-dialog v-model="requestPasswordReset" persistent max-width="600px">
+                        <v-dialog v-model="requestPasswordReset" persistent max-width="600px" dark>
                             <v-btn slot="activator" color="primary">Forgot your password?</v-btn>
                             <v-card>
                                 <v-card-title class="justify-center">
@@ -75,12 +75,12 @@
 </template>
 
 <script>
-import NavigationBar from '../components/NavigationBar.vue';
-import ApiDriver from '../ApiDriver';
-import router from '../router';
-import CurrentUserValidation from '../utils/CurrentUserValidation';
-import CustomErrorHandler from '../utils/CustomErrorHandler';
-import HttpResponse from '../utils/HttpResponse';
+import NavigationBar from '../../components/NavigationBar.vue';
+import ApiDriver from '../../ApiDriver';
+import router from '../../router';
+import CurrentUserValidation from '../../utils/CurrentUserValidation';
+import CustomErrorHandler from '../../utils/CustomErrorHandler';
+import HttpResponse from '../../utils/HttpResponse';
 export default {
     name: "Login",
     data () {

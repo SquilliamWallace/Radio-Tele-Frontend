@@ -72,10 +72,10 @@
 </template>
 <script>
 
-import NavigationBar from '../components/NavigationBar.vue'
-import ApiDriver from '../ApiDriver.js'
-import HttpResponse from '../utils/HttpResponse';
-import CurrentUserValidation from  '../utils/CurrentUserValidation';
+import NavigationBar from '../../components/NavigationBar.vue'
+import ApiDriver from '../../ApiDriver.js'
+import HttpResponse from '../../utils/HttpResponse';
+import CurrentUserValidation from  '../../utils/CurrentUserValidation';
 import moment from 'moment'
 export default {
     name: "AppointmentView",
@@ -120,8 +120,9 @@ export default {
                             html: '<span style="color:#f0ead6">Access Denied<span>',
                             type: 'error',
                             background: '#302f2f'
+                        }).then(response => {
+                            CurrentUserValidation.validateCurrentUser(this.$store);
                         });
-                        CurrentUserValidation.validateCurrentUser(this.$store);
                     }
                 })
             }).catch((error) => {
@@ -129,7 +130,7 @@ export default {
             });
         },
         auth () {
-            ApiDriver.Auth().then((response) => {
+            ApiDriver.Auth.User().then((response) => {
                 HttpResponse.then(response, (data) => {
                     
                 }, (status, errors) => {
@@ -139,8 +140,9 @@ export default {
                             html: '<span style="color:#f0ead6">Access Denied<span>',
                             type: 'error',
                             background: '#302f2f'
+                        }).then(response => {
+                            CurrentUserValidation.validateCurrentUser(this.$store);
                         });
-                        CurrentUserValidation.validateCurrentUser(this.$store);
                     }
                 })
             }).catch((error) => {
@@ -149,6 +151,8 @@ export default {
                             html: '<span style="color:#f0ead6">An error occurred when loading this appointment data<span>',
                             type: 'error',
                             background: '#302f2f'
+                        }).then(response => {
+                            CurrentUserValidation.validateCurrentUser(this.$store);
                         });
                 console.log(error)
             })

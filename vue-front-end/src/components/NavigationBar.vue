@@ -5,8 +5,8 @@
       <v-toolbar-title class="title-style" @click="homeRedirect">YCAS Radio Telescope</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-sm-and-down">
-          <v-btn v-show="isLoggedIn" @click="viewProfile">Profile</v-btn>
-          <v-btn v-show="isLoggedIn" @click="logout">Logout</v-btn>
+          <v-btn @click="viewProfile">Profile</v-btn>
+          <v-btn @click="logout">Logout</v-btn>
       </v-toolbar-items>
     </v-toolbar>
     <!-- Define drawer menu and populate it with items-->
@@ -27,7 +27,6 @@
 <script>
 import router from '../router';
 import ApiDriver from '../ApiDriver'
-import CurrentUserValidation from '../utils/CurrentUserValidation'
 export default {
     name: 'NavigationBar',
     data() {
@@ -35,14 +34,20 @@ export default {
             showDrawer: false,
             items: [
               { title: 'Scheduling Calendar', icon: 'dashboard', path: "/scheduler" },
-              { title: 'Administration', path: '/admin'}
-            ],
-            isLoggedIn: this.$store.state.currentUserId !== null
+              { title: 'Administration', path: '/admin'},
+              { title: 'Completed Appointments', path: '/users/' + this.$store.state.currentUserId + '/appointments/completed'},
+              { title: 'Under Construction', path: '/underConstruction'}
+            ]
         }
     },
     methods:{
         homeRedirect(){
-            CurrentUserValidation.validateCurrentUser(this.$store);
+            if (this.$store.state.currentUserId){
+                router.push('/home')
+            }
+            else{
+                router.push('/')
+            }
         },
         submit() {
             ApiDriver.User.login(this.data);

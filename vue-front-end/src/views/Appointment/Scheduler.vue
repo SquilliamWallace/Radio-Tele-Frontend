@@ -13,13 +13,13 @@
 
 <script>
 import {FullCalendar} from 'vue-full-calendar'
-import NavigationBar from '../components/NavigationBar.vue'
-import router from '../router'
-import CreateAppointment from '../components/Appointment.vue'
-import ApiDriver from '../ApiDriver'
-import HttpResponse from '../utils/HttpResponse'
-import CurrentUserValidation from '../utils/CurrentUserValidation'
-import PrivateEvent from "../components/PrivateEvent";
+import NavigationBar from '../../components/NavigationBar.vue'
+import router from '../../router'
+import CreateAppointment from '../../components/Appointment.vue'
+import ApiDriver from '../../ApiDriver'
+import HttpResponse from '../../utils/HttpResponse'
+import CurrentUserValidation from '../../utils/CurrentUserValidation'
+import PrivateEvent from "../../components/PrivateEvent";
 export default {
     name: 'Scheduler',
     data() {
@@ -91,8 +91,7 @@ export default {
                                 userId: element.userId,
                                 public: element.public
                             }
-
-                            this.events.push(eventData)
+                            this.events.push(eventData);
                         }
                     }, (status, errors) => {
                         if (parseInt(status) === 403) {
@@ -101,8 +100,9 @@ export default {
                             html: '<span style="color:#f0ead6">Access Denied<span>',
                             type: 'error',
                             background: '#302f2f'
-                        });
+                        }).then(response => {
                             CurrentUserValidation.validateCurrentUser(this.$store);
+                        });
                         } else {
                             console.log(status)
                             console.log(errors)

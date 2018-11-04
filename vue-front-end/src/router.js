@@ -1,16 +1,18 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Login from './views/Login.vue'
-import Register from './views/Register.vue'
-import Scheduler from './views/Scheduler.vue'
-import AppointmentView from './views/AppointmentView.vue'
+import Login from './views/User/Login.vue'
+import Register from './views/User/Register.vue'
+import Scheduler from './views/Appointment/Scheduler.vue'
+import AppointmentView from './views/Appointment/AppointmentView.vue'
 import ActivateAccount from './views/ActivateAccount.vue'
-import ViewProfile from './views/ViewProfile.vue'
-import EditProfile from './views/EditProfile'
-import admin from './views/admin'
-import Home from './views/Home'
-import RFData from './views/RFData'
-import ResetPassword from './views/ResetPassword'
+import ViewProfile from './views/Profile/ViewProfile.vue'
+import EditProfile from './views/Profile/EditProfile.vue'
+import admin from './views/admin.vue'
+import Home from './views/Home.vue'
+import RFData from './views/Appointment/RFData.vue'
+import ResetPassword from './views/ResetPassword.vue'
+import UnderConstruction from './views/UnderConstruction.vue'
+import CompletedAppointments from './views/Appointment/CompletedAppointments.vue'
 
 Vue.use(Router)
 
@@ -74,6 +76,16 @@ const router = new Router({
       name: 'ResetPassword',
       component: ResetPassword,
       query: { token: 'private' }
+    },
+    {
+      path: '/underConstruction',
+      name: 'underConstruction',
+      component: UnderConstruction  
+    },
+    {
+      path: '/users/:userId/appointments/completed',
+      name: 'CompletedAppointments',
+      component: CompletedAppointments
     }
   ]
 })

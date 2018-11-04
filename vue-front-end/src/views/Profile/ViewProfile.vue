@@ -40,11 +40,11 @@
 </template>
 
 <script>
-import NavigationBar from '../components/NavigationBar.vue'
-import ApiDriver from '../ApiDriver'
-import router from '../router'
-import HttpResponse from '../utils/HttpResponse'
-import CurrentUserValidation from '../utils/CurrentUserValidation'
+import NavigationBar from '../../components/NavigationBar.vue'
+import ApiDriver from '../../ApiDriver'
+import router from '../../router'
+import HttpResponse from '../../utils/HttpResponse'
+import CurrentUserValidation from '../../utils/CurrentUserValidation'
 export default {
     name: "ViewProfile",
     data() {
@@ -81,8 +81,9 @@ export default {
                             html: '<span style="color:#f0ead6">Access Denied<span>',
                             type: 'error',
                             background: '#302f2f'
-                        });
+                        }).then(response => {
                             CurrentUserValidation.validateCurrentUser(this.$store);
+                        });
                         }
                     })
                 }).catch((errors) => {
@@ -91,6 +92,8 @@ export default {
                             html: '<span style="color:#f0ead6">An error occurred when loading the user information<span>',
                             type: 'error',
                             background: '#302f2f'
+                        }).then(response => {
+                            CurrentUserValidation.validateCurrentUser(this.$store);
                         });
                     console.log(errors)
                 })
