@@ -44,18 +44,18 @@ export default {
     methods:{
         getUsers(){
             ApiDriver.User.allUsers(this.data).then((response) => {
-                let that = this;
                 HttpResponse.then(response, (data) => {
                     this.populateData(data.data)
-                    console.log(that.users)
-                }, (status, errors) => {
-                    if (parseInt(status) === 403) {
-                        alert("Access Denied");
-                        CurrentUserValidation.validateCurrentUser(this.$store);
-                    }
-                })
+                }, (status, errors) => {})
             }).catch((error) => {
-                alert("An error occurred loading in the list of users")
+                this.$swal({
+                            title: '<span style="color:#f0ead6">Error!<span>',
+                            html: '<span style="color:#f0ead6">An error occurred when loading the list of users<span>',
+                            type: 'error',
+                            background: '#302f2f'
+                        }).then(response => {
+                            CurrentUserValidation.validateCurrentUser(this.$store);
+                        });
                 console.log(error)
             });
         },
@@ -67,7 +67,6 @@ export default {
                 }
                 this.users.push(user);
             }
-
             console.log(this.users)
         },
         banUser(userId){
@@ -78,7 +77,7 @@ export default {
         }
     },
     mounted: function(){
-        this.getUsers()
+        this.getUsers();
     }
 }
 

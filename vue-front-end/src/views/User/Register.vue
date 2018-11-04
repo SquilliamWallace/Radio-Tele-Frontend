@@ -25,7 +25,7 @@
                         :error=form.first.hasError
                         :error-messages=form.first.errorMessage
                         color="blue darken-2"
-                        label="First name"
+                        label="First Name"
                         required
                         ></v-text-field>
                     </v-flex>
@@ -36,7 +36,7 @@
                         :error=form.last.hasError
                         :error-messages=form.last.errorMessage
                         color="blue darken-2"
-                        label="Last name"
+                        label="Last Name"
                         required
                         ></v-text-field>
                     </v-flex>
@@ -48,6 +48,48 @@
                         :error-messages=form.email.errorMessage
                         color="blue darken-2"
                         label="Email"
+                        required
+                        ></v-text-field>
+                    </v-flex>
+                    <v-flex xs12 sm6>
+                        <v-text-field
+                        v-model="form.emailConfirm.value"
+                        :rules="[rules.required, rules.emailMatch]"
+                        :error=form.emailConfirm.hasError
+                        :error-messages=form.emailConfirm.errorMessage
+                        color="bule darken-2"
+                        label="Confirm Email"
+                        validate-on-blur=true
+                        required
+                        ></v-text-field>
+                    </v-flex>
+                    <v-flex xs12 sm6>
+                        <v-text-field
+                        v-model="form.password.value"
+                        :append-icon="show1 ? 'visibility_off' : 'visibility'"
+                        :type="show1 ? 'text' : 'password'"
+                        :rules="rules.required"
+                        :error=form.password.hasError
+                        :error-messages=form.password.errorMessage
+                        color="blue darken-2"
+                        label="Password"
+                        hint="At least 8 characters. 3 of 4 of the following: Uppercase, Lowercase, Digit, Special Character"
+                        @click:append="show1 = !show1"
+                        required
+                        ></v-text-field>
+                    </v-flex>
+                    <v-flex xs12 sm6>
+                        <v-text-field
+                        v-model="form.passwordMatch.value"
+                        :append-icon="show2 ? 'visibility_off' : 'visibility'"
+                        :rules="[rules.required, rules.passMatch]"
+                        :error=form.passwordMatch.hasError
+                        :error-messages=form.passwordMatch.errorMessage
+                        :type="show2 ? 'text' : 'password'"
+                        color="blue darken-2"
+                        label="Re-Type Password"
+                        @click:append="show2 = !show2"
+                        validate-on-blur=true
                         required
                         ></v-text-field>
                     </v-flex>
@@ -65,41 +107,10 @@
                     </v-flex>
                     <v-flex xs12 sm6>
                         <v-text-field
-                        v-model="form.password.value"
-                        :append-icon="show1 ? 'visibility_off' : 'visibility'"
-                        :type="show1 ? 'text' : 'password'"
-                        :rules="rules.required"
-                        :error=form.password.hasError
-                        :error-messages=form.password.errorMessage
-                        color="blue darken-2"
-                        label="Password"
-                        @click:append="show1 = !show1"
-                        required
-                        ></v-text-field>
-                    </v-flex>
-                    <v-flex xs12 sm6>
-                        <v-text-field
-                        v-model="form.passwordMatch.value"
-                        :append-icon="show2 ? 'visibility_off' : 'visibility'"
-                        :rules="rules.required"
-                        :error=form.passwordMatch.hasError
-                        :error-messages=form.passwordMatch.errorMessage
-                        :type="show2 ? 'text' : 'password'"
-                        color="blue darken-2"
-                        label="Re-Type Password"
-                        @click:append="show2 = !show2"
-                        required
-                        ></v-text-field>
-                    </v-flex>
-                    <v-flex xs12>
-                        <v-textarea
                         v-model="form.affiliates.value"
-                        color="blue darken-2"
-                        >
-                        <div slot="label">
-                            Company Affiliates <small>(optional)</small>
-                        </div>
-                        </v-textarea>
+                        label="Company Affiliation (Optional)"
+                        color="blue darken-2">
+                    </v-text-field>
                     </v-flex>
                     <v-flex xs12 sm6>
                         <v-text-field
@@ -174,11 +185,11 @@
 </template>
 
 <script>
-import router from '../router';
-import ApiDriver from '../ApiDriver';
-import FormConfirmation from '../components/FormConfirmation';
-import HttpResponse from '../utils/HttpResponse';
-import CustomErrorHandler from "../utils/CustomErrorHandler";
+import router from '../../router';
+import ApiDriver from '../../ApiDriver';
+import FormConfirmation from '../../components/FormConfirmation';
+import HttpResponse from '../../utils/HttpResponse';
+import CustomErrorHandler from "../../utils/CustomErrorHandler";
     export default {
     data () {
       return {
@@ -192,6 +203,10 @@ import CustomErrorHandler from "../utils/CustomErrorHandler";
                   hasError: false
               },
               email: {
+                  value: "",
+                  hasError: false
+              },
+              emailConfirm: {
                   value: "",
                   hasError: false
               },
@@ -220,12 +235,9 @@ import CustomErrorHandler from "../utils/CustomErrorHandler";
               terms: false
         },
         rules: {
-            required: [
-                val => (val || '').length > 0 || 'This field is required'
-            ],
-            passMatch: [
-                val => val == this.password || 'Passwords must match'
-            ]
+            required: val => (val || '').length > 0 || 'This field is required',
+            passMatch: val => val === this.form.password.value || 'Passwords must match',
+            emailMatch: val => val === this.form.email.value || 'Emails must match'
         },
         accountTypes: ['Guest', 'Member', 'Student', 'Researcher'],
         conditions: false,
@@ -245,6 +257,7 @@ import CustomErrorHandler from "../utils/CustomErrorHandler";
           this.form.first.value &&
           this.form.last.value &&
           this.form.email.value &&
+          this.form.emailConfirm &&
           this.form.accountType.value &&
           this.form.password.value && 
           this.form.passwordMatch.value &&
@@ -264,12 +277,13 @@ import CustomErrorHandler from "../utils/CustomErrorHandler";
                 firstName: this.form.first.value,
                 lastName: this.form.last.value,
                 email: this.form.email.value,
+                emailConfirm: this.form.emailConfirm.value,
                 phoneNumber: this.form.phoneNumber.value,
                 password: this.form.password.value,
                 passwordConfirm: this.form.passwordMatch.value,
                 company: this.form.affiliates.value,
                 categoryOfService: categoryOfService
-            })
+            });
         
             // This will need changed to properly handle success or failure scenarios
             ApiDriver.User.register(data).then((response) => {
@@ -278,7 +292,7 @@ import CustomErrorHandler from "../utils/CustomErrorHandler";
 
                 // Handle the response
                 HttpResponse.then(response, function(data) {
-                    // If the call was a success, redirect to the home page
+                    // If the call was a success, redirect to the login page
                     if (data.statusCode == 200 && data.statusReason == "OK"){
                         router.push('/')
                     }
@@ -306,6 +320,8 @@ import CustomErrorHandler from "../utils/CustomErrorHandler";
                   CustomErrorHandler.populateError(this.form.last, message);
               } else if (field === "EMAIL") {
                   CustomErrorHandler.populateError(this.form.email, message);
+              } else if (field === "EMAIL_CONFIRM") {
+                  CustomErrorHandler.populateError(this.form.emailConfirm, message);
               } else if (field === "PASSWORD") {
                   CustomErrorHandler.populateError(this.form.password, message);
               } else if (field === "PASSWORD_CONFIRM") {

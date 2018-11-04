@@ -1,7 +1,7 @@
 <template dark>
-    <v-toolbar style="width:100%;">
-        <v-container v-bind:style="{ padding:'50px' }">
+    <v-dialog dark hide-overlay :value="value" @input="$emit('input')" persistent width="50%">
             <v-card flat>
+                <v-card-title class="headline">Schedule Appointment</v-card-title>
                 <v-snackbar
                 v-model="snackbar"
                 absolute
@@ -52,8 +52,7 @@
                 </v-card-actions>
                 </v-form>
             </v-card>
-        </v-container>
-    </v-toolbar>
+    </v-dialog>
 </template>
 
 <script>
@@ -74,7 +73,8 @@ export default {
         }
     },
     props: {
-        eventObj: {}
+        eventObj: {},
+        value: false
     },
     methods: {
         resetForm() {
@@ -101,12 +101,19 @@ export default {
                         this.form = {
                             isPrivate: false
                         }
+                        this.$emit('populateData');
                         this.$emit('close-modal');
 
                     }, (status, errors) => {
                         if (parseInt(status) === 403) {
-                            alert("Access Denied");
+                            this.$swal({
+                            title: '<span style="color:#f0ead6">Error!<span>',
+                            html: '<span style="color:#f0ead6">Access Denied<span>',
+                            type: 'error',
+                            background: '#302f2f'
+                        }).then(response => {
                             CurrentUserValidation.validateCurrentUser(this.$store);
+                        });
                         } else {
                             console.log(status)
                             console.log(errors)
