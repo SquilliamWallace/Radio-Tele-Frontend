@@ -40,7 +40,10 @@ export default {
       },
       data: function(appointmentId) {
         return axios.get("/api/appointments/" + appointmentId + "/rf-data")
-      } 
+      },
+      completedAppointments: function(userId, pageNumber, pageSize) {
+        return axios.get("/api/users/" + userId + "/appointments/completedList?page=" + pageNumber + "&size=" + pageSize);
+      }
   },
     Auth: {
       User: function() {

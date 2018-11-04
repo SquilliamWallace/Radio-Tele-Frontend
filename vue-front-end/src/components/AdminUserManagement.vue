@@ -63,7 +63,7 @@ export default {
         }
     },
     mounted: function(){
-        this.getUsers()
+        this.getUsers();
     }
 }
 
