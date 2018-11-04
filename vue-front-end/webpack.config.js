@@ -10,11 +10,11 @@ module.exports = {
         historyApiFallback: true,
         proxy: {
           '/api': {
-            target: 'http://localhost:8080',
+            target: 'ycp-radio-telescope-dev.cgaa5jndlq2g.us-east-1.rds.amazonaws.com:8080',
             secure: false
           },
           '/login': {
-            target: 'http://localhost:8080',
+            target: 'ycp-radio-telescope-dev.cgaa5jndlq2g.us-east-1.rds.amazonaws.com:8080',
             secure: false
           }
         }
