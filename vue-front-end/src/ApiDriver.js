@@ -25,6 +25,9 @@ export default {
       },
       allUsers: function(data) {
         return axios.get("/api/users?page=" + data.pageNumber + "&size=" + data.pageSize)
+      },
+      requestPasswordReset(data) {
+        return axios.post("/api/requestPasswordReset", data, Headers.retrieveHeaders())
       }
     },
 
