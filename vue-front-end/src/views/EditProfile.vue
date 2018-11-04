@@ -184,11 +184,11 @@ export default {
             let message = errors[field][0];
 
             if (field === "FIRST_NAME") {
-            CustomErrorHandler.populateError(this.profile.firstName, message);
+                CustomErrorHandler.populateError(this.profile.firstName, message);
             } else if (field === "LAST_NAME") {
-            CustomErrorHandler.populateError(this.profile.lastName, message);
+                CustomErrorHandler.populateError(this.profile.lastName, message);
             } else if (field === "EMAIL") {
-            CustomErrorHandler.populateError(this.profile.email, message);
+                CustomErrorHandler.populateError(this.profile.email, message);
             }
         }
     },

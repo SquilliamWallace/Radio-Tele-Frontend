@@ -10,6 +10,7 @@ import EditProfile from './views/EditProfile'
 import admin from './views/admin'
 import Home from './views/Home'
 import RFData from './views/RFData'
+import ResetPassword from './views/ResetPassword'
 
 Vue.use(Router)
 
@@ -66,6 +67,12 @@ const router = new Router({
       path: '/activateAccount',
       name: 'ActivateAccount',
       component: ActivateAccount,
+      query: { token: 'private' }
+    },
+    {
+      path: '/resetPassword',
+      name: 'ResetPassword',
+      component: ResetPassword,
       query: { token: 'private' }
     }
   ]

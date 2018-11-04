@@ -28,6 +28,9 @@ export default {
       },
       requestPasswordReset(data) {
         return axios.post("/api/requestPasswordReset", data, Headers.retrieveHeaders())
+      },
+      resetPassword(data, token) {
+        return axios.post("/api/resetPassword?token=" + token, data, Headers.retrieveHeaders())
       }
     },
 
