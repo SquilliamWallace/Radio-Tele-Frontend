@@ -6,6 +6,7 @@ module.exports = {
   //or an array of multiple points
     entry: './src/main.js',
     devServer: {
+        host: '34.239.40.223',
         port: 8081,
         historyApiFallback: true,
         proxy: {
