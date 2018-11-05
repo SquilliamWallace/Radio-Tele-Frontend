@@ -1,7 +1,8 @@
 <template>
     <div>
         <navigation-bar></navigation-bar>
-        <v-container>
+        <loading v-show="$store.state.isLoading"></loading>
+        <v-container v-show="!$store.state.isLoading">
             <v-list-tile >
                 <v-list-tile-content class="white--text">
                     <v-list-tile-title>Start Date:</v-list-tile-title>
@@ -60,15 +61,14 @@
     
 </template>
 <script>
-
-import NavigationBar from '../components/NavigationBar.vue'
-import ApiDriver from '../ApiDriver.js'
-import HttpResponse from '../utils/HttpResponse'
-import CurrentUserValidation from  '../utils/CurrentUserValidation'
+import NavigationBar from '../../components/NavigationBar.vue'
+import ApiDriver from '../../ApiDriver.js'
+import HttpResponse from '../../utils/HttpResponse'
+import CurrentUserValidation from  '../../utils/CurrentUserValidation'
 import moment from 'moment'
-import CancelAppointment from "../components/CancelAppointment.vue"
-import EditAppointment from "../components/EditAppointment.vue"
-
+import CancelAppointment from "../../components/CancelAppointment.vue"
+import EditAppointment from "../../components/EditAppointment.vue"
+import Loading from "../../components/Loading"
 export default {
     name: "AppointmentView",
     data() {
@@ -108,9 +108,11 @@ export default {
     },
     methods: {
         getAppointment () {
+            this.$store.commit("loading", true);
             ApiDriver.Appointment.view(this.$route.params.appointmentId).then((response) => {
                 HttpResponse.then(response, (data) => {
                     this.populateData(data.data)
+                    this.$store.commit("loading", false);
                 }, (status, errors) => {
                     if (parseInt(status) === 403) {
                         this.$swal({
@@ -118,8 +120,9 @@ export default {
                             html: '<span style="color:#f0ead6">Access Denied<span>',
                             type: 'error',
                             background: '#302f2f'
+                        }).then(response => {
+                            CurrentUserValidation.validateCurrentUser(this.$store);
                         });
-                        CurrentUserValidation.validateCurrentUser(this.$store);
                     }
                 })
             }).catch((error) => {
@@ -127,7 +130,7 @@ export default {
             });
         },
         auth () {
-            ApiDriver.Auth().then((response) => {
+            ApiDriver.Auth.User().then((response) => {
                 HttpResponse.then(response, (data) => {
                     
                 }, (status, errors) => {
@@ -137,8 +140,9 @@ export default {
                             html: '<span style="color:#f0ead6">Access Denied<span>',
                             type: 'error',
                             background: '#302f2f'
+                        }).then(response => {
+                            CurrentUserValidation.validateCurrentUser(this.$store);
                         });
-                        CurrentUserValidation.validateCurrentUser(this.$store);
                     }
                 })
             }).catch((error) => {
@@ -147,6 +151,8 @@ export default {
                             html: '<span style="color:#f0ead6">An error occurred when loading this appointment data<span>',
                             type: 'error',
                             background: '#302f2f'
+                        }).then(response => {
+                            CurrentUserValidation.validateCurrentUser(this.$store);
                         });
                 console.log(error)
             })

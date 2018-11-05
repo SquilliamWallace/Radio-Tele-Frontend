@@ -103,7 +103,7 @@ export default {
                         }
                         this.$emit('populateData');
                         this.$emit('close-modal');
-
+                        document.location.reload(true);
                     }, (status, errors) => {
                         if (parseInt(status) === 403) {
                             this.$swal({
@@ -111,8 +111,9 @@ export default {
                             html: '<span style="color:#f0ead6">Access Denied<span>',
                             type: 'error',
                             background: '#302f2f'
-                        });
+                        }).then(response => {
                             CurrentUserValidation.validateCurrentUser(this.$store);
+                        });
                         } else {
                             console.log(status)
                             console.log(errors)

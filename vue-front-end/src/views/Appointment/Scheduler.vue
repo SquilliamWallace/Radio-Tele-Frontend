@@ -1,7 +1,8 @@
 <template>
     <v-app>
         <navigation-bar></navigation-bar>
-        <v-app light>
+        <loading v-show="$store.state.isLoading"></loading>
+        <v-app v-show="!$store.state.isLoading" light>
             <full-calendar @event-created="createEvent" @event-selected="openEvent" :events="events" class='overcast' id="calendar"></full-calendar>
             <v-layout justify-center>
                 <create-appointment :eventObj="event" v-model="openCreateModal" v-on:close-modal="openCreateModal = false"></create-appointment>
@@ -13,14 +14,16 @@
 
 <script>
 import {FullCalendar} from 'vue-full-calendar'
-import NavigationBar from '../components/NavigationBar.vue'
-import router from '../router'
+
+import NavigationBar from '../../components/NavigationBar.vue'
+import router from '../../router'
 import moment from 'moment'
-import CreateAppointment from '../components/Appointment.vue'
-import ApiDriver from '../ApiDriver'
-import HttpResponse from '../utils/HttpResponse'
-import CurrentUserValidation from '../utils/CurrentUserValidation'
-import PrivateEvent from "../components/PrivateEvent";
+import CreateAppointment from '../../components/Appointment.vue'
+import ApiDriver from '../../ApiDriver'
+import HttpResponse from '../../utils/HttpResponse'
+import CurrentUserValidation from '../../utils/CurrentUserValidation'
+import PrivateEvent from "../../components/PrivateEvent"
+import Loading from "../../components/Loading"
 export default {
     name: 'Scheduler',
     data() {
@@ -40,7 +43,8 @@ export default {
         FullCalendar,
         NavigationBar,
         CreateAppointment,
-        PrivateEvent
+        PrivateEvent,
+        Loading
     },
     methods: {
         openEvent(event) {
@@ -69,6 +73,7 @@ export default {
             this.openCreateModal = false;
         },
         populateData() {
+            this.$store.commit("loading", true);
             ApiDriver.Appointment.futureAppointmentsByTelescopeID(1, 0, 100).then((response) => {
                 //console.log(response.data.data.content);
                 HttpResponse.then(response, (data) => {
@@ -93,9 +98,9 @@ export default {
                                 userId: element.userId,
                                 public: element.public
                             }
-
-                            this.events.push(eventData)
+                            this.events.push(eventData);
                         }
+                        this.$store.commit("loading", false);
                     }, (status, errors) => {
                         if (parseInt(status) === 403) {
                             this.$swal({
@@ -103,8 +108,9 @@ export default {
                             html: '<span style="color:#f0ead6">Access Denied<span>',
                             type: 'error',
                             background: '#302f2f'
-                        });
+                        }).then(response => {
                             CurrentUserValidation.validateCurrentUser(this.$store);
+                        });
                         } else {
                             console.log(status)
                             console.log(errors)

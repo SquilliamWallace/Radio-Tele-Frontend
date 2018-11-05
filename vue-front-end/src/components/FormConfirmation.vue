@@ -1,7 +1,7 @@
 <template>
     <v-dialog class="confirmation-modal" width="50%" dark :value="value" @input="$emit('input')" persistent>
         <v-card>
-            <v-card-title class="headline">Are you sure you wish to cancel?</v-card-title>
+            <v-card-title class="headline justify-center">Are you sure you wish to cancel?</v-card-title>
             <v-card-text>If you cancel, you will lose all progress on this form and will have to fill it out again.</v-card-text>
             <v-spacer></v-spacer>
             <v-card-actions>
