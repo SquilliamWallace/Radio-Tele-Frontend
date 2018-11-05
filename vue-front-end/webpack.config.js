@@ -6,16 +6,15 @@ module.exports = {
   //or an array of multiple points
     entry: './src/main.js',
     devServer: {
-        host: '34.239.40.223',
         port: 8081,
         historyApiFallback: true,
         proxy: {
           '/api': {
-            target: 'ycp-radio-telescope-dev.cgaa5jndlq2g.us-east-1.rds.amazonaws.com:8080',
+            target: 'http://ec2-184-72-162-159.compute-1.amazonaws.com:8080',
             secure: false
           },
           '/login': {
-            target: 'ycp-radio-telescope-dev.cgaa5jndlq2g.us-east-1.rds.amazonaws.com:8080',
+            target: 'http://ec2-184-72-162-159.compute-1.amazonaws.com:8080',
             secure: false
           }
         }
