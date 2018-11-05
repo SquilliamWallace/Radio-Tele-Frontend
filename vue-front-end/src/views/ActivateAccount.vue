@@ -24,6 +24,7 @@
 import ApiDriver from '../ApiDriver';
 import router from '../router'
 import HttpResponse from '../utils/HttpResponse'
+import { error } from 'util';
 export default {
     name: "ActivateAccount",
     data() {
@@ -53,6 +54,8 @@ export default {
                     this.callAlert();
                     // Show the success text
                     this.accountActivated = true;
+                }, (status, errors) => {
+                    console.log(errors)
                 })
             })
         },
