@@ -1,7 +1,7 @@
 const axios = require('axios');
 import Headers from './utils/Headers';
 
-let baseUrl = "/api/"
+let baseUrl = "/api/";
 export default {
     //API endpoints go here
     User: {
@@ -12,12 +12,6 @@ export default {
       register: function (data) {
         return axios.post(this.namespace, data, Headers.retrieveHeaders());
       },
-      login: function (data) {
-        return axios.post("/api/login?email=" + data.username.value + "&password=" + data.password.value, JSON.stringify(data), Headers.retrieveHeaders())
-      },
-      logout: function () {
-        return axios.post("/api/logout", {}, Headers.retrieveHeaders())
-      },
       get: function(userId) {
         return axios.get(this.namespace + "/" + userId)
       },
@@ -27,14 +21,14 @@ export default {
       allUsers: function(data) {
         return axios.get(this.namespace + "?page=" + data.pageNumber + "&size=" + data.pageSize)
       },
-      requestPasswordReset(data) {
-        return axios.post("/api/requestPasswordReset", data, Headers.retrieveHeaders())
-      },
-      resetPassword(data, token) {
-        return axios.post("/api/resetPassword?token=" + token, data, Headers.retrieveHeaders())
-      },
       ban: function(userId){
         return axios.put(this.namespace + "/" + userId + "/ban")
+      },
+      Appointment: {
+        namespace: baseUrl + "users",
+        completedAppointments: function(userId, pageNumber, pageSize) {
+          return axios.get(this.namespace + "/" + userId + "/appointments/completedList?page=" + pageNumber + "&size=" + pageSize);
+        }
       }
     },
 
@@ -54,18 +48,27 @@ export default {
       },
       data: function(appointmentId) {
         return axios.get(this.namespace + "/" + appointmentId + "/rf-data")
-      },
-      completedAppointments: function(userId, pageNumber, pageSize) {
-        return axios.get("/api/users/" + userId + "/appointments/completedList?page=" + pageNumber + "&size=" + pageSize);
       }
   },
     Auth: {
       User: function() {
-        return axios.get("/api/auth")
+        return axios.get(baseUrl + "auth")
       },
       Admin: function() {
-        return axios.get("/api/authAdmin")
+        return axios.get(baseUrl + "authAdmin")
       }
-    }
+    },
 
+    login: function(data) {
+      return axios.post(baseUrl + "login?email=" + data.username.value + "&password=" + data.password.value, JSON.stringify(data), Headers.retrieveHeaders())
+    },
+    logout: function () {
+      return axios.post(baseUrl + "logout", {}, Headers.retrieveHeaders())
+    },
+    requestPasswordReset(data) {
+      return axios.post(baseUrl + "requestPasswordReset", data, Headers.retrieveHeaders())
+    },
+    resetPassword(data, token) {
+      return axios.post("/api/resetPassword?token=" + token, data, Headers.retrieveHeaders())
+    }
 }
