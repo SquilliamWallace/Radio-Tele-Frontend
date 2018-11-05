@@ -21,7 +21,7 @@
                     <v-flex xs12 sm6>
                         <v-text-field
                         v-model="form.first.value"
-                        :rules="rules.required"
+                        :rules="[rules.required]"
                         :error=form.first.hasError
                         :error-messages=form.first.errorMessage
                         color="blue darken-2"
@@ -32,7 +32,7 @@
                     <v-flex xs12 sm6>
                         <v-text-field
                         v-model="form.last.value"
-                        :rules="rules.required"
+                        :rules="[rules.required]"
                         :error=form.last.hasError
                         :error-messages=form.last.errorMessage
                         color="blue darken-2"
@@ -43,7 +43,7 @@
                     <v-flex xs12 sm6>
                         <v-text-field
                         v-model="form.email.value"
-                        :rules="rules.required"
+                        :rules="[rules.required]"
                         :error=form.email.hasError
                         :error-messages=form.email.errorMessage
                         color="blue darken-2"
@@ -59,7 +59,7 @@
                         :error-messages=form.emailConfirm.errorMessage
                         color="bule darken-2"
                         label="Confirm Email"
-                        validate-on-blur=true
+                        :validate-on-blur=true
                         required
                         ></v-text-field>
                     </v-flex>
@@ -68,7 +68,7 @@
                         v-model="form.password.value"
                         :append-icon="show1 ? 'visibility_off' : 'visibility'"
                         :type="show1 ? 'text' : 'password'"
-                        :rules="rules.required"
+                        :rules="[rules.required]"
                         :error=form.password.hasError
                         :error-messages=form.password.errorMessage
                         color="blue darken-2"
@@ -89,7 +89,7 @@
                         color="blue darken-2"
                         label="Re-Type Password"
                         @click:append="show2 = !show2"
-                        validate-on-blur=true
+                        :validate-on-blur=true
                         required
                         ></v-text-field>
                     </v-flex>
@@ -97,7 +97,7 @@
                         <v-select
                         v-model="form.accountType.value"
                         :items="accountTypes"
-                        :rules="rules.required"
+                        :rules="[rules.required]"
                         :error=form.accountType.hasError
                         :error-messages=form.accountType.errorMessage
                         color="blue darken-2"
@@ -235,7 +235,7 @@ import CustomErrorHandler from "../../utils/CustomErrorHandler";
               terms: false
         },
         rules: {
-            required: val => (val || '').length > 0 || 'This field is required',
+            required: val => val.length > 0 || 'This field is required',
             passMatch: val => val === this.form.password.value || 'Passwords must match',
             emailMatch: val => val === this.form.email.value || 'Emails must match'
         },
