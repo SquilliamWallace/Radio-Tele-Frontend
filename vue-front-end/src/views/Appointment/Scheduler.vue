@@ -11,7 +11,7 @@
     </v-app>
 </template>
 
-<script>
+<script type="application/javascript">
 import {FullCalendar} from 'vue-full-calendar'
 import NavigationBar from '../../components/NavigationBar.vue'
 import router from '../../router'
@@ -96,8 +96,8 @@ export default {
                     }, (status, errors) => {
                         if (parseInt(status) === 403) {
                             this.$swal({
-                            title: '<span style="color:#f0ead6">Error!<span>',
-                            html: '<span style="color:#f0ead6">Access Denied<span>',
+                            title: '<span style="color:#f0ead6">Error!</span>',
+                            html: '<span style="color:#f0ead6">Access Denied</span>',
                             type: 'error',
                             background: '#302f2f'
                         }).then(response => {
@@ -119,16 +119,16 @@ export default {
     }  
 }
 
-$(function() {
-$('#calendar').fullCalendar({
-    themeSystem: 'jquery-ui',
-    header: {
-      left: 'prev,next today',
-      center: 'title',
-      right: 'month,agendaWeek,agendaDay,listMonth'
-    }
-    });
-});
+// $(window).load(function() {
+// $('#calendar').fullCalendar({
+//     themeSystem: 'jquery-ui',
+//     header: {
+//       left: 'prev,next today',
+//       center: 'title',
+//       right: 'month,agendaWeek,agendaDay,listMonth'
+//     }
+//     });
+// });
 </script>
 
 <style scoped>
