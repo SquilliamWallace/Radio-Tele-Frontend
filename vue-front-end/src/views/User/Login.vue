@@ -106,7 +106,7 @@ export default {
     },
     methods: {
       submit() {
-        ApiDriver.User.login(this.data).then(response => {
+        ApiDriver.login(this.data).then(response => {
             this.clearErrors();
 
             if(response.data.includes("bundle.js")){
@@ -120,7 +120,7 @@ export default {
       submitResetRequest() {
           this.clearErrors();
           
-          ApiDriver.User.requestPasswordReset(this.data.reqPassEmail.value).then(response => {
+          ApiDriver.requestPasswordReset(this.data.reqPassEmail.value).then(response => {
               HttpResponse.then(response, data => {
                   this.$swal({
                       title: '<span style="color:#f0ead6">Success!<span>',

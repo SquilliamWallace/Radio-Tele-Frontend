@@ -14,13 +14,15 @@
 
 <script>
 import {FullCalendar} from 'vue-full-calendar'
+
 import NavigationBar from '../../components/NavigationBar.vue'
 import router from '../../router'
+import moment from 'moment'
 import CreateAppointment from '../../components/Appointment.vue'
 import ApiDriver from '../../ApiDriver'
 import HttpResponse from '../../utils/HttpResponse'
 import CurrentUserValidation from '../../utils/CurrentUserValidation'
-import PrivateEvent from "../../components/PrivateEvent";
+import PrivateEvent from "../../components/PrivateEvent"
 import Loading from "../../components/Loading"
 export default {
     name: 'Scheduler',
@@ -58,9 +60,10 @@ export default {
             }
         },
         createEvent(Obj) {
+            console.log(moment(Obj.start).format('YYYY-MM-DD hh:mm A'))
             this.event.allDay = Obj.allDay
-            this.event.start = Obj.start.format()
-            this.event.end = Obj.end.format()
+            this.event.start = moment(Obj.start).format('YYYY-MM-DD hh:mm A')
+            this.event.end = moment(Obj.end).format('YYYY-MM-DD hh:mm A')
             
             // this.$data.newStartTime = Obj.start.format();
             // this.$data.newEndTime = Obj.end.format();
@@ -87,8 +90,8 @@ export default {
                             }
                             var eventData = {
                                 title: title,
-                                start: element.startTime,
-                                end: element.endTime,
+                                start: new Date(element.startTime),
+                                end: new Date(element.endTime),
                                 backgroundColor: backgroundColor,
                                 id: element.id,
                                 telescopeId: element.telescopeId,

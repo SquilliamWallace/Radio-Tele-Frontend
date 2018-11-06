@@ -50,13 +50,13 @@ export default {
             }
         },
         submit() {
-            ApiDriver.User.login(this.data);
+            ApiDriver.login(this.data);
         },
         viewProfile() {
             router.push('/users/' + this.$store.state.currentUserId + '/view')
         },
         logout() {
-            ApiDriver.User.logout();
+            ApiDriver.logout();
             this.$store.commit("logout");
             router.push('/');
         }

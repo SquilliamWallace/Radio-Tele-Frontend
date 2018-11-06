@@ -8,11 +8,6 @@
                     <v-list-tile-title>Start Date:</v-list-tile-title>
                     <v-list-tile-sub-title class = "pl-3">{{ startMonth }}</v-list-tile-sub-title>
                 </v-list-tile-content>
-                <v-list-tile-action>
-                    <v-btn v-on:click="getAppointment" icon ripple>
-                        <v-icon>edit</v-icon>
-                    </v-btn>
-                </v-list-tile-action>
             </v-list-tile>
             <v-divider></v-divider>
             <v-list-tile>
@@ -20,11 +15,6 @@
                     <v-list-tile-title >End Date:</v-list-tile-title>
                     <v-list-tile-sub-title class = "pl-3">{{ endMonth }}</v-list-tile-sub-title>
                 </v-list-tile-content>
-                <v-list-tile-action>
-                    <v-btn icon ripple>
-                        <v-icon>edit</v-icon>
-                    </v-btn>
-                </v-list-tile-action>
             </v-list-tile>
             <v-divider></v-divider>
             <v-list-tile>
@@ -32,11 +22,6 @@
                     <v-list-tile-title>Public:</v-list-tile-title>
                     <v-list-tile-sub-title class = "pl-3">{{ privacy }}</v-list-tile-sub-title>
                 </v-list-tile-content>
-                <v-list-tile-action>
-                    <v-btn icon ripple>
-                        <v-icon>edit</v-icon>
-                    </v-btn>
-                </v-list-tile-action>
             </v-list-tile>
             <v-divider></v-divider>
             <v-list-tile>
@@ -44,11 +29,6 @@
                     <v-list-tile-title>Celestial Body:</v-list-tile-title>
                     <v-list-tile-sub-title class = "pl-3">{{ celestialBody }}</v-list-tile-sub-title>
                 </v-list-tile-content>
-                <v-list-tile-action>
-                    <v-btn icon ripple>
-                        <v-icon>edit</v-icon>
-                    </v-btn>
-                </v-list-tile-action>
             </v-list-tile>
             <v-divider></v-divider>
             <v-list-tile>
@@ -57,27 +37,37 @@
                     </v-list-tile-title>
                     <v-list-tile-sub-title class = "pl-3">{{ Tele }}</v-list-tile-sub-title>
                 </v-list-tile-content>
-                <v-list-tile-action>
-                    <v-btn icon ripple>
-                        <v-icon>edit</v-icon>
-                    </v-btn>
-                </v-list-tile-action>
             </v-list-tile>
             <v-divider>
                 <v-divider></v-divider>
             </v-divider>
             <v-btn v-if="status === 'Completed'" color="primary" v-bind:href="'/appointments/' + id + '/rf-data'">View Data</v-btn>
-    </v-container>
+        </v-container>
+        <v-layout wrap>
+        <v-flex v-if="$store.state.currentUserId === eventUserId | $store.state.isAdmin">
+            <div>
+                <v-btn color="primary" @click="editAppointment">Edit</v-btn>
+            </div>
+        </v-flex>
+        <v-flex v-if="$store.state.currentUserId === eventUserId | $store.state.isAdmin">
+            <div>
+                <v-btn color="error" @click="cancelAppointment">Cancel</v-btn>
+            </div>
+        </v-flex>
+        </v-layout>
+        <edit-appointment :appointmentObj="appointment" v-model="edit"> </edit-appointment>
+        <cancel-appointment v-model="cancel">  </cancel-appointment>
     </div>
     
 </template>
 <script>
-
 import NavigationBar from '../../components/NavigationBar.vue'
 import ApiDriver from '../../ApiDriver.js'
-import HttpResponse from '../../utils/HttpResponse';
-import CurrentUserValidation from  '../../utils/CurrentUserValidation';
+import HttpResponse from '../../utils/HttpResponse'
+import CurrentUserValidation from  '../../utils/CurrentUserValidation'
 import moment from 'moment'
+import CancelAppointment from "../../components/CancelAppointment.vue"
+import EditAppointment from "../../components/EditAppointment.vue"
 import Loading from "../../components/Loading"
 export default {
     name: "AppointmentView",
@@ -105,11 +95,16 @@ export default {
                 { title: 'Coordinates', celestialBody: "Mars"},
                 { title: 'Telescope', enum: '1'}
                 ],
+                eventUserId: 0,
+                edit: false,
+                appointment: {},
+                cancel: false
         }
     },
     components: {
         NavigationBar,
-        Loading
+        EditAppointment,
+        CancelAppointment
     },
     methods: {
         getAppointment () {
@@ -132,10 +127,27 @@ export default {
         },
         populateData(data){
             this.id = data.id
+            this.eventUserId = data.userId
             this.privacy = data.public
-            this.startMonth = moment(data.startTime).add(4, 'hours').format('MM/DD/YYYY hh:mm A')
-            this.endMonth = moment(data.endTime).add(4, 'hours').format('MM/DD/YYYY hh:mm A')
+            this.startMonth = moment(data.startTime).format('YYYY-MM-DD hh:mm A')
+            this.endMonth = moment(data.endTime).format('YYYY-MM-DD hh:mm A')
             this.status = data.status
+            console.log(this.status)
+        },
+        editAppointment () {
+            this.appointment.id = this.id
+            this.appointment.privacy = !this.privacy
+            this.appointment.start = this.startMonth
+            this.appointment.end = this.endMonth
+            this.appointment.Tele = this.Tele
+            this.edit = true
+        },
+        cancelAppointment () {
+            this.cancel = true
+        },
+        closeModal() {
+            this.edit = false
+            this.appointment = {}
         }
     },
     mounted: function() {

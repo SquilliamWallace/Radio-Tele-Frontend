@@ -66,7 +66,7 @@ export default {
     methods: {
         getCompletedAppointments() {
             this.$store.commit("loading", true);
-            ApiDriver.Appointment.completedAppointments(this.$route.params.userId, this.pageNumber, this.pageSize)
+            ApiDriver.User.Appointment.completedAppointments(this.$route.params.userId, this.pageNumber, this.pageSize)
                 .then(response => {
                     HttpResponse.then(response, data => {
                         this.last = data.data.last;
