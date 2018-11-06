@@ -67,7 +67,6 @@ export default {
             this.$store.commit("loading", true);
             ApiDriver.Appointment.futureAppointments(this.$route.params.userId, this.pageNumber, this.pageSize)
                 .then(response => {
-                    console.log(response)
                     HttpResponse.then(response, data => {
                         this.last = data.data.last
                         this.populateData(data.data);
