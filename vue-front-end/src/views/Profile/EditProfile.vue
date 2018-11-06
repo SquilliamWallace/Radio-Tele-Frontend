@@ -115,46 +115,32 @@ export default {
     },
     retrieveInformation() {
         let that = this;
-        // If a route param was not supplied, return to the
-        // login page
-        if (!this.$route.params.userId) {
-            router.push("/");
-        } else {
-            this.$store.commit("loading", true);
-            // Otherwise call the retrieve method
-            ApiDriver.User.get(this.$route.params.userId).then(response => {
-                // Handle the response
-                HttpResponse.then(response, data => {
-                    // If it was a success, populate the user information fields
-                    that.populateData(data.data);
-                    this.$store.commit("loading", false);
-                }, (status, errors) => {
-                    // Check if the user is forbidden from accessing the endpoint
-                    if (parseInt(status) === 403) {
-                        this.$swal({
-                            title: '<span style="color:#f0ead6">Error!<span>',
-                            html: '<span style="color:#f0ead6">Access Denied<span>',
-                            type: 'error',
-                            background: '#302f2f'
-                        }).then(response => {
-                            CurrentUserValidation.validateCurrentUser(this.$store);
-                        });
-                    } else {
-                        handleErrors(errors);
-                    }
-                });
-          }).catch(errors => {
-              this.$swal({
-                            title: '<span style="color:#f0ead6">Error!<span>',
-                            html: '<span style="color:#f0ead6">An error occurred when loading the user information<span>',
-                            type: 'error',
-                            background: '#302f2f'
-                        }).then(response => {
-                            CurrentUserValidation.validateCurrentUser(this.$store);
-                        });
-              console.log(errors);
-          });
-      }
+        this.$store.commit("loading", true);
+        // Call the retrieve method
+        ApiDriver.User.get(this.$route.params.userId).then(response => {
+            // Handle the response
+            HttpResponse.then(response, data => {
+                // If it was a success, populate the user information fields
+                that.populateData(data.data);
+                this.$store.commit("loading", false);
+            }, (status, errors) => {
+                // Check if the user is forbidden from accessing the endpoint
+                if (parseInt(status) === 403) {
+                    HttpResponse.accessDenied(this);
+                } else if (parseInt(status) === 404) {
+                    HttpResponse.notFound(this, errors)
+                }
+            });
+        }).catch(errors => {
+            this.$swal({
+                title: '<span style="color:#f0ead6">Error!<span>',
+                html: '<span style="color:#f0ead6">An error occurred when loading the user information<span>',
+                type: 'error',
+                background: '#302f2f'
+            }).then(response => {
+                CurrentUserValidation.validateCurrentUser(this.$store);
+            });
+        });
     },
     updateInformation() {
         // Populate the data
@@ -181,7 +167,14 @@ export default {
             }
           );
         }).catch(errors => {
-          console.log(errors);
+            this.$swal({
+                title: '<span style="color:#f0ead6">Error!<span>',
+                html: '<span style="color:#f0ead6">An error occurred when updating the user\'s information<span>',
+                type: 'error',
+                background: '#302f2f'
+            }).then(response => {
+                CurrentUserValidation.validateCurrentUser(this.$store);
+            });
         });
     },
     handleErrors(errors) {

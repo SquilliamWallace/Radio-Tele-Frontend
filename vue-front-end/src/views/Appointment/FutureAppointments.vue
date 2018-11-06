@@ -45,8 +45,6 @@
 <script>
 import router from '../../router';
 import ApiDriver from '../../ApiDriver';
-import HttpResponse from '../../utils/HttpResponse';
-import AccessDenied from '../../utils/AccessDenied';
 import CurrentUserValidation from '../../utils/CurrentUserValidation';
 import moment from 'moment';
 import NavigationBar from '../../components/NavigationBar';
@@ -74,11 +72,10 @@ export default {
                         this.$store.commit("loading", false);
                     }, (status, errors) => {
                         if (parseInt(status) === 403) {
-                            AccessDenied.accessDenied(this);
+                            HttpResponse.accessDenied(this);
                         }
                     })
                 }).catch(error => {
-                    console.log(error)
                     this.$store.commit("loading", false);
                     this.$swal({
                         title: '<span style="color:#f0ead6">Error!<span>',

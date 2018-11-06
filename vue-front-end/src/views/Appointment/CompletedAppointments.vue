@@ -70,26 +70,14 @@ export default {
                 .then(response => {
                     HttpResponse.then(response, data => {
                         this.last = data.data.last;
-                        console.log(this.last)
                         this.populateData(data.data);
                         this.$store.commit("loading", false);
                     }, (status, errors) => {
-                        this.$store.commit("loading", false);
-                        // if (parseInt(status) === 403) {
-                        //     this.$store.commit("loading", false);
-                        //     this.$swal({
-                        //         title: '<span style="color:#f0ead6">Error!<span>',
-                        //         html: '<span style="color:#f0ead6">Access Denied<span>',
-                        //         type: 'error',
-                        //         background: '#302f2f'
-                        //     }).then(response => {
-                        //         CurrentUserValidation.validateCurrentUser(this.$store);
-                        //     });
-                        // }
+                        if (parseInt(status) === 403) {
+                            HttpResponse.accessDenied(this);
+                        }
                     })
                 }).catch(error => {
-                    console.log(error);
-                    this.$store.commit("loading", false);
                     this.$swal({
                         title: '<span style="color:#f0ead6">Error!<span>',
                         html: '<span style="color:#f0ead6">An error occurred when loading the user\'s completed appointments<span>',
@@ -101,7 +89,6 @@ export default {
                 })
         },
         populateData(data) {
-            console.log(data)
             for (var index in data.content) {
                 let appointment = data.content[index];
                 appointment.celestialBody = "Alpha Centauri";

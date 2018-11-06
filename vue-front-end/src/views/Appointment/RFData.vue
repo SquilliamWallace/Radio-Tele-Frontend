@@ -44,14 +44,9 @@ export default {
                     this.populateData(data.data);
                 }, (status, errors) => {
                     if (parseInt(status) === 403) {
-                        this.$swal({
-                            title: '<span style="color:#f0ead6">Error!<span>',
-                            html: '<span style="color:#f0ead6">Access Denied<span>',
-                            type: 'error',
-                            background: '#302f2f'
-                        }).then(response => {
-                            CurrentUserValidation.validateCurrentUser(this.$store);
-                        });
+                        HttpResponse.accessDenied(this);
+                    } else if (parseInt(status) === 404) {
+                        HttpResponse.notFound(this, errors);
                     }
                 })
             }).catch(error => {
@@ -63,7 +58,6 @@ export default {
                         }).then(response => {
                             CurrentUserValidation.validateCurrentUser(this.$store);
                         });
-                console.log(error)
             })
         },
         populateData(data) {
@@ -82,7 +76,6 @@ export default {
     }
 }
 </script>
-
 <style scoped>
 
 </style>

@@ -120,47 +120,23 @@ export default {
                     this.$store.commit("loading", false);
                 }, (status, errors) => {
                     if (parseInt(status) === 403) {
-                        this.$swal({
-                            title: '<span style="color:#f0ead6">Error!<span>',
-                            html: '<span style="color:#f0ead6">Access Denied<span>',
-                            type: 'error',
-                            background: '#302f2f'
-                        }).then(response => {
-                            CurrentUserValidation.validateCurrentUser(this.$store);
-                        });
+                        HttpResponse.accessDenied(this);
+                    } else if (parseInt(status) === 404) {
+                        HttpResponse.notFound(this, errors);
                     }
                 })
             }).catch((error) => {
-                console.log(error)
-            });
-        },
-        auth () {
-            ApiDriver.Auth.User().then((response) => {
-                HttpResponse.then(response, (data) => {
-                    
-                }, (status, errors) => {
-                    if (parseInt(status) === 403) {
-                        this.$swal({
-                            title: '<span style="color:#f0ead6">Error!<span>',
-                            html: '<span style="color:#f0ead6">Access Denied<span>',
-                            type: 'error',
-                            background: '#302f2f'
-                        }).then(response => {
-                            CurrentUserValidation.validateCurrentUser(this.$store);
-                        });
-                    }
-                })
-            }).catch((error) => {
+                console.log(error);
+                this.$store.commit("loading", false);
                 this.$swal({
-                            title: '<span style="color:#f0ead6">Error!<span>',
-                            html: '<span style="color:#f0ead6">An error occurred when loading this appointment data<span>',
-                            type: 'error',
-                            background: '#302f2f'
-                        }).then(response => {
-                            CurrentUserValidation.validateCurrentUser(this.$store);
-                        });
-                console.log(error)
-            })
+                    title: '<span style="color:#f0ead6">Error!<span>',
+                    html: '<span style="color:#f0ead6">An error occurred when loading this appiontment<span>',
+                    type: 'error',
+                    background: '#302f2f'
+                }).then(response => {
+                    CurrentUserValidation.validateCurrentUser(this.$store);
+                });
+            });
         },
         populateData(data){
             this.id = data.id
@@ -168,12 +144,9 @@ export default {
             this.startMonth = moment(data.startTime).add(4, 'hours').format('MM/DD/YYYY hh:mm A')
             this.endMonth = moment(data.endTime).add(4, 'hours').format('MM/DD/YYYY hh:mm A')
             this.status = data.status
-
-            console.log(this.status)
         }
     },
-    mounted: function(){
-        this.auth()
+    mounted: function() {
         this.getAppointment()
     }
 }
