@@ -28,11 +28,11 @@
         </v-tab>
 
         <v-tab-item>
-                <admin-user-management></admin-user-management>
+          <admin-user-management></admin-user-management>
         </v-tab-item>
-
+        
         <v-tab-item>
-            
+          <admin-log></admin-log>
         </v-tab-item>
 
         <v-tab-item>
@@ -44,6 +44,7 @@
   </div>
 </template>
 <script>
+import AdminLog from '../components/AdminLog.vue'
 import AdminUserManagement from '../components/AdminUserManagement.vue';
 import ApiDriver from '../ApiDriver';
 import HttpResponse from '../utils/HttpResponse';
@@ -82,7 +83,8 @@ import CurrentUserValidation from '../utils/CurrentUserValidation';
     },
     components: {
         AdminUserManagement,
-        NavigationBar
+        NavigationBar,
+        AdminLog
     },
     mounted() {
       this.authenticate()
