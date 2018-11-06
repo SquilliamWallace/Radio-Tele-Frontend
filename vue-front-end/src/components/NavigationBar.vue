@@ -33,10 +33,10 @@ export default {
         return {
             showDrawer: false,
             items: [
-              { title: 'Scheduling Calendar', icon: 'dashboard', path: "/scheduler" },
-              { title: 'Administration', path: '/admin'},
-              { title: 'Completed Appointments', path: '/users/' + this.$store.state.currentUserId + '/appointments/completed'},
-              { title: 'Future Appointments', path: '/underConstruction'}
+              { title: 'Scheduling Calendar', icon: 'dashboard', path: '/scheduler' },
+              { title: 'Administration', path: '/admin' },
+              { title: 'Completed Appointments', path: '/users/' + this.$store.state.currentUserId + '/appointments/completed' },
+              { title: 'Future Appointments', path: '/users/' + this.$store.state.currentUserId + '/appointments/future' }
             ]
         }
     },

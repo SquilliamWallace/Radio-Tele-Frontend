@@ -69,14 +69,7 @@ import CurrentUserValidation from '../utils/CurrentUserValidation';
           HttpResponse.then(response, data => {
             this.$store.commit("login", data.data);
           }, (status, errors) => {
-            this.$swal({
-              title: '<span style="color:#f0ead6">Error!<span>',
-              html: '<span style="color:#f0ead6">Access Denied<span>',
-              type: 'error',
-              background: '#302f2f'
-            }).then(response => {
-              CurrentUserValidation.validateCurrentUser(this.$store);
-            });
+            HttpResponse.accessDenied(this);
           })
         })
       }

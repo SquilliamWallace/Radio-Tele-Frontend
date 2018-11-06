@@ -49,7 +49,7 @@ import ApiDriver from '../../ApiDriver';
 import HttpResponse from '../../utils/HttpResponse';
 import CurrentUserValidation from '../../utils/CurrentUserValidation';
 import moment from 'moment';
-import NavigationBar from '../../components/NavigationBar.vue'
+import NavigationBar from '../../components/NavigationBar'
 import Loading from "../../components/Loading"
 export default {
     name: 'CompletedAppointments',
@@ -74,25 +74,12 @@ export default {
                         this.$store.commit("loading", false);
                     }, (status, errors) => {
                         if (parseInt(status) === 403) {
-                            this.$swal({
-                                title: '<span style="color:#f0ead6">Error!<span>',
-                                html: '<span style="color:#f0ead6">Access Denied<span>',
-                                type: 'error',
-                                background: '#302f2f'
-                            }).then(response => {
-                                CurrentUserValidation.validateCurrentUser(this.$store);
-                            });
+                            HttpResponse.accessDenied(this);
                         }
                     })
-                }).catch(error => {
-                    this.$swal({
-                        title: '<span style="color:#f0ead6">Error!<span>',
-                        html: '<span style="color:#f0ead6">An error occurred when loading the user\'s completed appointments<span>',
-                        type: 'error',
-                        background: '#302f2f'
-                    }).then(response => {
-                        CurrentUserValidation.validateCurrentUser(this.$store);
-                    });
+                }).catch(errors => {
+                    let message = "An error occurred when loading the user\'s completed observations"
+                    HttpResponse.generalError(this, message)
                 })
         },
         populateData(data) {

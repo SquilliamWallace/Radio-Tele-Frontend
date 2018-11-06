@@ -57,6 +57,9 @@ export default {
       },
       completedAppointments: function(userId, pageNumber, pageSize) {
         return axios.get("/api/users/" + userId + "/appointments/completedList?page=" + pageNumber + "&size=" + pageSize);
+      },
+      futureAppointments: function(userId, pageNumber, pageSize) {
+        return axios.get("/api/users/" + userId + "/appointments/futureList?page=" + pageNumber + "&size=" + pageSize);
       }
     },
     Log: {

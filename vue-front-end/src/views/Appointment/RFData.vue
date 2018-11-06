@@ -44,26 +44,14 @@ export default {
                     this.populateData(data.data);
                 }, (status, errors) => {
                     if (parseInt(status) === 403) {
-                        this.$swal({
-                            title: '<span style="color:#f0ead6">Error!<span>',
-                            html: '<span style="color:#f0ead6">Access Denied<span>',
-                            type: 'error',
-                            background: '#302f2f'
-                        }).then(response => {
-                            CurrentUserValidation.validateCurrentUser(this.$store);
-                        });
+                        HttpResponse.accessDenied(this);
+                    } else if (parseInt(status) === 404) {
+                        HttpResponse.notFound(this, errors);
                     }
                 })
-            }).catch(error => {
-                this.$swal({
-                            title: '<span style="color:#f0ead6">Error!<span>',
-                            html: '<span style="color:#f0ead6">An error occurred when loading the RF data for this appointment<span>',
-                            type: 'error',
-                            background: '#302f2f'
-                        }).then(response => {
-                            CurrentUserValidation.validateCurrentUser(this.$store);
-                        });
-                console.log(error)
+            }).catch(errors => {
+                let message = "An error occurred when loading the RF data for this observation"
+                HttpResponse.generalError(this, message)
             })
         },
         populateData(data) {
@@ -82,7 +70,6 @@ export default {
     }
 }
 </script>
-
 <style scoped>
 
 </style>
