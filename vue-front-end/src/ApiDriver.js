@@ -53,6 +53,12 @@ export default {
       data: function(appointmentId) {
         return axios.get("/api/appointments/" + appointmentId + "/rf-data")
       },
+      update: function(appointmentId, data) {
+        return axios.put("/api/appointments/" + appointmentId, data, Headers.retrieveHeaders())
+      },
+      cancel: function(appointmentId) {
+        return axios.put("/api/appointments/" + appointmentId + "/cancel")
+      },
       completedAppointments: function(userId, pageNumber, pageSize) {
         return axios.get("/api/users/" + userId + "/appointments/completedList?page=" + pageNumber + "&size=" + pageSize);
       }
