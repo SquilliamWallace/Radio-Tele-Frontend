@@ -67,7 +67,6 @@ export default {
         return axios.get("/api/logs?pageNumber=" + pageNumber + "&pageSize=" + pageSize)
       }
     },
-  },
     Auth: {
       User: function() {
         return axios.get(baseUrl + "auth")
