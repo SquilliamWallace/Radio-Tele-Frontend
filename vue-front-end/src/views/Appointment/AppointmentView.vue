@@ -126,7 +126,6 @@ export default {
                     }
                 })
             }).catch((error) => {
-                console.log(error);
                 this.$store.commit("loading", false);
                 this.$swal({
                     title: '<span style="color:#f0ead6">Error!<span>',

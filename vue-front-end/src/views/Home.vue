@@ -56,15 +56,9 @@ export default {
         ApiDriver.Auth.User().then((response) => {
           HttpResponse.then(response, (data) => {
             this.$store.commit("login", data.data);
+            this.$forceUpdate();
           }, (status, errors) => {
-              this.$swal({
-                title: '<span style="color:#f0ead6">Error!<span>',
-                html: '<span style="color:#f0ead6">Access Denied<span>',
-                type: 'error',
-                background: '#302f2f'
-              }).then(response => {
-                router.push('/')
-              });
+              HttpResponse.accessDenied(this)
           })
         });
       }
@@ -72,7 +66,6 @@ export default {
   mounted() {
     // Handle the log in when the DOM is loaded
     this.handleLoggedIn();
-    this.$forceUpdate();
   }
 };
 </script>

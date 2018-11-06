@@ -78,19 +78,15 @@ export default {
                 ApiDriver.User.get(this.$route.params.userId).then((response) => {
                     HttpResponse.then(response, (data) => {
                         that.populateData(data.data)
+                        this.$store.commit("loading", false)
                     }, (status, errors) => {
+                        console.log(errors);
                         if (parseInt(status) === 403) {
-                            this.$swal({
-                            title: '<span style="color:#f0ead6">Error!<span>',
-                            html: '<span style="color:#f0ead6">Access Denied<span>',
-                            type: 'error',
-                            background: '#302f2f'
-                        }).then(response => {
-                            CurrentUserValidation.validateCurrentUser(this.$store);
-                        });
+                            HttpResponse.accessDenied(that)
+                        } else if (parseInt(status) === 404) {
+                            HttpResponse.notFound(that, errors)
                         }
                     })
-                    this.$store.commit("loading", false);
                 }).catch((errors) => {
                     this.$swal({
                             title: '<span style="color:#f0ead6">Error!<span>',
@@ -114,8 +110,7 @@ export default {
                 this.profile.type.value = data.membershipRole;
             } else {
                 this.profile.type.value = "Pending Approval";
-            }
-            
+            }   
         }
     },
     mounted() {
