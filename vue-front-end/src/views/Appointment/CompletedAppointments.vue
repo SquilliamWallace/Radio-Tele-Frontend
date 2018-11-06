@@ -66,11 +66,10 @@ export default {
     methods: {
         getCompletedAppointments() {
             this.$store.commit("loading", true);
-            ApiDriver.Appointment.completedAppointments(this.$route.params.userId, this.pageNumber, this.pageSize)
+            ApiDriver.User.Appointment.completedAppointments(this.$route.params.userId, this.pageNumber, this.pageSize)
                 .then(response => {
                     HttpResponse.then(response, data => {
                         this.last = data.data.last;
-                        console.log(this.last)
                         this.populateData(data.data);
                         this.$store.commit("loading", false);
                     }, (status, errors) => {
@@ -97,7 +96,6 @@ export default {
                 })
         },
         populateData(data) {
-            console.log(data)
             for (var index in data.content) {
                 let appointment = data.content[index];
                 appointment.celestialBody = "Alpha Centauri";

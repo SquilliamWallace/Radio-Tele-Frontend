@@ -70,7 +70,7 @@ export default {
                 passwordConfirm: this.data.passwordConfirm.value,
             });
 
-            ApiDriver.User.resetPassword(data, token).then(response => {
+            ApiDriver.resetPassword(data, token).then(response => {
                 this.clearErrors();
                 HttpResponse.then(response, data => {
                     this.$swal({
