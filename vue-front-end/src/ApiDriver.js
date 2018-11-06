@@ -56,6 +56,12 @@ export default {
       completedAppointments: function(userId, pageNumber, pageSize) {
         return axios.get("/api/users/" + userId + "/appointments/completedList?page=" + pageNumber + "&size=" + pageSize);
       }
+    },
+    Log: {
+      viewLogs: function(pageNumber, pageSize){
+        return axios.get("/api/logs?pageNumber=" + pageNumber + "&pageSize=" + pageSize)
+      }
+    },
   },
     Auth: {
       User: function() {
