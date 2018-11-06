@@ -5,6 +5,9 @@ import Headers from './utils/Headers';
 export default {
     //API endpoints go here
     User: {
+      activate: function(token) {
+        return axios.put("/api/users/activate?token=" + token, {}, Headers.retrieveHeaders());
+      },
       register: function (data) {
         return axios.post("/api/users", data, Headers.retrieveHeaders());
       },
@@ -22,6 +25,15 @@ export default {
       },
       allUsers: function(data) {
         return axios.get("/api/users?page=" + data.pageNumber + "&size=" + data.pageSize)
+      },
+      requestPasswordReset(data) {
+        return axios.post("/api/requestPasswordReset", data, Headers.retrieveHeaders())
+      },
+      resetPassword(data, token) {
+        return axios.post("/api/resetPassword?token=" + token, data, Headers.retrieveHeaders())
+      },
+      ban: function(userId){
+        return axios.put("/api/users/" + userId + "/ban")
       }
     },
 
@@ -40,15 +52,24 @@ export default {
       },
       data: function(appointmentId) {
         return axios.get("/api/appointments/" + appointmentId + "/rf-data")
-      } 
+      },
+      completedAppointments: function(userId, pageNumber, pageSize) {
+        return axios.get("/api/users/" + userId + "/appointments/completedList?page=" + pageNumber + "&size=" + pageSize);
+      }
     },
     Log: {
       viewLogs: function(pageNumber, pageSize){
         return axios.get("/api/logs?pageNumber=" + pageNumber + "&pageSize=" + pageSize)
       }
     },
-    Auth: function() {
-      return axios.get("/api/auth")
+  },
+    Auth: {
+      User: function() {
+        return axios.get("/api/auth")
+      },
+      Admin: function() {
+        return axios.get("/api/authAdmin")
+      }
     }
 
 }

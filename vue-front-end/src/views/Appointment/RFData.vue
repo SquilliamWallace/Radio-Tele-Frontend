@@ -18,11 +18,11 @@
 </template>
 
 <script>
-import router from '../router';
-import ApiDriver from '../ApiDriver';
-import HttpResponse from '../utils/HttpResponse';
-import CurrentUserValidation from  '../utils/CurrentUserValidation';
-import NavigationBar from "../components/NavigationBar.vue";
+import router from '../../router';
+import ApiDriver from '../../ApiDriver';
+import HttpResponse from '../../utils/HttpResponse';
+import CurrentUserValidation from  '../../utils/CurrentUserValidation';
+import NavigationBar from "../../components/NavigationBar.vue";
 import moment from 'moment';
 export default {
     name: 'RFData',
@@ -49,8 +49,9 @@ export default {
                             html: '<span style="color:#f0ead6">Access Denied<span>',
                             type: 'error',
                             background: '#302f2f'
+                        }).then(response => {
+                            CurrentUserValidation.validateCurrentUser(this.$store);
                         });
-                        CurrentUserValidation.validateCurrentUser(this.$store);
                     }
                 })
             }).catch(error => {
@@ -59,6 +60,8 @@ export default {
                             html: '<span style="color:#f0ead6">An error occurred when loading the RF data for this appointment<span>',
                             type: 'error',
                             background: '#302f2f'
+                        }).then(response => {
+                            CurrentUserValidation.validateCurrentUser(this.$store);
                         });
                 console.log(error)
             })

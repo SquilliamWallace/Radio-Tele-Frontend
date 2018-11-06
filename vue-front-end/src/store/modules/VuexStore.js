@@ -19,7 +19,8 @@ export default {
                 isStudent: false,
                 isResearcher: false,
                 isMember: false,
-                isAdmin: false
+                isAdmin: false,
+                isLoading: false
             },
             mutations: {
                 login(state, data) {
@@ -49,6 +50,9 @@ export default {
                     state.isResearcher = false;
                     state.isMember = false;
                     state.isAdmin = false;
+                },
+                loading(state, value) {
+                    state.isLoading = value;
                 }
             },
             plugins: [vuexLocal.plugin]

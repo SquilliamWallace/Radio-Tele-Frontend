@@ -44,9 +44,13 @@
   </div>
 </template>
 <script>
-import AdminUserManagement from '../components/AdminUserManagement.vue'
-import NavigationBar from '../components/NavigationBar.vue'
 import AdminLog from '../components/AdminLog.vue'
+import AdminUserManagement from '../components/AdminUserManagement.vue';
+import ApiDriver from '../ApiDriver';
+import HttpResponse from '../utils/HttpResponse';
+import NavigationBar from '../components/NavigationBar.vue';
+import router from '../router';
+import CurrentUserValidation from '../utils/CurrentUserValidation';
  export default {
      name: 'admin',
     data () {
@@ -59,10 +63,31 @@ import AdminLog from '../components/AdminLog.vue'
         ]
       }
     },
+    methods: {
+      authenticate() {
+        ApiDriver.Auth.Admin().then(response => {
+          HttpResponse.then(response, data => {
+            this.$store.commit("login", data.data);
+          }, (status, errors) => {
+            this.$swal({
+              title: '<span style="color:#f0ead6">Error!<span>',
+              html: '<span style="color:#f0ead6">Access Denied<span>',
+              type: 'error',
+              background: '#302f2f'
+            }).then(response => {
+              CurrentUserValidation.validateCurrentUser(this.$store);
+            });
+          })
+        })
+      }
+    },
     components: {
         AdminUserManagement,
         NavigationBar,
         AdminLog
+    },
+    mounted() {
+      this.authenticate()
     }
   }
 </script>
