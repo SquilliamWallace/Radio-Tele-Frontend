@@ -132,14 +132,8 @@ export default {
                 }
             });
         }).catch(errors => {
-            this.$swal({
-                title: '<span style="color:#f0ead6">Error!<span>',
-                html: '<span style="color:#f0ead6">An error occurred when loading the user information<span>',
-                type: 'error',
-                background: '#302f2f'
-            }).then(response => {
-                CurrentUserValidation.validateCurrentUser(this.$store);
-            });
+            let message = "An error occurred when loading the user information";
+            HttpResponse.generalError(this, message)
         });
     },
     updateInformation() {

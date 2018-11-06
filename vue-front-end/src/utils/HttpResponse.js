@@ -23,7 +23,7 @@ export default {
         for (var index in errors) {
             error = errors[index][0];
         }
-        
+
         that.$swal({
             title: '<span style="color:#f0ead6">Error!</span>',
             html: '<span style="color:#f0ead6">' + error + '</span>',
@@ -38,6 +38,17 @@ export default {
         that.$swal({
             title: '<span style="color:#f0ead6">Error!<span>',
             html: '<span style="color:#f0ead6">Access Denied<span>',
+            type: 'error',
+            background: '#302f2f'
+        }).then(response => {
+            CurrentUserValidation.validateCurrentUser(that.$store);
+        });
+    },
+    generalError: function(that, message) {
+        that.$store.commit("loading", false);
+        that.$swal({
+            title: '<span style="color:#f0ead6">Error!<span>',
+            html: '<span style="color:#f0ead6">' + message + '<span>',
             type: 'error',
             background: '#302f2f'
         }).then(response => {

@@ -49,15 +49,9 @@ export default {
                         HttpResponse.notFound(this, errors);
                     }
                 })
-            }).catch(error => {
-                this.$swal({
-                            title: '<span style="color:#f0ead6">Error!<span>',
-                            html: '<span style="color:#f0ead6">An error occurred when loading the RF data for this appointment<span>',
-                            type: 'error',
-                            background: '#302f2f'
-                        }).then(response => {
-                            CurrentUserValidation.validateCurrentUser(this.$store);
-                        });
+            }).catch(errors => {
+                let message = "An error occurred when loading the RF data for this observation"
+                HttpResponse.generalError(this, message)
             })
         },
         populateData(data) {

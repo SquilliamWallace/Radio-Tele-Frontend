@@ -77,15 +77,9 @@ export default {
                             HttpResponse.accessDenied(this);
                         }
                     })
-                }).catch(error => {
-                    this.$swal({
-                        title: '<span style="color:#f0ead6">Error!<span>',
-                        html: '<span style="color:#f0ead6">An error occurred when loading the user\'s completed appointments<span>',
-                        type: 'error',
-                        background: '#302f2f'
-                    }).then(response => {
-                        CurrentUserValidation.validateCurrentUser(this.$store);
-                    });
+                }).catch(errors => {
+                    let message = "An error occurred when loading the user\'s completed observations"
+                    HttpResponse.generalError(this, message)
                 })
         },
         populateData(data) {

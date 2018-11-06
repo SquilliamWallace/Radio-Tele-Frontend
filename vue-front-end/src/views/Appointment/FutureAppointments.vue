@@ -49,6 +49,7 @@ import CurrentUserValidation from '../../utils/CurrentUserValidation';
 import moment from 'moment';
 import NavigationBar from '../../components/NavigationBar';
 import Loading from '../../components/Loading'
+import HttpResponse from '../../utils/HttpResponse';
 export default {
     name: 'FutureAppointments',
     data() {
@@ -66,6 +67,7 @@ export default {
             this.$store.commit("loading", true);
             ApiDriver.Appointment.futureAppointments(this.$route.params.userId, this.pageNumber, this.pageSize)
                 .then(response => {
+                    console.log(response)
                     HttpResponse.then(response, data => {
                         this.last = data.data.last
                         this.populateData(data.data);
@@ -76,15 +78,8 @@ export default {
                         }
                     })
                 }).catch(error => {
-                    this.$store.commit("loading", false);
-                    this.$swal({
-                        title: '<span style="color:#f0ead6">Error!<span>',
-                        html: '<span style="color:#f0ead6">An error occurred when loading the user\'s future appointments<span>',
-                        type: 'error',
-                        background: '#302f2f'
-                    }).then(response => {
-                        CurrentUserValidation.validateCurrentUser(this.$store);
-                    });
+                    let message = "An error occurred when loading the user\'s future observations";
+                    HttpResponse.generalError(this, message);
                 });
         },
         populateData(data) {

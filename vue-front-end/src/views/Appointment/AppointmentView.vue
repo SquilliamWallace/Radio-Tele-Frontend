@@ -126,15 +126,8 @@ export default {
                     }
                 })
             }).catch((error) => {
-                this.$store.commit("loading", false);
-                this.$swal({
-                    title: '<span style="color:#f0ead6">Error!<span>',
-                    html: '<span style="color:#f0ead6">An error occurred when loading this appiontment<span>',
-                    type: 'error',
-                    background: '#302f2f'
-                }).then(response => {
-                    CurrentUserValidation.validateCurrentUser(this.$store);
-                });
+                let message = "An error occurred when loading this observation";
+                HttpResponse.generalError(this, message);
             });
         },
         populateData(data){
