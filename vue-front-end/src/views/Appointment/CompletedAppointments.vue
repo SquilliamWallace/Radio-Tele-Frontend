@@ -49,7 +49,7 @@ import ApiDriver from '../../ApiDriver';
 import HttpResponse from '../../utils/HttpResponse';
 import CurrentUserValidation from '../../utils/CurrentUserValidation';
 import moment from 'moment';
-import NavigationBar from '../../components/NavigationBar.vue'
+import NavigationBar from '../../components/NavigationBar'
 import Loading from "../../components/Loading"
 export default {
     name: 'CompletedAppointments',
@@ -75,6 +75,7 @@ export default {
                         this.$store.commit("loading", false);
                     }, (status, errors) => {
                         if (parseInt(status) === 403) {
+                            this.$store.commit("loading", false);
                             this.$swal({
                                 title: '<span style="color:#f0ead6">Error!<span>',
                                 html: '<span style="color:#f0ead6">Access Denied<span>',
@@ -86,6 +87,7 @@ export default {
                         }
                     })
                 }).catch(error => {
+                    this.$store.commit("loading", true);
                     this.$swal({
                         title: '<span style="color:#f0ead6">Error!<span>',
                         html: '<span style="color:#f0ead6">An error occurred when loading the user\'s completed appointments<span>',
