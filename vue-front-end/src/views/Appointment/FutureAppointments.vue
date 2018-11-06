@@ -46,6 +46,7 @@
 import router from '../../router';
 import ApiDriver from '../../ApiDriver';
 import HttpResponse from '../../utils/HttpResponse';
+import AccessDenied from '../../utils/AccessDenied';
 import CurrentUserValidation from '../../utils/CurrentUserValidation';
 import moment from 'moment';
 import NavigationBar from '../../components/NavigationBar';
@@ -56,7 +57,7 @@ export default {
         return {
             pageNumber: 0,
             pageDisplay: 1,
-            pageSize: 1,
+            pageSize: 25,
             numPages: 0,
             last: false,
             futureAppointments: []
@@ -72,19 +73,12 @@ export default {
                         this.populateData(data.data);
                         this.$store.commit("loading", false);
                     }, (status, errors) => {
-                        this.$store.commit("loading", false);
                         if (parseInt(status) === 403) {
-                            this.$swal({
-                                title: '<span style="color:#f0ead6">Error!<span>',
-                                html: '<span style="color:#f0ead6">Access Denied<span>',
-                                type: 'error',
-                                background: '#302f2f'
-                            }).then(response => {
-                                CurrentUserValidation.validateCurrentUser(this.$store);
-                            });
+                            AccessDenied.accessDenied(this);
                         }
                     })
                 }).catch(error => {
+                    console.log(error)
                     this.$store.commit("loading", false);
                     this.$swal({
                         title: '<span style="color:#f0ead6">Error!<span>',

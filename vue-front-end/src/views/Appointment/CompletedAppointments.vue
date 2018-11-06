@@ -74,20 +74,22 @@ export default {
                         this.populateData(data.data);
                         this.$store.commit("loading", false);
                     }, (status, errors) => {
-                        if (parseInt(status) === 403) {
-                            this.$store.commit("loading", false);
-                            this.$swal({
-                                title: '<span style="color:#f0ead6">Error!<span>',
-                                html: '<span style="color:#f0ead6">Access Denied<span>',
-                                type: 'error',
-                                background: '#302f2f'
-                            }).then(response => {
-                                CurrentUserValidation.validateCurrentUser(this.$store);
-                            });
-                        }
+                        this.$store.commit("loading", false);
+                        // if (parseInt(status) === 403) {
+                        //     this.$store.commit("loading", false);
+                        //     this.$swal({
+                        //         title: '<span style="color:#f0ead6">Error!<span>',
+                        //         html: '<span style="color:#f0ead6">Access Denied<span>',
+                        //         type: 'error',
+                        //         background: '#302f2f'
+                        //     }).then(response => {
+                        //         CurrentUserValidation.validateCurrentUser(this.$store);
+                        //     });
+                        // }
                     })
                 }).catch(error => {
-                    this.$store.commit("loading", true);
+                    console.log(error);
+                    this.$store.commit("loading", false);
                     this.$swal({
                         title: '<span style="color:#f0ead6">Error!<span>',
                         html: '<span style="color:#f0ead6">An error occurred when loading the user\'s completed appointments<span>',
