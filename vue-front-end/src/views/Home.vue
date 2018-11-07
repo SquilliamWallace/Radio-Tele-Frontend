@@ -39,6 +39,7 @@ import NavigationBar from "../components/NavigationBar.vue";
 import ApiDriver from "../ApiDriver";
 import router from '../router';
 import HttpResponse from '../utils/HttpResponse';
+import { error } from 'util';
 export default {
   name: "Home",
   data() {
@@ -55,22 +56,28 @@ export default {
         // the Vue store with user information
         ApiDriver.Auth.User().then((response) => {
           HttpResponse.then(response, (data) => {
-            if (!data.data.accountActive) {
-              this.$swal({
-                title: '<span style="color:#f0ead6">Error!</span>',
-                html: '<span style="color:#f0ead6">This account is not currently active and cannot be logged in</span>',
-                type: 'error',
-                background: '#302f2f'
+            this.$store.commit("login", data.data);
+            this.$forceUpdate();
+          }, (status, errors) => {
+            this.handleAccountDisabled(errors)
+          })
+        });
+      },
+      handleAccountDisabled(errors) {
+        let message = "";
+
+        // There will only ever be one error in this scenario
+        for (var index in errors) {
+          message = errors[index][0]
+        }
+
+        this.$swal({
+          title: '<span style="color:#f0ead6">Error!</span>',
+          html: '<span style="color:#f0ead6">' + message + '</span>',
+          type: 'error',
+          background: '#302f2f'
         }).then(response => {
             router.push('/')
-        });
-            } else {
-              this.$store.commit("login", data.data);
-              this.$forceUpdate();
-            }
-          }, (status, errors) => {
-              HttpResponse.accessDenied(this)
-          })
         });
       }
   },
