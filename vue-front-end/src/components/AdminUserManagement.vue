@@ -19,7 +19,7 @@
                         <v-icon>gavel</v-icon>
                     </v-btn>  
                 </div>
-                <div v-if = "user.status === 'Banned'">
+                <div v-else>
                     <v-btn icon @click="confirm = !confirm, chosenUserId = user.id, action = 'unban', chosenUserName = user.firstName +' '+ user.lastName">
                         <v-icon>lock_open</v-icon>
                     </v-btn> 
@@ -70,7 +70,8 @@ export default {
             confirm: false,
             chosenUserId: '',
             chosenUserName: '',
-            action: ''
+            action: '',
+            icon:''
         }
     },
     methods:{
@@ -106,11 +107,13 @@ export default {
         banUser(userId){
             ApiDriver.User.ban(userId).then((response) => {
                 console.log(response)
+                location.reload();
             })
         },
         unbanUser(userId){
             ApiDriver.User.unban(userId).then((response) => {
                 console.log(response)
+                location.reload();
             })
         }
     },
