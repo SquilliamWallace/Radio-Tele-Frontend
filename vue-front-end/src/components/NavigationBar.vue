@@ -10,7 +10,7 @@
       </v-toolbar-items>
     </v-toolbar>
     <!-- Define drawer menu and populate it with items-->
-    <v-navigation-drawer :temporary=true :floating=true :hide-overlay=true style="max-height:200px; position:absolute;" v-model="showDrawer">
+    <v-navigation-drawer :temporary=true :floating=true :hide-overlay=true style="max-height:250px; position:absolute;" v-model="showDrawer">
         <v-list>
             <v-list-tile v-for = "item in items"
             :key = "item.title"
@@ -33,10 +33,10 @@ export default {
         return {
             showDrawer: false,
             items: [
-              { title: 'Scheduling Calendar', icon: 'dashboard', path: "/scheduler" },
-              { title: 'Administration', path: '/admin'},
-              { title: 'Completed Appointments', path: '/users/' + this.$store.state.currentUserId + '/appointments/completed'},
-              { title: 'Under Construction', path: '/underConstruction'}
+              { title: 'Scheduling Calendar', icon: 'dashboard', path: '/scheduler' },
+              { title: 'Administration', path: '/admin' },
+              { title: 'Completed Appointments', path: '/users/' + this.$store.state.currentUserId + '/appointments/completed' },
+              { title: 'Future Appointments', path: '/users/' + this.$store.state.currentUserId + '/appointments/future' }
             ]
         }
     },
@@ -50,13 +50,13 @@ export default {
             }
         },
         submit() {
-            ApiDriver.User.login(this.data);
+            ApiDriver.login(this.data);
         },
         viewProfile() {
             router.push('/users/' + this.$store.state.currentUserId + '/view')
         },
         logout() {
-            ApiDriver.User.logout();
+            ApiDriver.logout();
             this.$store.commit("logout");
             router.push('/');
         }

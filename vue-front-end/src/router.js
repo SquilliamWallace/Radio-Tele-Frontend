@@ -1,18 +1,19 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Login from './views/User/Login.vue'
-import Register from './views/User/Register.vue'
-import Scheduler from './views/Appointment/Scheduler.vue'
-import AppointmentView from './views/Appointment/AppointmentView.vue'
-import ActivateAccount from './views/ActivateAccount.vue'
-import ViewProfile from './views/Profile/ViewProfile.vue'
-import EditProfile from './views/Profile/EditProfile.vue'
-import admin from './views/admin.vue'
-import Home from './views/Home.vue'
-import RFData from './views/Appointment/RFData.vue'
-import ResetPassword from './views/ResetPassword.vue'
-import UnderConstruction from './views/UnderConstruction.vue'
-import CompletedAppointments from './views/Appointment/CompletedAppointments.vue'
+import Login from './views/User/Login'
+import Register from './views/User/Register'
+import Scheduler from './views/Appointment/Scheduler'
+import AppointmentView from './views/Appointment/AppointmentView'
+import ActivateAccount from './views/ActivateAccount'
+import ViewProfile from './views/Profile/ViewProfile'
+import EditProfile from './views/Profile/EditProfile'
+import admin from './views/admin'
+import Home from './views/Home'
+import RFData from './views/Appointment/RFData'
+import ResetPassword from './views/ResetPassword'
+import UnderConstruction from './views/UnderConstruction'
+import CompletedAppointments from './views/Appointment/CompletedAppointments'
+import FutureAppointments from './views/Appointment/FutureAppointments'
 
 Vue.use(Router)
 
@@ -86,6 +87,11 @@ const router = new Router({
       path: '/users/:userId/appointments/completed',
       name: 'CompletedAppointments',
       component: CompletedAppointments
+    },
+    {
+      path: '/users/:userId/appointments/future',
+      name: 'FutureAppointments',
+      component: FutureAppointments
     }
   ]
 })

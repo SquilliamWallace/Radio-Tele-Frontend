@@ -1,7 +1,8 @@
 <template>
     <div>
         <navigation-bar></navigation-bar>
-        <v-container id = "profile" width = "700px" >
+        <loading v-show="$store.state.isLoading"></loading>
+        <v-container v-show="!$store.state.isLoading" id = "profile" width = "700px" >
             <v-layout row wrap>
             <v-flex xs6>
                <v-card class = "elevation-0" color = "transparent">
@@ -45,6 +46,7 @@ import ApiDriver from '../../ApiDriver'
 import router from '../../router'
 import HttpResponse from '../../utils/HttpResponse'
 import CurrentUserValidation from '../../utils/CurrentUserValidation'
+import Loading from "../../components/Loading"
 export default {
     name: "ViewProfile",
     data() {
@@ -60,7 +62,8 @@ export default {
         }
     },
     components: {
-      NavigationBar
+      NavigationBar,
+      Loading
     },
     methods: {
         editRedirect() {
@@ -71,31 +74,22 @@ export default {
             if (!this.$route.params.userId) {
                 router.push('/')
             } else {    
+                this.$store.commit("loading", true);
                 ApiDriver.User.get(this.$route.params.userId).then((response) => {
                     HttpResponse.then(response, (data) => {
                         that.populateData(data.data)
+                        this.$store.commit("loading", false)
                     }, (status, errors) => {
+                        console.log(errors);
                         if (parseInt(status) === 403) {
-                            this.$swal({
-                            title: '<span style="color:#f0ead6">Error!<span>',
-                            html: '<span style="color:#f0ead6">Access Denied<span>',
-                            type: 'error',
-                            background: '#302f2f'
-                        }).then(response => {
-                            CurrentUserValidation.validateCurrentUser(this.$store);
-                        });
+                            HttpResponse.accessDenied(that)
+                        } else if (parseInt(status) === 404) {
+                            HttpResponse.notFound(that, errors)
                         }
                     })
                 }).catch((errors) => {
-                    this.$swal({
-                            title: '<span style="color:#f0ead6">Error!<span>',
-                            html: '<span style="color:#f0ead6">An error occurred when loading the user information<span>',
-                            type: 'error',
-                            background: '#302f2f'
-                        }).then(response => {
-                            CurrentUserValidation.validateCurrentUser(this.$store);
-                        });
-                    console.log(errors)
+                    let message = "An error occurred when loading this user\'s information"
+                    HttpResponse.generalError(this, message)
                 })
             }
         },
@@ -109,8 +103,7 @@ export default {
                 this.profile.type.value = data.membershipRole;
             } else {
                 this.profile.type.value = "Pending Approval";
-            }
-            
+            }   
         }
     },
     mounted() {
