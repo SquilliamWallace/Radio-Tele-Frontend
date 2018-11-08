@@ -10,11 +10,11 @@ module.exports = {
         historyApiFallback: true,
         proxy: {
           '/api': {
-            target: 'http://ec2-184-72-162-159.compute-1.amazonaws.com:8080',
+            target: 'http://localhost:8080',
             secure: false
           },
           '/login': {
-            target: 'http://ec2-184-72-162-159.compute-1.amazonaws.com:8080',
+            target: 'http://localhost:8080',
             secure: false
           }
         }
