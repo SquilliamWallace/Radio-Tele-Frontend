@@ -81,7 +81,9 @@ export default {
                 public: data.isPublic,
                 start: new Date(data.startTime),
                 telescopeId: data.telescopeId,
-                userId: data.userId
+                userId: data.userId,
+                editable: false,
+                draggable: false
             }
 
             this.events.push(event)
@@ -121,7 +123,9 @@ export default {
                                 id: element.id,
                                 telescopeId: element.telescopeId,
                                 userId: element.userId,
-                                public: element.public
+                                public: element.public,
+                                editable: false,
+                                draggable: false
                             }
                             this.events.push(eventData);
                         }
@@ -159,8 +163,7 @@ $('#calendar').fullCalendar({
       left: 'prev,next today',
       center: 'title',
       right: 'month,agendaWeek,agendaDay,listMonth'
-    },
-    eventOverlap: false
+    }
     });
 });
 </script>
