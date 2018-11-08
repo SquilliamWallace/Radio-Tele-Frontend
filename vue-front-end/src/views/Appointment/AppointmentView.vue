@@ -55,7 +55,7 @@
             </div>
         </v-flex>
         </v-layout>
-        <edit-appointment :appointmentObj="appointment" v-model="edit"> </edit-appointment>
+        <edit-appointment :appointmentObj="appointment" v-model="edit" @edited="edited"> </edit-appointment>
         <cancel-appointment v-model="cancel">  </cancel-appointment>
     </div>
     
@@ -125,6 +125,10 @@ export default {
                 let message = "An error occurred when loading this observation";
                 HttpResponse.generalError(this, message);
             });
+        },
+        edited: function(start, end) {
+            this.startMonth = start
+            this.endMonth = end
         },
         populateData(data){
             this.id = data.id
