@@ -81,13 +81,24 @@ export default {
                             var element = response.data.data.content[index]
                             var backgroundColor= "";
                             var title = "";
-                            console.log(element.public);
-                            if (element.public) {
+                            
+                            if (element.userId == this.$store.state.currentUserId) {
+                                title = "Your Observation";
+                                backgroundColor = "green";
+                            }
+                            else if (element.public) {
                                 backgroundColor = "";
                                 title = element.userFirstName + " " + element.userLastName;
                             } else {
                                 backgroundColor = "black";
+                                if (this.$store.state.isAdmin) {
+                                    title = element.userFirstName + " " + element.userLastName;
+                                } else {
+                                    title = "Private Observation"
+                                }
                             }
+                            
+
                             var eventData = {
                                 title: title,
                                 start: new Date(element.startTime),
@@ -134,7 +145,8 @@ $('#calendar').fullCalendar({
       left: 'prev,next today',
       center: 'title',
       right: 'month,agendaWeek,agendaDay,listMonth'
-    }
+    },
+    eventOverlap: false
     });
 });
 </script>

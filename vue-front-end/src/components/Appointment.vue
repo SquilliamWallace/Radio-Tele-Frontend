@@ -30,7 +30,7 @@
                         required
                         ></v-text-field>
                     </v-flex>
-                    <v-flex v-if="this.$store.state.isResearcher" xs12>
+                    <v-flex v-if="this.$store.state.isResearcher || this.$store.state.isAdmin" xs12>
                         <v-checkbox
                         v-model="form.isPrivate"
                         color="green"
@@ -92,6 +92,7 @@ export default {
                 telescopeId: 1,
                 isPublic: !this.form.isPrivate
             })
+            console.log(data)
 
             // This will need changed to properly handle success or failure scenarios
             ApiDriver.Appointment.create(data).then((response) => {

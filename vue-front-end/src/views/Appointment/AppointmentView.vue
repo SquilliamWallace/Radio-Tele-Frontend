@@ -44,12 +44,12 @@
             <v-btn v-if="status === 'Completed'" color="primary" v-bind:href="'/appointments/' + id + '/rf-data'">View Data</v-btn>
         </v-container>
         <v-layout wrap>
-        <v-flex v-if="$store.state.currentUserId === eventUserId | $store.state.isAdmin">
+        <v-flex v-if="($store.state.currentUserId === eventUserId | $store.state.isAdmin) && !complete">
             <div>
                 <v-btn color="primary" @click="editAppointment">Edit</v-btn>
             </div>
         </v-flex>
-        <v-flex v-if="$store.state.currentUserId === eventUserId | $store.state.isAdmin">
+        <v-flex v-if="($store.state.currentUserId === eventUserId | $store.state.isAdmin) && !complete">
             <div>
                 <v-btn color="error" @click="cancelAppointment">Cancel</v-btn>
             </div>
@@ -98,7 +98,8 @@ export default {
                 eventUserId: 0,
                 edit: false,
                 appointment: {},
-                cancel: false
+                cancel: false,
+                complete: false
         }
     },
     components: {
@@ -132,6 +133,9 @@ export default {
             this.startMonth = moment(data.startTime).format('YYYY-MM-DD hh:mm A')
             this.endMonth = moment(data.endTime).format('YYYY-MM-DD hh:mm A')
             this.status = data.status
+            if (this.status === 'Completed') {
+                this.complete = true
+            }
             console.log(this.status)
         },
         editAppointment () {
