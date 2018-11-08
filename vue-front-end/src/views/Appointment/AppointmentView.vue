@@ -38,6 +38,14 @@
                     <v-list-tile-sub-title class = "pl-3">{{ Tele }}</v-list-tile-sub-title>
                 </v-list-tile-content>
             </v-list-tile>
+            <v-divider></v-divider>
+            <v-list-tile >
+                <v-list-tile-content class="white--text">
+                    <v-list-tile-title>Created by:</v-list-tile-title>
+                    <v-list-tile-sub-title class = "pl-3">{{ name }}</v-list-tile-sub-title>
+                </v-list-tile-content>
+            </v-list-tile>
+            
             <v-divider>
                 <v-divider></v-divider>
             </v-divider>
@@ -77,6 +85,7 @@ export default {
                 posts: [],
                 errors: [],
 
+                name: '',
                 startDay: 6,
                 startMonth: '',
                 startYear: '2018',
@@ -131,6 +140,7 @@ export default {
             this.endMonth = end
         },
         populateData(data){
+            this.name = data.userFirstName + " " + data.userLastName
             this.id = data.id
             this.eventUserId = data.userId
             this.privacy = data.public
