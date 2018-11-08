@@ -85,6 +85,13 @@ export default {
         },
         submit() {
             var date = new Date(this.eventObj.start)
+            let createdEvent = {
+                userId: this.$store.state.currentUserId,
+                startTime: new Date(this.eventObj.start).toUTCString(),
+                endTime: new Date(this.eventObj.end).toUTCString(),
+                telescopeId: 1,
+                isPublic: !this.form.isPrivate
+            }
             let data = JSON.stringify({
                 userId: this.$store.state.currentUserId,
                 startTime: new Date(this.eventObj.start).toUTCString(),
@@ -102,9 +109,10 @@ export default {
                         this.form = {
                             isPrivate: false
                         }
-                        this.$emit('populateData');
+                        
+                        this.$emit('created-event', createdEvent, response.data.data);
                         this.$emit('close-modal');
-                        document.location.reload(true);
+                        //document.location.reload(true);
                     }, (status, errors) => {
                         if (parseInt(status) === 403) {
                             this.$swal({

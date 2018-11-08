@@ -5,7 +5,7 @@
         <v-app v-show="!$store.state.isLoading" light>
             <full-calendar @event-created="createEvent" @event-selected="openEvent" :events="events" class='overcast' id="calendar"></full-calendar>
             <v-layout justify-center>
-                <create-appointment :eventObj="event" v-model="openCreateModal" v-on:close-modal="openCreateModal = false"></create-appointment>
+                <create-appointment :eventObj="event" v-model="openCreateModal" @created-event="createdEvent" v-on:close-modal="openCreateModal = false"></create-appointment>
             </v-layout>
         </v-app>
          <private-event v-model="privateEventModal"></private-event>
@@ -71,6 +71,20 @@ export default {
         },
         closeEventModal() {
             this.openCreateModal = false;
+        },
+        createdEvent: function(data, id) {
+            var event = {
+                title: "Your Observation",
+                backgroundColor: "green",
+                id: id,
+                end: new Date(data.endTime),
+                public: data.isPublic,
+                start: new Date(data.startTime),
+                telescopeId: data.telescopeId,
+                userId: data.userId
+            }
+
+            this.events.push(event)
         },
         populateData() {
             this.$store.commit("loading", true);

@@ -69,7 +69,6 @@ export default {
             ApiDriver.Appointment.update(this.appointmentObj.id, data).then((response) => {
                 console.log(response);
                 HttpResponse.then(response, (data) => {
-                        this.$emit('populateData');
                         this.$emit('input');
 
                     }, (status, errors) => {
