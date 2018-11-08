@@ -4,7 +4,7 @@
         <loading v-show="$store.state.isLoading"></loading>
         <v-container v-show="!$store.state.isLoading" id = "profile" width = "700px" >
             <v-layout row wrap>
-            <v-flex xs6>
+            <v-flex xs4>
                <v-card class = "elevation-0" color = "transparent">
                    <v-avatar size = "200">
                         <img src="https://i.kym-cdn.com/entries/icons/original/000/009/803/spongebob-squarepants-patrick-spongebob-patrick-star-background-225039.jpg" alt="Patrick">
@@ -12,7 +12,7 @@
                     <div class = "headline">{{ profile.firstName.value }} {{ profile.lastName.value }}</div>
                </v-card>
             </v-flex>
-            <v-flex xs6>
+            <v-flex xs8>
                 <v-card class = "elevation-0" color = "transparent">
                     <v-divider></v-divider>
                     <div class = "headline text-xs-left">Email <v-icon>email</v-icon></div>
@@ -29,9 +29,12 @@
                     <v-divider></v-divider>
                 </v-card>
             </v-flex>
-            <v-flex xs6>
+            <v-flex xs12>
+                <br><br><br>
                 <div>
-                    <v-btn @click="editRedirect">Edit</v-btn>
+                    <v-btn color="red darken-1" @click="editRedirect">Edit Profile</v-btn>
+                    <v-btn color="primary" @click="completedAppointmentsRedirect">View Completed Observations</v-btn>
+                    <v-btn color="primary" @click="futureAppointmentsRedirect">View Future Observations</v-btn>
                 </div>
             </v-flex>
             
@@ -52,6 +55,7 @@ export default {
     data() {
         return {
             profile: {
+                id: { value: null },
                 firstName: { value: "" },
                 lastName: { value: "" },
                 email: { value: "" },
@@ -68,6 +72,12 @@ export default {
     methods: {
         editRedirect() {
             router.push('/users/' + this.$route.params.userId + '/edit')
+        },
+        futureAppointmentsRedirect() {
+            router.push('/users/' + this.profile.id.value + '/appointments/future')
+        },
+        completedAppointmentsRedirect() {
+            router.push('/users/' + this.profile.id.value + '/appointments/completed')
         },
         retrieveInformation() {
             let that = this;
@@ -94,6 +104,7 @@ export default {
             }
         },
         populateData(data) {
+            this.profile.id.value = data.id;
             this.profile.firstName.value = data.firstName;
             this.profile.lastName.value = data.lastName;
             this.profile.email.value = data.email;
