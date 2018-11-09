@@ -41,10 +41,10 @@
 </div>
 </template>
 <script>
-import ApiDriver from '../ApiDriver';
-import router from '../router'
-import CustomErrorHandler from '../utils/CustomErrorHandler'
-import HttpResponse from '../utils/HttpResponse'
+import ApiDriver from '../../ApiDriver';
+import router from '../../router'
+import CustomErrorHandler from '../../utils/CustomErrorHandler'
+import HttpResponse from '../../utils/HttpResponse'
 export default {
     name: 'ResetPassword',
     data() {
