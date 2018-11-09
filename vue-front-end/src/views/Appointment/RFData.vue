@@ -51,7 +51,7 @@ export default {
                 })
             }).catch(errors => {
                 let message = "An error occurred when loading the RF data for this observation"
-                HttpResponse.generalError(this, message)
+                HttpResponse.generalError(this, message, true)
             })
         },
         populateData(data) {

@@ -41,7 +41,7 @@ export default {
             ]
         }
     },
-    methods:{
+    methods: {
         homeRedirect(){
             if (this.$store.state.currentUserId){
                 router.push('/home')
@@ -62,7 +62,7 @@ export default {
             router.push('/');
         }
     },
-    mounted: function () {
+    mounted() {
         var d = $('.v-navigation-drawer')
         d.css('top', document.getElementById('titleBar').offsetHeight)
     }

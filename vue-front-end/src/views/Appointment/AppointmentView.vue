@@ -133,7 +133,7 @@ export default {
                 })
             }).catch((error) => {
                 let message = "An error occurred when loading this observation";
-                HttpResponse.generalError(this, message);
+                HttpResponse.generalError(this, message, true);
             });
         },
         edited: function(start, end) {
@@ -174,7 +174,6 @@ export default {
     }
 }
 </script>
-
 <style scoped>
     
 </style>

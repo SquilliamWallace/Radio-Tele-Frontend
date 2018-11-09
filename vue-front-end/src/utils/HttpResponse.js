@@ -44,7 +44,7 @@ export default {
             CurrentUserValidation.validateCurrentUser(that.$store);
         });
     },
-    generalError: function(that, message) {
+    generalError: function(that, message, redirect) {
         that.$store.commit("loading", false);
         that.$swal({
             title: '<span style="color:#f0ead6">Error!<span>',
@@ -52,7 +52,9 @@ export default {
             type: 'error',
             background: '#302f2f'
         }).then(response => {
-            CurrentUserValidation.validateCurrentUser(that.$store);
+            if (redirect) {
+                CurrentUserValidation.validateCurrentUser(that.$store);
+            }
         });
     }
 }
