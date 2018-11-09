@@ -7,7 +7,7 @@ import AppointmentView from './views/Appointment/AppointmentView'
 import ActivateAccount from './views/ActivateAccount'
 import ViewProfile from './views/Profile/ViewProfile'
 import EditProfile from './views/Profile/EditProfile'
-import admin from './views/admin'
+import Admin from './views/Administration'
 import Home from './views/Home'
 import RFData from './views/Appointment/RFData'
 import ResetPassword from './views/User/ResetPassword'
@@ -56,7 +56,7 @@ const router = new Router({
     {
       path: '/admin',
       name: 'admin',
-      component: admin
+      component: Admin
     },
     {
       path: '/home',
