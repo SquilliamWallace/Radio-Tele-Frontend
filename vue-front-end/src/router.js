@@ -14,6 +14,7 @@ import ResetPassword from './views/ResetPassword'
 import UnderConstruction from './views/UnderConstruction'
 import CompletedAppointments from './views/Appointment/CompletedAppointments'
 import FutureAppointments from './views/Appointment/FutureAppointments'
+import PublicAppointments from './views/Appointment/PublicAppointments'
 
 Vue.use(Router)
 
@@ -92,6 +93,11 @@ const router = new Router({
       path: '/users/:userId/appointments/future',
       name: 'FutureAppointments',
       component: FutureAppointments
+    },
+    {
+      path: '/appointments/public',
+      name: 'PublicAppointments',
+      component: PublicAppointments
     }
   ]
 })

@@ -96,7 +96,7 @@ export default {
             this.pageNumber = page - 1;
             this.pageDisplay = page;
             this.completedAppointments = [];
-            this.getCompletedAppointments()
+            this.getCompletedAppointments();
         }
     },
     mounted: function() {
