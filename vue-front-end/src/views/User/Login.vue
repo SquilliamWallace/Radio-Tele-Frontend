@@ -59,7 +59,7 @@
                                     <v-spacer></v-spacer>
                                     <br>
                                     <v-btn color="primary" @click="submitResetRequest">Submit</v-btn>
-                                    <v-btn color="red darken-1" @click="requestPasswordReset = false">Cancel</v-btn>
+                                    <v-btn color="red darken-1" @click="clearDialog">Cancel</v-btn>
                                 </v-card-text>
                             </v-card>
                         </v-dialog>
@@ -133,8 +133,14 @@ export default {
                   });
               }, (status, errors) => {
                   CustomErrorHandler.populateError(this.data.reqPassEmail, "Invalid Email Address");
+                  this.$forceUpdate();
               })
           })
+      },
+      clearDialog() {
+          CustomErrorHandler.clearError(this.data.reqPassEmail);
+          this.requestPasswordReset = false
+          this.data.reqPassEmail.value = ""
       },
       registerRedirect(){
         router.push('/users/register');
