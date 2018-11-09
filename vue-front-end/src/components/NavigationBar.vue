@@ -35,8 +35,9 @@ export default {
             items: [
               { title: 'Scheduling Calendar', icon: 'dashboard', path: '/scheduler' },
               { title: 'Administration', path: '/admin' },
+              { title: 'Public Appointments', path: '/appointments/public' },
               { title: 'Completed Appointments', path: '/users/' + this.$store.state.currentUserId + '/appointments/completed' },
-              { title: 'Future Appointments', path: '/users/' + this.$store.state.currentUserId + '/appointments/future' }
+              { title: 'Future Appointments', path: '/users/' + this.$store.state.currentUserId + '/appointments/future' },
             ]
         }
     },

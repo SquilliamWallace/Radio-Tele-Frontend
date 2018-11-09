@@ -104,7 +104,8 @@ export default {
     components: {
         NavigationBar,
         EditAppointment,
-        CancelAppointment
+        CancelAppointment,
+        Loading
     },
     methods: {
         getAppointment () {
