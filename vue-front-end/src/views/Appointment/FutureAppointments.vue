@@ -78,7 +78,7 @@ export default {
                     })
                 }).catch(error => {
                     let message = "An error occurred when loading the user\'s future observations";
-                    HttpResponse.generalError(this, message);
+                    HttpResponse.generalError(this, message, true);
                 });
         },
         populateData(data) {

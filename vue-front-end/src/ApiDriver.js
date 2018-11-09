@@ -21,8 +21,11 @@ export default {
       allUsers: function(data) {
         return axios.get(this.namespace + "?page=" + data.pageNumber + "&size=" + data.pageSize)
       },
-      ban: function(userId){
+      ban: function(userId) {
         return axios.put(this.namespace + "/" + userId + "/ban")
+      },
+      changeEmail: function(userId, data) {
+        return axios.post(this.namespace + "/" + userId + "/updateEmail", data, Headers.retrieveHeaders())
       },
       Appointment: {
         namespace: baseUrl + "users",

@@ -119,7 +119,7 @@ export default {
             });
         }).catch(errors => {
             let message = "An error occurred loading this user's information";
-            HttpResponse.generalError(this, message)
+            HttpResponse.generalError(this, message, true)
         });
     },
     updateInformation() {
@@ -146,9 +146,8 @@ export default {
             }
           );
         }).catch(errors => {
-            console.log(errors)
             let message = "An error occurred when updating this user's information"
-            HttpResponse.generalError(this, message);
+            HttpResponse.generalError(this, message, true);
         });
     },
     handleErrors(errors) {

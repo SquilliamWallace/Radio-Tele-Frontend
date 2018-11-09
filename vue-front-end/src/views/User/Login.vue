@@ -39,7 +39,7 @@
                         <a @click="registerRedirect">Register Here!</a>
                     </v-flex>
                     <v-flex xs12>
-                        <v-dialog v-model="requestPasswordReset" persistent max-width="600px" dark>
+                        <v-dialog v-model="requestPasswordReset" max-width="600px" dark>
                             <v-btn slot="activator" color="primary">Forgot your password?</v-btn>
                             <v-card>
                                 <v-card-title class="justify-center">
@@ -59,7 +59,7 @@
                                     <v-spacer></v-spacer>
                                     <br>
                                     <v-btn color="primary" @click="submitResetRequest">Submit</v-btn>
-                                    <v-btn color="error" @click="requestPasswordReset = false">Cancel</v-btn>
+                                    <v-btn color="red darken-1" @click="requestPasswordReset = false">Cancel</v-btn>
                                 </v-card-text>
                             </v-card>
                         </v-dialog>
@@ -132,7 +132,6 @@ export default {
                       this.requestPasswordReset = false;
                   });
               }, (status, errors) => {
-                  console.log(errors)
                   CustomErrorHandler.populateError(this.data.reqPassEmail, "Invalid Email Address");
               })
           })

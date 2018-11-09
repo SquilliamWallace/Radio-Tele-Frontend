@@ -237,7 +237,7 @@ import CustomErrorHandler from "../../utils/CustomErrorHandler";
         rules: {
             required: val => val.length > 0 || 'This field is required',
             passMatch: val => val === this.form.password.value || 'Passwords must match',
-            emailMatch: val => val === this.form.email.value || 'Emails must match'
+            emailMatch: val => val === this.form.email.value || 'Emails do not match'
         },
         accountTypes: ['Guest', 'Member', 'Student', 'Researcher'],
         conditions: false,

@@ -122,7 +122,7 @@ export default {
                 })
             }).catch((error) => {
                 let message = "An error occurred when loading this observation";
-                HttpResponse.generalError(this, message);
+                HttpResponse.generalError(this, message, true);
             });
         },
         populateData(data){
@@ -132,7 +132,6 @@ export default {
             this.startMonth = moment(data.startTime).format('YYYY-MM-DD hh:mm A')
             this.endMonth = moment(data.endTime).format('YYYY-MM-DD hh:mm A')
             this.status = data.status
-            console.log(this.status)
         },
         editAppointment () {
             this.appointment.id = this.id
@@ -155,7 +154,6 @@ export default {
     }
 }
 </script>
-
 <style scoped>
     
 </style>
