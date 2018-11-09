@@ -90,5 +90,8 @@ export default {
     },
     resetPassword(data, token) {
       return axios.post(baseUrl + "resetPassword?token=" + token, data, Headers.retrieveHeaders())
+    },
+    updateEmail(token) {
+      return axios.put(baseUrl + "updateEmail?token=" + token, {}, Headers.retrieveHeaders());
     }
 }

@@ -14,6 +14,7 @@ import ResetPassword from './views/ResetPassword'
 import UnderConstruction from './views/UnderConstruction'
 import CompletedAppointments from './views/Appointment/CompletedAppointments'
 import FutureAppointments from './views/Appointment/FutureAppointments'
+import UpdateEmail from './views/User/UpdateEmail'
 
 Vue.use(Router)
 
@@ -76,6 +77,12 @@ const router = new Router({
       path: '/resetPassword',
       name: 'ResetPassword',
       component: ResetPassword,
+      query: { token: 'private' }
+    },
+    {
+      path: '/updateEmail',
+      name: 'UpdateEmail',
+      component: UpdateEmail,
       query: { token: 'private' }
     },
     {
