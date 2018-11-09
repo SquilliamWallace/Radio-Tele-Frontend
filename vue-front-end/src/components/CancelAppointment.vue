@@ -28,7 +28,7 @@ export default {
             ApiDriver.Appointment.cancel(this.$route.params.appointmentId).then((response) => {
                 console.log(response);
                 HttpResponse.then(response, (data) => {
-                        router.go('/home')
+                        router.go(-1)
 
                     }, (status, errors) => {
                         if (parseInt(status) === 403) {

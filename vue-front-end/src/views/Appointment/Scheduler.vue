@@ -5,7 +5,7 @@
         <v-app v-show="!$store.state.isLoading" light>
             <full-calendar @event-created="createEvent" @event-selected="openEvent" :events="events" class='overcast' id="calendar"></full-calendar>
             <v-layout justify-center>
-                <create-appointment :eventObj="event" v-model="openCreateModal" v-on:close-modal="openCreateModal = false"></create-appointment>
+                <create-appointment :eventObj="event" v-model="openCreateModal" @created-event="createdEvent" v-on:close-modal="openCreateModal = false"></create-appointment>
             </v-layout>
         </v-app>
          <private-event v-model="privateEventModal"></private-event>
@@ -72,6 +72,22 @@ export default {
         closeEventModal() {
             this.openCreateModal = false;
         },
+        createdEvent: function(data, id) {
+            var event = {
+                title: "Your Observation",
+                backgroundColor: "green",
+                id: id,
+                end: new Date(data.endTime),
+                public: data.isPublic,
+                start: new Date(data.startTime),
+                telescopeId: data.telescopeId,
+                userId: data.userId,
+                editable: false,
+                draggable: false
+            }
+
+            this.events.push(event)
+        },
         populateData() {
             this.$store.commit("loading", true);
             ApiDriver.Appointment.futureAppointmentsByTelescopeID(1, 0, 100).then((response) => {
@@ -81,13 +97,24 @@ export default {
                             var element = response.data.data.content[index]
                             var backgroundColor= "";
                             var title = "";
-                            console.log(element.public);
-                            if (element.public) {
+                            
+                            if (element.userId == this.$store.state.currentUserId) {
+                                title = "Your Observation";
+                                backgroundColor = "green";
+                            }
+                            else if (element.public) {
                                 backgroundColor = "";
                                 title = element.userFirstName + " " + element.userLastName;
                             } else {
                                 backgroundColor = "black";
+                                if (this.$store.state.isAdmin) {
+                                    title = element.userFirstName + " " + element.userLastName;
+                                } else {
+                                    title = "Private Observation"
+                                }
                             }
+                            
+
                             var eventData = {
                                 title: title,
                                 start: new Date(element.startTime),
@@ -96,7 +123,9 @@ export default {
                                 id: element.id,
                                 telescopeId: element.telescopeId,
                                 userId: element.userId,
-                                public: element.public
+                                public: element.public,
+                                editable: false,
+                                draggable: false
                             }
                             this.events.push(eventData);
                         }

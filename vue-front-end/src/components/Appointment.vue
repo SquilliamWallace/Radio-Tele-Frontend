@@ -30,7 +30,7 @@
                         required
                         ></v-text-field>
                     </v-flex>
-                    <v-flex v-if="this.$store.state.isResearcher" xs12>
+                    <v-flex v-if="this.$store.state.isResearcher || this.$store.state.isAdmin" xs12>
                         <v-checkbox
                         v-model="form.isPrivate"
                         color="green"
@@ -85,6 +85,13 @@ export default {
         },
         submit() {
             var date = new Date(this.eventObj.start)
+            let createdEvent = {
+                userId: this.$store.state.currentUserId,
+                startTime: new Date(this.eventObj.start).toUTCString(),
+                endTime: new Date(this.eventObj.end).toUTCString(),
+                telescopeId: 1,
+                isPublic: !this.form.isPrivate
+            }
             let data = JSON.stringify({
                 userId: this.$store.state.currentUserId,
                 startTime: new Date(this.eventObj.start).toUTCString(),
@@ -92,6 +99,7 @@ export default {
                 telescopeId: 1,
                 isPublic: !this.form.isPrivate
             })
+            console.log(data)
 
             // This will need changed to properly handle success or failure scenarios
             ApiDriver.Appointment.create(data).then((response) => {
@@ -101,9 +109,10 @@ export default {
                         this.form = {
                             isPrivate: false
                         }
-                        this.$emit('populateData');
+                        
+                        this.$emit('created-event', createdEvent, response.data.data);
                         this.$emit('close-modal');
-                        document.location.reload(true);
+                        //document.location.reload(true);
                     }, (status, errors) => {
                         if (parseInt(status) === 403) {
                             this.$swal({

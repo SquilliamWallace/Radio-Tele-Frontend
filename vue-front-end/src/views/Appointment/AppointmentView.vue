@@ -38,24 +38,32 @@
                     <v-list-tile-sub-title class = "pl-3">{{ Tele }}</v-list-tile-sub-title>
                 </v-list-tile-content>
             </v-list-tile>
+            <v-divider></v-divider>
+            <v-list-tile >
+                <v-list-tile-content class="white--text">
+                    <v-list-tile-title>Created by:</v-list-tile-title>
+                    <v-list-tile-sub-title class = "pl-3">{{ name }}</v-list-tile-sub-title>
+                </v-list-tile-content>
+            </v-list-tile>
+            
             <v-divider>
                 <v-divider></v-divider>
             </v-divider>
             <v-btn v-if="status === 'Completed'" color="primary" v-bind:href="'/appointments/' + id + '/rf-data'">View Data</v-btn>
         </v-container>
         <v-layout wrap>
-        <v-flex v-if="$store.state.currentUserId === eventUserId | $store.state.isAdmin">
+        <v-flex v-if="($store.state.currentUserId === eventUserId | $store.state.isAdmin) && !complete">
             <div>
                 <v-btn color="primary" @click="editAppointment">Edit</v-btn>
             </div>
         </v-flex>
-        <v-flex v-if="$store.state.currentUserId === eventUserId | $store.state.isAdmin">
+        <v-flex v-if="($store.state.currentUserId === eventUserId | $store.state.isAdmin) && !complete">
             <div>
                 <v-btn color="error" @click="cancelAppointment">Cancel</v-btn>
             </div>
         </v-flex>
         </v-layout>
-        <edit-appointment :appointmentObj="appointment" v-model="edit"> </edit-appointment>
+        <edit-appointment :appointmentObj="appointment" v-model="edit" @edited="edited"> </edit-appointment>
         <cancel-appointment v-model="cancel">  </cancel-appointment>
     </div>
     
@@ -77,6 +85,7 @@ export default {
                 posts: [],
                 errors: [],
 
+                name: '',
                 startDay: 6,
                 startMonth: '',
                 startYear: '2018',
@@ -98,13 +107,15 @@ export default {
                 eventUserId: 0,
                 edit: false,
                 appointment: {},
-                cancel: false
+                cancel: false,
+                complete: false
         }
     },
     components: {
         NavigationBar,
         EditAppointment,
-        CancelAppointment
+        CancelAppointment,
+        Loading
     },
     methods: {
         getAppointment () {
@@ -125,13 +136,22 @@ export default {
                 HttpResponse.generalError(this, message, true);
             });
         },
+        edited: function(start, end) {
+            this.startMonth = start
+            this.endMonth = end
+        },
         populateData(data){
+            this.name = data.userFirstName + " " + data.userLastName
             this.id = data.id
             this.eventUserId = data.userId
             this.privacy = data.public
             this.startMonth = moment(data.startTime).format('YYYY-MM-DD hh:mm A')
             this.endMonth = moment(data.endTime).format('YYYY-MM-DD hh:mm A')
             this.status = data.status
+            if (this.status === 'Completed') {
+                this.complete = true
+            }
+            console.log(this.status)
         },
         editAppointment () {
             this.appointment.id = this.id

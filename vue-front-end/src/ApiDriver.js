@@ -63,6 +63,9 @@ export default {
       },
       futureAppointments: function(userId, pageNumber, pageSize) {
         return axios.get("/api/users/" + userId + "/appointments/futureList?page=" + pageNumber + "&size=" + pageSize);
+      },
+      publicAppointments: function(page, size) {
+        return axios.get(this.namespace + "/publicCompleted?page=" + page + "&size=" + size)
       }
     },
     Log: {
