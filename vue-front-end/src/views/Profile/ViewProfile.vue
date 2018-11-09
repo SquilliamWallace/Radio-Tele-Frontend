@@ -68,7 +68,7 @@
                                         </v-flex>
                                         <v-spacer></v-spacer>
                                         <br><br>
-                                        <v-btn color="primary" @click="changeEmailRequest">Submit</v-btn>
+                                        <v-btn color="primary darken-1" @click="changeEmailRequest">Submit</v-btn>
                                         <v-btn color="red darken-1" @click="clearDialog">Cancel</v-btn>
                                     </v-container>
                                 </v-card-text>

@@ -40,7 +40,7 @@
                     </v-flex>
                     <v-flex xs12>
                         <v-dialog v-model="requestPasswordReset" max-width="600px" dark>
-                            <v-btn slot="activator" color="primary">Forgot your password?</v-btn>
+                            <v-btn slot="activator" color="primary darken-1">Forgot your password?</v-btn>
                             <v-card>
                                 <v-card-title class="justify-center">
                                     <span class="headline">Request Password Reset</span>

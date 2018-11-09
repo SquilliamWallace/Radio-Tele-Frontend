@@ -1,18 +1,5 @@
 <template>
     <v-app>
-        <v-snackbar
-            v-model="snackbar"
-            top
-            color="success"
-            >
-            <span>Registration successful!</span>
-            <v-btn
-                flat
-                @click="registerSuccess()"
-                >
-                Okay
-            </v-btn>
-        </v-snackbar>
         <v-container v-bind:style="{ padding:'50px' }">
             <v-card flat>
                 <v-form ref="form" @submit.prevent="submit" refs="form">
