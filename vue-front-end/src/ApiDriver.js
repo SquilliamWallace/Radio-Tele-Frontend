@@ -77,7 +77,7 @@ export default {
     },
 
     login: function(data) {
-      return axios.post(baseUrl + "login?email=" + data.username.value + "&password=" + data.password.value, JSON.stringify(data), Headers.retrieveHeaders())
+      return axios.post(baseUrl + "login?email=" + data.username.value + "&password=" + data.password.value, JSON.stringify(data))
     },
     logout: function () {
       return axios.post(baseUrl + "logout", {}, Headers.retrieveHeaders())
