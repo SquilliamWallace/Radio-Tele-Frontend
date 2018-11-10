@@ -106,22 +106,30 @@ export default {
     },
     methods: {
       submit() {
-        ApiDriver.login(this.data).then(response => {
-            this.clearErrors();
+          // Make the API call
+          ApiDriver.login(this.data).then(response => {
+              // Clear any errors
+              this.clearErrors();
 
-            if(response.data.includes("bundle.js")){
-              router.push('/home');
-            } else {
-                CustomErrorHandler.populateError(this.data.username, this.generalErrorMessage);
-                CustomErrorHandler.populateError(this.data.password, this.generalErrorMessage);
-            }
+              // Redirect on success
+              if(response.data.includes("bundle.js")){
+                router.push('/home');
+              } else {
+                  // Populate error messages for the form fields
+                  CustomErrorHandler.populateError(this.data.username, this.generalErrorMessage);
+                  CustomErrorHandler.populateError(this.data.password, this.generalErrorMessage);
+              }
           });
       },
       submitResetRequest() {
+          // Clear any errors
           this.clearErrors();
           
+          // Make the API call
           ApiDriver.requestPasswordReset(this.data.reqPassEmail.value).then(response => {
+              // Handle the server response
               HttpResponse.then(response, data => {
+                  // Display the success alert
                   this.$swal({
                       title: '<span style="color:#f0ead6">Success!<span>',
                       html: '<span style="color:#f0ead6">You should receive an email shortly' + 
@@ -129,21 +137,24 @@ export default {
                       type: 'success',
                       background: '#302f2f'
                   }).then(response => {
+                      // Close the modal
                       this.requestPasswordReset = false;
                   });
               }, (status, errors) => {
+                  // Populate the error messages for the form field
                   CustomErrorHandler.populateError(this.data.reqPassEmail, "Invalid Email Address");
                   this.$forceUpdate();
               })
           })
       },
       clearDialog() {
+          // Close the modal and reset values
           CustomErrorHandler.clearError(this.data.reqPassEmail);
           this.requestPasswordReset = false
           this.data.reqPassEmail.value = ""
       },
       registerRedirect(){
-        router.push('/users/register');
+          router.push('/users/register');
       },
       clearErrors() {
           CustomErrorHandler.clearError(this.data.username);
@@ -153,7 +164,6 @@ export default {
     }
 }
 </script>
-
 <style scoped>
 
 </style>

@@ -65,7 +65,10 @@ export default {
 
                         HttpResponse.generalError(this, message, true)
                     });
-                })
+                }).catch(errors => {
+                    let message = "An error occurred changing this user's email address";
+                    HttpResponse.generalError(this, message, true)
+                });
             }
         },
         callAlert() {

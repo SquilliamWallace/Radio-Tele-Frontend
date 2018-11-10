@@ -57,9 +57,19 @@ export default {
                     // Show the success text
                     this.accountActivated = true;
                 }, (status, errors) => {
-                    console.log(errors)
-                })
-            })
+                    let message = "";
+
+                    // There will only ever be one error here
+                    for (var index in errors) {
+                        message = errors[index][0];
+                    }
+
+                    HttpResponse.generalError(this, message, true)
+                });
+            }).catch(errors => {
+                let message = "An error occurred activating this user's account";
+                HttpResponse.generalError(this, message, true)
+            });
         },
         callAlert() {
             this.$swal({

@@ -94,10 +94,11 @@ export default {
       this.confirmModal = !this.confirmModal;
     },
     populateData(data) {
-      this.profile.firstName.value = data.firstName;
-      this.profile.lastName.value = data.lastName;
-      this.profile.phone.value = data.phoneNumber;
-      this.profile.company.value = data.company;
+        // Populate the profile information
+        this.profile.firstName.value = data.firstName;
+        this.profile.lastName.value = data.lastName;
+        this.profile.phone.value = data.phoneNumber;
+        this.profile.company.value = data.company;
     },
     retrieveInformation() {
         let that = this;
@@ -110,14 +111,19 @@ export default {
                 that.populateData(data.data);
                 this.$store.commit("loading", false);
             }, (status, errors) => {
-                // Check if the user is forbidden from accessing the endpoint
+                // Access Denied
                 if (parseInt(status) === 403) {
+                    // Call the generic access denied handler
                     HttpResponse.accessDenied(this);
-                } else if (parseInt(status) === 404) {
+                } 
+                // Not Found
+                else if (parseInt(status) === 404) {
+                    // Call the generic invalid resource id handler
                     HttpResponse.notFound(this, errors)
                 }
             });
         }).catch(errors => {
+            // Handle an erroneous API call
             let message = "An error occurred loading this user's information";
             HttpResponse.generalError(this, message, true)
         });
@@ -146,6 +152,7 @@ export default {
             }
           );
         }).catch(errors => {
+            // Handle an erroneous API call
             let message = "An error occurred when updating this user's information"
             HttpResponse.generalError(this, message, true);
         });

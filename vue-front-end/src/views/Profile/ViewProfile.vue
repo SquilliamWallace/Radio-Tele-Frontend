@@ -134,26 +134,37 @@ export default {
             if (!this.$route.params.userId) {
                 router.push('/')
             } else {    
+                // Set the store's loading boolean to true
                 this.$store.commit("loading", true);
+
+                // Make the API call
                 ApiDriver.User.get(this.$route.params.userId).then((response) => {
+                    // Handle the server response
                     HttpResponse.then(response, (data) => {
+                        // Populate the data and set the store's boolean back to false
                         that.populateData(data.data)
                         this.$store.commit("loading", false)
                     }, (status, errors) => {
-                        console.log(errors);
+                        // Access Denied
                         if (parseInt(status) === 403) {
+                            // Call the generic access denied handler
                             HttpResponse.accessDenied(that)
-                        } else if (parseInt(status) === 404) {
+                        } 
+                        // Not Found
+                        else if (parseInt(status) === 404) {
+                            // Call the generic invalid resource id handler
                             HttpResponse.notFound(that, errors)
                         }
                     })
                 }).catch((errors) => {
+                    // Handle an erroneous API call
                     let message = "An error occurred when loading this user\'s information"
                     HttpResponse.generalError(this, message, true)
                 })
             }
         },
         populateData(data) {
+            // Populate the profile information
             this.profile.id.value = data.id;
             this.profile.firstName.value = data.firstName;
             this.profile.lastName.value = data.lastName;
@@ -177,7 +188,9 @@ export default {
             });
             // Call the api method
             ApiDriver.User.changeEmail(this.profile.id.value, data).then(response => {
+                // Handle the response
                 HttpResponse.then(response, data => {
+                    // Success alert
                     this.$swal({
                         title: '<span style="color:#f0ead6">Success!<span>',
                         html: '<span style="color:#f0ead6">You should receive an email shortly' + 
@@ -185,29 +198,41 @@ export default {
                         type: 'success',
                         background: '#302f2f'
                     }).then(response => {
+                        // Clear out the modal's information
                         this.clearDialog();
                     });
                 }, (status, errors) => {
+                    // Access Denied
                     if (parseInt(status) === 403) {
+                        // Call the generic access denied handler
                         HttpResponse.accessDenied(this)
-                    } else if (parseInt(status) === 404) {
+                    } 
+                    // Not Found
+                    else if (parseInt(status) === 404) {
+                        // Call the generic invalid resource id handler
                         HttpResponse.notFound(that, errors)
-                    } else {
+                    } 
+                    // Bad request
+                    else {
+                        // Handle errors
                         this.handleErrors(errors)
                     }
                 })
             }).catch(errors => {
-                let message = "An Error occurred changing this user's email address"
+                // Handle an erroneous API call
+                let message = "An error occurred changing this user's email address"
                 HttpResponse.generalError(this, message, false)
             });
         },
         clearDialog() {
+            // Clear out the modal
             this.clearErrors();
             this.dialog = false;
             this.changeEmailForm.email.value = "";
             this.changeEmailForm.emailConfirm.value = "";
         },
         handleErrors(errors) {
+            // Populate error messages for the form
             for (var field in errors) {
                 let message = errors[field][0];
 
@@ -228,6 +253,7 @@ export default {
         }
     },
     mounted() {
+        // Retrieve the user information when loaded onto the DOM
         this.retrieveInformation()
     }
 }

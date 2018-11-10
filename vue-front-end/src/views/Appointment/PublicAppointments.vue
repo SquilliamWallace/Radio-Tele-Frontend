@@ -69,26 +69,32 @@ export default {
     },
     methods: {
         getPublicAppointments() {
+            // Set the store's loading boolean to true
             this.$store.commit("loading", true);
+
+            // Make the API call
             ApiDriver.Appointment.publicAppointments(this.pageNumber, this.pageSize).then(response => {
-                console.log(response)
+                // Handle the server response
                 HttpResponse.then(response, data => {
+                    // Populate the data and set the store's boolean back to false
                     this.last = data.data.last;
                     this.populateData(data.data);
                     this.$store.commit("loading", false);
                 }, (status, errors) => {
-                    console.log(errors)
+                    // Access Denied
                     if (parseInt(status) === 403) {
+                        // Call the generic access denied handler
                         HttpResponse.accessDenied(this);
                     }
                 });
             }).catch(errors => {
-                console.log(errors);
+                // Handle an erroneous API call
                 let message = "An error occurred when loading the public appointments"
                 HttpResponse.generalError(this, message)
             })
         },
         populateData(data) {
+            // Populate the public appointments array
             for (var index in data.content) {
                 let appointment = data.content[index];
                 appointment.celestialBody = "Alpha Centauri";
@@ -99,6 +105,7 @@ export default {
             }
         },
         next(page) {
+            // Handle retrieving a new page of information
             this.pageNumber = page - 1;
             this.pageDisplay = page;
             this.publicAppointments = [];
@@ -106,6 +113,7 @@ export default {
         }
     },
     mounted: function() {
+        // Retrieve the public appointments when loaded onto the DOM
         this.getPublicAppointments();
     },
     components: {

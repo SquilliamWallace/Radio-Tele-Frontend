@@ -56,9 +56,11 @@ export default {
         // the Vue store with user information
         ApiDriver.Auth.User().then((response) => {
           HttpResponse.then(response, (data) => {
+            // Commit the data to the store and update the vue app
             this.$store.commit("login", data.data);
             this.$forceUpdate();
           }, (status, errors) => {
+            // Handle if the user logging in has an inactive/disabled account
             this.handleAccountDisabled(errors)
           })
         });
