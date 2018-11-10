@@ -33,7 +33,7 @@
                     <br><br><br>
                     <div>
                         <v-btn color="primary darken-1" @click="editRedirect">Edit Profile</v-btn>
-                        <v-dialog v-model="dialog" max-width="600px" dark>
+                        <v-dialog v-model="dialog" v-if="showChangeEmailButton" max-width="600px" dark>
                             <v-btn slot="activator" color="primary darken-1">Change Email</v-btn>
                             <v-card>
                                 <v-card-title class="justify-center">
@@ -112,7 +112,8 @@ export default {
                 required: val => val.length > 0 || 'This field is required',
                 emailMatch: val => val === this.changeEmailForm.email.value || 'Emails do not match'
             },
-            dialog: false
+            dialog: false,
+            showChangeEmailButton: false
         }
     },
     components: {
@@ -176,6 +177,7 @@ export default {
             } else {
                 this.profile.type.value = "Pending Approval";
             }   
+            this.showChangeEmailButton = (data.id === this.$store.state.currentUserId)
         },
         changeEmailRequest() {
             // Clear any errors
