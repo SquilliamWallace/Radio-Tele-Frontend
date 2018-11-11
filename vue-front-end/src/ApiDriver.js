@@ -27,6 +27,9 @@ export default {
       changeEmail: function(userId, data) {
         return axios.post(this.namespace + "/" + userId + "/updateEmail", data, Headers.retrieveHeaders())
       },
+      unapproved: function(data) {
+        return axios.get("/api/roles/unapproved" + "?page=" + data.pageNumber + "&size=" + data.pageSize)
+      },
       Appointment: {
         namespace: baseUrl + "users",
         completedAppointments: function(userId, pageNumber, pageSize) {
