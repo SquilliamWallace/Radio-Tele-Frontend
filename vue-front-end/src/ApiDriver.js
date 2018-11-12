@@ -1,7 +1,7 @@
 const axios = require('axios');
 import Headers from './utils/Headers';
 
-let baseUrl = "http://ec2-54-224-74-129.compute-1.amazonaws.com:8080/api/";
+let baseUrl = "https://ec2-52-90-251-86.compute-1.amazonaws.com:8080/api/";
 export default {
     //API endpoints go here
     User: {
