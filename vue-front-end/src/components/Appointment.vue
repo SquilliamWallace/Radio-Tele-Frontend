@@ -35,6 +35,7 @@
                         v-model="eventObj.rightAscension"
                         color="blue darken-2"
                         label="Right Ascension"
+                        type="number"
                         required
                         ></v-text-field>
                     </v-flex>
@@ -43,6 +44,7 @@
                         v-model="eventObj.declination"
                         color="blue darken-2"
                         label="Declination"
+                        type="number"
                         required
                         ></v-text-field>
                     </v-flex>
