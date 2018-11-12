@@ -26,15 +26,6 @@
                         </v-flex>
                         <v-flex xs12>
                             <v-text-field
-                                v-model="profile.email.value"
-                                label="Email Address"
-                                :error=profile.email.hasError
-                                :error-messages=profile.email.errorMessage
-                                required>
-                            </v-text-field>
-                        </v-flex>
-                        <v-flex xs12>
-                            <v-text-field
                                 v-model="profile.phone.value"
                                 :error=profile.phone.hasError
                                 :error-messages=profile.phone.errorMessage
@@ -86,10 +77,6 @@ export default {
           value: "",
           hasError: false
         },
-        email: {
-          value: "",
-          hasError: false
-        },
         phone: {
           value: "",
           hasError: false
@@ -107,11 +94,11 @@ export default {
       this.confirmModal = !this.confirmModal;
     },
     populateData(data) {
-      this.profile.firstName.value = data.firstName;
-      this.profile.lastName.value = data.lastName;
-      this.profile.email.value = data.email;
-      this.profile.phone.value = data.phoneNumber;
-      this.profile.company.value = data.company;
+        // Populate the profile information
+        this.profile.firstName.value = data.firstName;
+        this.profile.lastName.value = data.lastName;
+        this.profile.phone.value = data.phoneNumber;
+        this.profile.company.value = data.company;
     },
     retrieveInformation() {
         let that = this;
@@ -124,16 +111,21 @@ export default {
                 that.populateData(data.data);
                 this.$store.commit("loading", false);
             }, (status, errors) => {
-                // Check if the user is forbidden from accessing the endpoint
+                // Access Denied
                 if (parseInt(status) === 403) {
+                    // Call the generic access denied handler
                     HttpResponse.accessDenied(this);
-                } else if (parseInt(status) === 404) {
+                } 
+                // Not Found
+                else if (parseInt(status) === 404) {
+                    // Call the generic invalid resource id handler
                     HttpResponse.notFound(this, errors)
                 }
             });
         }).catch(errors => {
-            let message = "An error occurred when loading the user information";
-            HttpResponse.generalError(this, message)
+            // Handle an erroneous API call
+            let message = "An error occurred loading this user's information";
+            HttpResponse.generalError(this, message, true)
         });
     },
     updateInformation() {
@@ -142,7 +134,6 @@ export default {
             id: this.$store.state.currentUserId,
             firstName: this.profile.firstName.value,
             lastName: this.profile.lastName.value,
-            email: this.profile.email.value,
             phoneNumber: this.profile.phone.value,
             company: this.profile.company.value
         };
@@ -161,14 +152,9 @@ export default {
             }
           );
         }).catch(errors => {
-            this.$swal({
-                title: '<span style="color:#f0ead6">Error!<span>',
-                html: '<span style="color:#f0ead6">An error occurred when updating the user\'s information<span>',
-                type: 'error',
-                background: '#302f2f'
-            }).then(response => {
-                CurrentUserValidation.validateCurrentUser(this.$store);
-            });
+            // Handle an erroneous API call
+            let message = "An error occurred when updating this user's information"
+            HttpResponse.generalError(this, message, true);
         });
     },
     handleErrors(errors) {
@@ -180,8 +166,6 @@ export default {
                 CustomErrorHandler.populateError(this.profile.firstName, message);
             } else if (field === "LAST_NAME") {
                 CustomErrorHandler.populateError(this.profile.lastName, message);
-            } else if (field === "EMAIL") {
-                CustomErrorHandler.populateError(this.profile.email, message);
             }
         }
     },
@@ -189,7 +173,6 @@ export default {
         // Clear the errors
         CustomErrorHandler.clearError(this.profile.firstName);
         CustomErrorHandler.clearError(this.profile.lastName);
-        CustomErrorHandler.clearError(this.profile.email);
     }
   },
   components: {

@@ -30,6 +30,24 @@
                         required
                         ></v-text-field>
                     </v-flex>
+                    <v-flex xs12 sm6>
+                        <v-text-field
+                        v-model="eventObj.rightAscension"
+                        color="blue darken-2"
+                        label="Right Ascension"
+                        type="number"
+                        required
+                        ></v-text-field>
+                    </v-flex>
+                    <v-flex xs12 sm6>
+                        <v-text-field
+                        v-model="eventObj.declination"
+                        color="blue darken-2"
+                        label="Declination"
+                        type="number"
+                        required
+                        ></v-text-field>
+                    </v-flex>
                     <v-flex v-if="this.$store.state.isResearcher || this.$store.state.isAdmin" xs12>
                         <v-checkbox
                         v-model="form.isPrivate"
