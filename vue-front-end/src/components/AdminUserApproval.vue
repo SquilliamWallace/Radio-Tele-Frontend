@@ -15,7 +15,8 @@
                         <v-btn 
                             @click="confirm = !confirm, userCompany = user.userInfo.company, userEmail = user.userInfo.email, userFirst = user.userInfo.
                                             firstName, userLast = user.userInfo.lastName, userId = user.userInfo.id, userPhone = user.userInfo.phoneNumber, 
-                                            userStatus = user.userInfo.status, userRequestedRole =user.role.charAt(0) + user.role.slice(1).toLowerCase()">
+                                            userStatus = user.userInfo.status, userRequestedRole =user.role.charAt(0) + user.role.slice(1).toLowerCase(),
+                                            form.roleId.value = user.id">
                             Approve
                         </v-btn>
                     </v-list-tile>
@@ -85,11 +86,12 @@
                             item-value= this.userRequestedRole
                             :items="accountTypes"
                             required
+                            v-model="form.assignedRole.value"
                             ></v-select>
                     </v-flex>
                     
                     <v-btn @click.native="confirm = false" color = "red">Cancel</v-btn>
-                    <v-btn @click.native="confirm = false" color = "green">Approve</v-btn>
+                    <v-btn @click.native="confirm = false, submit()" color = "green">Approve</v-btn>
                     
                     
                 </v-container>
@@ -110,6 +112,14 @@ export default {
             data: {
                 pageNumber: 0,
                 pageSize: 50 
+            },
+            form: {
+                roleId: {
+                    value: ""
+                },
+                assignedRole: {
+                    value: ""
+                }
             },
             users: [],
             confirm: false,
@@ -134,6 +144,30 @@ export default {
         }
     },
     methods:{
+        submit(){
+            let form = JSON.stringify({
+               id: this.form.roleId.value,
+               role: this.form.assignedRole.value.toUpperCase()
+
+            });
+            console.log(this.form.roleId.value)
+            console.log(this.form.assignedRole.value)
+            ApiDriver.User.approve(form).then((response) => {
+                console.log(response)
+            }).catch(errors => {
+                console.log(errors)
+            })
+            console.log(this.users)
+            console.log(this.form.roleId.value)
+            for (var index in this.users) {
+                var user = this.users[index];
+                console.log(user)
+                if (user.id === this.form.roleId.value) {
+                    this.users.splice(index, 1)
+                }
+            }
+            
+        },
         getUnapprovedUsers(){
             ApiDriver.User.unapproved(this.data).then((response) => {
                 HttpResponse.then(response, (data) => {
