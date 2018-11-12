@@ -64,24 +64,33 @@ export default {
     },
     methods: {
         getFutureAppointments() {
+            // Set the store's loading boolean to true
             this.$store.commit("loading", true);
+
+            // Make the API call
             ApiDriver.Appointment.futureAppointments(this.$route.params.userId, this.pageNumber, this.pageSize)
                 .then(response => {
+                    // Handle the server response
                     HttpResponse.then(response, data => {
+                        // Populate the data and set the store's boolean back to false
                         this.last = data.data.last
                         this.populateData(data.data);
                         this.$store.commit("loading", false);
                     }, (status, errors) => {
+                        // Access Denied
                         if (parseInt(status) === 403) {
+                            // Call the generic access denied handler
                             HttpResponse.accessDenied(this);
                         }
                     })
                 }).catch(error => {
+                    // Handle an erroneous API call
                     let message = "An error occurred when loading the user\'s future observations";
-                    HttpResponse.generalError(this, message);
+                    HttpResponse.generalError(this, message, true);
                 });
         },
         populateData(data) {
+            // Populate the future appointments array
             for (var index in data.content) {
                 let appointment = data.content[index];
                 appointment.celestialBody = "Alpha Centauri"
@@ -92,6 +101,7 @@ export default {
             }
         },
         next(page) {
+            // Handle retrieving a new page of information
             this.pageNumber = page - 1;
             this.pageDisplay = page;
             this.futureAppointments = [];
@@ -99,6 +109,7 @@ export default {
         }
     },
     mounted: function() {
+        // Retrieve the future appointments when loaded onto the DOM
         this.getFutureAppointments();
     },
     components: {

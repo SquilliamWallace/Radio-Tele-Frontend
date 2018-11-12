@@ -24,7 +24,6 @@
 import ApiDriver from '../ApiDriver';
 import router from '../router'
 import HttpResponse from '../utils/HttpResponse'
-import { error } from 'util';
 export default {
     name: "ActivateAccount",
     data() {
@@ -44,9 +43,12 @@ export default {
                     html: '<span style="color:#f0ead6">Activation Token Not Found<span>',
                     type: 'error',
                     background: '#302f2f'
+                }).then(response => {
+                    // Return to login page since user's should
+                    // not be logged in at this point. If they
+                    // are, we are treating them as if they are not
+                    router.push('/');
                 });
-                // Return to login page
-                router.push('/');
             }
             // Call the API endpoint to activate the account
             ApiDriver.User.activate(token).then(response => {
@@ -55,9 +57,19 @@ export default {
                     // Show the success text
                     this.accountActivated = true;
                 }, (status, errors) => {
-                    console.log(errors)
-                })
-            })
+                    let message = "";
+
+                    // There will only ever be one error here
+                    for (var index in errors) {
+                        message = errors[index][0];
+                    }
+
+                    HttpResponse.generalError(this, message, true)
+                });
+            }).catch(errors => {
+                let message = "An error occurred activating this user's account";
+                HttpResponse.generalError(this, message, true)
+            });
         },
         callAlert() {
             this.$swal({

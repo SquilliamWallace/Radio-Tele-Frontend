@@ -69,8 +69,8 @@ export default {
             ApiDriver.Appointment.update(this.appointmentObj.id, data).then((response) => {
                 console.log(response);
                 HttpResponse.then(response, (data) => {
-                        this.$emit('populateData');
-                        this.$emit('input');
+                    this.$emit('edited', this.appointmentObj.start, this.appointmentObj.end)
+                    this.$emit('input');
 
                     }, (status, errors) => {
                         if (parseInt(status) === 403) {

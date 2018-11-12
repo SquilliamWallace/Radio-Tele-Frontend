@@ -39,8 +39,8 @@
                         <a @click="registerRedirect">Register Here!</a>
                     </v-flex>
                     <v-flex xs12>
-                        <v-dialog v-model="requestPasswordReset" persistent max-width="600px" dark>
-                            <v-btn slot="activator" color="primary">Forgot your password?</v-btn>
+                        <v-dialog v-model="requestPasswordReset" max-width="600px" dark>
+                            <v-btn slot="activator" color="primary darken-1">Forgot your password?</v-btn>
                             <v-card>
                                 <v-card-title class="justify-center">
                                     <span class="headline">Request Password Reset</span>
@@ -59,7 +59,7 @@
                                     <v-spacer></v-spacer>
                                     <br>
                                     <v-btn color="primary" @click="submitResetRequest">Submit</v-btn>
-                                    <v-btn color="error" @click="requestPasswordReset = false">Cancel</v-btn>
+                                    <v-btn color="red darken-1" @click="clearDialog">Cancel</v-btn>
                                 </v-card-text>
                             </v-card>
                         </v-dialog>
@@ -106,22 +106,30 @@ export default {
     },
     methods: {
       submit() {
-        ApiDriver.login(this.data).then(response => {
-            this.clearErrors();
+          // Make the API call
+          ApiDriver.login(this.data).then(response => {
+              // Clear any errors
+              this.clearErrors();
 
-            if(response.data.includes("bundle.js")){
-              router.push('/home');
-            } else {
-                CustomErrorHandler.populateError(this.data.username, this.generalErrorMessage);
-                CustomErrorHandler.populateError(this.data.password, this.generalErrorMessage);
-            }
+              // Redirect on success
+              if(response.data.includes("bundle.js")){
+                router.push('/home');
+              } else {
+                  // Populate error messages for the form fields
+                  CustomErrorHandler.populateError(this.data.username, this.generalErrorMessage);
+                  CustomErrorHandler.populateError(this.data.password, this.generalErrorMessage);
+              }
           });
       },
       submitResetRequest() {
+          // Clear any errors
           this.clearErrors();
           
+          // Make the API call
           ApiDriver.requestPasswordReset(this.data.reqPassEmail.value).then(response => {
+              // Handle the server response
               HttpResponse.then(response, data => {
+                  // Display the success alert
                   this.$swal({
                       title: '<span style="color:#f0ead6">Success!<span>',
                       html: '<span style="color:#f0ead6">You should receive an email shortly' + 
@@ -129,16 +137,24 @@ export default {
                       type: 'success',
                       background: '#302f2f'
                   }).then(response => {
+                      // Close the modal
                       this.requestPasswordReset = false;
                   });
               }, (status, errors) => {
-                  console.log(errors)
+                  // Populate the error messages for the form field
                   CustomErrorHandler.populateError(this.data.reqPassEmail, "Invalid Email Address");
+                  this.$forceUpdate();
               })
           })
       },
+      clearDialog() {
+          // Close the modal and reset values
+          CustomErrorHandler.clearError(this.data.reqPassEmail);
+          this.requestPasswordReset = false
+          this.data.reqPassEmail.value = ""
+      },
       registerRedirect(){
-        router.push('/users/register');
+          router.push('/users/register');
       },
       clearErrors() {
           CustomErrorHandler.clearError(this.data.username);
@@ -148,7 +164,6 @@ export default {
     }
 }
 </script>
-
 <style scoped>
 
 </style>
