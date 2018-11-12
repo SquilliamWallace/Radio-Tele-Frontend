@@ -59,7 +59,7 @@
                     <v-flex xs12 sm6>
                         <v-select
                         v-model="telescopeName"
-                        :items="Telescopes"
+                        :items="telescopes"
                         color="blue darken-2"
                         label="Telescope"
                         required
@@ -92,7 +92,7 @@ export default {
     data() {
         name: 'Appointment'
         return {
-            Telescopes: [
+            telescopes: [
                 "John Rudy Park",
                 "Scale Model",
                 "Virtual"
@@ -121,16 +121,10 @@ export default {
                 userId: this.$store.state.currentUserId,
                 startTime: new Date(this.eventObj.start).toUTCString(),
                 endTime: new Date(this.eventObj.end).toUTCString(),
-                telescopeId: this.Telescopes.indexOf(this.telescopeName) + 1,
+                telescopeId: this.telescopes.indexOf(this.telescopeName) + 1,
                 isPublic: !this.form.isPrivate
             }
-            let data = JSON.stringify({
-                userId: this.$store.state.currentUserId,
-                startTime: new Date(this.eventObj.start).toUTCString(),
-                endTime: new Date(this.eventObj.end).toUTCString(),
-                telescopeId: this.Telescopes.indexOf(this.telescopeName) + 1,
-                isPublic: !this.form.isPrivate
-            })
+            let data = JSON.stringify(createdEvent)
             console.log(data)
 
             // This will need changed to properly handle success or failure scenarios

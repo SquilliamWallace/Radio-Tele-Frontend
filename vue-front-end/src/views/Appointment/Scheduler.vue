@@ -1,11 +1,14 @@
 <template>
     <v-app>
         <navigation-bar></navigation-bar>
-        <choose-telescope v-model="tele" @chosen="populateData"></choose-telescope>
+        <choose-telescope ref="choose" v-model="tele" @chosen="populateData" @input="toggleChoseTelescope"></choose-telescope>
         <loading v-show="$store.state.isLoading"></loading>
         <v-app v-show="!$store.state.isLoading" light>
-            <title>{{ telescopeName }}</title>
-            <full-calendar @event-created="createEvent" @event-selected="openEvent" :events="events" id="calendar"></full-calendar>
+            <h1 justify-center>{{ telescopeName }}</h1>
+            <v-btn v-on:click="toggleChooseTele" ripple>
+                Change Telescope
+            </v-btn>
+            <full-calendar @event-created="createEvent" @event-selected="openEvent" :events="events" :header="header" id="calendar"></full-calendar>
             <v-layout justify-center>
                 <create-appointment :eventObj="event" v-model="openCreateModal" @created-event="createdEvent" v-on:close-modal="openCreateModal = false"></create-appointment>
             </v-layout>
@@ -39,11 +42,16 @@ export default {
             tele: true,
             telescopeId: "",
             telescopes: [
-                { label: "John Rudy Park", value: 0}, 
-                { label:"Scale Model", value: 1},
-                { label:"Virtual", value: 2}
+                "John Rudy Park", 
+                "Scale Model",
+                "Virtual"
             ],
-            telescopeName: ''
+            telescopeName: '',
+            header: {
+                left:   'prev,next custom today',
+                center: 'title',
+                right:  'month,agendaWeek,agendaDay'
+            }
         }
     },
     components: {
@@ -79,6 +87,9 @@ export default {
         closeEventModal() {
             this.openCreateModal = false;
         },
+        toggleChooseTele() {
+            this.tele = !this.tele
+        },
         createdEvent: function(data, id) {
             var event = {
                 title: "Your Observation",
@@ -97,6 +108,7 @@ export default {
         },
         populateData: function(id) {
             this.$store.commit("loading", true);
+            this.telescopeName = this.telescopes[id-1] + " telescope"
             ApiDriver.Appointment.futureAppointmentsByTelescopeID(id, 0, 100).then((response) => {
                 //console.log(response.data.data.content);
                 HttpResponse.then(response, (data) => {
@@ -161,14 +173,27 @@ export default {
     }
 }
 
-$(function() {
+/*$(function() {
 $('#calendar').fullCalendar({
     groupByDateAndResource: true,
     defaultView: 'agendaDay',
+    header: {
+        left:   'prev,next ChangeTelescope',
+        center: 'title',
+        right:  'month,agendaWeek,agendaDay'
+    },
+    customButtons: {
+        ChangeTelescope: {
+            text: 'Change Telescope',
+            click: function() {
+                this.tele = true
+            }
+        }
+    },
     
     events: this.events
     });
-});
+});*/
 </script>
 
 <style scoped>
