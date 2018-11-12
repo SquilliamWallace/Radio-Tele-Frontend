@@ -115,7 +115,9 @@ export default {
                 startTime: new Date(this.eventObj.start).toUTCString(),
                 endTime: new Date(this.eventObj.end).toUTCString(),
                 telescopeId: 1,
-                isPublic: !this.form.isPrivate
+                isPublic: !this.form.isPrivate,
+                rightAscension: this.eventObj.rightAscension,
+                declination: this.eventObj.declination
             })
             console.log(data)
 
