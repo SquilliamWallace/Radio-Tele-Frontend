@@ -10,7 +10,7 @@
       </v-toolbar-items>
     </v-toolbar>
     <!-- Define drawer menu and populate it with items-->
-    <v-navigation-drawer :temporary=true :floating=true :hide-overlay=true style="max-height:300px; position:absolute;" v-model="showDrawer">
+    <v-navigation-drawer class = "nav-drawer" :temporary=true :floating=true :hide-overlay=true v-model="showDrawer">
         <v-list>
             <v-list-tile v-for = "item in items"
             :key = "item.title"
@@ -61,10 +61,6 @@ export default {
             this.$store.commit("logout");
             router.push('/');
         }
-    },
-    mounted() {
-        var d = $('.v-navigation-drawer')
-        d.css('top', document.getElementById('titleBar').offsetHeight)
     }
 }
 </script>
@@ -75,5 +71,11 @@ export default {
 }
 .bar-style{
     width: 100%;
+}
+.nav-drawer{
+    max-height:300px !important;
+    position: absolute;
+    margin-top: 64px !important;
+    z-index: 99 !important;
 }
 </style>
