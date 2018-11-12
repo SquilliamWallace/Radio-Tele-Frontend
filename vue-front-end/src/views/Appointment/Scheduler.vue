@@ -1,9 +1,11 @@
 <template>
     <v-app>
         <navigation-bar></navigation-bar>
+        <choose-telescope v-model="tele" @chosen="populateData"></choose-telescope>
         <loading v-show="$store.state.isLoading"></loading>
         <v-app v-show="!$store.state.isLoading" light>
-            <full-calendar @event-created="createEvent" @event-selected="openEvent" :events="events" class='overcast' id="calendar"></full-calendar>
+            <title>{{ telescopeName }}</title>
+            <full-calendar @event-created="createEvent" @event-selected="openEvent" :events="events" id="calendar"></full-calendar>
             <v-layout justify-center>
                 <create-appointment :eventObj="event" v-model="openCreateModal" @created-event="createdEvent" v-on:close-modal="openCreateModal = false"></create-appointment>
             </v-layout>
@@ -24,19 +26,24 @@ import HttpResponse from '../../utils/HttpResponse'
 import CurrentUserValidation from '../../utils/CurrentUserValidation'
 import PrivateEvent from "../../components/PrivateEvent"
 import Loading from "../../components/Loading"
+import ChooseTelescope from "../../components/ChooseTelescope"
+
 export default {
     name: 'Scheduler',
     data() {
         return {
             events: [],
+            event: {},
             openCreateModal: false,
-            event: {
-                title: "",
-                allDay: false,
-                start: "",
-                end: ""
-            },
-            privateEventModal: false
+            privateEventModal: false,
+            tele: true,
+            telescopeId: "",
+            telescopes: [
+                { label: "John Rudy Park", value: 0}, 
+                { label:"Scale Model", value: 1},
+                { label:"Virtual", value: 2}
+            ],
+            telescopeName: ''
         }
     },
     components: {
@@ -44,22 +51,22 @@ export default {
         NavigationBar,
         CreateAppointment,
         PrivateEvent,
-        Loading
+        Loading,
+        ChooseTelescope
     },
     methods: {
         openEvent(event) {
             console.log(event)
             if (event.public) {
                 router.push('/appointments/' + event.id + "/view" )
-            }
-            else if (this.$store.state.isAdmin || (this.$store.state.currentUserId == event.userId)){
+            } else if (this.$store.state.isAdmin || (this.$store.state.currentUserId == event.userId)){
                 router.push('/appointments/' + event.id + "/view" )
             } else {
                 this.privateEventModal = true;
                 //alert("Sorry you dont have permission to view that event")
             }
         },
-        createEvent(Obj) {
+        createEvent: function(Obj) {
             console.log(moment(Obj.start).format('YYYY-MM-DD hh:mm A'))
             this.event.allDay = Obj.allDay
             this.event.start = moment(Obj.start).format('YYYY-MM-DD hh:mm A')
@@ -88,9 +95,9 @@ export default {
 
             this.events.push(event)
         },
-        populateData() {
+        populateData: function(id) {
             this.$store.commit("loading", true);
-            ApiDriver.Appointment.futureAppointmentsByTelescopeID(1, 0, 100).then((response) => {
+            ApiDriver.Appointment.futureAppointmentsByTelescopeID(id, 0, 100).then((response) => {
                 //console.log(response.data.data.content);
                 HttpResponse.then(response, (data) => {
                         for (var index in response.data.data.content) {
@@ -127,6 +134,7 @@ export default {
                                 editable: false,
                                 draggable: false
                             }
+                            console.log(eventData)
                             this.events.push(eventData);
                         }
                         this.$store.commit("loading", false);
@@ -150,20 +158,15 @@ export default {
         closeModal() {
             this.privateEventModal = false
         }
-    },
-    mounted() {
-        this.populateData();
-    }  
+    }
 }
 
 $(function() {
 $('#calendar').fullCalendar({
-    themeSystem: 'jquery-ui',
-    header: {
-      left: 'prev,next today',
-      center: 'title',
-      right: 'month,agendaWeek,agendaDay,listMonth'
-    }
+    groupByDateAndResource: true,
+    defaultView: 'agendaDay',
+    
+    events: this.events
     });
 });
 </script>
