@@ -8,7 +8,7 @@
                                 {{user.userInfo.firstName}} {{user.userInfo.lastName}}
                             </v-list-tile-title>
                             <v-list-tile-sub-title>
-                                {{user.userInfo.email}} <span v-if = "user.userInfo.phoneNumber">- ({{user.userInfo.phoneNumber.slice(0,3)}})-{{user.userInfo.phoneNumber.slice(4,7)}}-{{user.userInfo.phoneNumber.slice(-4)}}</span>
+                                {{user.userInfo.email}} <span v-if = "user.userInfo.phoneNumber">- ({{user.userInfo.phoneNumber.slice(0,3)}})-{{user.userInfo.phoneNumber.slice(3,6)}}-{{user.userInfo.phoneNumber.slice(-4)}}</span>
                             </v-list-tile-sub-title>
                         </v-list-tile-content>
                         <v-spacer></v-spacer>
@@ -49,7 +49,7 @@
                                                 Phone:
                                             </v-list-tile-title>
                                             <v-list-tile-sub-title class = "">
-                                                ({{userPhone.slice(0,3)}})-{{userPhone.slice(4,7)}}-{{userPhone.slice(-4)}}
+                                                ({{userPhone.slice(0,3)}})-{{userPhone.slice(3,6)}}-{{userPhone.slice(-4)}}
                                             </v-list-tile-sub-title>
                                     </v-list-tile-content>
                                     <span v-if="userPhone != null"><v-divider vertical></v-divider></span>
@@ -77,42 +77,6 @@
 
                                 </v-list-tile>
                             </v-list>
-
-                            <!-- <v-card-text class = "">
-                            {{userLast}}, {{userFirst}}<br />
-                            {{userEmail}}<br />
-                        </v-card-text> -->
-                            <!-- <div>
-                                <v-layout row wrap>
-                                    <v-flex v-for="item in headers" :key="item.header" xs4>
-                                        <v-card  color="transparent" class = "elevation-0">
-                                            <v-card-text class="text-xs-center">{{item.header}}</v-card-text>
-                                        </v-card>
-                                    </v-flex>
-                                </v-layout>
-                            </div>
-                            <v-divider></v-divider>
-                            <div>
-                                <v-layout row wrap>
-                                    
-                                    <v-flex xs4>
-                                        <v-card  color="" class = "elevation-0">
-                                            <v-card-text class="text-xs-center">{{userId}}</v-card-text>
-                                        </v-card>
-                                    </v-flex>
-                                    <v-flex xs4>
-                                        <v-card  color="" class = "elevation-0">
-                                            <v-card-text class="text-xs-center">{{userCompany}}</v-card-text>
-                                        </v-card>
-                                    </v-flex>
-                                    <v-flex xs4>
-                                        <v-card  color="" class = "elevation-0">
-                                            <v-card-text class="text-xs-center">{{userRequestedRole}}</v-card-text>
-                                        </v-card>
-                                    </v-flex>
-                                    
-                                </v-layout>
-                            </div> -->
                         </v-container>
                         <v-card-text>
                             Select the role you wish to assign to this user.
