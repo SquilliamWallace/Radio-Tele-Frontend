@@ -156,6 +156,7 @@ export default {
             // Populate the appointment information 
             this.name = data.userFirstName + " " + data.userLastName
             this.id = data.id
+            this.Tele = data.telescopeId
             this.eventUserId = data.userId
             this.privacy = data.public
             this.startMonth = moment(data.startTime).format('YYYY-MM-DD hh:mm A')
