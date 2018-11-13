@@ -17,6 +17,7 @@
                     <v-flex xs12 sm6>
                         <v-text-field
                         v-model="eventObj.start"
+                        :rules="[rules.dateRequired]"
                         color="blue darken-2"
                         label="Start Time"
                         required
@@ -25,6 +26,7 @@
                     <v-flex xs12 sm6>
                         <v-text-field
                         v-model="eventObj.end"
+                        :rules="[rules.dateRequired]"
                         color="blue darken-2"
                         label="End Time"
                         required
@@ -33,6 +35,7 @@
                     <v-flex xs12 sm6>
                         <v-text-field
                         v-model="form.rightAscension.value"
+                        :rules="[rules.numRequired]"
                         color="blue darken-2"
                         :error=form.rightAscension.hasError
                         :error-messages=form.rightAscension.errorMessage
@@ -44,6 +47,7 @@
                     <v-flex xs12 sm6>
                         <v-text-field
                         v-model="form.declination.value"
+                        :rules="[rules.numRequired]"
                         color="blue darken-2"
                         :error=form.declination.hasError
                         :error-messages=form.declination.errorMessage
@@ -100,6 +104,10 @@ export default {
                     value: null,
                     hasError: false
                 }
+            },
+            rules: {
+                dateRequired: val => (val && val.length > 0) || 'Required field',
+                numRequired: val => (val && val.toString().length > 0) || 'Required field'
             },
             snackbar: false,
         }
@@ -173,7 +181,10 @@ export default {
     },
     computed: {
         formIsValid() {
-            return (this.eventObj.start && this.eventObj.end)
+            return (this.eventObj.start &&
+                    this.eventObj.end &&
+                    this.form.rightAscension.value,
+                    this.form.declination.value)
         }
     }
 }

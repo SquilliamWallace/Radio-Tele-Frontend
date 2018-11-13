@@ -197,7 +197,6 @@ export default {
         },
         edited: function(appointmentObj) {
             // Update the start and end times
-            console.log(appointmentObj);
             this.data.startTime.value = appointmentObj.start.value;
             this.data.endTime.value = appointmentObj.end.value;
             this.data.rightAscension.value = appointmentObj.rightAscension.value;

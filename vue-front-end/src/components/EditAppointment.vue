@@ -88,7 +88,7 @@ export default {
         return {
             rules: {
                 dateRequired: val => (val && val.length > 0) || 'Required field',
-                numRequired: val => (val && val.toString.length > 0) || 'Required field'
+                numRequired: val => (val && val.toString().length > 0) || 'Required field'
             }
         }
     },
@@ -147,7 +147,7 @@ export default {
             CustomErrorHandler.clearError(this.appointmentObj.declination)
             CustomErrorHandler.clearError(this.appointmentObj.start)
             CustomErrorHandler.clearError(this.appointmentObj.end)
-        }
+        }        
     },
     computed: {
         validRequest() {
