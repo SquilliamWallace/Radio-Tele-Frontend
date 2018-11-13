@@ -19,7 +19,7 @@ export default {
         return axios.put(this.namespace + "/" + userId, data, Headers.retrieveHeaders())
       },
       allUsers: function(data) {
-        return axios.get(this.namespace + "?page=" + data.pageNumber + "&size=" + data.pageSize)
+        return axios.get("/api/users?page=" + data.pageNumber + "&size=" + data.pageSize)
       },
       ban: function(userId) {
         return axios.put(this.namespace + "/" + userId + "/ban")
