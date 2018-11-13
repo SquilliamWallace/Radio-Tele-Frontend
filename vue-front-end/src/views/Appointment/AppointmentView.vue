@@ -56,7 +56,7 @@
             <v-divider>
                 <v-divider></v-divider>
             </v-divider>
-            <v-btn v-if="data.status.value === 'Completed'" color="primary" v-bind:href="'/appointments/' + id + '/rf-data'">View Data</v-btn>
+            <v-btn v-if="data.status.value === 'Completed'" color="primary" v-bind:href="'/appointments/' + data.id.value + '/rf-data'">View Data</v-btn>
         </v-container>
         <v-layout wrap>
         <v-flex v-if="($store.state.currentUserId === data.eventUserId.value | $store.state.isAdmin) && !complete">
