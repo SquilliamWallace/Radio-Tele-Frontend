@@ -1,13 +1,11 @@
 <template>
     <v-app>
         <navigation-bar></navigation-bar>
-        <choose-telescope ref="choose" v-model="tele" @chosen="populateData" @input="toggleChoseTelescope"></choose-telescope>
+        <choose-telescope ref="choose" v-model="tele" @chosen="populateData"></choose-telescope>
         <loading v-show="$store.state.isLoading"></loading>
         <v-app v-show="!$store.state.isLoading" light>
             <h1 justify-center>{{ telescopeName }}</h1>
-            <v-btn v-on:click="toggleChooseTele" ripple>
-                Change Telescope
-            </v-btn>
+            <v-btn v-show="!this.tele" v-on:click="toggleChooseTelescope" ripple>Change Telescope</v-btn>
             <full-calendar @event-created="createEvent" @event-selected="openEvent" :events="events" :header="header" id="calendar"></full-calendar>
             <v-layout justify-center>
                 <create-appointment :eventObj="event" v-model="openCreateModal" @created-event="createdEvent" v-on:close-modal="openCreateModal = false"></create-appointment>
@@ -48,10 +46,20 @@ export default {
             ],
             telescopeName: '',
             header: {
-                left:   'prev,next custom today',
+                left:   'prev,next today',
                 center: 'title',
                 right:  'month,agendaWeek,agendaDay'
-            }
+            },
+            /*
+            customButtons: {
+                ChangeTelescope: {
+                    text: 'Change Telescope',
+                    click: function() {
+                        console.log(self)
+                        self.$emit('changeTelescope')
+                    }
+                }
+            }*/
         }
     },
     components: {
@@ -87,7 +95,7 @@ export default {
         closeEventModal() {
             this.openCreateModal = false;
         },
-        toggleChooseTele() {
+        toggleChooseTelescope() {
             this.tele = !this.tele
         },
         createdEvent: function(data, id) {
