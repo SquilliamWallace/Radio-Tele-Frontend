@@ -176,7 +176,6 @@ export default {
         },
         clearErrors() {
             CustomErrorHandler.clearError(this.form.rightAscension);
-            CustomErrorHandler.clearError(this.form.declination);
         }
     },
     computed: {
