@@ -2,7 +2,7 @@
     <v-dialog class="modal" width="50%" dark :value="value" @input="$emit('input')" persistent>
         <v-card>
             <v-card-title class="headline">Are you sure you wish to cancel?</v-card-title>
-            <v-card-text>If you cancel, your observation will be deleted and allow anyone else to scedule an observation during this timeslot.</v-card-text>
+            <v-card-text>If you cancel, your observation will be deleted and allow anyone else to schedule an observation during this timeslot.</v-card-text>
             <v-spacer></v-spacer>
             <v-card-actions>
                 <v-spacer></v-spacer>
@@ -18,6 +18,7 @@ import router from '../router'
 import ApiDriver from '../ApiDriver'
 import HttpResponse from '../utils/HttpResponse'
 import CurrentUserValidation from '../utils/CurrentUserValidation'
+import { error } from 'util';
 export default {
     name: "cancel-appointment",
     props: {
@@ -26,22 +27,20 @@ export default {
     methods: {
         cancel() {
             ApiDriver.Appointment.cancel(this.$route.params.appointmentId).then((response) => {
-                console.log(response);
                 HttpResponse.then(response, (data) => {
                         router.go(-1)
-
                     }, (status, errors) => {
                         if (parseInt(status) === 403) {
-                            this.$swal({
-                            title: '<span style="color:#f0ead6">Error!<span>',
-                            html: '<span style="color:#f0ead6">Access Denied<span>',
-                            type: 'error',
-                            background: '#302f2f'
-                        });
-                            CurrentUserValidation.validateCurrentUser(this.$store);
+                            HttpResponse.accessDenied(this);
+                        } else if (parseInt(status) === 404) {
+                            HttpResponse.notFound(this, errors);
                         } else {
-                            console.log(status)
-                            console.log(errors)
+                            // There should only be one error in this scenario
+                            for (var field in errors) {
+                                let message = errors[field][0];
+                            }
+                            HttpResponse.generalError(this, message, false)
+                            this.confirmation = false
                         }
                     })
             });
