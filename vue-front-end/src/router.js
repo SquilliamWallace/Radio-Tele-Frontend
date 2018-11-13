@@ -4,12 +4,18 @@ import Login from './views/User/Login'
 import Register from './views/User/Register'
 import Scheduler from './views/Appointment/Scheduler'
 import AppointmentView from './views/Appointment/AppointmentView'
+import ActivateAccount from './views/ActivateAccount'
 import ViewProfile from './views/Profile/ViewProfile'
 import EditProfile from './views/Profile/EditProfile'
-import admin from './views/admin'
+import Admin from './views/Administration'
 import Home from './views/Home'
 import RFData from './views/Appointment/RFData'
+import ResetPassword from './views/User/ResetPassword'
 import UnderConstruction from './views/UnderConstruction'
+import CompletedAppointments from './views/Appointment/CompletedAppointments'
+import FutureAppointments from './views/Appointment/FutureAppointments'
+import UpdateEmail from './views/User/UpdateEmail'
+import PublicAppointments from './views/Appointment/PublicAppointments'
 
 Vue.use(Router)
 
@@ -50,7 +56,7 @@ const router = new Router({
     {
       path: '/admin',
       name: 'admin',
-      component: admin
+      component: Admin
     },
     {
       path: '/home',
@@ -63,9 +69,42 @@ const router = new Router({
       component: RFData
     },
     {
+      path: '/activateAccount',
+      name: 'ActivateAccount',
+      component: ActivateAccount,
+      query: { token: 'private' }
+    },
+    {
+      path: '/resetPassword',
+      name: 'ResetPassword',
+      component: ResetPassword,
+      query: { token: 'private' }
+    },
+    {
+      path: '/updateEmail',
+      name: 'UpdateEmail',
+      component: UpdateEmail,
+      query: { token: 'private' }
+    },
+    {
       path: '/underConstruction',
       name: 'underConstruction',
       component: UnderConstruction  
+    },
+    {
+      path: '/users/:userId/appointments/completed',
+      name: 'CompletedAppointments',
+      component: CompletedAppointments
+    },
+    {
+      path: '/users/:userId/appointments/future',
+      name: 'FutureAppointments',
+      component: FutureAppointments
+    },
+    {
+      path: '/appointments/public',
+      name: 'PublicAppointments',
+      component: PublicAppointments
     }
   ]
 })

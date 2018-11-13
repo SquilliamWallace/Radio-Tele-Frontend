@@ -1,18 +1,5 @@
 <template>
     <v-app>
-        <v-snackbar
-            v-model="snackbar"
-            top
-            color="success"
-            >
-            <span>Registration successful!</span>
-            <v-btn
-                flat
-                @click="registerSuccess()"
-                >
-                Okay
-            </v-btn>
-        </v-snackbar>
         <v-container v-bind:style="{ padding:'50px' }">
             <v-card flat>
                 <v-form ref="form" @submit.prevent="submit" refs="form">
@@ -21,29 +8,29 @@
                     <v-flex xs12 sm6>
                         <v-text-field
                         v-model="form.first.value"
-                        :rules="rules.required"
+                        :rules="[rules.required]"
                         :error=form.first.hasError
                         :error-messages=form.first.errorMessage
                         color="blue darken-2"
-                        label="First name"
+                        label="First Name"
                         required
                         ></v-text-field>
                     </v-flex>
                     <v-flex xs12 sm6>
                         <v-text-field
                         v-model="form.last.value"
-                        :rules="rules.required"
+                        :rules="[rules.required]"
                         :error=form.last.hasError
                         :error-messages=form.last.errorMessage
                         color="blue darken-2"
-                        label="Last name"
+                        label="Last Name"
                         required
                         ></v-text-field>
                     </v-flex>
                     <v-flex xs12 sm6>
                         <v-text-field
                         v-model="form.email.value"
-                        :rules="rules.required"
+                        :rules="[rules.required]"
                         :error=form.email.hasError
                         :error-messages=form.email.errorMessage
                         color="blue darken-2"
@@ -52,10 +39,52 @@
                         ></v-text-field>
                     </v-flex>
                     <v-flex xs12 sm6>
+                        <v-text-field
+                        v-model="form.emailConfirm.value"
+                        :rules="[rules.required, rules.emailMatch]"
+                        :error=form.emailConfirm.hasError
+                        :error-messages=form.emailConfirm.errorMessage
+                        color="bule darken-2"
+                        label="Confirm Email"
+                        :validate-on-blur=true
+                        required
+                        ></v-text-field>
+                    </v-flex>
+                    <v-flex xs12 sm6>
+                        <v-text-field
+                        v-model="form.password.value"
+                        :append-icon="show1 ? 'visibility_off' : 'visibility'"
+                        :type="show1 ? 'text' : 'password'"
+                        :rules="[rules.required]"
+                        :error=form.password.hasError
+                        :error-messages=form.password.errorMessage
+                        color="blue darken-2"
+                        label="Password"
+                        hint="At least 8 characters. 3 of 4 of the following: Uppercase, Lowercase, Digit, Special Character"
+                        @click:append="show1 = !show1"
+                        required
+                        ></v-text-field>
+                    </v-flex>
+                    <v-flex xs12 sm6>
+                        <v-text-field
+                        v-model="form.passwordMatch.value"
+                        :append-icon="show2 ? 'visibility_off' : 'visibility'"
+                        :rules="[rules.required, rules.passMatch]"
+                        :error=form.passwordMatch.hasError
+                        :error-messages=form.passwordMatch.errorMessage
+                        :type="show2 ? 'text' : 'password'"
+                        color="blue darken-2"
+                        label="Re-Type Password"
+                        @click:append="show2 = !show2"
+                        :validate-on-blur=true
+                        required
+                        ></v-text-field>
+                    </v-flex>
+                    <v-flex xs12 sm6>
                         <v-select
                         v-model="form.accountType.value"
                         :items="accountTypes"
-                        :rules="rules.required"
+                        :rules="[rules.required]"
                         :error=form.accountType.hasError
                         :error-messages=form.accountType.errorMessage
                         color="blue darken-2"
@@ -65,41 +94,10 @@
                     </v-flex>
                     <v-flex xs12 sm6>
                         <v-text-field
-                        v-model="form.password.value"
-                        :append-icon="show1 ? 'visibility_off' : 'visibility'"
-                        :type="show1 ? 'text' : 'password'"
-                        :rules="rules.required"
-                        :error=form.password.hasError
-                        :error-messages=form.password.errorMessage
-                        color="blue darken-2"
-                        label="Password"
-                        @click:append="show1 = !show1"
-                        required
-                        ></v-text-field>
-                    </v-flex>
-                    <v-flex xs12 sm6>
-                        <v-text-field
-                        v-model="form.passwordMatch.value"
-                        :append-icon="show2 ? 'visibility_off' : 'visibility'"
-                        :rules="rules.required"
-                        :error=form.passwordMatch.hasError
-                        :error-messages=form.passwordMatch.errorMessage
-                        :type="show2 ? 'text' : 'password'"
-                        color="blue darken-2"
-                        label="Re-Type Password"
-                        @click:append="show2 = !show2"
-                        required
-                        ></v-text-field>
-                    </v-flex>
-                    <v-flex xs12>
-                        <v-textarea
                         v-model="form.affiliates.value"
-                        color="blue darken-2"
-                        >
-                        <div slot="label">
-                            Company Affiliates <small>(optional)</small>
-                        </div>
-                        </v-textarea>
+                        label="Company Affiliation (Optional)"
+                        color="blue darken-2">
+                    </v-text-field>
                     </v-flex>
                     <v-flex xs12 sm6>
                         <v-text-field
@@ -195,6 +193,10 @@ import CustomErrorHandler from "../../utils/CustomErrorHandler";
                   value: "",
                   hasError: false
               },
+              emailConfirm: {
+                  value: "",
+                  hasError: false
+              },
               password: {
                   value: "",
                   hasError: false
@@ -220,12 +222,9 @@ import CustomErrorHandler from "../../utils/CustomErrorHandler";
               terms: false
         },
         rules: {
-            required: [
-                val => (val || '').length > 0 || 'This field is required'
-            ],
-            passMatch: [
-                val => val == this.password || 'Passwords must match'
-            ]
+            required: val => val.length > 0 || 'This field is required',
+            passMatch: val => val === this.form.password.value || 'Passwords must match',
+            emailMatch: val => val === this.form.email.value || 'Emails do not match'
         },
         accountTypes: ['Guest', 'Member', 'Student', 'Researcher'],
         conditions: false,
@@ -245,6 +244,7 @@ import CustomErrorHandler from "../../utils/CustomErrorHandler";
           this.form.first.value &&
           this.form.last.value &&
           this.form.email.value &&
+          this.form.emailConfirm &&
           this.form.accountType.value &&
           this.form.password.value && 
           this.form.passwordMatch.value &&
@@ -264,24 +264,30 @@ import CustomErrorHandler from "../../utils/CustomErrorHandler";
                 firstName: this.form.first.value,
                 lastName: this.form.last.value,
                 email: this.form.email.value,
+                emailConfirm: this.form.emailConfirm.value,
                 phoneNumber: this.form.phoneNumber.value,
                 password: this.form.password.value,
                 passwordConfirm: this.form.passwordMatch.value,
                 company: this.form.affiliates.value,
                 categoryOfService: categoryOfService
-            })
+            });
         
             // This will need changed to properly handle success or failure scenarios
             ApiDriver.User.register(data).then((response) => {
+                let that = this;
                 // After each submit, clear any errors
                 this.clearErrors();
-
                 // Handle the response
                 HttpResponse.then(response, function(data) {
                     // If the call was a success, redirect to the login page
-                    if (data.statusCode == 200 && data.statusReason == "OK"){
-                        router.push('/')
-                    }
+                    that.$swal({
+                        title: '<span style="color:#f0ead6">Account Created!<span>',
+                        html: '<span style="color:#f0ead6">Your account has been created. Please check your email to activate it.<span>',
+                        type: 'success',
+                        background: '#302f2f'
+                    }).then(response => {
+                        router.push('/');
+                    });
                 }, function(status, errors) {
                     // Otherwise handle errors
                     that.handleErrors(errors)
@@ -306,6 +312,8 @@ import CustomErrorHandler from "../../utils/CustomErrorHandler";
                   CustomErrorHandler.populateError(this.form.last, message);
               } else if (field === "EMAIL") {
                   CustomErrorHandler.populateError(this.form.email, message);
+              } else if (field === "EMAIL_CONFIRM") {
+                  CustomErrorHandler.populateError(this.form.emailConfirm, message);
               } else if (field === "PASSWORD") {
                   CustomErrorHandler.populateError(this.form.password, message);
               } else if (field === "PASSWORD_CONFIRM") {

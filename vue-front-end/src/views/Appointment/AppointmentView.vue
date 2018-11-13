@@ -1,17 +1,13 @@
 <template>
     <div>
         <navigation-bar></navigation-bar>
-        <v-container>
+        <loading v-show="$store.state.isLoading"></loading>
+        <v-container v-show="!$store.state.isLoading">
             <v-list-tile >
                 <v-list-tile-content class="white--text">
                     <v-list-tile-title>Start Date:</v-list-tile-title>
                     <v-list-tile-sub-title class = "pl-3">{{ startMonth }}</v-list-tile-sub-title>
                 </v-list-tile-content>
-                <v-list-tile-action>
-                    <v-btn v-on:click="getAppointment" icon ripple>
-                        <v-icon>edit</v-icon>
-                    </v-btn>
-                </v-list-tile-action>
             </v-list-tile>
             <v-divider></v-divider>
             <v-list-tile>
@@ -19,11 +15,6 @@
                     <v-list-tile-title >End Date:</v-list-tile-title>
                     <v-list-tile-sub-title class = "pl-3">{{ endMonth }}</v-list-tile-sub-title>
                 </v-list-tile-content>
-                <v-list-tile-action>
-                    <v-btn icon ripple>
-                        <v-icon>edit</v-icon>
-                    </v-btn>
-                </v-list-tile-action>
             </v-list-tile>
             <v-divider></v-divider>
             <v-list-tile>
@@ -31,11 +22,6 @@
                     <v-list-tile-title>Public:</v-list-tile-title>
                     <v-list-tile-sub-title class = "pl-3">{{ privacy }}</v-list-tile-sub-title>
                 </v-list-tile-content>
-                <v-list-tile-action>
-                    <v-btn icon ripple>
-                        <v-icon>edit</v-icon>
-                    </v-btn>
-                </v-list-tile-action>
             </v-list-tile>
             <v-divider></v-divider>
             <v-list-tile>
@@ -43,11 +29,6 @@
                     <v-list-tile-title>Celestial Body:</v-list-tile-title>
                     <v-list-tile-sub-title class = "pl-3">{{ celestialBody }}</v-list-tile-sub-title>
                 </v-list-tile-content>
-                <v-list-tile-action>
-                    <v-btn icon ripple>
-                        <v-icon>edit</v-icon>
-                    </v-btn>
-                </v-list-tile-action>
             </v-list-tile>
             <v-divider></v-divider>
             <v-list-tile>
@@ -56,27 +37,46 @@
                     </v-list-tile-title>
                     <v-list-tile-sub-title class = "pl-3">{{ Tele }}</v-list-tile-sub-title>
                 </v-list-tile-content>
-                <v-list-tile-action>
-                    <v-btn icon ripple>
-                        <v-icon>edit</v-icon>
-                    </v-btn>
-                </v-list-tile-action>
             </v-list-tile>
+            <v-divider></v-divider>
+            <v-list-tile >
+                <v-list-tile-content class="white--text">
+                    <v-list-tile-title>Created by:</v-list-tile-title>
+                    <v-list-tile-sub-title class = "pl-3">{{ name }}</v-list-tile-sub-title>
+                </v-list-tile-content>
+            </v-list-tile>
+            
             <v-divider>
                 <v-divider></v-divider>
             </v-divider>
             <v-btn v-if="status === 'Completed'" color="primary" v-bind:href="'/appointments/' + id + '/rf-data'">View Data</v-btn>
-    </v-container>
+        </v-container>
+        <v-layout wrap>
+        <v-flex v-if="($store.state.currentUserId === eventUserId | $store.state.isAdmin) && !complete">
+            <div>
+                <v-btn color="primary" @click="editAppointment">Edit</v-btn>
+            </div>
+        </v-flex>
+        <v-flex v-if="($store.state.currentUserId === eventUserId | $store.state.isAdmin) && !complete">
+            <div>
+                <v-btn color="error" @click="cancelAppointment">Cancel</v-btn>
+            </div>
+        </v-flex>
+        </v-layout>
+        <edit-appointment :appointmentObj="appointment" v-model="edit" @edited="edited"></edit-appointment>
+        <cancel-appointment v-model="cancel"> </cancel-appointment>
     </div>
     
 </template>
 <script>
-
 import NavigationBar from '../../components/NavigationBar.vue'
 import ApiDriver from '../../ApiDriver.js'
-import HttpResponse from '../../utils/HttpResponse';
-import CurrentUserValidation from  '../../utils/CurrentUserValidation';
+import HttpResponse from '../../utils/HttpResponse'
+import CurrentUserValidation from  '../../utils/CurrentUserValidation'
 import moment from 'moment'
+import CancelAppointment from "../../components/CancelAppointment.vue"
+import EditAppointment from "../../components/EditAppointment.vue"
+import Loading from "../../components/Loading"
 export default {
     name: "AppointmentView",
     data() {
@@ -85,6 +85,7 @@ export default {
                 posts: [],
                 errors: [],
 
+                name: '',
                 startDay: 6,
                 startMonth: '',
                 startYear: '2018',
@@ -103,77 +104,90 @@ export default {
                 { title: 'Coordinates', celestialBody: "Mars"},
                 { title: 'Telescope', enum: '1'}
                 ],
+                eventUserId: 0,
+                edit: false,
+                appointment: {},
+                cancel: false,
+                complete: false
         }
     },
     components: {
-        NavigationBar
+        NavigationBar,
+        EditAppointment,
+        CancelAppointment,
+        Loading
     },
     methods: {
         getAppointment () {
+            // Set the store's loading boolean to true
+            this.$store.commit("loading", true);
+
+            // Make the API call
             ApiDriver.Appointment.view(this.$route.params.appointmentId).then((response) => {
+                // Handle the server response
                 HttpResponse.then(response, (data) => {
+                    // Populate the data and set the store's boolean back to false
                     this.populateData(data.data)
+                    this.$store.commit("loading", false);
                 }, (status, errors) => {
+                    // Access Denied
                     if (parseInt(status) === 403) {
-                        this.$swal({
-                            title: '<span style="color:#f0ead6">Error!<span>',
-                            html: '<span style="color:#f0ead6">Access Denied<span>',
-                            type: 'error',
-                            background: '#302f2f'
-                        }).then(response => {
-                            CurrentUserValidation.validateCurrentUser(this.$store);
-                        });
+                        // Call the generic access denied handler
+                        HttpResponse.accessDenied(this);
+                    } 
+                    // Invalid Resource Id
+                    else if (parseInt(status) === 404) {
+                        // Call the generic not found handler
+                        HttpResponse.notFound(this, errors);
                     }
                 })
             }).catch((error) => {
-                console.log(error)
+                // Handle an errorneous API call
+                let message = "An error occurred when loading this observation";
+                HttpResponse.generalError(this, message, true);
             });
         },
-        auth () {
-            ApiDriver.Auth.User().then((response) => {
-                HttpResponse.then(response, (data) => {
-                    
-                }, (status, errors) => {
-                    if (parseInt(status) === 403) {
-                        this.$swal({
-                            title: '<span style="color:#f0ead6">Error!<span>',
-                            html: '<span style="color:#f0ead6">Access Denied<span>',
-                            type: 'error',
-                            background: '#302f2f'
-                        }).then(response => {
-                            CurrentUserValidation.validateCurrentUser(this.$store);
-                        });
-                    }
-                })
-            }).catch((error) => {
-                this.$swal({
-                            title: '<span style="color:#f0ead6">Error!<span>',
-                            html: '<span style="color:#f0ead6">An error occurred when loading this appointment data<span>',
-                            type: 'error',
-                            background: '#302f2f'
-                        }).then(response => {
-                            CurrentUserValidation.validateCurrentUser(this.$store);
-                        });
-                console.log(error)
-            })
+        edited: function(start, end) {
+            // Update the start and end times
+            this.startMonth = start
+            this.endMonth = end
         },
-        populateData(data){
+        populateData(data) {
+            // Populate the appointment information 
+            this.name = data.userFirstName + " " + data.userLastName
             this.id = data.id
+            this.eventUserId = data.userId
             this.privacy = data.public
-            this.startMonth = moment(data.startTime).add(4, 'hours').format('MM/DD/YYYY hh:mm A')
-            this.endMonth = moment(data.endTime).add(4, 'hours').format('MM/DD/YYYY hh:mm A')
+            this.startMonth = moment(data.startTime).format('YYYY-MM-DD hh:mm A')
+            this.endMonth = moment(data.endTime).format('YYYY-MM-DD hh:mm A')
             this.status = data.status
-
-            console.log(this.status)
+            // If the appointment has been completed, mark the boolean
+            if (this.status === 'Completed') {
+                this.complete = true
+            }
+        },
+        editAppointment () {
+            this.appointment.id = this.id
+            this.appointment.privacy = !this.privacy
+            this.appointment.start = this.startMonth
+            this.appointment.end = this.endMonth
+            this.appointment.Tele = this.Tele
+            this.edit = true
+        },
+        cancelAppointment () {
+            this.cancel = true
+        },
+        closeModal() {
+            this.edit = false
+            this.appointment = {}
         }
     },
-    mounted: function(){
-        this.auth()
+    mounted: function() {
+        // Retrieve the appointment when loaded onto the DOM
         this.getAppointment()
     }
 }
 </script>
-
 <style scoped>
     
 </style>

@@ -5,12 +5,12 @@
       <v-toolbar-title class="title-style" @click="homeRedirect">YCAS Radio Telescope</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-sm-and-down">
-          <v-btn v-show="isLoggedIn" @click="viewProfile">Profile</v-btn>
-          <v-btn v-show="isLoggedIn" @click="logout">Logout</v-btn>
+          <v-btn @click="viewProfile">Profile</v-btn>
+          <v-btn @click="logout">Logout</v-btn>
       </v-toolbar-items>
     </v-toolbar>
     <!-- Define drawer menu and populate it with items-->
-    <v-navigation-drawer :temporary=true :floating=true :hide-overlay=true style="max-height:200px; position:absolute;" v-model="showDrawer">
+    <v-navigation-drawer class = "nav-drawer" :temporary=true :floating=true :hide-overlay=true v-model="showDrawer">
         <v-list>
             <v-list-tile v-for = "item in items"
             :key = "item.title"
@@ -33,14 +33,15 @@ export default {
         return {
             showDrawer: false,
             items: [
-              { title: 'Scheduling Calendar', icon: 'dashboard', path: "/scheduler" },
-              { title: 'Administration', path: '/admin'},
-              { title: 'Under Construction', path: '/underConstruction'}
-            ],
-            isLoggedIn: this.$store.state.currentUserId !== null
+              { title: 'Scheduling Calendar', icon: 'dashboard', path: '/scheduler' },
+              { title: 'Administration', path: '/admin' },
+              { title: 'Public Appointments', path: '/appointments/public' },
+              { title: 'Completed Appointments', path: '/users/' + this.$store.state.currentUserId + '/appointments/completed' },
+              { title: 'Future Appointments', path: '/users/' + this.$store.state.currentUserId + '/appointments/future' },
+            ]
         }
     },
-    methods:{
+    methods: {
         homeRedirect(){
             if (this.$store.state.currentUserId){
                 router.push('/home')
@@ -50,20 +51,16 @@ export default {
             }
         },
         submit() {
-            ApiDriver.User.login(this.data);
+            ApiDriver.login(this.data);
         },
         viewProfile() {
             router.push('/users/' + this.$store.state.currentUserId + '/view')
         },
         logout() {
-            ApiDriver.User.logout();
+            ApiDriver.logout();
             this.$store.commit("logout");
             router.push('/');
         }
-    },
-    mounted: function () {
-        var d = $('.v-navigation-drawer')
-        d.css('top', document.getElementById('titleBar').offsetHeight)
     }
 }
 </script>
@@ -74,5 +71,11 @@ export default {
 }
 .bar-style{
     width: 100%;
+}
+.nav-drawer{
+    max-height:300px !important;
+    position: absolute;
+    margin-top: 64px !important;
+    z-index: 99 !important;
 }
 </style>
