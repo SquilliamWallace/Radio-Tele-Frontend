@@ -7,7 +7,7 @@
                     <v-layout wrap>
                     <v-flex xs12 sm6>
                         <v-text-field
-                        v-model="appointmentObj.start"
+                        v-model="appointmentObj.start.value"
                         color="blue darken-2"
                         label="Start Time"
                         required
@@ -15,15 +15,31 @@
                     </v-flex>
                     <v-flex xs12 sm6>
                         <v-text-field
-                        v-model="appointmentObj.end"
+                        v-model="appointmentObj.end.value"
                         color="blue darken-2"
                         label="End Time"
                         required
                         ></v-text-field>
                     </v-flex>
+                    <v-flex xs12 sm6>
+                        <v-text-field
+                        v-model="appointmentObj.rightAscension.value"
+                        color="blue darken-2"
+                        label="Right Ascension"
+                        required
+                        ></v-text-field>
+                    </v-flex>
+                    <v-flex xs12 sm6>
+                        <v-text-field
+                        v-model="appointmentObj.declination.value"
+                        color="blue darken-2"
+                        label="Declination"
+                        required
+                        ></v-text-field>
+                    </v-flex>
                     <v-flex v-if="$store.state.isResearcher | $store.state.isAdmin" xs12>
                         <v-checkbox
-                        v-model="appointmentObj.privacy"
+                        v-model="appointmentObj.privacy.value"
                         color="green"
                         label="Private"
                         >
@@ -59,17 +75,19 @@ export default {
         submit() {
 
             let data = JSON.stringify({
-                startTime: new Date(this.appointmentObj.start).toUTCString(),
-                endTime: new Date(this.appointmentObj.end).toUTCString(),
-                telescopeId: this.appointmentObj.Tele,
-                isPublic: !this.appointmentObj.privacy
-            })
-//
+                startTime: new Date(this.appointmentObj.start.value).toUTCString(),
+                endTime: new Date(this.appointmentObj.end.value).toUTCString(),
+                telescopeId: this.appointmentObj.telescopeId.value,
+                isPublic: !this.appointmentObj.privacy.value,
+                rightAscension: this.appointmentObj.rightAscension.value,
+                declination: this.appointmentObj.declination.value
+            });
+
             // This will need changed to properly handle success or failure scenarios
-            ApiDriver.Appointment.update(this.appointmentObj.id, data).then((response) => {
+            ApiDriver.Appointment.update(this.appointmentObj.id.value, data).then((response) => {
                 console.log(response);
                 HttpResponse.then(response, (data) => {
-                    this.$emit('edited', this.appointmentObj.start, this.appointmentObj.end)
+                    this.$emit('edited', this.appointmentObj)
                     this.$emit('input');
 
                     }, (status, errors) => {

@@ -33,9 +33,16 @@
             <v-divider></v-divider>
             <v-list-tile>
                 <v-list-tile-content class="white--text">
+                    <v-list-tile-title>Coordinates:</v-list-tile-title>
+                    <v-list-tile-sub-title class="pl-3">Right Ascension: {{ data.rightAscension.value }}, Declination: {{ data.declination.value }}</v-list-tile-sub-title>
+                </v-list-tile-content>
+            </v-list-tile>
+            <v-divider></v-divider>
+            <v-list-tile>
+                <v-list-tile-content class="white--text">
                     <v-list-tile-title>Telescope Id:
                     </v-list-tile-title>
-                    <v-list-tile-sub-title class = "pl-3">{{ data.telescopeId }}</v-list-tile-sub-title>
+                    <v-list-tile-sub-title class = "pl-3">{{ telescopeId }}</v-list-tile-sub-title>
                 </v-list-tile-content>
             </v-list-tile>
             <v-divider></v-divider>
@@ -77,6 +84,7 @@ import moment from 'moment'
 import CancelAppointment from "../../components/CancelAppointment.vue"
 import EditAppointment from "../../components/EditAppointment.vue"
 import Loading from "../../components/Loading"
+import { throws } from 'assert';
 export default {
     name: "AppointmentView",
     data() {
@@ -105,13 +113,48 @@ export default {
                 },
                 status: {
                     value: ""
+                },
+                rightAscension: {
+                    value: null
+                },
+                declination: {
+                    value: null
                 }
             },
             celestialBody: 'Alpha Centauri',
             telescopeId: 1,
             eventUserId: 0,
             edit: false,
-            appointment: {},
+            appointment: {
+                id: {
+                    value: null,
+                    hasError: false
+                },
+                privacy: {
+                    value: false,
+                    hasError: false
+                },
+                start: {
+                    value: null, 
+                    hasError: false
+                },
+                end: {
+                    value: null,
+                    hasError: false
+                },
+                telescopeId: {
+                    value: null,
+                    hasError: false
+                },
+                rightAscension: {
+                    value: null,
+                    hasError: false
+                },
+                declination: {
+                    value: null,
+                    hasError: false
+                }
+            },
             cancel: false,
             complete: false
         }
@@ -152,10 +195,14 @@ export default {
                 HttpResponse.generalError(this, message, true);
             });
         },
-        edited: function(start, end) {
+        edited: function(appointmentObj) {
             // Update the start and end times
-            this.startMonth = start
-            this.endMonth = end
+            console.log(appointmentObj);
+            this.data.startTime.value = appointmentObj.start.value;
+            this.data.endTime.value = appointmentObj.end.value;
+            this.data.rightAscension.value = appointmentObj.rightAscension.value;
+            this.data.declination.value = appointmentObj.declination.value;
+            this.data.isPublic.value = !appointmentObj.privacy.value
         },
         populateData(data) {
             // Populate the appointment information 
@@ -164,20 +211,24 @@ export default {
             this.data.userLastName.value = data.userLastName
             this.data.eventUserId.value = data.userId
             this.data.isPublic.value = data.public
-            this.data.startTime.value = moment(data.startTime).format('YYYY-MM-DD hh:mm A')
-            this.data.endTime.value = moment(data.endTime).format('YYYY-MM-DD hh:mm A')
+            this.data.startTime.value = moment(data.startTime).format('MM-DD-YYYY hh:mm A')
+            this.data.endTime.value = moment(data.endTime).format('MM-DD-YYYY hh:mm A')
             this.data.status.value = data.status
+            this.data.rightAscension.value = data.rightAscension
+            this.data.declination.value = data.declination
             // If the appointment has been completed, mark the boolean
             if (this.data.status.value === 'Completed') {
                 this.complete = true
             }
         },
         editAppointment () {
-            this.appointment.id = this.data.id.value
-            this.appointment.privacy = !this.data.isPublic.data
-            this.appointment.start = this.data.startTime.value
-            this.appointment.end = this.data.endTime.value
-            this.appointment.Tele = this.telescopeId
+            this.appointment.id.value = this.data.id.value
+            this.appointment.privacy.value = !this.data.isPublic.value
+            this.appointment.start.value = this.data.startTime.value
+            this.appointment.end.value = this.data.endTime.value
+            this.appointment.telescopeId.value = this.telescopeId
+            this.appointment.rightAscension.value = this.data.rightAscension.value
+            this.appointment.declination.value = this.data.declination.value
             this.edit = true
         },
         cancelAppointment () {
