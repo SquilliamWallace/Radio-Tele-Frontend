@@ -64,6 +64,15 @@
                         >
                         </v-checkbox>
                     </v-flex>
+                    <v-flex xs12 sm6>
+                        <v-select
+                        v-model="telescopeName"
+                        :items="telescopes"
+                        color="blue darken-2"
+                        label="Telescope"
+                        required
+                        ></v-select>
+                    </v-flex>
                     </v-layout>
                 </v-container>
                 <v-card-actions>
@@ -92,6 +101,12 @@ export default {
     data() {
         name: 'Appointment'
         return {
+            telescopes: [
+                "John Rudy Park",
+                "Scale Model",
+                "Virtual"
+            ],
+            telescopeName: "", 
             form: {
                 isPrivate: {
                     value: false
@@ -126,19 +141,11 @@ export default {
         },
         submit() {
             this.clearErrors();
-            let createdEvent = {
-                userId: this.$store.state.currentUserId,
-                startTime: new Date(this.eventObj.start).toUTCString(),
-                endTime: new Date(this.eventObj.end).toUTCString(),
-                telescopeId: 1,
-                isPublic: !this.form.isPrivate.value
-            }
-
             let data = JSON.stringify({
                 userId: this.$store.state.currentUserId,
                 startTime: new Date(this.eventObj.start).toUTCString(),
                 endTime: new Date(this.eventObj.end).toUTCString(),
-                telescopeId: 1,
+                telescopeId: this.telescopes.indexOf(this.telescopeName) + 1,
                 isPublic: !this.form.isPrivate.value,
                 rightAscension: this.form.rightAscension.value,
                 declination: this.form.declination.value

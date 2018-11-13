@@ -19,8 +19,8 @@
             <v-icon>work</v-icon>
         </v-tab>
         <v-tab>
-            Surveillance
-            <v-icon>videocam</v-icon>
+            User Approval
+            <v-icon>check_circle</v-icon>
         </v-tab>
         <v-tab>
           Appointment Management
@@ -36,7 +36,7 @@
         </v-tab-item>
 
         <v-tab-item>
-            
+            <admin-user-approval></admin-user-approval>
         </v-tab-item>
         
       </v-tabs>
@@ -51,6 +51,7 @@ import HttpResponse from '../utils/HttpResponse';
 import NavigationBar from '../components/NavigationBar.vue';
 import router from '../router';
 import CurrentUserValidation from '../utils/CurrentUserValidation';
+import AdminUserApproval from '../components/AdminUserApproval.vue';
  export default {
      name: 'admin',
     data () {
@@ -77,7 +78,8 @@ import CurrentUserValidation from '../utils/CurrentUserValidation';
     components: {
         AdminUserManagement,
         NavigationBar,
-        AdminLog
+        AdminLog,
+        AdminUserApproval
     },
     mounted() {
       this.authenticate()
