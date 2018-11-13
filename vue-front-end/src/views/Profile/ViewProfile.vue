@@ -46,7 +46,7 @@
                                             name="newEmail"
                                             v-model="changeEmailForm.email.value"
                                             :error=changeEmailForm.email.hasError
-                                            :rules=[rules.required]
+                                            :rules="[rules.required]"
                                             :error-messages=changeEmailForm.email.errorMessage
                                             :validate-on-blur=true
                                             label="Enter New Email Address"
