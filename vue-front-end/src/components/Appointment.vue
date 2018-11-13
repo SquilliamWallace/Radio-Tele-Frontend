@@ -32,8 +32,10 @@
                     </v-flex>
                     <v-flex xs12 sm6>
                         <v-text-field
-                        v-model="eventObj.rightAscension"
+                        v-model="form.rightAscension.value"
                         color="blue darken-2"
+                        :error=form.rightAscension.hasError
+                        :error-messages=form.rightAscension.errorMessage
                         label="Right Ascension"
                         type="number"
                         required
@@ -41,8 +43,10 @@
                     </v-flex>
                     <v-flex xs12 sm6>
                         <v-text-field
-                        v-model="eventObj.declination"
+                        v-model="form.declination.value"
                         color="blue darken-2"
+                        :error=form.declination.hasError
+                        :error-messages=form.declination.errorMessage
                         label="Declination"
                         type="number"
                         required
@@ -50,7 +54,7 @@
                     </v-flex>
                     <v-flex v-if="this.$store.state.isResearcher || this.$store.state.isAdmin" xs12>
                         <v-checkbox
-                        v-model="form.isPrivate"
+                        v-model="form.isPrivate.value"
                         color="green"
                         label="Private"
                         >
@@ -79,13 +83,23 @@ import ApiDriver from '../ApiDriver'
 import HttpResponse from '../utils/HttpResponse'
 import CurrentUserValidation from '../utils/CurrentUserValidation'
 import router from '../router';
+import CustomErrorHandler from '../utils/CustomErrorHandler.js';
 export default {
     data() {
         name: 'Appointment'
         return {
-            
             form: {
-                isPrivate: false
+                isPrivate: {
+                    value: false
+                },
+                rightAscension: {
+                    value: null,
+                    hasError: false
+                },
+                declination: {
+                    value: null,
+                    hasError: false
+                }
             },
             snackbar: false,
         }
@@ -96,75 +110,74 @@ export default {
     },
     methods: {
         resetForm() {
-            this.form = {
-                isPrivate: false
-            }
+            this.form.isPrivate.value = false;
+            this.form.rightAscension.value = null;
+            this.form.declination.value = null;
+            this.clearErrors();
             this.$emit('close-modal');
         },
         submit() {
-            var date = new Date(this.eventObj.start)
+            this.clearErrors();
             let createdEvent = {
                 userId: this.$store.state.currentUserId,
                 startTime: new Date(this.eventObj.start).toUTCString(),
                 endTime: new Date(this.eventObj.end).toUTCString(),
                 telescopeId: 1,
-                isPublic: !this.form.isPrivate
+                isPublic: !this.form.isPrivate.value
             }
+
             let data = JSON.stringify({
                 userId: this.$store.state.currentUserId,
                 startTime: new Date(this.eventObj.start).toUTCString(),
                 endTime: new Date(this.eventObj.end).toUTCString(),
                 telescopeId: 1,
-                isPublic: !this.form.isPrivate,
-                rightAscension: this.eventObj.rightAscension,
-                declination: this.eventObj.declination
-            })
-            console.log(data)
+                isPublic: !this.form.isPrivate.value,
+                rightAscension: this.form.rightAscension.value,
+                declination: this.form.declination.value
+            });
 
-            // This will need changed to properly handle success or failure scenarios
             ApiDriver.Appointment.create(data).then((response) => {
-                console.log(response);
                 HttpResponse.then(response, (data) => {
                         this.snackbar = true;
-                        this.form = {
-                            isPrivate: false
-                        }
+                        this.resetForm()
                         
                         this.$emit('created-event', createdEvent, response.data.data);
                         this.$emit('close-modal');
-                        //document.location.reload(true);
                     }, (status, errors) => {
                         if (parseInt(status) === 403) {
-                            this.$swal({
-                            title: '<span style="color:#f0ead6">Error!<span>',
-                            html: '<span style="color:#f0ead6">Access Denied<span>',
-                            type: 'error',
-                            background: '#302f2f'
-                        }).then(response => {
-                            CurrentUserValidation.validateCurrentUser(this.$store);
-                        });
+                            HttpResponse.accessDenied(this)
                         } else {
-                            console.log(status)
-                            console.log(errors)
+                            this.handleErrors(errors);
                         }
-                    })
+                    });
             });
             
+        },
+        handleErrors(errors) {
+            for (var field in errors) {
+                let message = errors[field][0];
+
+                if (field === "RIGHT_ASCENSION") {
+                    CustomErrorHandler.populateError(this.form.rightAscension, message)
+                } else if (field === "DECLINATION") {
+                    CustomErrorHandler.populateError(this.form.declination, message)
+                } else {
+                    HttpResponse.generalError(this, message, false)
+                }
+            }
+        },
+        clearErrors() {
+            CustomErrorHandler.clearError(this.form.rightAscension);
+            CustomErrorHandler.clearError(this.form.declination);
         }
     },
     computed: {
         formIsValid() {
-            if(this.eventObj.start && this.eventObj.end){
-                return true;
-            }
-            else{
-                return false;
-            }
+            return (this.eventObj.start && this.eventObj.end)
         }
     }
 }
 </script>
-
 <style scoped>
 
 </style>

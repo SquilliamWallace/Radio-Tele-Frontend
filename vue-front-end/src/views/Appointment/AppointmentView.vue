@@ -6,21 +6,21 @@
             <v-list-tile >
                 <v-list-tile-content class="white--text">
                     <v-list-tile-title>Start Date:</v-list-tile-title>
-                    <v-list-tile-sub-title class = "pl-3">{{ startMonth }}</v-list-tile-sub-title>
+                    <v-list-tile-sub-title class = "pl-3">{{ data.startTime.value }}</v-list-tile-sub-title>
                 </v-list-tile-content>
             </v-list-tile>
             <v-divider></v-divider>
             <v-list-tile>
                 <v-list-tile-content class="white--text">
                     <v-list-tile-title >End Date:</v-list-tile-title>
-                    <v-list-tile-sub-title class = "pl-3">{{ endMonth }}</v-list-tile-sub-title>
+                    <v-list-tile-sub-title class = "pl-3">{{ data.endTime.value }}</v-list-tile-sub-title>
                 </v-list-tile-content>
             </v-list-tile>
             <v-divider></v-divider>
             <v-list-tile>
                 <v-list-tile-content class="white--text">
                     <v-list-tile-title>Public:</v-list-tile-title>
-                    <v-list-tile-sub-title class = "pl-3">{{ privacy }}</v-list-tile-sub-title>
+                    <v-list-tile-sub-title class = "pl-3">{{ data.isPublic.value }}</v-list-tile-sub-title>
                 </v-list-tile-content>
             </v-list-tile>
             <v-divider></v-divider>
@@ -35,29 +35,29 @@
                 <v-list-tile-content class="white--text">
                     <v-list-tile-title>Telescope Id:
                     </v-list-tile-title>
-                    <v-list-tile-sub-title class = "pl-3">{{ Tele }}</v-list-tile-sub-title>
+                    <v-list-tile-sub-title class = "pl-3">{{ data.telescopeId }}</v-list-tile-sub-title>
                 </v-list-tile-content>
             </v-list-tile>
             <v-divider></v-divider>
             <v-list-tile >
                 <v-list-tile-content class="white--text">
                     <v-list-tile-title>Created by:</v-list-tile-title>
-                    <v-list-tile-sub-title class = "pl-3">{{ name }}</v-list-tile-sub-title>
+                    <v-list-tile-sub-title class = "pl-3">{{ data.userFirstName.value }} {{ data.userLastName.value}}</v-list-tile-sub-title>
                 </v-list-tile-content>
             </v-list-tile>
             
             <v-divider>
                 <v-divider></v-divider>
             </v-divider>
-            <v-btn v-if="status === 'Completed'" color="primary" v-bind:href="'/appointments/' + id + '/rf-data'">View Data</v-btn>
+            <v-btn v-if="data.status.value === 'Completed'" color="primary" v-bind:href="'/appointments/' + id + '/rf-data'">View Data</v-btn>
         </v-container>
         <v-layout wrap>
-        <v-flex v-if="($store.state.currentUserId === eventUserId | $store.state.isAdmin) && !complete">
+        <v-flex v-if="($store.state.currentUserId === data.eventUserId.value | $store.state.isAdmin) && !complete">
             <div>
                 <v-btn color="primary" @click="editAppointment">Edit</v-btn>
             </div>
         </v-flex>
-        <v-flex v-if="($store.state.currentUserId === eventUserId | $store.state.isAdmin) && !complete">
+        <v-flex v-if="($store.state.currentUserId === data.eventUserId.value | $store.state.isAdmin) && !complete">
             <div>
                 <v-btn color="error" @click="cancelAppointment">Cancel</v-btn>
             </div>
@@ -80,35 +80,40 @@ import Loading from "../../components/Loading"
 export default {
     name: "AppointmentView",
     data() {
-            return {
-
-                posts: [],
-                errors: [],
-
-                name: '',
-                startDay: 6,
-                startMonth: '',
-                startYear: '2018',
-                endDay: '6', endMonth: '', endYear: '2018',
-                startHour: '6', startMinute: '30', period: 'am',
-                endHour: '1', endMinute: '45', endPeriod: 'pm',
-                privacy: 'private',
-                status: '',
-                celestialBody: 'Alpha Centauri',
-                Tele: 1,
-
-                items: [
-                { title: 'Start Date', day: "6", month: "10", year: "2018", h: "6", mm: "30", period: "am"},
-                { title: 'End Date', day: "6", month: "10", year: "2018", h: "1", mm: "45", period: "pm"},
-                { title: 'Privacy', private:"true"},
-                { title: 'Coordinates', celestialBody: "Mars"},
-                { title: 'Telescope', enum: '1'}
-                ],
-                eventUserId: 0,
-                edit: false,
-                appointment: {},
-                cancel: false,
-                complete: false
+        return {
+            data: {
+                id: {
+                    value: null
+                },
+                userFirstName: {
+                    value: null
+                },
+                userLastName: {
+                    value: null
+                },
+                eventUserId: {
+                    value: null
+                },
+                isPublic: {
+                    value: false
+                },
+                startTime: {
+                    value: null
+                },
+                endTime: {
+                    value: null
+                },
+                status: {
+                    value: ""
+                }
+            },
+            celestialBody: 'Alpha Centauri',
+            telescopeId: 1,
+            eventUserId: 0,
+            edit: false,
+            appointment: {},
+            cancel: false,
+            complete: false
         }
     },
     components: {
@@ -154,24 +159,25 @@ export default {
         },
         populateData(data) {
             // Populate the appointment information 
-            this.name = data.userFirstName + " " + data.userLastName
-            this.id = data.id
-            this.eventUserId = data.userId
-            this.privacy = data.public
-            this.startMonth = moment(data.startTime).format('YYYY-MM-DD hh:mm A')
-            this.endMonth = moment(data.endTime).format('YYYY-MM-DD hh:mm A')
-            this.status = data.status
+            this.data.id.value = data.id
+            this.data.userFirstName.value = data.userFirstName
+            this.data.userLastName.value = data.userLastName
+            this.data.eventUserId.value = data.userId
+            this.data.isPublic.value = data.public
+            this.data.startTime.value = moment(data.startTime).format('YYYY-MM-DD hh:mm A')
+            this.data.endTime.value = moment(data.endTime).format('YYYY-MM-DD hh:mm A')
+            this.data.status.value = data.status
             // If the appointment has been completed, mark the boolean
-            if (this.status === 'Completed') {
+            if (this.data.status.value === 'Completed') {
                 this.complete = true
             }
         },
         editAppointment () {
-            this.appointment.id = this.id
-            this.appointment.privacy = !this.privacy
-            this.appointment.start = this.startMonth
-            this.appointment.end = this.endMonth
-            this.appointment.Tele = this.Tele
+            this.appointment.id = this.data.id.value
+            this.appointment.privacy = !this.data.isPublic.data
+            this.appointment.start = this.data.startTime.value
+            this.appointment.end = this.data.endTime.value
+            this.appointment.Tele = this.telescopeId
             this.edit = true
         },
         cancelAppointment () {
