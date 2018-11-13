@@ -1,5 +1,7 @@
 <template>
-    <v-card  width = "100%">
+<div>
+    <loading v-if="$store.state.isLoading"></loading>
+    <v-card v-if="!$store.state.isLoading" width = "100%">
         <v-list >
             <v-list-tile v-for="user in users" :key = "user.id"  @click="hover = !hover">
                 <v-list-tile-content>
@@ -49,6 +51,7 @@
             </v-card>
         </v-dialog>
     </v-card>
+    </div>
 </template>
 <script>
 import router from '../router';
@@ -82,7 +85,6 @@ export default {
                 HttpResponse.then(response, (data) => {
                     this.populateData(data.data)
                 }, (status, errors) => {})
-                this.$store.commit("loading", false);
             }).catch((error) => {
                 this.$swal({
                             title: '<span style="color:#f0ead6">Error!<span>',

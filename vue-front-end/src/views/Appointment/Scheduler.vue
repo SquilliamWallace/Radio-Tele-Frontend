@@ -172,6 +172,7 @@ export default {
                             console.log(status)
                             console.log(errors)
                         }
+                        this.$store.commit("loading", false);
                     })
             });
         },

@@ -52,6 +52,7 @@ import NavigationBar from '../components/NavigationBar.vue';
 import router from '../router';
 import CurrentUserValidation from '../utils/CurrentUserValidation';
 import AdminUserApproval from '../components/AdminUserApproval.vue';
+import Loading from "../components/Loading"
  export default {
      name: 'admin',
     data () {
@@ -79,7 +80,8 @@ import AdminUserApproval from '../components/AdminUserApproval.vue';
         AdminUserManagement,
         NavigationBar,
         AdminLog,
-        AdminUserApproval
+        AdminUserApproval,
+        Loading
     },
     mounted() {
       this.authenticate()
