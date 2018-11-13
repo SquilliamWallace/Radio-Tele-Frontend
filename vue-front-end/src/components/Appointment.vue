@@ -148,14 +148,31 @@ export default {
                             background: '#302f2f'
                         }).then(response => {
                             CurrentUserValidation.validateCurrentUser(this.$store);
-                        });
-                        } else {
+                        })}
+                        else if (parseInt(status) === 400) {
+                            this.handleErrors(errors);
+                        }
+                        else {
                             console.log(status)
                             console.log(errors)
                         }
                     })
             });
             
+        },
+        handleErrors(errors) {
+            var message = ""
+
+            for (var index in errors) {
+                message = errors[index][0]
+            }
+
+             this.$swal({
+                title: '<span style="color:#f0ead6">Error!<span>',
+                html: '<span style="color:#f0ead6">' + message + '</span>',
+                type: 'error',
+                background: '#302f2f'
+            })
         }
     },
     computed: {

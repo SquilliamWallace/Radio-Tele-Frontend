@@ -2,20 +2,27 @@
   <div>
     <navigation-bar></navigation-bar>
     <loading v-show="$store.state.isLoading"></loading>
-    <v-data-table
-      :headers="headers"
-      :items="RFData"
-      hide-actions
-      class="elevation-1"
-      v-show="!$store.state.isLoading"
-    >
-      <template slot="items" slot-scope="props">
-        <td>{{ props.item.id }}</td>
-        <td class="text-xs">{{ props.item.appointmentId }}</td>
-        <td class="text-xs">{{ props.item.intensity }}</td>
-        <td class="text-xs">{{ props.item.timeCaptured }}</td>
-      </template>
-    </v-data-table>
+    <div v-show="!$store.state.isLoading">
+        <v-data-table
+        :headers="headers"
+        :items="RFData"
+        hide-actions
+        class="elevation-1"
+        >
+        <template slot="items" slot-scope="props">
+            <td>{{ props.item.id }}</td>
+            <td class="text-xs">{{ props.item.appointmentId }}</td>
+            <td class="text-xs">{{ props.item.intensity }}</td>
+            <td class="text-xs">{{ props.item.timeCaptured }}</td>
+        </template>
+        </v-data-table>
+        <v-dialog hide-overlay transition="dialog-bottom-transition" v-model="graphToggle">
+            <v-btn color="primary darken-1" slot="activator">View Data Graph</v-btn>
+            <div class="graph-style">
+                <rf-data-graph :chartdata="graphData" :styles="graphStyles"></rf-data-graph>
+            </div>
+        </v-dialog>
+    </div>
   </div>
 </template>
 
@@ -26,7 +33,9 @@ import HttpResponse from '../../utils/HttpResponse';
 import CurrentUserValidation from  '../../utils/CurrentUserValidation';
 import NavigationBar from '../../components/NavigationBar';
 import Loading from '../../components/Loading';
+import RfDataGraph from '../../components/RfDataGraph';
 import moment from 'moment';
+import Chart from 'chart.js';
 export default {
     name: 'RFData',
     data() {
@@ -37,7 +46,18 @@ export default {
                 {text: 'Intensity', align: 'left', value: 'intensity'},
                 {text: 'Time Captured', align: 'left', value: 'intensity'}
             ],
-            RFData: []
+            RFData: [],
+            graphToggle: false,
+            graphData: {
+                labels: [],
+                datasets: [
+                    {
+                        label: 'Radio Frequency Intensity Over Time',
+                        backgroundColor: '#0c03b2',
+                        data: []
+                    }
+                ]
+            }
         }
     },
     methods: {
@@ -76,18 +96,34 @@ export default {
                 let rfData = data[index];
                 rfData.timeCaptured = moment(rfData.timeCaptured).format('MM/DD/YYYY hh:mm:ss A')
                 this.RFData.push(rfData)
+                this.graphData.labels.push(rfData.timeCaptured)
+                this.graphData.datasets[0].data.push(rfData.intensity)
             }
+        },
+        showGraph() {
+            this.graphToggle=!this.graphToggle;
         }
     },
     components: {
         NavigationBar,
-        Loading
+        Loading,
+        RfDataGraph
     },
     mounted() {
         this.retrieveData()
+    },
+    computed: {
+        graphStyles() {
+            return {
+                height: '600px',
+                position: 'relative'
+            }
+        }
     }
 }
 </script>
 <style scoped>
-
+.graph-style{
+    background-color: #f0ead6;
+}
 </style>
