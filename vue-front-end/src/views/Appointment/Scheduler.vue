@@ -118,7 +118,6 @@ export default {
             this.$store.commit("loading", true);
             this.telescopeName = this.telescopes[id-1] + " telescope"
             ApiDriver.Appointment.futureAppointmentsByTelescopeID(id, 0, 100).then((response) => {
-                //console.log(response.data.data.content);
                 HttpResponse.then(response, (data) => {
                         for (var index in response.data.data.content) {
                             var element = response.data.data.content[index]

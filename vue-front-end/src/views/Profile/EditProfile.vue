@@ -102,6 +102,7 @@ export default {
     },
     retrieveInformation() {
         let that = this;
+        // Set the loading flag to true
         this.$store.commit("loading", true);
         // Call the retrieve method
         ApiDriver.User.get(this.$route.params.userId).then(response => {

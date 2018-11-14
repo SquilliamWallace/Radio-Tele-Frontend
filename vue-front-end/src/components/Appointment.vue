@@ -141,7 +141,7 @@ export default {
         },
         submit() {
             this.clearErrors();
-            let data = JSON.stringify({
+            let form = {
                 userId: this.$store.state.currentUserId,
                 startTime: new Date(this.eventObj.start).toUTCString(),
                 endTime: new Date(this.eventObj.end).toUTCString(),
@@ -149,14 +149,14 @@ export default {
                 isPublic: !this.form.isPrivate.value,
                 rightAscension: this.form.rightAscension.value,
                 declination: this.form.declination.value
-            });
+            };
 
-            ApiDriver.Appointment.create(data).then((response) => {
+            ApiDriver.Appointment.create(JSON.stringify(form)).then((response) => {
                 HttpResponse.then(response, (data) => {
                         this.snackbar = true;
                         this.resetForm()
                         
-                        this.$emit('created-event', createdEvent, response.data.data);
+                        this.$emit('created-event', form, data.data);
                         this.$emit('close-modal');
                     }, (status, errors) => {
                         if (parseInt(status) === 403) {

@@ -73,6 +73,7 @@ export default {
           message = errors[index][0]
         }
 
+        // Display the error message in an alert
         this.$swal({
           title: '<span style="color:#f0ead6">Error!</span>',
           html: '<span style="color:#f0ead6">' + message + '</span>',

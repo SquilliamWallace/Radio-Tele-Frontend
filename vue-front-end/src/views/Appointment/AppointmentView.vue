@@ -221,6 +221,7 @@ export default {
             }
         },
         editAppointment () {
+            // Set the prop values and open up the edit modal
             this.appointment.id.value = this.data.id.value
             this.appointment.privacy.value = !this.data.isPublic.value
             this.appointment.start.value = this.data.startTime.value
@@ -231,9 +232,11 @@ export default {
             this.edit = true
         },
         cancelAppointment () {
+            // Open the modal
             this.cancel = true
         },
         closeModal() {
+            // Reset prop values and close the edit modal
             this.edit = false
             this.appointment = {}
         }
