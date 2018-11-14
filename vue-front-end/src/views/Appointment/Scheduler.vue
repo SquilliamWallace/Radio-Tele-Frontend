@@ -84,6 +84,7 @@ export default {
             this.openCreateModal = false;
         },
         toggleChooseTelescope() {
+            this.events = []
             this.tele = !this.tele
         },
         createdEvent: function(data, id) {
@@ -99,11 +100,14 @@ export default {
                 editable: false,
                 draggable: false
             }
-
-            this.events.push(event)
+            
+            if (this.telescopeId == event.telescopeId){
+                this.events.push(event)
+            }
         },
         populateData: function(id) {
             this.$store.commit("loading", true);
+            this.telescopeId = id
             this.telescopeName = this.telescopes[id-1] + " telescope"
             ApiDriver.Appointment.futureAppointmentsByTelescopeID(id, 0, 100).then((response) => {
                 HttpResponse.then(response, (data) => {
