@@ -165,27 +165,6 @@ export default {
     }
 }
 
-/*$(function() {
-$('#calendar').fullCalendar({
-    groupByDateAndResource: true,
-    defaultView: 'agendaDay',
-    header: {
-        left:   'prev,next ChangeTelescope',
-        center: 'title',
-        right:  'month,agendaWeek,agendaDay'
-    },
-    customButtons: {
-        ChangeTelescope: {
-            text: 'Change Telescope',
-            click: function() {
-                this.tele = true
-            }
-        }
-    },
-    
-    events: this.events
-    });
-});*/
 </script>
 
 <style scoped>
