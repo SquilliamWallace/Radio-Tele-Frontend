@@ -53,6 +53,7 @@
                                         :error=data.reqPassEmail.hasError
                                         :error-messages=data.reqPassEmail.errorMessage
                                         label="Enter Email Address"
+                                        v-on:keyup.enter="submitResetRequest"
                                         required
                                         ></v-text-field>
                                     </v-container>

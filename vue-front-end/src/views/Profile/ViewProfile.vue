@@ -50,6 +50,7 @@
                                             :error-messages=changeEmailForm.email.errorMessage
                                             :validate-on-blur=true
                                             label="Enter New Email Address"
+                                            v-on:keyup.enter="changeEmailRequest"
                                             required
                                             ></v-text-field>
                                         </v-flex>
@@ -63,6 +64,7 @@
                                             :error-messages=changeEmailForm.emailConfirm.errorMessage
                                             :validate-on-blur=true
                                             label="Confirm New Email Address"
+                                            v-on:keyup.enter="changeEmailRequest"
                                             required
                                             ></v-text-field>
                                         </v-flex>
@@ -195,8 +197,8 @@ export default {
                     // Success alert
                     this.$swal({
                         title: '<span style="color:#f0ead6">Success!<span>',
-                        html: '<span style="color:#f0ead6">You should receive an email shortly' + 
-                        ' containing a link to accept your email change<span>',
+                        html: '<span style="color:#f0ead6">You should receive an email shortly at ' + 
+                        this.changeEmailForm.email.value + ' containing a link to accept your email change<span>',
                         type: 'success',
                         background: '#302f2f'
                     }).then(response => {
