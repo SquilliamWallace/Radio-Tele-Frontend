@@ -50,16 +50,6 @@ export default {
                 center: 'title',
                 right:  'month,agendaWeek,agendaDay'
             },
-            /*
-            customButtons: {
-                ChangeTelescope: {
-                    text: 'Change Telescope',
-                    click: function() {
-                        console.log(self)
-                        self.$emit('changeTelescope')
-                    }
-                }
-            }*/
         }
     },
     components: {
@@ -72,7 +62,6 @@ export default {
     },
     methods: {
         openEvent(event) {
-            console.log(event)
             if (event.public) {
                 router.push('/appointments/' + event.id + "/view" )
             } else if (this.$store.state.isAdmin || (this.$store.state.currentUserId == event.userId)){
@@ -83,7 +72,6 @@ export default {
             }
         },
         createEvent: function(Obj) {
-            console.log(moment(Obj.start).format('YYYY-MM-DD hh:mm A'))
             this.event.allDay = Obj.allDay
             this.event.start = moment(Obj.start).format('YYYY-MM-DD hh:mm A')
             this.event.end = moment(Obj.end).format('YYYY-MM-DD hh:mm A')
@@ -118,7 +106,6 @@ export default {
             this.$store.commit("loading", true);
             this.telescopeName = this.telescopes[id-1] + " telescope"
             ApiDriver.Appointment.futureAppointmentsByTelescopeID(id, 0, 100).then((response) => {
-                //console.log(response.data.data.content);
                 HttpResponse.then(response, (data) => {
                         for (var index in response.data.data.content) {
                             var element = response.data.data.content[index]
@@ -154,7 +141,6 @@ export default {
                                 editable: false,
                                 draggable: false
                             }
-                            console.log(eventData)
                             this.events.push(eventData);
                         }
                         this.$store.commit("loading", false);
@@ -168,9 +154,6 @@ export default {
                         }).then(response => {
                             CurrentUserValidation.validateCurrentUser(this.$store);
                         });
-                        } else {
-                            console.log(status)
-                            console.log(errors)
                         }
                         this.$store.commit("loading", false);
                     })

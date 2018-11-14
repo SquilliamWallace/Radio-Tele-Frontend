@@ -159,13 +159,10 @@ export default {
                role: this.form.assignedRole.value.toUpperCase()
             });
             ApiDriver.User.approve(form).then((response) => {
-                console.log(response)
             }).catch(errors => {
-                console.log(errors)
             })
             for (var index in this.users) {
                 var user = this.users[index];
-                console.log(user)
                 if (user.id === this.form.roleId.value) {
                     this.users.splice(index, 1)
                 }
@@ -175,7 +172,6 @@ export default {
         getUnapprovedUsers(){
             ApiDriver.User.unapproved(this.data).then((response) => {
                 HttpResponse.then(response, (data) => {
-                    console.log(data)
                     this.populateData(data.data.success)
                 },(status, errors) => {})
                 
@@ -186,7 +182,6 @@ export default {
                 let user = data.content[index];
                 this.users.push(user);
             }
-            console.log(this.users)
         }
     },
     mounted: function(){

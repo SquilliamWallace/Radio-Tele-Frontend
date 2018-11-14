@@ -15,7 +15,6 @@ export default {
         }
     },
     notFound: function(that, errors) {
-        console.log(errors)
         that.$store.commit("loading", false);
         let error = "";
 

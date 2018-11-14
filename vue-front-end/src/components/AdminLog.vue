@@ -107,7 +107,6 @@ export default {
         getLogs() {
             this.$store.commit("loading", true);
             ApiDriver.Log.viewLogs(this.pageNumber, this.pageSize).then((response) => {
-                console.log(response)
                 HttpResponse.then(response, (data) => {
                     this.populateData(data.data)
                     this.$store.commit("loading", false);
@@ -130,7 +129,6 @@ export default {
                             type: 'error',
                             background: '#302f2f'
                         });
-                console.log(error)
                 this.$store.commit("loading", false);
             });
         },

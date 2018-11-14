@@ -81,7 +81,6 @@ export default {
         getUsers(){
             this.$store.commit("loading", true);
             ApiDriver.User.allUsers(this.data).then((response) => {
-                console.log(response)
                 HttpResponse.then(response, (data) => {
                     this.populateData(data.data)
                 }, (status, errors) => {})
@@ -94,7 +93,6 @@ export default {
                         }).then(response => {
                             CurrentUserValidation.validateCurrentUser(this.$store);
                         });
-                console.log(error)
             });
         },
         populateData(data){
@@ -108,13 +106,11 @@ export default {
         },
         banUser(userId){
             ApiDriver.User.ban(userId).then((response) => {
-                console.log(response)
                 location.reload();
             })
         },
         unbanUser(userId){
             ApiDriver.User.unban(userId).then((response) => {
-                console.log(response)
                 location.reload();
             })
         }
