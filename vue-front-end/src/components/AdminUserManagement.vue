@@ -21,7 +21,7 @@
                         <v-icon>gavel</v-icon>
                     </v-btn>  
                 </div>
-                <div v-else>
+                <div v-else-if="user.status == 'Banned'">
                     <v-btn icon @click="confirm = !confirm, chosenUserId = user.id, action = 'unban', chosenUserName = user.firstName +' '+ user.lastName">
                         <v-icon>lock_open</v-icon>
                     </v-btn> 
