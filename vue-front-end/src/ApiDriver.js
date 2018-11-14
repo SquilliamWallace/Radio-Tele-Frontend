@@ -19,19 +19,22 @@ export default {
         return axios.put(this.namespace + "/" + userId, data, Headers.retrieveHeaders())
       },
       allUsers: function(data) {
-        return axios.get("/api/users?page=" + data.pageNumber + "&size=" + data.pageSize)
+        return axios.get(this.namespace + "?page=" + data.pageNumber + "&size=" + data.pageSize)
+      },
+      changePassword: function(userId) {
+        return axios.put(this.namespace + "/" + userId + "/changePassword", data, Headers.retrieveHeaders())
       },
       ban: function(userId) {
         return axios.put(this.namespace + "/" + userId + "/ban")
+      },
+      unban: function(userId) {
+        return axios.put(this.namespace + "/" + userId + "/unban")
       },
       changeEmail: function(userId, data) {
         return axios.post(this.namespace + "/" + userId + "/updateEmail", data, Headers.retrieveHeaders())
       },
       unapproved: function(data) {
         return axios.get("/api/roles/unapproved" + "?page=" + data.pageNumber + "&size=" + data.pageSize)
-      },
-      approve: function(data) {
-        return axios.put("/api/roles/validate", data, Headers.retrieveHeaders())
       },
       Appointment: {
         namespace: baseUrl + "users",
