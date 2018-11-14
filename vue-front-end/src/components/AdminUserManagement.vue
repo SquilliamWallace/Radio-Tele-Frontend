@@ -1,5 +1,7 @@
 <template>
-    <v-card  width = "100%">
+<div>
+    <loading v-if="$store.state.isLoading"></loading>
+    <v-card v-if="!$store.state.isLoading" width = "100%">
         <v-list >
             <v-list-tile v-for="user in users" :key = "user.id"  @click="hover = !hover">
                 <v-list-tile-content>
@@ -49,6 +51,7 @@
             </v-card>
         </v-dialog>
     </v-card>
+    </div>
 </template>
 <script>
 import router from '../router';
@@ -78,11 +81,9 @@ export default {
         getUsers(){
             this.$store.commit("loading", true);
             ApiDriver.User.allUsers(this.data).then((response) => {
-                console.log(response)
                 HttpResponse.then(response, (data) => {
                     this.populateData(data.data)
                 }, (status, errors) => {})
-                this.$store.commit("loading", false);
             }).catch((error) => {
                 this.$swal({
                             title: '<span style="color:#f0ead6">Error!<span>',
@@ -92,7 +93,6 @@ export default {
                         }).then(response => {
                             CurrentUserValidation.validateCurrentUser(this.$store);
                         });
-                console.log(error)
             });
         },
         populateData(data){
@@ -106,13 +106,11 @@ export default {
         },
         banUser(userId){
             ApiDriver.User.ban(userId).then((response) => {
-                console.log(response)
                 location.reload();
             })
         },
         unbanUser(userId){
             ApiDriver.User.unban(userId).then((response) => {
-                console.log(response)
                 location.reload();
             })
         }

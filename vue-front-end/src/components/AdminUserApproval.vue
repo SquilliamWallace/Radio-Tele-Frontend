@@ -1,6 +1,14 @@
 <template>
-    <div>
-        <v-card width = "100s%" align-center>
+<div>
+    <loading v-if="$store.state.isLoading"></loading>
+    <div v-if="!$store.state.isLoading">
+        <v-card v-if="users.length <= 0" flat>
+            <v-card-title primary-title class="justify-center">No Users Require Approval</v-card-title>
+            <v-card-text>
+                <div>Come back later to see if any users tried to do anything sneaky</div>
+            </v-card-text>
+        </v-card>
+        <v-card v-if="users.length > 0" width = "100s%" align-center>
                 <v-list >
                     <v-list-tile @click="''" v-for="user in users" :key = "user.id" >
                         <v-list-tile-content>
@@ -98,6 +106,7 @@
             </v-card>
         </v-dialog>
     </div>
+</div>
 </template>
 <script>
 import router from '../router';
@@ -148,20 +157,12 @@ export default {
             let form = JSON.stringify({
                id: this.form.roleId.value,
                role: this.form.assignedRole.value.toUpperCase()
-
             });
-            console.log(this.form.roleId.value)
-            console.log(this.form.assignedRole.value)
             ApiDriver.User.approve(form).then((response) => {
-                console.log(response)
             }).catch(errors => {
-                console.log(errors)
             })
-            console.log(this.users)
-            console.log(this.form.roleId.value)
             for (var index in this.users) {
                 var user = this.users[index];
-                console.log(user)
                 if (user.id === this.form.roleId.value) {
                     this.users.splice(index, 1)
                 }
@@ -171,7 +172,6 @@ export default {
         getUnapprovedUsers(){
             ApiDriver.User.unapproved(this.data).then((response) => {
                 HttpResponse.then(response, (data) => {
-                    console.log(data)
                     this.populateData(data.data.success)
                 },(status, errors) => {})
                 
@@ -182,11 +182,13 @@ export default {
                 let user = data.content[index];
                 this.users.push(user);
             }
-            console.log(this.users)
         }
     },
     mounted: function(){
         this.getUnapprovedUsers();
+    },
+    components: {
+        Loading
     }
 }
 </script>

@@ -1,5 +1,7 @@
 <template>
-    <v-container width = "100%">
+<div>
+    <loading v-if="$store.state.isLoading"></loading>
+    <v-container v-if="!$store.state.isLoading" width = "100%">
         <div>
             <v-layout row wrap>
                 <v-flex v-for="item in headers" :key="item.header" xs2>
@@ -70,42 +72,14 @@
             ></v-pagination>
         </div>
     </v-container>
-    
-             
-            <!-- <v-list>
-                <v-container>
-                    <v-list-tile v-for="log in logs" :key = log.id>
-                        <span>
-                            <v-list-tile-title class="text-sm-left">User Id</v-list-tile-title>
-                            <v-list-tile-sub-title class="text-sm-left"> {{log.userId}}</v-list-tile-sub-title>
-                        </span>
-                        <v-spacer></v-spacer>
-                        <span v-bind:style="{ color : '', fontWeight: 'bold'}">User Id:&nbsp;</span> {{ log.userId }} 
-                        <span>
-                            <v-list-tile-title class="text-sm-left">Name</v-list-tile-title>
-                            <v-list-tile-sub-title class="text-sm-left"> {{log.userFirstName}} {{log.userLastName}}</v-list-tile-sub-title>
-                        </span>
-                        
-                        <v-spacer></v-spacer>
-                        <span v-bind:style="{ color : '', fontWeight: 'bold'}">Action:&nbsp;</span> {{ log.action }} {{ log.affectedTable }}
-                        <span>
-                            <v-list-tile-title class="text-xs-left">Action</v-list-tile-title>
-                            <v-list-tile-sub-title class="text-sm-left"> {{log.action}} {{log.affectedTable}}</v-list-tile-sub-title>
-                        </span>
-                        <v-spacer></v-spacer>
-                    
-                </v-list-tile>
-                </v-container>
-            </v-list> -->
-            
-            
-        
+    </div>
 </template>
 <script>
 import router from '../router';
 import ApiDriver from '../ApiDriver';
 import HttpResponse from '../utils/HttpResponse';
 import CurrentUserValidation from  '../utils/CurrentUserValidation';
+import Loading from "../components/Loading"
 export default {
     name: 'AdminLog',
     data() {
@@ -131,10 +105,11 @@ export default {
     },
     methods: {
         getLogs() {
+            this.$store.commit("loading", true);
             ApiDriver.Log.viewLogs(this.pageNumber, this.pageSize).then((response) => {
-                console.log(response)
                 HttpResponse.then(response, (data) => {
                     this.populateData(data.data)
+                    this.$store.commit("loading", false);
                 }, (status, errors) => {
                     if (parseInt(status) === 403) {
                         this.$swal({
@@ -145,6 +120,7 @@ export default {
                         });
                         CurrentUserValidation.validateCurrentUser(this.$store);
                     }
+                    this.$store.commit("loading", false);
                 })
             }).catch((error) => {
                 this.$swal({
@@ -153,7 +129,7 @@ export default {
                             type: 'error',
                             background: '#302f2f'
                         });
-                console.log(error)
+                this.$store.commit("loading", false);
             });
         },
         populateData(data){
@@ -184,6 +160,9 @@ export default {
     },
     mounted: function(){
         this.getLogs()
+    },
+    components: {
+        Loading
     }
 }
 </script>
