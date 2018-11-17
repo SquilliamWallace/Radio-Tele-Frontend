@@ -75,6 +75,9 @@ export default {
       },
       publicAppointments: function(page, size) {
         return axios.get(this.namespace + "/publicCompleted?page=" + page + "&size=" + size)
+      },
+      listAppointmentsBetweenDates: function(data) {
+        return axios.get(this.namespace + "/telescopes/" + data.telescopeId + "/listBetweenDates?startTime=" + data.startTime + "&endTime=" + data.endTime)
       }
     },
     Log: {
