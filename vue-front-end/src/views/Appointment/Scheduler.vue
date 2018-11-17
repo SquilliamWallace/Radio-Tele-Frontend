@@ -45,6 +45,7 @@
             
             <!-- 
                 linked component: FullCalendar.vue (found in node_modules)
+                Vue Full Calendar Docs: https://fullcalendar.io/docs
 
                 Because we are importing the full-calendar node module We have to add the appropriate parameters to the call
                 to allow us to change the config of the default callendar.
@@ -68,7 +69,7 @@
                     this allows us to call the calendar by id and get information about it inside of our methods.
                 }
             -->
-            <full-calendar @event-created="createEvent" @event-selected="openEvent" :events="events" :header="header" @view-render="changedViews" id="calendar"></full-calendar>
+            <full-calendar :customButtons="customButtons" @change-telescope="toggleChooseTelescope" @event-created="createEvent" @event-selected="openEvent" :events="events" :header="header" @view-render="changedViews" id="calendar"></full-calendar>
             
             <v-layout justify-center>
                 <!-- 
@@ -138,10 +139,19 @@ export default {
                 info for header input: https://fullcalendar.io/docs/header
             */
             header: {
-                left:   'prev,next today',
+                left:   'prev,next changeTele today',
                 center: 'title',
                 right:  'month,agendaWeek,agendaDay'
             },
+            customButtons: {
+                changeTele: {
+                    text: "Change Telescope",
+                    click: function() {
+                        
+                    },
+                    id: "changeTele"
+                }
+            }
         }
     },
     // These are the components used in the rendering.
@@ -384,6 +394,15 @@ export default {
         },*/
     }
 }
+
+
+// This executes when pressing the custom button "Change Telescope"
+// Have to figure out how to call toggleChooseTelescope() from here
+$(document).on('click', '.fc-changeTele-button', function () {
+    console.log("testing")
+    // your function here
+});
+
 
 </script>
 
