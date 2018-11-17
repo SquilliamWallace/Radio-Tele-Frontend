@@ -76,6 +76,34 @@
                                 </v-card-text>
                             </v-card>
                         </v-dialog>
+
+                        <v-btn color="primary darken-1" @click.native="passReset = true">Edit Password</v-btn>
+                        <!-- Password change modal -->
+                         <v-dialog v-model = "passReset" persistent max-width="600px">
+                            <v-card>
+                                <v-container>
+                                    <v-flex xs12>
+                                        <v-card-text class = "headline">
+                                            Change Password
+                                        </v-card-text>
+                                    </v-flex>
+                                    <v-flex xs12>
+                                        <v-text-field v-model="changePasswordForm.currentPassword.value" label="Old Password" type="password" required></v-text-field>
+                                    </v-flex>
+                                    <v-flex xs12>
+                                        <v-text-field v-model="changePasswordForm.password.value" label="New Password" type="password" required></v-text-field>
+                                    </v-flex>
+                                    <v-flex xs12>
+                                        <v-text-field v-model="changePasswordForm.passwordConfirm.value" label="Verify Password" type="password" required></v-text-field>
+                                    </v-flex>
+
+                                    <v-btn @click.native="changePasswordRequest" color="green" >Submit</v-btn>
+                                    <v-btn @click.native="passReset = false" color = "red">Cancel</v-btn>
+                                    
+                                </v-container>
+                            </v-card>
+                        </v-dialog>
+
                         <v-btn color="primary darken-1" @click="completedAppointmentsRedirect">View Completed Observations</v-btn>
                         <v-btn color="primary darken-1" @click="futureAppointmentsRedirect">View Future Observations</v-btn>
                     </div>
@@ -110,12 +138,20 @@ export default {
                 email: { value: "" },
                 emailConfirm: { value: "" }
             },
+            changePasswordForm: {
+                currentPassword: {value: ""},
+                password: {value: ""},
+                passwordConfirm: {value: ""},
+                id: {value: ""}
+            },
             rules: {
                 required: val => val.length > 0 || 'This field is required',
                 emailMatch: val => val === this.changeEmailForm.email.value || 'Emails do not match'
             },
             dialog: false,
-            showChangeEmailButton: false
+            showChangeEmailButton: false,
+
+            passReset: false,
         }
     },
     components: {
@@ -227,6 +263,21 @@ export default {
                 let message = "An error occurred changing this user's email address"
                 HttpResponse.generalError(this, message, false)
             });
+        },
+        changePasswordRequest() {
+            this.changePasswordForm.id.value = this.profile.id.value
+            let form = JSON.stringify({
+                currentPassword: this.changePasswordForm.currentPassword.value,
+                password: this.changePasswordForm.password.value,
+                passwordConfirm: this.changePasswordForm.passwordConfirm.value,
+                id: this.changePasswordForm.id.value
+            });
+            console.log(form)
+            
+
+            ApiDriver.User.changePassword(this.profile.id.value, form).then(response => {
+                console.log(response)
+            })
         },
         clearDialog() {
             // Clear out the modal
