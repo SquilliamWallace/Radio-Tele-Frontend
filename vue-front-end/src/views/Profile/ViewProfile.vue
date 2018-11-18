@@ -118,6 +118,12 @@ export default {
             showChangeEmailButton: false
         }
     },
+    watch: {
+        '$route' (to, from) {
+        // react to route changes...
+        location.reload();
+        }
+    },
     components: {
       NavigationBar,
       Loading
@@ -167,6 +173,8 @@ export default {
             }
         },
         populateData(data) {
+            console.log(this.$store.state.currentUserId);
+            console.log(data.id);
             // Populate the profile information
             this.profile.id.value = data.id;
             this.profile.firstName.value = data.firstName;
@@ -259,6 +267,7 @@ export default {
     mounted() {
         // Retrieve the user information when loaded onto the DOM
         this.retrieveInformation()
+        console.log("router param: " + this.$route.params.userId)
     }
 }
 </script>
