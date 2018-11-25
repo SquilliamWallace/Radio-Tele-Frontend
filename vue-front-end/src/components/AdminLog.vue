@@ -1,77 +1,65 @@
 <template>
 <div>
     <loading v-if="$store.state.isLoading"></loading>
-    <v-container v-if="!$store.state.isLoading" width = "100%">
-        <div>
-            <v-layout row wrap>
-                <v-flex v-for="item in headers" :key="item.header" xs2>
-                    <v-card  color="transparent" class = "elevation-0 headline">
-                        <v-card-text class="text-xs-center">{{item.header}}</v-card-text>
-                    </v-card>
-                </v-flex>
-            </v-layout>
-        </div>
-        <v-divider></v-divider>
-        <v-layout row wrap v-for="log in logs" :key="log.id">
-            <v-flex xs2>
-                <v-tooltip bottom>
-                    <v-card  color="transparent" class = "elevation-0 " slot = "activator">
-                        <v-card-text class="text-xs-center">{{log.id}}</v-card-text>
-                    </v-card>
-                    <span>Log ID</span>
-                </v-tooltip>
-            </v-flex>
-            <v-flex xs2>
-                <v-tooltip bottom>
-                    <v-card  color="transparent" class = "elevation-0 " slot = "activator">
-                        <v-card-text class="text-xs-center">{{log.action}} {{log.affectedTable}}</v-card-text>
-                    </v-card>
-                    <span>Action</span>
-                </v-tooltip>
-            </v-flex>
-            <v-flex xs2>
-                <v-tooltip bottom>
-                <v-card  color="transparent" class = "elevation-0 " slot = "activator">
-                    <v-card-text class="text-xs-center">{{log.affectedRecordId}}</v-card-text>
-                </v-card>
-                <span>Record ID</span>
-                </v-tooltip>
-            </v-flex>
-            <v-flex xs2>
-                <v-tooltip bottom>
-                    <v-card  color="transparent" class = "elevation-0 " slot = "activator">
-                        <v-card-text class="text-xs-center">{{log.success}}</v-card-text>
-                    </v-card>
-                    <span>Success</span>
-                </v-tooltip>
-            </v-flex>
-            <v-flex xs2>
-                <v-tooltip bottom>
-                    <v-card  color="transparent" class = "elevation-0 " slot = "activator">
-                        <v-card-text class="text-xs-center">{{log.userId}}</v-card-text>
-                    </v-card>
-                    <span>User ID</span>
-                </v-tooltip>
-            </v-flex>
-            <v-flex xs2>
-                <v-tooltip bottom>
-                    <v-card  color="transparent" class = "elevation-0 " slot = "activator">
-                        <v-card-text class="text-xs-center">{{log.userFirstName}} {{log.userLastName}}</v-card-text>
-                    </v-card>
-                    <span>Name</span>
-                </v-tooltip>
-            </v-flex>
-        </v-layout>
-        <div class="text-xs-center">
-            <v-pagination
+    <v-card v-if="!$store.state.isLoading">
+      <v-card-title>
+        <v-text-field
+          v-model="search"
+          append-icon="search"
+          label="Search"
+          single-line
+          hide-details
+        ></v-text-field>
+      </v-card-title>
+    <v-data-table
+      v-if="!$store.state.isLoading"
+      hide-actions
+      :headers="headers"
+      :items="logs"
+      :pagination.sync="pagination"
+      select-all
+      item-key="name"
+      class="elevation-1"
+    >
+      <template slot="headers" slot-scope="props">
+        <tr>
+          <th
+            v-for="header in props.headers"
+            :key="header.text"
+            :class="['column sortable', pagination.descending ? 'desc' : 'asc', header.value === pagination.sortBy ? 'active' : '']"
+            @click="changeSort(header.value)"
+          >
+            <v-icon small>arrow_upward</v-icon>
+            {{ header.text }}
+          </th>
+        </tr>
+      </template>
+      <template slot="items" slot-scope="props">
+        <tr :active="props.selected" @click="props.selected = !props.selected">
+          <td>{{ props.item.id }}</td>
+          <td>{{ props.item.action }}</td>
+          <td>{{ props.item.affectedRecordId }}</td>
+          <td>{{ props.item.success }}</td>
+          <td>{{ props.item.userId }}</td>
+          <td>{{ props.item.userName}}</td>
+        </tr>
+      </template>
+      <template slot="footer">
+        <td :colspan="headers.length">
+          <v-pagination
             circle
             v-model="pageDisplay"
             :length="numPages"
             @input = "next"
             :total-visible="7"
             ></v-pagination>
-        </div>
-    </v-container>
+        </td>
+      </template>
+      <v-alert slot="no-results" :value="true" color="error" icon="warning">
+          Your search for "{{ search }}" found no results.
+      </v-alert>  
+    </v-data-table>
+    </v-card>
     </div>
 </template>
 <script>
@@ -84,20 +72,26 @@ export default {
     name: 'AdminLog',
     data() {
         return {
-            
+            pagination: {
+                sortBy: 'name',
+                totalItems: 0,
+                page: 1,
+                rowsPerPage: 25
+            },
             pageNumber: 0,
-            pageSize: 50,
+            pageSize: 25,
             pageDisplay: 1,
             numPages: 0,
-            
+            totalLogs: 0,
             logs: [],
+            search: '',
             headers: [
-                {header: 'Log ID'},
-                {header: 'Action'},
-                {header: 'Record ID'},
-                {header: 'Success'},
-                {header: 'User ID'},
-                {header: 'Name'}
+                {text: 'Log ID', value: 'id'},
+                {text: 'Action', value: 'action'},
+                {text: 'Record ID', value: 'affectedRecordId'},
+                {text: 'Success', value: 'success'},
+                {text: 'User ID', value: 'userId'},
+                {text: 'Username', value: 'userName'}
             ],
          
         }
@@ -109,6 +103,8 @@ export default {
             ApiDriver.Log.viewLogs(this.pageNumber, this.pageSize).then((response) => {
                 HttpResponse.then(response, (data) => {
                     this.populateData(data.data)
+                    this.totalLogs = data.data.totalElements;
+                    this.pagination.totalItems = this.totalLogs;
                     this.$store.commit("loading", false);
                 }, (status, errors) => {
                     if (parseInt(status) === 403) {
@@ -133,18 +129,17 @@ export default {
             });
         },
         populateData(data){
-            
             for (var index in data.content) {
                 let log = data.content[index];
                 if (!log.userId) {
                     log.userId = 'N/a';
-                    log.userFirtName = 'N/a';
-                    log.userLastName = "N/a";
+                    log.userName = 'N/a';
                     
                 }
                 if(!log.affectedRecordId){
                     log.affectedRecordId = 'N/a';
                 }
+                log.userName = log.userFirstName + ' ' + log.userLastName;
                 this.logs.push(log);
                 
             }
@@ -155,6 +150,14 @@ export default {
             this.pageDisplay = page;
             this.logs = [];
             this.getLogs();
+        },
+        changeSort (column) {
+            if (this.pagination.sortBy === column) {
+                this.pagination.descending = !this.pagination.descending
+            } else {
+                this.pagination.sortBy = column
+                this.pagination.descending = false
+            }
         }
         
     },
