@@ -90,7 +90,6 @@
                     </v-flex>
                     <v-flex xs12 sm12>
                         <h2>Errors:</h2>
-                        <span>{{currentLog.errors[0]}}</span>
                     </v-flex>
                 </v-layout>
                 </v-container>
