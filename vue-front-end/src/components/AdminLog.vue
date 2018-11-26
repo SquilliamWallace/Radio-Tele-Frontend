@@ -89,7 +89,10 @@
                         <span>{{currentLog.affectedRecordId}}</span>
                     </v-flex>
                     <v-flex xs12 sm12>
-                        <h2>Errors:</h2>
+                        <h2 v-if="!currentLog.success">Errors:</h2>
+                        <li v-bind:key="error.id" v-for="error in currentLog.errors" v-if="!currentLog.success">
+                            {{error.field}} {{error.message}}
+                        </li>
                     </v-flex>
                 </v-layout>
                 </v-container>
@@ -180,9 +183,31 @@ export default {
                 if(!log.affectedRecordId){
                     log.affectedRecordId = 'N/a';
                 }
-                log.userName = log.userFirstName + ' ' + log.userLastName;
+                if(log.userFirstName && log.userLastName){
+                    log.userName = log.userFirstName + ' ' + log.userLastName;
+                }
+                else{
+                    log.userName = "No User Logged In"
+                }
                 this.logs.push(log);
-                
+                if(!log.success){
+                    ApiDriver.Log.retrieveErrors(log.id).then((response) => {
+                        HttpResponse.then(response, (data) => {
+                        log.errors = data.data;
+                    })
+                }, (status, errors) => {
+                        // Access Denied
+                        if (parseInt(status) === 403) {
+                            // Call the generic access denied handler
+                            HttpResponse.accessDenied(this);
+                        } 
+                        // Invalid Resource Id
+                        else if (parseInt(status) === 404) {
+                            // Call the generic not found handler
+                            HttpResponse.notFound(this, errors);
+                        }
+                    });
+                }
             }
             this.numPages = data.totalPages;
         },
@@ -203,28 +228,6 @@ export default {
         toggleDetails (event) {
             this.currentLog = event;
             this.currentLog.timestamp = moment(this.currentLog.timestamp).format('MMMM Do YYYY, h:mm:ss a');
-            if(!this.currentLog.success){
-                this.$store.commit("loading", true);
-                ApiDriver.Log.retrieveErrors(this.currentLog.id).then((response) => {
-                    HttpResponse.then(response, (data) => {
-                    this.currentLog.errors = data.data;
-                    console.log(this.currentLog.errors);
-                    this.$store.commit("loading", false);
-                })
-            }, (status, errors) => {
-                    // Access Denied
-                    if (parseInt(status) === 403) {
-                        // Call the generic access denied handler
-                        HttpResponse.accessDenied(this);
-                    } 
-                    // Invalid Resource Id
-                    else if (parseInt(status) === 404) {
-                        // Call the generic not found handler
-                        HttpResponse.notFound(this, errors);
-                    }
-                });
-                this.$store.commit("loading", false);
-            }
             this.toggleDetailedView = !this.toggleDetailedView
         }
         
