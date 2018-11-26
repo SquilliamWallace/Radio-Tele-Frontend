@@ -80,6 +80,9 @@ export default {
     Log: {
       viewLogs: function(pageNumber, pageSize){
         return axios.get("/api/logs?pageNumber=" + pageNumber + "&pageSize=" + pageSize)
+      },
+      retrieveErrors: function(id){
+        return axios.get("/api/logs/" + id + "/errors")
       }
     },
     Auth: {

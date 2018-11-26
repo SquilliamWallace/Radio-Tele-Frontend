@@ -12,6 +12,7 @@
         ></v-text-field>
       </v-card-title>
     <v-data-table
+      @input="toggleDetails($event[0])"
       v-if="!$store.state.isLoading"
       hide-actions
       :headers="headers"
@@ -51,7 +52,7 @@
             v-model="pageDisplay"
             :length="numPages"
             @input = "next"
-            :total-visible="7"
+            :total-visible="15"
             ></v-pagination>
         </td>
       </template>
@@ -60,6 +61,44 @@
       </v-alert>  
     </v-data-table>
     </v-card>
+    <v-dialog v-model="toggleDetailedView">
+        <loading v-if="$store.state.isLoading"></loading>
+        <v-card v-if="!$store.state.isLoading" class="card-style">
+            <h1 v-if="currentLog.success">Log Number {{currentLog.id}}: Successful Operation</h1>
+            <h1 v-if="!currentLog.success">Log Number {{currentLog.id}}: Unsuccessful Operation</h1>
+            <v-container grid-list-xl fluid>
+                <v-layout wrap>
+                    <v-flex xs12 sm12>
+                        <h2>Date of Occurrence:</h2>
+                        <span>{{currentLog.timestamp}}</span>
+                    </v-flex>
+                    <v-flex xs12 sm6>
+                        <h3>Attempted Operation:</h3>
+                        <span>{{currentLog.action}}</span>
+                    </v-flex>
+                    <v-flex xs12 sm6>
+                        <h3>Name of User:</h3>
+                        <span>{{currentLog.userName}}</span>
+                    </v-flex>
+                    <v-flex xs12 sm6>
+                        <h3>Affected Table:</h3>
+                        <span>{{currentLog.affectedTable}}</span>
+                    </v-flex>
+                    <v-flex xs12 sm6>
+                        <h3>Affected Record ID:</h3>
+                        <span>{{currentLog.affectedRecordId}}</span>
+                    </v-flex>
+                    <v-flex xs12 sm12>
+                        <h2>Errors:</h2>
+                        <span>{{currentLog.errors[0]}}</span>
+                    </v-flex>
+                </v-layout>
+                </v-container>
+            <v-card-actions>
+                <v-btn flat color="blue" @click="toggleDetailedView = !toggleDetailedView">Close</v-btn>
+          </v-card-actions>
+        </v-card>
+    </v-dialog>
     </div>
 </template>
 <script>
@@ -68,6 +107,7 @@ import ApiDriver from '../ApiDriver';
 import HttpResponse from '../utils/HttpResponse';
 import CurrentUserValidation from  '../utils/CurrentUserValidation';
 import Loading from "../components/Loading"
+import moment from 'moment'
 export default {
     name: 'AdminLog',
     data() {
@@ -78,11 +118,13 @@ export default {
                 page: 1,
                 rowsPerPage: 25
             },
+            currentLog: {},
             pageNumber: 0,
             pageSize: 25,
             pageDisplay: 1,
             numPages: 0,
             totalLogs: 0,
+            toggleDetailedView: false,
             logs: [],
             search: '',
             headers: [
@@ -158,6 +200,33 @@ export default {
                 this.pagination.sortBy = column
                 this.pagination.descending = false
             }
+        },
+        toggleDetails (event) {
+            this.currentLog = event;
+            this.currentLog.timestamp = moment(this.currentLog.timestamp).format('MMMM Do YYYY, h:mm:ss a');
+            if(!this.currentLog.success){
+                this.$store.commit("loading", true);
+                ApiDriver.Log.retrieveErrors(this.currentLog.id).then((response) => {
+                    HttpResponse.then(response, (data) => {
+                    this.currentLog.errors = data.data;
+                    console.log(this.currentLog.errors);
+                    this.$store.commit("loading", false);
+                })
+            }, (status, errors) => {
+                    // Access Denied
+                    if (parseInt(status) === 403) {
+                        // Call the generic access denied handler
+                        HttpResponse.accessDenied(this);
+                    } 
+                    // Invalid Resource Id
+                    else if (parseInt(status) === 404) {
+                        // Call the generic not found handler
+                        HttpResponse.notFound(this, errors);
+                    }
+                });
+                this.$store.commit("loading", false);
+            }
+            this.toggleDetailedView = !this.toggleDetailedView
         }
         
     },
@@ -173,6 +242,9 @@ export default {
     .transparent {
         background-color: transparent!important;
         border-color: transparent!important;
+    }
+    .card-style {
+        padding: 10px;
     }
 </style>
 
