@@ -13,10 +13,9 @@
                         </v-list-tile-content>
                         <v-spacer></v-spacer>
                         <v-btn 
-                            @click="confirm = !confirm, userCompany = user.userInfo.company, userEmail = user.userInfo.email, userFirst = user.userInfo.
-                                            firstName, userLast = user.userInfo.lastName, userId = user.userInfo.id, userPhone = user.userInfo.phoneNumber, 
-                                            userStatus = user.userInfo.status, userRequestedRole =user.role.charAt(0) + user.role.slice(1).toLowerCase(),
-                                            form.roleId.value = user.id">
+                            @click="confirm = !confirm, assignModalVals(user.userInfo.company,user.userInfo.email,user.userInfo.firstName,
+                                                                        user.userInfo.lastName,user.userInfo.id, user.userInfo.phoneNumber, 
+                                                                        user.userInfo.status,user.role,user.id)">
                             Approve
                         </v-btn>
                     </v-list-tile>
@@ -144,6 +143,17 @@ export default {
         }
     },
     methods:{
+        assignModalVals(company,email,first,last,userId,phone,status,reqRole,roleId){
+            this.userCompany = company, 
+            this.userEmail = email, 
+            this.userFirst = first, 
+            this.userLast = last, 
+            this.userId = userId, 
+            this.userPhone = phone, 
+            this.phoneuserStatus = status, 
+            this.userRequestedRole =reqRole.charAt(0) + reqRole.slice(1).toLowerCase(),
+            this.form.roleId.value = roleId
+        },
         submit(){
             let form = JSON.stringify({
                id: this.form.roleId.value,
