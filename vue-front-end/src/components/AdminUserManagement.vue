@@ -38,6 +38,16 @@
                             Are you sure you want to {{action}}<br /> {{chosenUserName}}?
                         </v-card-text>
                     </v-flex>
+                    <v-textarea
+                    background-color = "white"
+                    outline
+                    label="Reason for ban"
+                    counter
+                    maxlength="120"
+                    full-width
+                    single-line
+                    height = "150px"
+                ></v-textarea>
                     
                     <v-btn @click.native="confirm = false" color = "red">Cancel</v-btn>
                     <span v-if = "action === 'ban'">
