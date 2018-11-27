@@ -56,7 +56,7 @@
                                     <span v-if="userPhone != null"><v-divider vertical></v-divider></span>
                                    
 
-                                    <v-list-tile-content class = "pl-3">
+                                    <v-list-tile-content v-if="userCompany !== null" class = "pl-3">
                                             <v-list-tile-title>
                                                 Company:
                                             </v-list-tile-title>
