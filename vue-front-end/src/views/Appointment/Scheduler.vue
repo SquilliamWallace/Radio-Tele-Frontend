@@ -69,7 +69,7 @@
                     this allows us to call the calendar by id and get information about it inside of our methods.
                 }
             -->
-            <full-calendar :customButtons="customButtons" @change-telescope="toggleChooseTelescope" @event-created="createEvent" @event-selected="openEvent" :events="events" :header="header" @view-render="changedViews" id="calendar"></full-calendar>
+            <full-calendar @change-telescope="toggleChooseTelescope" @event-created="createEvent" @event-selected="openEvent" :events="events" :header="header" @view-render="changedViews" id="calendar"></full-calendar>
             
             <v-layout justify-center>
                 <!-- 
@@ -132,17 +132,36 @@ export default {
                 "Scale Model",
                 "Virtual"
             ],
-            telescopeName: '',
+            telescopeName: 'Testing',
 
             /* 
                 This is the header bound to the FullCalendar.vue component
                 info for header input: https://fullcalendar.io/docs/header
             */
             header: {
+                left:   'prev,next today',
+                center: 'title',
+                right:  'month,agendaWeek,agendaDay'
+            }
+
+            /*
+            This is to add a custom button to calendar menu bar.
+            Currently unable to actually implement as the calendar is a node imported and so cannot call any function on the page with this.<function name>()
+            Leaving the set up for it in if just in case it becomes useful in the future.
+
+            Will have to add 
+
+            :customButtons="customButtons" 
+
+            into the <full-calendar></full-calendar> in the template section as well
+
+            EXAMPLE HEADER TO DISPLAY CUSTOM BUTTON
+            header: {
                 left:   'prev,next changeTele today',
                 center: 'title',
                 right:  'month,agendaWeek,agendaDay'
             },
+
             customButtons: {
                 changeTele: {
                     text: "Change Telescope",
@@ -152,6 +171,7 @@ export default {
                     id: "changeTele"
                 }
             }
+            */
         }
     },
     // These are the components used in the rendering.
@@ -236,6 +256,23 @@ export default {
             }
         },
         // This method is what is used to populate the data on the calendar
+        /*
+            This method does as its names, grabs the data of event for between two dates
+            The dates it grabs between is set by the calendar view,
+                So if you are in month view, it grabs a month of data at a time, 
+                If you are in week view it grabs just a weeks worth of data, 
+                If day view, only one days worth of data
+
+            When the calendar view changes (I.E. someone moves forward to the next month/week/day)
+            This function is called again to get the new data to display between the new dates.
+
+            Pros:
+                Less bulk of data being sent back from the back end. Quick load times
+            Cons:
+                Fetching data from back end each time the view changes for each user. 
+                If moved forward one week then backwards one week, it calls fetch data each change. No Cache implemented at this time.
+                    Cache can be usefull but also prove a problem due to if a new event was scheduled, it wouldnt populate if using a cache. 
+        */
         populateDataBetweenDates: function(id) {
             // call helper function
             this.clearEvents()
@@ -333,7 +370,13 @@ export default {
             });
         },
         /* This is the Old populate Data call. Grabs all future events of a given telescope and populated them into this.events
-        
+        This can be used to reduce back end calls, but will come at the cost of the size of data being sent from backend. 
+            Pros:
+                Doesnt have to refetch data for each calendar view switch. (Speed of use)
+            Cons:
+                If telescope is starting to become scheduled out months in advanced, this will be pulling more data than you would want/need.
+                To bulky of data will reduce initial loading time for those looking just for a certain date. 
+
         populateData: function(id) {
             this.$store.commit("loading", true)
             this.telescopeId = id
@@ -395,20 +438,18 @@ export default {
     }
 }
 
-
-// This executes when pressing the custom button "Change Telescope"
-// Have to figure out how to call toggleChooseTelescope() from here
-$(document).on('click', '.fc-changeTele-button', function () {
-    console.log("testing")
-    // your function here
-});
-
-
 </script>
 
 
 <style scoped>
 .loading-dialog {
    background-color: #303030; 
+}
+
+/* 
+    Set the padding of top left and right to 2% so calendar isnt right up against edge of browser.
+*/
+#calendar {
+    padding: 2% 2% 0% 2%;
 }
 </style>
