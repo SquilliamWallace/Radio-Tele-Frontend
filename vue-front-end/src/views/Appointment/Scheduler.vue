@@ -89,7 +89,8 @@
                         sets this.openCreateModel to false, to make the modal not display
                     }
                 -->
-                <create-appointment :eventObj="event" v-model="openCreateModal" @created-event="createdEvent" v-on:close-modal="openCreateModal = false"></create-appointment>
+                <create-appointment :eventObj="event" v-model="openCreateModal" @request-appointment="requestAppointment" @created-event="createdEvent" v-on:close-modal="openCreateModal = false"></create-appointment>
+                <request-appointment :Appointment="requestApt" v-model="openRequestModal" v-on:close-modal="openRequestModal = false"></request-appointment>
             </v-layout>
         </v-app>
 
@@ -115,6 +116,7 @@ import CurrentUserValidation from '../../utils/CurrentUserValidation'
 import PrivateEvent from "../../components/PrivateEvent"
 import Loading from "../../components/Loading"
 import ChooseTelescope from "../../components/ChooseTelescope"
+import RequestAppointment from "../../components/RequestAppointment"
 
 export default {
     name: 'Scheduler',
@@ -123,7 +125,9 @@ export default {
             // Set default variables for page here
             events: [],
             event: {},
+            requestApt: {},
             openCreateModal: false,
+            openRequestModal: false,
             privateEventModal: false,
             tele: true,
             telescopeId: "",
@@ -132,7 +136,7 @@ export default {
                 "Scale Model",
                 "Virtual"
             ],
-            telescopeName: 'Testing',
+            telescopeName: '',
 
             /* 
                 This is the header bound to the FullCalendar.vue component
@@ -181,7 +185,8 @@ export default {
         CreateAppointment,
         PrivateEvent,
         Loading,
-        ChooseTelescope
+        ChooseTelescope,
+        RequestAppointment
     },
     // Functions used on this page, called by other functions or called by components loaded on page
     methods: {
@@ -213,6 +218,14 @@ export default {
             // Set openCreateModal to true so that Appointment.vue component displays
             this.openCreateModal = true;
         },
+
+        requestAppointment: function(Obj) {
+            this.requestApt = Obj
+            this.openRequestModal = true
+        },
+
+
+
         // Toggles this.tele to display and close the ChooseTelescope.vue component
         toggleChooseTelescope() {
             this.tele = !this.tele

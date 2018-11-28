@@ -52,6 +52,9 @@ export default {
       create: function (data) {
         return axios.post(this.namespace + "/schedule", data, Headers.retrieveHeaders())
       },
+      request: function (data) {
+        return axios.post(this.namespace + "/request", data, Headers.retrieveHeaders())
+      },
       futureAppointmentsByTelescopeID: function(telescopeID, pageNumber, pageSize) {
         return axios.get(this.namespace + "/telescopes/" + telescopeID + "/futureList?page=" + pageNumber + "&size=" + pageSize)
       },

@@ -135,7 +135,9 @@ export default {
         resetForm() {
             this.form.isPrivate.value = false;
             this.form.rightAscension.value = null;
+            this.form.rightAscension.hasError = false;
             this.form.declination.value = null;
+            this.form.declination.hasError = false;
             this.clearErrors();
             this.$emit('close-modal');
         },
@@ -162,13 +164,13 @@ export default {
                         if (parseInt(status) === 403) {
                             HttpResponse.accessDenied(this)
                         } else {
-                            this.handleErrors(errors);
+                            this.handleErrors(errors, form);
                         }
                     });
             });
             
         },
-        handleErrors(errors) {
+        handleErrors(errors, formObj) {
             for (var field in errors) {
                 let message = errors[field][0];
 
@@ -176,6 +178,18 @@ export default {
                     CustomErrorHandler.populateError(this.form.rightAscension, message)
                 } else if (field === "DECLINATION") {
                     CustomErrorHandler.populateError(this.form.declination, message)
+                } else if (field == "ALLOTTED_TIME" && !this.$store.state.isGuest) {
+                    /*
+                    ADD CODE TO HANDLE REQUESTING AN APPOINTMENT HERE
+                    */
+                   //Changing startTime and endTime back to currnt time instead of UTC to display on request modal
+                   //Also adding telescope name into Obj to display on request form
+                   console.log(this.eventObj.start)
+                   formObj.startTime = this.eventObj.start
+                   formObj.endTime = this.eventObj.end
+                   formObj.telescope = this.telescopeName
+                   this.$emit('request-appointment', formObj)
+                   this.resetForm()
                 } else {
                     HttpResponse.generalError(this, message, false)
                 }
