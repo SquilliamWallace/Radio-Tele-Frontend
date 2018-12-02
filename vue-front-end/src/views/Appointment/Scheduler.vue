@@ -166,6 +166,9 @@ export default {
         closeModal() {
             this.privateEventModal = false
         }
+    },
+    mounted: function() {
+        this.$store.commit("updateInfo", {page: "Scheduling Calendar", info: "Select a telescope with which you would like to schedule\n an appointment. The highlighted column indicates the\n current day. Click and drag underneath a date column\n between two times on the left-hand side to schedule an\n appointment. The arrows in the top-left can be used to\n change between months/weeks/days, and the buttons in\n the top right will change the current view of the\n calendar."})
     }
 }
 

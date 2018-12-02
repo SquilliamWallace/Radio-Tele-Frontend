@@ -87,6 +87,7 @@ export default {
   mounted() {
     // Handle the log in when the DOM is loaded
     this.handleLoggedIn();
+    this.$store.commit("updateInfo", {page: "Home", info: "Welcome to the York County Astronomical Society\n Radio Telescope application!"})
   }
 };
 </script>

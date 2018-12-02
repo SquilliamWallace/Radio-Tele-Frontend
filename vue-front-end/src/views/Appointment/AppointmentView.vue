@@ -244,6 +244,7 @@ export default {
     mounted: function() {
         // Retrieve the appointment when loaded onto the DOM
         this.getAppointment()
+        this.$store.commit("updateInfo", {page: "View Appointment", info: "This page displays the information for an individual\n appointment. Clicking the button at the bottom of the\n page will direct you to a table which displays all\n of the Radio Frequency data for the displayed\n appointment."})
     }
 }
 </script>

@@ -187,6 +187,7 @@ export default {
   mounted() {
       // Retrieve the information when the DOM is loaded
       this.retrieveInformation();
+      this.$store.commit("updateInfo", {page: "Edit Profile", info: "Fill out the form below to edit the information for\n your user profile."})
   }
 };
 </script>

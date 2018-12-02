@@ -20,7 +20,9 @@ export default {
                 isResearcher: false,
                 isMember: false,
                 isAdmin: false,
-                isLoading: false
+                isLoading: false,
+                currentPage: "",
+                information: ""
             },
             mutations: {
                 login(state, data) {
@@ -53,6 +55,10 @@ export default {
                 },
                 loading(state, value) {
                     state.isLoading = value;
+                },
+                updateInfo(state, pageInfo) {
+                    state.currentPage = pageInfo.page;
+                    state.information = pageInfo.info;
                 }
             },
             plugins: [vuexLocal.plugin]

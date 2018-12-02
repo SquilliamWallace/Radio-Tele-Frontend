@@ -259,6 +259,7 @@ export default {
     mounted() {
         // Retrieve the user information when loaded onto the DOM
         this.retrieveInformation()
+        this.$store.commit("updateInfo", {page: "View Profile", info: "This page shows the information for the user\n that is currently logged in."})
     }
 }
 </script>

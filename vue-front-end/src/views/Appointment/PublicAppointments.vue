@@ -115,6 +115,7 @@ export default {
     mounted: function() {
         // Retrieve the public appointments when loaded onto the DOM
         this.getPublicAppointments();
+        this.$store.commit("updateInfo", {page: "Completed Public Appointments", info: "This page displays all public appointments that have\n been completed. Click on an individual appointment\n to view more details."})
     },
     components: {
         NavigationBar,

@@ -111,6 +111,7 @@ export default {
     },
     mounted() {
         this.retrieveData()
+        this.$store.commit("updateInfo", {page: "Radio Frequency Data", info: "Displays the R.F. data for a given appointment. The\n button at the bottom of the page will display a graph\n of the data as a factor of intensity over time."})
     },
     computed: {
         graphStyles() {
