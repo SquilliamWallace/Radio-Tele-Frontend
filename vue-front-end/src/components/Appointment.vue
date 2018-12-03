@@ -32,19 +32,43 @@
                         required
                         ></v-text-field>
                     </v-flex>
-                    <v-flex xs12 sm6>
+                    <v-flex xs12 sm4>
                         <v-text-field
-                        v-model="form.rightAscension.value"
+                        v-model="form.rightAscension.hours"
                         :rules="[rules.numRequired]"
                         color="blue darken-2"
                         :error=form.rightAscension.hasError
                         :error-messages=form.rightAscension.errorMessage
-                        label="Right Ascension"
+                        label="Right Ascension Hours"
                         type="number"
                         required
                         ></v-text-field>
                     </v-flex>
-                    <v-flex xs12 sm6>
+                    <v-flex xs12 sm4>
+                        <v-text-field
+                        v-model="form.rightAscension.minutes"
+                        :rules="[rules.numRequired]"
+                        color="blue darken-2"
+                        :error=form.rightAscension.hasError
+                        :error-messages=form.rightAscension.errorMessage
+                        label="Right Ascension Minutes"
+                        type="number"
+                        required
+                        ></v-text-field>
+                    </v-flex>
+                    <v-flex xs12 sm4>
+                        <v-text-field
+                        v-model="form.rightAscension.seconds"
+                        :rules="[rules.numRequired]"
+                        color="blue darken-2"
+                        :error=form.rightAscension.hasError
+                        :error-messages=form.rightAscension.errorMessage
+                        label="Right Ascension Seconds"
+                        type="number"
+                        required
+                        ></v-text-field>
+                    </v-flex>
+                    <v-flex xs12 sm12>
                         <v-text-field
                         v-model="form.declination.value"
                         :rules="[rules.numRequired]"
@@ -112,7 +136,9 @@ export default {
                     value: false
                 },
                 rightAscension: {
-                    value: null,
+                    hours: null,
+                    minutes: null,
+                    seconds: null,
                     hasError: false
                 },
                 declination: {
@@ -134,7 +160,9 @@ export default {
     methods: {
         resetForm() {
             this.form.isPrivate.value = false;
-            this.form.rightAscension.value = null;
+            this.form.rightAscension.hours = null;
+            this.form.rightAscension.minutes = null;
+            this.form.rightAscension.seconds = null;
             this.form.declination.value = null;
             this.clearErrors();
             this.$emit('close-modal');
@@ -147,7 +175,9 @@ export default {
                 endTime: new Date(this.eventObj.end).toUTCString(),
                 telescopeId: this.telescopes.indexOf(this.telescopeName) + 1,
                 isPublic: !this.form.isPrivate.value,
-                rightAscension: this.form.rightAscension.value,
+                hours: this.form.rightAscension.hours,
+                minutes: this.form.rightAscension.minutes,
+                seconds: this.form.rightAscension.seconds,
                 declination: this.form.declination.value
             };
 
@@ -189,7 +219,9 @@ export default {
         formIsValid() {
             return (this.eventObj.start &&
                     this.eventObj.end &&
-                    this.form.rightAscension.value,
+                    this.form.rightAscension.hours,
+                    this.form.rightAscension.minutes,
+                    this.form.rightAscension.seconds,
                     this.form.declination.value)
         }
     }
