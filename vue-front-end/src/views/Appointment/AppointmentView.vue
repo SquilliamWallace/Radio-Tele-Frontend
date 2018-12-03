@@ -213,7 +213,7 @@ export default {
             this.data.startTime.value = moment(data.startTime).format('MM-DD-YYYY hh:mm A')
             this.data.endTime.value = moment(data.endTime).format('MM-DD-YYYY hh:mm A')
             this.data.status.value = data.status
-            this.data.rightAscension.value = data.rightAscension
+            this.data.rightAscension.value = data.rightAscension.toFixed(2);
             this.data.declination.value = data.declination
             // If the appointment has been completed, mark the boolean
             if (this.data.status.value === 'Completed') {
