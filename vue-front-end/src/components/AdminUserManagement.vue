@@ -2,6 +2,15 @@
 <div>
     <loading v-if="$store.state.isLoading"></loading>
     <v-card v-if="!$store.state.isLoading" width = "100%">
+        <v-layout row wrap>
+            <v-text-field  v-on:keyup.enter="search(searchParam)" v-on:keyup.down="reset" clearable v-model = "searchParam" class="ml-2 mr-2" label="Search..." append-icon="search" dark></v-text-field>
+            <v-select
+            :items="filterTypes"
+            label="Filter by"
+            v-model="filterType"
+            ></v-select>
+            <v-btn @click="reset" class="mt-3 mr-4">Clear</v-btn>
+        </v-layout>
         <v-list >
             <v-list-tile v-for="user in users" :key = "user.id"  @click="hover = !hover">
                 <v-list-tile-content>
@@ -38,6 +47,15 @@
                             Are you sure you want to {{action}}<br /> {{chosenUserName}}?
                         </v-card-text>
                     </v-flex>
+                    <v-textarea
+                    background-color = "white"
+                    outline
+                    label="Reason for ban"
+                    counter
+                    maxlength="120"
+                    full-width
+                    single-line
+                ></v-textarea>
                     
                     <v-btn @click.native="confirm = false" color = "red">Cancel</v-btn>
                     <span v-if = "action === 'ban'">
@@ -68,16 +86,57 @@ export default {
                pageSize: 50,
             },
             users: [],
+            filtered: [],
+            unfiltered: [],
             viewUserId: '',
             hover: false,
             confirm: false,
             chosenUserId: '',
             chosenUserName: '',
             action: '',
-            icon:''
+            icon:'',
+            filterTypes: ['Email','User Id'],
+            filterType: 'Email',
+
+            //search
+            searchParam: ''
         }
     },
     methods:{
+        reset(){
+            console.log(this.unfiltered)
+            this.users = this.unfiltered
+        },
+        search(param){
+           this.filtered = []
+           if(param === ''){
+               this.users = this.unfiltered
+           }
+            //for filter based on email
+            else if(this.filterType === "Email"){
+                for (var i = 0; i < this.users.length; i++) {
+                    if(this.users[i].email.split('@')[0].toLowerCase() === param.split('@')[0].toLowerCase()){
+                        this.filtered.push(this.users[i])
+                    }
+                }
+            }
+            // for filter based on user id
+            else if(this.filterType === "User Id"){
+                for (var i = 0; i < this.users.length; i++) {
+                    console.log(this.users[i].id)
+                    if(this.users[i].id.toString() === param.toString()){
+                        this.filtered.push(this.users[i])
+                        console.log(this.users[i].id)
+                    }
+                }
+                
+            }
+            this.users = this.filtered
+            console.log(this.unfiltered)
+            console.log(this.filtered)
+          
+           
+        },
         getUsers(){
             this.$store.commit("loading", true);
             ApiDriver.User.allUsers(this.data).then((response) => {
@@ -102,6 +161,7 @@ export default {
                     user.membershipRole = 'Pending Approval';
                 }
                 this.users.push(user);
+                this.unfiltered.push(user)
             }
         },
         banUser(userId){
