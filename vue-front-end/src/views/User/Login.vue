@@ -35,8 +35,12 @@
                         v-on:keyup.enter="submit"></v-text-field>
                     </v-flex>
                     <v-flex xs12>
-                        <div>Don't have an account?</div>
-                        <a @click="registerRedirect">Register Here!</a>
+                        <v-btn color="primary" @click="submit">Login</v-btn>
+                    </v-flex>
+                    <v-flex class="register-style" xs12>
+                        <v-btn color="primary" @click="registerRedirect">
+                            <div>Register New Account</div>
+                        </v-btn>
                     </v-flex>
                     <v-flex xs12>
                         <v-dialog v-model="requestPasswordReset" max-width="600px" dark>
@@ -67,7 +71,6 @@
                     </v-flex>
                     </v-layout>
                 </v-container>
-                <v-btn color="white" flat @click="submit">Login</v-btn>
             </v-form> 
         </v-card-text>
     </v-flex>
@@ -166,5 +169,8 @@ export default {
 }
 </script>
 <style scoped>
-
+.register-style{
+    justify-content: center;
+    text-align: center;
+}
 </style>
