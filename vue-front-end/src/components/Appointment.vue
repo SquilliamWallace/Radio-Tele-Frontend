@@ -32,18 +32,45 @@
                         required
                         ></v-text-field>
                     </v-flex>
-                    <v-flex xs12 sm6>
-                        <v-text-field
-                        v-model="form.rightAscension.value"
-                        :rules="[rules.numRequired]"
-                        color="blue darken-2"
-                        :error=form.rightAscension.hasError
-                        :error-messages=form.rightAscension.errorMessage
-                        label="Right Ascension"
-                        type="number"
-                        required
-                        ></v-text-field>
-                    </v-flex>
+                    <v-flex xs12 sm4>
+                         <v-text-field
+                         v-model="form.rightAscension.hours"
+                         :rules="[rules.rightAscHours]"
+                         color="blue darken-2"
+                         :error=form.rightAscension.hasError
+                         :error-messages=form.rightAscension.errorMessage
+                         label="Right Ascension Hours"
+                         type="number"
+                         mask="##"
+                         required
+                         ></v-text-field>
+                     </v-flex>
+                     <v-flex xs12 sm4>
+                         <v-text-field
+                         v-model="form.rightAscension.minutes"
+                         :rules="[rules.rightAscMinutes]"
+                         color="blue darken-2"
+                         :error=form.rightAscension.hasError
+                         :error-messages=form.rightAscension.errorMessage
+                         label="Right Ascension Minutes"
+                         type="number"
+                         mask="##"
+                         required
+                         ></v-text-field>
+                     </v-flex>
+                     <v-flex xs12 sm4>
+                         <v-text-field
+                         v-model="form.rightAscension.seconds"
+                         :rules="[rules.rightAscSeconds]"
+                         color="blue darken-2"
+                         :error=form.rightAscension.hasError
+                         :error-messages=form.rightAscension.errorMessage
+                         label="Right Ascension Seconds"
+                         type="number"
+                         mask="##"
+                         required
+                         ></v-text-field>
+                     </v-flex>
                     <v-flex xs12 sm6>
                         <v-text-field
                         v-model="form.declination.value"
@@ -122,7 +149,9 @@ export default {
             },
             rules: {
                 dateRequired: val => (val && val.length > 0) || 'Required field',
-                numRequired: val => (val && val.toString().length > 0) || 'Required field'
+                rightAscHours: val => (val && val.toString().length > 0 && val < 24 && val >= 0) || 'Must be between 0 and 23 hours',
+                rightAscMinutes: val => (val && val.toString().length > 0 && val < 60 && val >= 0) || 'Must be between 0 and 59 minutes',
+                rightAscSeconds: val => (val && val.toString().length > 0 && val < 60 && val >= 0) || 'Must be between 0 and 59 seconds'
             },
             snackbar: false,
         }
