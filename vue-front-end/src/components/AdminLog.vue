@@ -176,12 +176,12 @@ export default {
             for (var index in data.content) {
                 let log = data.content[index];
                 if (!log.userId) {
-                    log.userId = 'N/a';
-                    log.userName = 'N/a';
+                    log.userId = 'N/A';
+                    log.userName = 'N/A';
                     
                 }
                 if(!log.affectedRecordId){
-                    log.affectedRecordId = 'N/a';
+                    log.affectedRecordId = 'N/A';
                 }
                 if(log.userFirstName && log.userLastName){
                     log.userName = log.userFirstName + ' ' + log.userLastName;

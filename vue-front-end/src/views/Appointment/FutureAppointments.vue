@@ -111,6 +111,7 @@ export default {
     mounted: function() {
         // Retrieve the future appointments when loaded onto the DOM
         this.getFutureAppointments();
+        this.$store.commit("updateInfo", {page: "Individual Future Appointments", info: "This page displays all of your future appointments.\n Click on an individual appointment to view more\n details."})
     },
     components: {
         NavigationBar,

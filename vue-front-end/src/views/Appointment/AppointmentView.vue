@@ -213,7 +213,7 @@ export default {
             this.data.startTime.value = moment(data.startTime).format('MM-DD-YYYY hh:mm A')
             this.data.endTime.value = moment(data.endTime).format('MM-DD-YYYY hh:mm A')
             this.data.status.value = data.status
-            this.data.rightAscension.value = data.rightAscension
+            this.data.rightAscension.value = data.rightAscension.toFixed(2);
             this.data.declination.value = data.declination
             // If the appointment has been completed, mark the boolean
             if (this.data.status.value === 'Completed') {
@@ -244,6 +244,7 @@ export default {
     mounted: function() {
         // Retrieve the appointment when loaded onto the DOM
         this.getAppointment()
+        this.$store.commit("updateInfo", {page: "View Appointment", info: "This page displays the information for an individual\n appointment. Clicking the button at the bottom of the\n page will direct you to a table which displays all\n of the Radio Frequency data for the displayed\n appointment."})
     }
 }
 </script>

@@ -179,15 +179,13 @@ export default {
                 } else if (field === "DECLINATION") {
                     CustomErrorHandler.populateError(this.form.declination, message)
                 } else if (field == "ALLOTTED_TIME" && !this.$store.state.isGuest) {
-                    /*
-                    ADD CODE TO HANDLE REQUESTING AN APPOINTMENT HERE
-                    */
                    //Changing startTime and endTime back to currnt time instead of UTC to display on request modal
                    //Also adding telescope name into Obj to display on request form
                    console.log(this.eventObj.start)
                    formObj.startTime = this.eventObj.start
                    formObj.endTime = this.eventObj.end
                    formObj.telescope = this.telescopeName
+                   //Sends the information of the form to the requestAppointment function on Scheduler Page.
                    this.$emit('request-appointment', formObj)
                    this.resetForm()
                 } else {

@@ -382,72 +382,9 @@ export default {
                     })
             });
         },
-        /* This is the Old populate Data call. Grabs all future events of a given telescope and populated them into this.events
-        This can be used to reduce back end calls, but will come at the cost of the size of data being sent from backend. 
-            Pros:
-                Doesnt have to refetch data for each calendar view switch. (Speed of use)
-            Cons:
-                If telescope is starting to become scheduled out months in advanced, this will be pulling more data than you would want/need.
-                To bulky of data will reduce initial loading time for those looking just for a certain date. 
-
-        populateData: function(id) {
-            this.$store.commit("loading", true)
-            this.telescopeId = id
-            this.telescopeName = this.telescopes[id-1] + " telescope"
-            ApiDriver.Appointment.futureAppointmentsByTelescopeID(id, 0, 100).then((response) => {
-                HttpResponse.then(response, (data) => {
-                        for (var index in response.data.data.content) {
-                            var element = response.data.data.content[index]
-                            var backgroundColor= "";
-                            var title = "";
-                            
-                            if (element.userId == this.$store.state.currentUserId) {
-                                title = "Your Observation";
-                                backgroundColor = "green";
-                            }
-                            else if (element.public) {
-                                backgroundColor = "";
-                                title = element.userFirstName + " " + element.userLastName;
-                            } else {
-                                backgroundColor = "black";
-                                if (this.$store.state.isAdmin) {
-                                    title = element.userFirstName + " " + element.userLastName;
-                                } else {
-                                    title = "Private Observation"
-                                }
-                            }
-                            
-
-                            var eventData = {
-                                title: title,
-                                start: new Date(element.startTime),
-                                end: new Date(element.endTime),
-                                backgroundColor: backgroundColor,
-                                id: element.id,
-                                telescopeId: element.telescopeId,
-                                userId: element.userId,
-                                public: element.public,
-                                editable: false,
-                                draggable: false
-                            }
-                            this.events.push(eventData);
-                        }
-                        this.$store.commit("loading", false);
-                    }, (status, errors) => {
-                        if (parseInt(status) === 403) {
-                            this.$swal({
-                            title: '<span style="color:#f0ead6">Error!<span>',
-                            html: '<span style="color:#f0ead6">Access Denied<span>',
-                            type: 'error',
-                            background: '#302f2f'
-                        }).then(response => {
-                            CurrentUserValidation.validateCurrentUser(this.$store);
-                        });
-                        }
-                        this.$store.commit("loading", false);
-                    })
-            });
-        },*/
+        mounted: function() {
+            this.$store.commit("updateInfo", {page: "Scheduling Calendar", info: "Select a telescope with which you would like to schedule\n an appointment. The highlighted column indicates the\n current day. Click and drag underneath a date column\n between two times on the left-hand side to schedule an\n appointment. The arrows in the top-left can be used to\n change between months/weeks/days, and the buttons in\n the top right will change the current view of the\n calendar."})
+        }
     }
 }
 

@@ -112,6 +112,7 @@ export default {
     mounted: function() {
         // Retrieve the completed appointments when loaded onto the DOM
         this.getCompletedAppointments();
+        this.$store.commit("updateInfo", {page: "Individual Completed Appointments", info: "This page displays all of your completed appointments.\n Click on an individual appointment to view more\n details."})
     },
     components: {
         NavigationBar,
