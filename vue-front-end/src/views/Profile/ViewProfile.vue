@@ -98,7 +98,7 @@
                                     </v-flex>
 
                                     <v-btn @click.native="changePasswordRequest" color="green" >Submit</v-btn>
-                                    <v-btn @click.native="passReset = false" color = "red">Cancel</v-btn>
+                                    <v-btn @click.native="clearPassReset" color = "red">Cancel</v-btn>
                                     
                                 </v-container>
                             </v-card>
@@ -264,6 +264,12 @@ export default {
                 HttpResponse.generalError(this, message, false)
             });
         },
+        clearPassReset() {
+            this.passReset = false
+            this.changePasswordForm.currentPassword.value = ''
+            this.changePasswordForm.password.value = ''
+            this.changePasswordForm.passwordConfirm.value = ''
+        },
         changePasswordRequest() {
             this.changePasswordForm.id.value = this.profile.id.value
             let form = JSON.stringify({
@@ -278,6 +284,10 @@ export default {
             ApiDriver.User.changePassword(this.profile.id.value, form).then(response => {
                 console.log(response)
             })
+
+            //Clearing dialog
+            this.clearPassReset()
+            
         },
         clearDialog() {
             // Clear out the modal
