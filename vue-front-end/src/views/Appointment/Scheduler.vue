@@ -17,7 +17,7 @@
             If variable tele is false, dont display modal
             @chosen, is what is used to call populateDataBetweenDates from inside the modal screen
         -->
-        <choose-telescope ref="choose" v-model="tele" @chosen="populateDataBetweenDates"></choose-telescope>
+        <choose-telescope ref="choose" v-model="tele" @chosen="changeTelescope"></choose-telescope>
         
         
         <!-- 
@@ -268,6 +268,15 @@ export default {
                 this.populateDataBetweenDates(this.telescopeId)
             }
         },
+        /*
+            This is a the function called when submit is called on choose-telescope modal
+            It passes an empty array to overwrite the current this.events array to be empty.
+            Then calls populateDataBetweenDates() to repopulate the data for the new telescope view
+        */
+        changeTelescope: function(telescopeId, array) {
+            this.events = array
+            this.populateDataBetweenDates(telescopeId)
+        },
         // This method is what is used to populate the data on the calendar
         /*
             This method does as its names, grabs the data of event for between two dates
@@ -289,6 +298,7 @@ export default {
         populateDataBetweenDates: function(id) {
             // call helper function
             this.clearEvents()
+            
             // Get the view of the calendar, so we know what dates to grab data between
             var vue = $('#calendar').fullCalendar('getView')
             // Set the data to send to the back end.
