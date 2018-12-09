@@ -45,8 +45,9 @@ export default {
     },
     methods: {
         submit() {
+            var reset = []
             var telescopeId = this.telescopes.indexOf(this.telescopeName) + 1
-            this.$emit("chosen", telescopeId)
+            this.$emit("chosen", telescopeId, reset)
             this.$emit('input')
         }
     }

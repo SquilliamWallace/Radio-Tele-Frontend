@@ -15,7 +15,7 @@
 
             If variable tele is true, display modal to choose which tele to grab information for
             If variable tele is false, dont display modal
-            @chosen, is what is used to call populateDataBetweenDates from inside the modal screen
+            @chosen, is what is used to call changeTelescope method from inside the modal screen
         -->
         <choose-telescope ref="choose" v-model="tele" @chosen="changeTelescope"></choose-telescope>
         
@@ -265,7 +265,7 @@ export default {
             // Call funciton populateDataBetweenData(this.telescopeId) to get the data they are wanting to display
             // Else they have not selected any telescope and do not try grabbing data from a null reference
             if( this.telescopeId != "") {
-                this.populateDataBetweenDates(this.telescopeId)
+                this.populateDataBetweenDates(this.telescopeId, false)
             }
         },
         /*
@@ -275,7 +275,7 @@ export default {
         */
         changeTelescope: function(telescopeId, array) {
             this.events = array
-            this.populateDataBetweenDates(telescopeId)
+            this.populateDataBetweenDates(telescopeId, true)
         },
         // This method is what is used to populate the data on the calendar
         /*
@@ -295,11 +295,13 @@ export default {
                 If moved forward one week then backwards one week, it calls fetch data each change. No Cache implemented at this time.
                     Cache can be usefull but also prove a problem due to if a new event was scheduled, it wouldnt populate if using a cache. 
         */
-        populateDataBetweenDates: function(id) {
+        populateDataBetweenDates: function(id, initial) {
             // call helper function
             this.clearEvents()
             
             // Get the view of the calendar, so we know what dates to grab data between
+            var calendar = $('#calendar')
+
             var vue = $('#calendar').fullCalendar('getView')
             // Set the data to send to the back end.
             /*
@@ -368,12 +370,24 @@ export default {
                                 editable: false,
                                 draggable: false
                             }
-
+                            
                             // Push the event to this.events to be rendered.
                             this.events.push(eventData);
                         }
                         // Set the $store.loading to false to switch back to displaying content of page.
                         this.$store.commit("loading", false);
+
+                        /*
+                            THIS IS A PATCH WORK TO GET THE INTIAL LOADING OF EVENTS TO DISPLAY CORRECTLY
+                            Will need to figure out why the initial call doesnt function the same as every
+                            other call and fix the root reason later. But this will force the calendar to 
+                            render all events on the initial page.
+                        */
+                        if (initial) {
+                            for (event in this.events) {
+                                calendar.fullCalendar('renderEvent', this.events[event])
+                            }
+                        } 
                     }, (status, errors) => {
                         // If there were errors in the back end call display an error pop up
                         if (parseInt(status) === 403) {
@@ -391,6 +405,7 @@ export default {
                         this.$store.commit("loading", false);
                     })
             });
+            
         },
         mounted: function() {
             this.$store.commit("updateInfo", {page: "Scheduling Calendar", info: "Select a telescope with which you would like to schedule\n an appointment. The highlighted column indicates the\n current day. Click and drag underneath a date column\n between two times on the left-hand side to schedule an\n appointment. The arrows in the top-left can be used to\n change between months/weeks/days, and the buttons in\n the top right will change the current view of the\n calendar."})
