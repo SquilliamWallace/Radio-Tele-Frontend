@@ -90,6 +90,20 @@
                     }
                 -->
                 <create-appointment :eventObj="event" v-model="openCreateModal" @request-appointment="requestAppointment" @created-event="createdEvent" v-on:close-modal="openCreateModal = false"></create-appointment>
+
+                <!-- 
+                    linked component: RequestAppointment.vue
+                    
+                    :Appointment="requestApt"
+                        Appointment is a prop in the component RequestAppointment
+                        requestApt is the Obj being passed in to the prop
+
+                    v-model="openRequestModal"
+                        Boolean check to display the modal or not
+                    
+                    v-on:close-modal="openRequestModal = false"
+                        if the modal is closed, set the boolean variable openRequestModal back to false
+                -->
                 <request-appointment :Appointment="requestApt" v-model="openRequestModal" v-on:close-modal="openRequestModal = false"></request-appointment>
             </v-layout>
         </v-app>
@@ -219,12 +233,13 @@ export default {
             this.openCreateModal = true;
         },
 
+        // This method is called from inside the Appointment.vue modal if an appointment request to be scheduled 
+        // comes back with an ALLOTTED_TIME error. 
+        // Passes the obj of the appointment trying to be made into the RequestAppointment.vue modal
         requestAppointment: function(Obj) {
             this.requestApt = Obj
             this.openRequestModal = true
         },
-
-
 
         // Toggles this.tele to display and close the ChooseTelescope.vue component
         toggleChooseTelescope() {

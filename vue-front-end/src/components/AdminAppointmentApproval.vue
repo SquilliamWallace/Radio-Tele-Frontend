@@ -2,41 +2,55 @@
 <div>
     <loading v-if="$store.state.isLoading"></loading>
     <div v-if="!$store.state.isLoading">
-        <v-card v-if="users.length <= 0" flat>
-            <v-card-title primary-title class="justify-center">No Users Require Approval</v-card-title>
+        <v-card v-if="appointments.length <= 0" flat>
+            <v-card-title primary-title class="justify-center">No Appointments Require Approval</v-card-title>
             <v-card-text>
-                <div>Come back later to see if any users tried to do anything sneaky</div>
+                <div>Come back later to see if any users tried to request an appointment</div>
             </v-card-text>
         </v-card>
-        <v-card v-if="users.length > 0" width = "100s%" align-center>
+        <v-card v-if="appointments.length > 0" width = "100s%" align-center>
                 <v-list >
-                    <v-list-tile @click="''" v-for="user in users" :key = "user.id" >
+                    <v-list-tile @click="''" v-for="appointment in appointments" :key = "appointment.id" >
                         <v-list-tile-content>
                             <v-list-tile-title>
-                                {{user.userInfo.firstName}} {{user.userInfo.lastName}}
+                                {{appointment.userFirstName}} {{appointment.userLastName}}
                             </v-list-tile-title>
                             <v-list-tile-sub-title>
-                                {{user.userInfo.email}} <span v-if = "user.userInfo.phoneNumber">- ({{user.userInfo.phoneNumber.slice(0,3)}})-{{user.userInfo.phoneNumber.slice(3,6)}}-{{user.userInfo.phoneNumber.slice(-4)}}</span>
+                                {{appointment.startTime}} - {{appointment.endTime}}
                             </v-list-tile-sub-title>
                         </v-list-tile-content>
                         <v-spacer></v-spacer>
                         <v-btn 
-                            @click="confirm = !confirm, userCompany = user.userInfo.company, userEmail = user.userInfo.email, userFirst = user.userInfo.
-                                            firstName, userLast = user.userInfo.lastName, userId = user.userInfo.id, userPhone = user.userInfo.phoneNumber, 
-                                            userStatus = user.userInfo.status, userRequestedRole =user.role.charAt(0) + user.role.slice(1).toLowerCase(),
-                                            form.roleId.value = user.id">
+                            @click="confirm = !confirm, id = appointment.id, startTime = appointment.startTime, 
+                            endTime = appointment.endTime, telescopeId = appointment.telescopeId, idPublic = appointment.isPublic,
+                            userId = appointment.userId, userFirstName = appointment.userFirstName, userLastName = appointment.userLastName,
+                            rightAscension = appointment.rightAscension, declination = appointment.declination, telescopeName = telescopes[appointment.telescopeId - 1]
+                            approved = false">
+                            Deny
+                        </v-btn>
+                        <v-btn 
+                            @click="confirm = !confirm, id = appointment.id, startTime = appointment.startTime, 
+                            endTime = appointment.endTime, telescopeId = appointment.telescopeId, idPublic = appointment.isPublic,
+                            userId = appointment.userId, userFirstName = appointment.userFirstName, userLastName = appointment.userLastName,
+                            rightAscension = appointment.rightAscension, declination = appointment.declination, telescopeName = telescopes[appointment.telescopeId - 1]
+                            approved = true">
                             Approve
                         </v-btn>
                     </v-list-tile>
                 </v-list>
         </v-card>
         <!-- this dialog is called when the approve button is pressed -->
-         <v-dialog dark v-model = "confirm" persistent max-width="700px">
+         <v-dialog dark v-model="confirm" persistent max-width="700px">
             <v-card>
                 <v-container>
                     <v-flex xs12>
-                        <v-card-text class = "headline">
-                            Are you sure you want to approve this user?
+                        <v-card-text class="headline">
+                            <span v-if="approved">
+                            Are you sure you want to approve this Appointment?
+                            </span>
+                            <span v-if="!approved">
+                            Are you sure you want to deny this Appointment?
+                            </span>
                         </v-card-text>
                         <v-container align-content-start class = "align-content-start">
 
@@ -44,16 +58,17 @@
                                 <v-list-tile>
                                     <v-list-tile-content>
                                         <v-list-tile-title>
-                                            {{userLast}}, {{userFirst}} - Id: {{userId}}
+                                            {{userLastName}}, {{userFirstName}} - Id: {{userId}}
                                         </v-list-tile-title>
-                                        <v-list-tile-sub-title class = "">
-                                            {{userEmail}}
+                                        <v-list-tile-sub-title class="">
+                                            {{telescopeName}}
+                                            {{startTime}} - {{endTime}}
                                         </v-list-tile-sub-title>
                                     </v-list-tile-content>
 
                                     <v-divider vertical></v-divider>
 
-                                    <v-list-tile-content v-if="userPhone !== null" class = "pl-3">
+                                    <!--<v-list-tile-content v-if="userPhone !== null" class = "pl-3">
                                             <v-list-tile-title>
                                                 Phone:
                                             </v-list-tile-title>
@@ -83,23 +98,22 @@
                                                 {{userRequestedRole}}
                                             </v-list-tile-sub-title>
                                     </v-list-tile-content>
+                                    -->
 
                                 </v-list-tile>
                             </v-list>
                         </v-container>
-                        <v-card-text>
-                            Select the role you wish to assign to this user.
-                        </v-card-text>
-                        <v-select
-                            item-value= this.userRequestedRole
-                            :items="accountTypes"
-                            required
-                            v-model="form.assignedRole.value"
-                            ></v-select>
                     </v-flex>
                     
                     <v-btn @click.native="confirm = false" color = "red">Cancel</v-btn>
-                    <v-btn @click.native="confirm = false, submit()" color = "green">Approve</v-btn>
+                    <v-btn @click.native="confirm = false, submit()" color = "green">
+                        <span v-if="approved">
+                            Approve
+                            </span>
+                            <span v-if="!approved">
+                            Deny
+                            </span>
+                    </v-btn>
                     
                     
                 </v-container>
@@ -115,7 +129,7 @@ import HttpResponse from '../utils/HttpResponse';
 import CurrentUserValidation from  '../utils/CurrentUserValidation';
 import Loading from "../components/Loading"
 export default {
-    name:'AdminUserApproval',
+    name:'AdminAppointmentApproval',
     data(){
         return{
             data: {
@@ -130,19 +144,30 @@ export default {
                     value: ""
                 }
             },
-            users: [],
+            appointments: [],
             confirm: false,
+            approved: false,
 
-            // user info
-            
+            telescopes: [
+                "John Rudy Park", 
+                "Scale Model",
+                "Virtual"
+            ],
+            telescopeName: '',
+
+            // Appointment info
+            id: '',
+            startTime: '',
+            endTime: '',
+            telescopeId: '',
+            isPublic: '',
             userId: '',
-            userFirst: '',
-            userLast: '',
-            userCompany: '',
-            userRequestedRole: '',
-            userEmail: '',
-            userPhone: '',
-            userStatus: '',
+            userFirstName: '',
+            userLastName: '',
+            status: '',
+            rightAscension: '',
+            declination: '',
+            
 
             headers: [
                 {header: 'Id'},
@@ -155,38 +180,41 @@ export default {
     methods:{
         submit(){
             let form = JSON.stringify({
-               id: this.form.roleId.value,
-               role: this.form.assignedRole.value.toUpperCase()
+                isApprove: this.approved
             });
-            ApiDriver.User.approve(form).then((response) => {
+            var isApprove = this.approved
+            var aptId = this.id
+            ApiDriver.Appointment.approveRequest(aptId, isApprove).then((response) => {
+
             }).catch(errors => {
             })
-            for (var index in this.users) {
-                var user = this.users[index];
-                if (user.id === this.form.roleId.value) {
-                    this.users.splice(index, 1)
+            for (var index in this.appointments) {
+                var appointment = this.appointments[index];
+                if (appointment.id === this.id) {
+                    this.appointments.splice(index, 1)
                 }
             }
             
         },
-        getUnapprovedUsers(){
-            ApiDriver.User.unapproved(this.data).then((response) => {
+        getUnapprovedAppointments(){
+            ApiDriver.Appointment.unapprovedRequest(this.data).then((response) => {
                 HttpResponse.then(response, (data) => {
                     console.log(data);
-                    this.populateData(data.data.success)
+                    this.populateData(data.data)
                 },(status, errors) => {})
                 
             })
         },
         populateData(data){
             for(var index in data.content){
-                let user = data.content[index];
-                this.users.push(user);
+                let appointment = data.content[index];
+                console.log(appointment);
+                this.appointments.push(appointment);
             }
         }
     },
     mounted: function(){
-        this.getUnapprovedUsers();
+        this.getUnapprovedAppointments();
     },
     components: {
         Loading

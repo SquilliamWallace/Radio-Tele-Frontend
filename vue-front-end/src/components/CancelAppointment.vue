@@ -1,5 +1,8 @@
 <template>
     <v-dialog class="modal" width="50%" dark :value="value" @input="$emit('input')" persistent>
+        <!--
+            Simple v-card that has a title and text body, with two buttons for confirmation or cancelling
+        -->
         <v-card>
             <v-card-title class="headline">Are you sure you wish to cancel?</v-card-title>
             <v-card-text>If you cancel, your observation will be deleted and allow anyone else to schedule an observation during this timeslot.</v-card-text>
@@ -25,9 +28,12 @@ export default {
         value: false
     },
     methods: {
+        // Method called if user wishes to cancel their scheduled appointment and confirms on the modal pop up.
         cancel() {
             ApiDriver.Appointment.cancel(this.$route.params.appointmentId).then((response) => {
                 HttpResponse.then(response, (data) => {
+                    // If SUCCESSFULL
+                        // router.go(-1) sends them back to one page before the appointment page.
                         router.go(-1)
                     }, (status, errors) => {
                         if (parseInt(status) === 403) {
@@ -45,6 +51,7 @@ export default {
                     })
             });
         },
+        // If user does not confirm cancelling appointment, close modal.
         toggleModal() {
             this.confirmation = !this.confirmation
             this.$emit('input');

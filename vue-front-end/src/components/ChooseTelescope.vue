@@ -1,3 +1,7 @@
+<!-- SIMPLE drop down selction modal to choose which telesope to view the scheduler for
+    Automatically pops up on scheduler page at first, then can be made to appear again by hitting the 
+    "change telescope" button on the scheduler page
+-->
 <template dark>
     <v-dialog dark hide-overlay :value="value" @input="$emit('input')" persistent width="50%">
             <v-card flat>
@@ -47,6 +51,8 @@ export default {
         submit() {
             var reset = []
             var telescopeId = this.telescopes.indexOf(this.telescopeName) + 1
+            // this sends the telescopeId to the scheduler page and an empty array to be used to reset the events array on the scheduler page.
+            // the empty array is used to prevent duplicate events being displayed.
             this.$emit("chosen", telescopeId, reset)
             this.$emit('input')
         }

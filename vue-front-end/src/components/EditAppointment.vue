@@ -1,3 +1,4 @@
+<!-- Same form type as Appointment.vue except all fields are already populated by the appointment data -->
 <template dark>
     <v-dialog dark hide-overlay :value="value" @input="$emit('input')" persistent width="50%">
             <v-card flat>

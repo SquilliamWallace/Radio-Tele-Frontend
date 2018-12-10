@@ -38,6 +38,10 @@
         <v-tab-item>
             <admin-user-approval></admin-user-approval>
         </v-tab-item>
+
+        <v-tab-item>
+            <admin-appointment-approval></admin-appointment-approval>
+        </v-tab-item>
         
       </v-tabs>
 
@@ -52,6 +56,7 @@ import NavigationBar from '../components/NavigationBar.vue';
 import router from '../router';
 import CurrentUserValidation from '../utils/CurrentUserValidation';
 import AdminUserApproval from '../components/AdminUserApproval.vue';
+import AdminAppointmentApproval from '../components/AdminAppointmentApproval.vue';
 import Loading from "../components/Loading"
  export default {
      name: 'admin',
@@ -81,7 +86,8 @@ import Loading from "../components/Loading"
         NavigationBar,
         AdminLog,
         AdminUserApproval,
-        Loading
+        Loading,
+        AdminAppointmentApproval
     },
     mounted() {
       this.authenticate()
