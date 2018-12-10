@@ -1,3 +1,4 @@
+<!-- This is a simple Text Modal pop up that appears if a user tries accessing a private event they are not invited too -->
 <template>
     <v-dialog class="alert-modal" width="50%" dark :value="value" persistent>
         <v-card>

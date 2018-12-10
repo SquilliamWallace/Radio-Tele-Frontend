@@ -58,6 +58,16 @@ export default {
       create: function (data) {
         return axios.post(this.namespace + "/schedule", data, Headers.retrieveHeaders())
       },
+      request: function (data) {
+        return axios.post(this.namespace + "/request", data, Headers.retrieveHeaders())
+      },
+      unapprovedRequest: function (data) {
+        return axios.get(this.namespace + "/listRequested?page=" + data.pageNumber + "&size=" + data.pageSize)
+      },
+      approveRequest: function (appointmentId, isApprove){
+        console.log(isApprove)
+        return axios.put(this.namespace + "/" + appointmentId + "/validate?isApprove=" + isApprove);
+      },
       futureAppointmentsByTelescopeID: function(telescopeID, pageNumber, pageSize) {
         return axios.get(this.namespace + "/telescopes/" + telescopeID + "/futureList?page=" + pageNumber + "&size=" + pageSize)
       },

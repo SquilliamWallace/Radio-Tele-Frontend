@@ -14,6 +14,16 @@
                 <v-form ref="form" @submit.prevent="submit" refs="form">
                 <v-container grid-list-xl fluid>
                     <v-layout wrap>
+                    <!--
+                        Start Time text box input
+                        v-model="eventObj.start"
+                            Bind the data of this input field with eventObj.start
+                            which is passed in as a prop so will display the data automatically but allow for editing if they
+                            selected the time slot wrong.
+
+                        :rules="[rules.dateRequired]"
+                            Makes sure that their is input in the start date field
+                    -->
                     <v-flex xs12 sm6>
                         <v-text-field
                         v-model="eventObj.start"
@@ -23,6 +33,9 @@
                         required
                         ></v-text-field>
                     </v-flex>
+                    <!--
+                        Same as Start Time above
+                    -->
                     <v-flex xs12 sm6>
                         <v-text-field
                         v-model="eventObj.end"
@@ -32,46 +45,72 @@
                         required
                         ></v-text-field>
                     </v-flex>
-                    <v-flex xs12 sm4>
-                        <v-text-field
+                    <!--
+                        Right Ascension Hours
+
                         v-model="form.rightAscension.hours"
+                            Bind the data of this input field with form.rightAscension.hours
+
                         :rules="[rules.rightAscHours]"
-                        color="blue darken-2"
-                        :error=form.rightAscension.hasError
-                        :error-messages=form.rightAscension.errorMessage
-                        label="Right Ascension Hours"
-                        type="number"
+                            Makes sure that the input here is between 0 and 24
+
+                        :error = form.rightAscension.hasError
+                            This is a boolean decleration to display or not display the error messages
+
+                        :error-messages= form.rightAscension.errorMessage
+                            This displays any text inside form.rightAscension.errorMessage if :error=true
+                            errorMessage is handled on backend and sent back to front end. 
+
                         mask="##"
-                        required
-                        ></v-text-field>
-                    </v-flex>
+                            forces the input of this field to only be 2 numbers, no text allowed
+                    -->
                     <v-flex xs12 sm4>
-                        <v-text-field
-                        v-model="form.rightAscension.minutes"
-                        :rules="[rules.rightAscMinutes]"
-                        color="blue darken-2"
-                        :error=form.rightAscension.hasError
-                        :error-messages=form.rightAscension.errorMessage
-                        label="Right Ascension Minutes"
-                        type="number"
-                        mask="##"
-                        required
-                        ></v-text-field>
-                    </v-flex>
-                    <v-flex xs12 sm4>
-                        <v-text-field
-                        v-model="form.rightAscension.seconds"
-                        :rules="[rules.rightAscSeconds]"
-                        color="blue darken-2"
-                        :error=form.rightAscension.hasError
-                        :error-messages=form.rightAscension.errorMessage
-                        label="Right Ascension Seconds"
-                        type="number"
-                        mask="##"
-                        required
-                        ></v-text-field>
-                    </v-flex>
-                    <v-flex xs12 sm12>
+                         <v-text-field
+                         v-model="form.rightAscension.hours"
+                         :rules="[rules.rightAscHours]"
+                         color="blue darken-2"
+                         :error=form.rightAscension.hasError
+                         :error-messages=form.rightAscension.errorMessage
+                         label="Right Ascension Hours"
+                         type="number"
+                         mask="##"
+                         required
+                         ></v-text-field>
+                     </v-flex>
+                     <!--
+                        Same as Right Ascension Hours, except checks for minutes error handling
+                    -->
+                     <v-flex xs12 sm4>
+                         <v-text-field
+                         v-model="form.rightAscension.minutes"
+                         :rules="[rules.rightAscMinutes]"
+                         color="blue darken-2"
+                         :error=form.rightAscension.hasError
+                         :error-messages=form.rightAscension.errorMessage
+                         label="Right Ascension Minutes"
+                         type="number"
+                         mask="##"
+                         required
+                         ></v-text-field>
+                     </v-flex>
+                     <!--
+                        Same as Right Ascension Hours, except checks for seconds error handling
+                    -->
+                     <v-flex xs12 sm4>
+                         <v-text-field
+                         v-model="form.rightAscension.seconds"
+                         :rules="[rules.rightAscSeconds]"
+                         color="blue darken-2"
+                         :error=form.rightAscension.hasError
+                         :error-messages=form.rightAscension.errorMessage
+                         label="Right Ascension Seconds"
+                         type="number"
+                         mask="##"
+                         required
+                         ></v-text-field>
+                     </v-flex>
+                     <!-- Pretty much same as Right Ascension -->
+                    <v-flex xs12 sm6>
                         <v-text-field
                         v-model="form.declination.value"
                         :rules="[rules.numRequired]"
@@ -83,6 +122,12 @@
                         required
                         ></v-text-field>
                     </v-flex>
+                    <!--
+                        v-if="this.$store.state.isResearcher || this.$store.state.isAdmin"
+                            only display this part of the form if current user is researcher or admin
+
+                        This is a simple checkbox to choose to make the appointment private or not
+                    -->
                     <v-flex v-if="this.$store.state.isResearcher || this.$store.state.isAdmin" xs12>
                         <v-checkbox
                         v-model="form.isPrivate.value"
@@ -91,6 +136,10 @@
                         >
                         </v-checkbox>
                     </v-flex>
+                    <!--
+                        Simple drop down select menu to choose which telescope you want to schedule your appointment for
+                        Added to form to make sure user knows which telescope they are scheduling for
+                    -->
                     <v-flex xs12 sm6>
                         <v-select
                         v-model="telescopeName"
@@ -103,8 +152,10 @@
                     </v-layout>
                 </v-container>
                 <v-card-actions>
+                    <!-- Cancel resets form and closes Modal -->
                     <v-btn flat @click="resetForm">Cancel</v-btn>
                     <v-spacer></v-spacer>
+                    <!-- Submit sends the form to backend to be verified -->
                     <v-btn
                     :disabled="!formIsValid"
                     flat
@@ -149,6 +200,9 @@ export default {
                     hasError: false
                 }
             },
+            /* This is the rules obj used in the form validation.
+                val => (true or false logic) || 'text to display if false
+            */
             rules: {
                 dateRequired: val => (val && val.length > 0) || 'Required field',
                 rightAscHours: val => (val && val.toString().length > 0 && val < 24 && val >= 0) || 'Must be between 0 and 23 hours',
@@ -163,17 +217,21 @@ export default {
         value: false
     },
     methods: {
+        // Method to reset the form then close the modal
         resetForm() {
-            this.form.isPrivate.value = false;
-            this.form.rightAscension.hours = null;
-            this.form.rightAscension.minutes = null;
-            this.form.rightAscension.seconds = null;
-            this.form.declination.value = null;
-            this.clearErrors();
-            this.$emit('close-modal');
+             this.form.isPrivate.value = false;
+             this.form.rightAscension.hours = null;
+             this.form.rightAscension.minutes = null;
+             this.form.rightAscension.seconds = null;
+             this.form.declination.value = null;
+             this.clearErrors();
+             this.$emit('close-modal');
         },
+        // Method to submit to back end
         submit() {
+            // Clears the errors first to make sure that if backend sends back any errors we only display the current errors
             this.clearErrors();
+            // set up form to send to back end with data from form obj
             let form = {
                 userId: this.$store.state.currentUserId,
                 startTime: new Date(this.eventObj.start).toUTCString(),
@@ -185,25 +243,28 @@ export default {
                 seconds: this.form.rightAscension.seconds,
                 declination: this.form.declination.value
             };
-
+            // Call appropriate API CALL and send form in json format
             ApiDriver.Appointment.create(JSON.stringify(form)).then((response) => {
                 HttpResponse.then(response, (data) => {
-                        this.snackbar = true;
-                        this.resetForm()
+                    // If returns SUCCESS
+                    this.snackbar = true;
+                    // Reset form before closing Modal as user can schedule multiple Appointments without leaving Scheduler Page
+                    this.resetForm()
                         
-                        this.$emit('created-event', form, data.data);
-                        this.$emit('close-modal');
+                    // Call the created-event method on Scheduler.vue page so it knows whether to display the newly created event or not without doing a backend call again
+                    this.$emit('created-event', form, data.data);
+                    this.$emit('close-modal');
                     }, (status, errors) => {
                         if (parseInt(status) === 403) {
                             HttpResponse.accessDenied(this)
                         } else {
-                            this.handleErrors(errors);
+                            this.handleErrors(errors, form);
                         }
                     });
             });
             
         },
-        handleErrors(errors) {
+        handleErrors(errors, formObj) {
             for (var field in errors) {
                 let message = errors[field][0];
 
@@ -211,6 +272,16 @@ export default {
                     CustomErrorHandler.populateError(this.form.rightAscension, message)
                 } else if (field === "DECLINATION") {
                     CustomErrorHandler.populateError(this.form.declination, message)
+                } else if (field == "ALLOTTED_TIME" && !this.$store.state.isGuest) {
+                   //Changing startTime and endTime back to currnt time instead of UTC to display on request modal
+                   //Also adding telescope name into Obj to display on request form
+                   console.log(this.eventObj.start)
+                   formObj.startTime = this.eventObj.start
+                   formObj.endTime = this.eventObj.end
+                   formObj.telescope = this.telescopeName
+                   //Sends the information of the form to the requestAppointment function on Scheduler Page.
+                   this.$emit('request-appointment', formObj)
+                   this.resetForm()
                 } else {
                     HttpResponse.generalError(this, message, false)
                 }
@@ -222,12 +293,14 @@ export default {
     },
     computed: {
         formIsValid() {
-            return (this.eventObj.start &&
-                    this.eventObj.end &&
-                    this.form.rightAscension.hours,
-                    this.form.rightAscension.minutes,
-                    this.form.rightAscension.seconds,
-                    this.form.declination.value)
+            return (
+                this.eventObj.start &&
+                this.eventObj.end &&
+                this.form.rightAscension.hours,
+                this.form.rightAscension.minutes,
+                this.form.rightAscension.seconds,
+                this.form.declination.value
+            )
         }
     }
 }

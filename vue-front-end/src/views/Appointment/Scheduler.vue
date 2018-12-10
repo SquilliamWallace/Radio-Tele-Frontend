@@ -15,9 +15,9 @@
 
             If variable tele is true, display modal to choose which tele to grab information for
             If variable tele is false, dont display modal
-            @chosen, is what is used to call populateDataBetweenDates from inside the modal screen
+            @chosen, is what is used to call changeTelescope method from inside the modal screen
         -->
-        <choose-telescope ref="choose" v-model="tele" @chosen="populateDataBetweenDates"></choose-telescope>
+        <choose-telescope ref="choose" v-model="tele" @chosen="changeTelescope"></choose-telescope>
         
         
         <!-- 
@@ -89,7 +89,22 @@
                         sets this.openCreateModel to false, to make the modal not display
                     }
                 -->
-                <create-appointment :eventObj="event" v-model="openCreateModal" @created-event="createdEvent" v-on:close-modal="openCreateModal = false"></create-appointment>
+                <create-appointment :eventObj="event" v-model="openCreateModal" @request-appointment="requestAppointment" @created-event="createdEvent" v-on:close-modal="openCreateModal = false"></create-appointment>
+
+                <!-- 
+                    linked component: RequestAppointment.vue
+                    
+                    :Appointment="requestApt"
+                        Appointment is a prop in the component RequestAppointment
+                        requestApt is the Obj being passed in to the prop
+
+                    v-model="openRequestModal"
+                        Boolean check to display the modal or not
+                    
+                    v-on:close-modal="openRequestModal = false"
+                        if the modal is closed, set the boolean variable openRequestModal back to false
+                -->
+                <request-appointment :Appointment="requestApt" v-model="openRequestModal" v-on:close-modal="openRequestModal = false"></request-appointment>
             </v-layout>
         </v-app>
 
@@ -115,6 +130,7 @@ import CurrentUserValidation from '../../utils/CurrentUserValidation'
 import PrivateEvent from "../../components/PrivateEvent"
 import Loading from "../../components/Loading"
 import ChooseTelescope from "../../components/ChooseTelescope"
+import RequestAppointment from "../../components/RequestAppointment"
 
 export default {
     name: 'Scheduler',
@@ -123,7 +139,9 @@ export default {
             // Set default variables for page here
             events: [],
             event: {},
+            requestApt: {},
             openCreateModal: false,
+            openRequestModal: false,
             privateEventModal: false,
             tele: true,
             telescopeId: "",
@@ -132,7 +150,7 @@ export default {
                 "Scale Model",
                 "Virtual"
             ],
-            telescopeName: 'Testing',
+            telescopeName: '',
 
             /* 
                 This is the header bound to the FullCalendar.vue component
@@ -181,7 +199,8 @@ export default {
         CreateAppointment,
         PrivateEvent,
         Loading,
-        ChooseTelescope
+        ChooseTelescope,
+        RequestAppointment
     },
     // Functions used on this page, called by other functions or called by components loaded on page
     methods: {
@@ -213,6 +232,15 @@ export default {
             // Set openCreateModal to true so that Appointment.vue component displays
             this.openCreateModal = true;
         },
+
+        // This method is called from inside the Appointment.vue modal if an appointment request to be scheduled 
+        // comes back with an ALLOTTED_TIME error. 
+        // Passes the obj of the appointment trying to be made into the RequestAppointment.vue modal
+        requestAppointment: function(Obj) {
+            this.requestApt = Obj
+            this.openRequestModal = true
+        },
+
         // Toggles this.tele to display and close the ChooseTelescope.vue component
         toggleChooseTelescope() {
             this.tele = !this.tele
@@ -252,8 +280,17 @@ export default {
             // Call funciton populateDataBetweenData(this.telescopeId) to get the data they are wanting to display
             // Else they have not selected any telescope and do not try grabbing data from a null reference
             if( this.telescopeId != "") {
-                this.populateDataBetweenDates(this.telescopeId)
+                this.populateDataBetweenDates(this.telescopeId, false)
             }
+        },
+        /*
+            This is a the function called when submit is called on choose-telescope modal
+            It passes an empty array to overwrite the current this.events array to be empty.
+            Then calls populateDataBetweenDates() to repopulate the data for the new telescope view
+        */
+        changeTelescope: function(telescopeId, array) {
+            this.events = array
+            this.populateDataBetweenDates(telescopeId, true)
         },
         // This method is what is used to populate the data on the calendar
         /*
@@ -273,10 +310,13 @@ export default {
                 If moved forward one week then backwards one week, it calls fetch data each change. No Cache implemented at this time.
                     Cache can be usefull but also prove a problem due to if a new event was scheduled, it wouldnt populate if using a cache. 
         */
-        populateDataBetweenDates: function(id) {
+        populateDataBetweenDates: function(id, initial) {
             // call helper function
             this.clearEvents()
+            
             // Get the view of the calendar, so we know what dates to grab data between
+            var calendar = $('#calendar')
+
             var vue = $('#calendar').fullCalendar('getView')
             // Set the data to send to the back end.
             /*
@@ -345,12 +385,24 @@ export default {
                                 editable: false,
                                 draggable: false
                             }
-
+                            
                             // Push the event to this.events to be rendered.
                             this.events.push(eventData);
                         }
                         // Set the $store.loading to false to switch back to displaying content of page.
                         this.$store.commit("loading", false);
+
+                        /*
+                            THIS IS A PATCH WORK TO GET THE INTIAL LOADING OF EVENTS TO DISPLAY CORRECTLY
+                            Will need to figure out why the initial call doesnt function the same as every
+                            other call and fix the root reason later. But this will force the calendar to 
+                            render all events on the initial page.
+                        */
+                        if (initial) {
+                            for (event in this.events) {
+                                calendar.fullCalendar('renderEvent', this.events[event])
+                            }
+                        } 
                     }, (status, errors) => {
                         // If there were errors in the back end call display an error pop up
                         if (parseInt(status) === 403) {
@@ -368,6 +420,7 @@ export default {
                         this.$store.commit("loading", false);
                     })
             });
+            
         },
         mounted: function() {
             this.$store.commit("updateInfo", {page: "Scheduling Calendar", info: "Select a telescope with which you would like to schedule\n an appointment. The highlighted column indicates the\n current day. Click and drag underneath a date column\n between two times on the left-hand side to schedule an\n appointment. The arrows in the top-left can be used to\n change between months/weeks/days, and the buttons in\n the top right will change the current view of the\n calendar."})
