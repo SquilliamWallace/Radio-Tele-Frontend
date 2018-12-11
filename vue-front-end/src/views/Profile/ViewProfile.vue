@@ -88,17 +88,35 @@
                                         </v-card-text>
                                     </v-flex>
                                     <v-flex xs12>
-                                        <v-text-field v-model="changePasswordForm.currentPassword.value" label="Old Password" type="password" required></v-text-field>
+                                        <v-text-field 
+                                        :error=changePasswordForm.currentPassword.hasError
+                                        :rules="[passResetRules.required]"
+                                        :error-messages=changePasswordForm.currentPassword.errorMessage
+                                        :validate-on-blur=true
+                                        v-model="changePasswordForm.currentPassword.value" label="Old Password" type="password" required></v-text-field>
                                     </v-flex>
                                     <v-flex xs12>
-                                        <v-text-field v-model="changePasswordForm.password.value" label="New Password" type="password" required></v-text-field>
+                                        <v-text-field 
+                                        :error=changePasswordForm.password.hasError
+                                        :rules="[passResetRules.required, passResetRules.passMatch]"
+                                        :error-messages=changePasswordForm.password.errorMessage
+                                        :validate-on-blur=true
+                                        v-model="changePasswordForm.password.value" label="New Password" type="password" required></v-text-field>
                                     </v-flex>
                                     <v-flex xs12>
-                                        <v-text-field v-model="changePasswordForm.passwordConfirm.value" label="Verify Password" type="password" required></v-text-field>
+                                        <v-text-field
+                                        :error=changePasswordForm.passwordConfirm.hasError
+                                        :rules="[passResetRules.required, passResetRules.passMatch]" 
+                                        :error-messages=changePasswordForm.passwordConfirm.errorMessage
+                                        :validate-on-blur=true
+                                        v-model="changePasswordForm.passwordConfirm.value" label="Verify Password" type="password" required></v-text-field>
+                                    </v-flex>
+                                    <v-flex xs12>
+                                        <v-card-text></v-card-text>
                                     </v-flex>
 
                                     <v-btn @click.native="changePasswordRequest" color="green" >Submit</v-btn>
-                                    <v-btn @click.native="passReset = false" color = "red">Cancel</v-btn>
+                                    <v-btn @click.native="clearPassReset" color = "red">Cancel</v-btn>
                                     
                                 </v-container>
                             </v-card>
@@ -152,6 +170,10 @@ export default {
             showChangeEmailButton: false,
 
             passReset: false,
+            passResetRules: {
+                required: val => val.length > 0 || 'This field is required',
+                passMatch: val => val === this.changePasswordForm.password || 'Passwords do not match'
+            }
         }
     },
     components: {
@@ -264,7 +286,16 @@ export default {
                 HttpResponse.generalError(this, message, false)
             });
         },
+        clearPassReset() { //resets form values to nothing
+            this.passReset = false
+            this.clearErrors()
+            this.changePasswordForm.currentPassword.value = ''
+            this.changePasswordForm.password.value = ''
+            this.changePasswordForm.passwordConfirm.value = ''
+        },
         changePasswordRequest() {
+
+
             this.changePasswordForm.id.value = this.profile.id.value
             let form = JSON.stringify({
                 currentPassword: this.changePasswordForm.currentPassword.value,
@@ -277,7 +308,43 @@ export default {
 
             ApiDriver.User.changePassword(this.profile.id.value, form).then(response => {
                 console.log(response)
-            })
+                // Handle the response
+                HttpResponse.then(response, data => {
+                    // Success alert
+                    this.$swal({
+                        title: '<span style="color:#f0ead6">Success!<span>',
+                        html: '<span style="color:#f0ead6">Your password has been changed',
+                        type: 'success',
+                        background: '#302f2f'
+                    }).then(response => {
+                        // Clear out the modal's information
+                        this.clearPassReset();
+                    });
+                }, (status, errors) => {
+                    // Access Denied
+                    if (parseInt(status) === 403) {
+                        // Call the generic access denied handler
+                        HttpResponse.accessDenied(this)
+                    } 
+                    // Not Found
+                    else if (parseInt(status) === 404) {
+                        // Call the generic invalid resource id handler
+                        HttpResponse.notFound(that, errors)
+                    } 
+                    // Bad request
+                    else {
+                        // Handle errors
+                        this.passResetErrorHandler(errors)
+                    }
+                })
+            }).catch(errors => {
+                // Handle an erroneous API call
+                let message = "An error occurred changing this user's password"
+                HttpResponse.generalError(this, message, false)
+            });
+
+            
+            
         },
         clearDialog() {
             // Clear out the modal
@@ -285,6 +352,23 @@ export default {
             this.dialog = false;
             this.changeEmailForm.email.value = "";
             this.changeEmailForm.emailConfirm.value = "";
+        },
+        passResetErrorHandler(errors){
+            // populate error messages for form
+            for(var field in errors){
+                let message = errors[field][0];
+
+                if(field === "CURRENT_PASSWORD"){
+                    CustomErrorHandler.populateError(this.changePasswordForm.currentPassword, message);
+                }else if(field === "PASSWORD"){
+                    CustomErrorHandler.populateError(this.changePasswordForm.password, message);
+                }else if(field === "PASSWORD_CONFIRM"){
+                    CustomErrorHandler.populateError(this.changePasswordForm.passwordConfirm, message);
+                }else{
+                    HttpResponse.generalError(this, message, false);
+                }
+            }
+            this.$forceUpdate();
         },
         handleErrors(errors) {
             // Populate error messages for the form
@@ -305,6 +389,9 @@ export default {
         clearErrors() {
             CustomErrorHandler.clearError(this.changeEmailForm.email);
             CustomErrorHandler.clearError(this.changeEmailForm.emailConfirm);
+            CustomErrorHandler.clearError(this.changePasswordForm.currentPassword)
+            CustomErrorHandler.clearError(this.changePasswordForm.password)
+            CustomErrorHandler.clearError(this.changePasswordForm.passwordConfirm)
         }
     },
     mounted() {
