@@ -199,7 +199,6 @@ export default {
         getUnapprovedAppointments(){
             ApiDriver.Appointment.unapprovedRequest(this.data).then((response) => {
                 HttpResponse.then(response, (data) => {
-                    console.log(data);
                     this.populateData(data.data)
                 },(status, errors) => {})
                 
@@ -208,7 +207,6 @@ export default {
         populateData(data){
             for(var index in data.content){
                 let appointment = data.content[index];
-                console.log(appointment);
                 this.appointments.push(appointment);
             }
         }

@@ -172,7 +172,7 @@ export default {
             passReset: false,
             passResetRules: {
                 required: val => val.length > 0 || 'This field is required',
-                passMatch: val => val === this.changePasswordForm.password || 'Passwords do not match'
+                passMatch: val => val === this.changePasswordForm.password.value || 'Passwords do not match'
             }
         }
     },

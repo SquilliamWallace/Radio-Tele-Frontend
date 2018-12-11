@@ -48,18 +48,19 @@
                         </v-card-text>
                     </v-flex>
                     <v-textarea
-                    background-color = "white"
-                    outline
-                    label="Reason for ban"
-                    counter
-                    maxlength="120"
-                    full-width
-                    single-line
-                ></v-textarea>
+                        background-color = "white"
+                        outline
+                        label="Reason for ban"
+                        counter
+                        maxlength="120"
+                        full-width
+                        single-line
+                        v-model="banMessage"
+                    ></v-textarea>
                     
                     <v-btn @click.native="confirm = false" color = "red">Cancel</v-btn>
                     <span v-if = "action === 'ban'">
-                        <v-btn @click="banUser(chosenUserId), confirm = false" color = "green" >Submit</v-btn>
+                        <v-btn @click="banUser(chosenUserId, banMessage), confirm = false" color = "green" >Submit</v-btn>
                     </span>
                     <span v-if = "action === 'unban'">
                         <v-btn @click="unbanUser(chosenUserId), confirm = false" color = "green" >Submit</v-btn>
@@ -98,13 +99,15 @@ export default {
             filterTypes: ['Email','User Id'],
             filterType: 'Email',
 
+            // Ban-related
+            banMessage: "",
+
             //search
             searchParam: ''
         }
     },
     methods:{
         reset(){
-            console.log(this.unfiltered)
             this.users = this.unfiltered
         },
         search(param){
@@ -123,24 +126,18 @@ export default {
             // for filter based on user id
             else if(this.filterType === "User Id"){
                 for (var i = 0; i < this.users.length; i++) {
-                    console.log(this.users[i].id)
                     if(this.users[i].id.toString() === param.toString()){
                         this.filtered.push(this.users[i])
-                        console.log(this.users[i].id)
                     }
                 }
                 
             }
             this.users = this.filtered
-            console.log(this.unfiltered)
-            console.log(this.filtered)
-          
-           
         },
         getUsers(){
             this.$store.commit("loading", true);
             ApiDriver.User.allUsers(this.data).then((response) => {
-                HttpResponse.then(response, (data) => {
+                HttpResponse.then(response, data => {
                     this.populateData(data.data)
                 }, (status, errors) => {})
             }).catch((error) => {
@@ -164,8 +161,8 @@ export default {
                 this.unfiltered.push(user)
             }
         },
-        banUser(userId){
-            ApiDriver.User.ban(userId).then((response) => {
+        banUser(userId, message){
+            ApiDriver.User.ban(userId, message).then((response) => {
                 location.reload();
             })
         },

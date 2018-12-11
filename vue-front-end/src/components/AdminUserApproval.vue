@@ -172,7 +172,6 @@ export default {
         getUnapprovedUsers(){
             ApiDriver.User.unapproved(this.data).then((response) => {
                 HttpResponse.then(response, (data) => {
-                    console.log(data);
                     this.populateData(data.data.success)
                 },(status, errors) => {})
                 

@@ -24,8 +24,8 @@ export default {
       changePassword: function(userId) {
         return axios.put(this.namespace + "/" + userId + "/changePassword", data, Headers.retrieveHeaders())
       },
-      ban: function(userId) {
-        return axios.put(this.namespace + "/" + userId + "/ban")
+      ban: function(userId, message) {
+        return axios.put(this.namespace + "/" + userId + "/ban?message=" + message)
       },
       unban: function(userId) {
         return axios.put(this.namespace + "/" + userId + "/unban")
@@ -64,8 +64,7 @@ export default {
       unapprovedRequest: function (data) {
         return axios.get(this.namespace + "/listRequested?page=" + data.pageNumber + "&size=" + data.pageSize)
       },
-      approveRequest: function (appointmentId, isApprove){
-        console.log(isApprove)
+      approveRequest: function (appointmentId, isApprove) {
         return axios.put(this.namespace + "/" + appointmentId + "/validate?isApprove=" + isApprove);
       },
       futureAppointmentsByTelescopeID: function(telescopeID, pageNumber, pageSize) {
