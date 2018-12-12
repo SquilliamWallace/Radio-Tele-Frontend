@@ -61,7 +61,7 @@
       </v-alert>  
     </v-data-table>
     </v-card>
-    <v-dialog v-model="toggleDetailedView">
+    <v-dialog dark v-model="toggleDetailedView">
         <loading v-if="$store.state.isLoading"></loading>
         <v-card v-if="!$store.state.isLoading" class="card-style">
             <h1 v-if="currentLog.success">Log Number {{currentLog.id}}: Successful Operation</h1>
