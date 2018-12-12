@@ -48,6 +48,7 @@
                         </v-card-text>
                     </v-flex>
                     <v-textarea
+                        v-if= "action == ban"
                         background-color = "white"
                         outline
                         label="Reason for ban"
