@@ -207,6 +207,8 @@ export default {
         populateData(data){
             for(var index in data.content){
                 let appointment = data.content[index];
+                appointment.startTime = new Date(appointment.startTime);
+                appointment.endTime = new Date(appointment.endTime);
                 this.appointments.push(appointment);
             }
         }
