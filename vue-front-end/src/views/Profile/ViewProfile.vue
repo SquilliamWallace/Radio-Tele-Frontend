@@ -7,7 +7,7 @@
                 <v-flex xs4>
                 <v-card class = "elevation-0" color = "transparent">
                     <v-avatar size = "200">
-                            <img src="https://i.kym-cdn.com/entries/icons/original/000/009/803/spongebob-squarepants-patrick-spongebob-patrick-star-background-225039.jpg" alt="Patrick">
+                            <img src="https://icdn3.digitaltrends.com/image/50395182-infinite-space-background-with-silhouette-of-telescope.jpg?ver=1" alt="Patrick">
                         </v-avatar>
                         <div class = "headline">{{ profile.firstName.value }} {{ profile.lastName.value }}</div>
                 </v-card>
