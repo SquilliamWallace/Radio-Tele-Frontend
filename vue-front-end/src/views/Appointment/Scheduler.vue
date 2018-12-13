@@ -146,7 +146,7 @@ export default {
             tele: true,
             telescopeId: "",
             telescopes: [
-                "John Rudy Park", 
+                "John C. Rudy County Park", 
                 "Scale Model",
                 "Virtual"
             ],
@@ -338,7 +338,7 @@ export default {
             this.telescopeId = id
 
             // Get the name of the telescope based on the telescopeId, to display at top of page
-            this.telescopeName = this.telescopes[id-1] + " telescope"
+            this.telescopeName = this.telescopes[id-1] + " Radio Telescope"
 
             // Call back-end Api with data set above.
             ApiDriver.Appointment.listAppointmentsBetweenDates(data).then((response) => {

@@ -180,7 +180,7 @@ export default {
         name: 'Appointment'
         return {
             telescopes: [
-                "John Rudy Park",
+                "John C. Rudy County Park", 
                 "Scale Model",
                 "Virtual"
             ],
