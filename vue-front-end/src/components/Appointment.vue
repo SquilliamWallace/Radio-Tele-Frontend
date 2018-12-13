@@ -184,7 +184,7 @@ export default {
                 "Scale Model",
                 "Virtual"
             ],
-            telescopeName: "", 
+            telescopeName: "John C. Rudy County Park", 
             form: {
                 isPrivate: {
                     value: false
