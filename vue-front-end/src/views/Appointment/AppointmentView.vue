@@ -256,8 +256,8 @@ export default {
             this.appointment.end.value = this.data.endTime.value
             this.appointment.telescopeId.value = this.data.telescopeId.value
             this.appointment.rightAscension.hours = this.data.rightAscension.hours
-            this.appointment.rightAscension.hours = this.data.rightAscension.minutes
-            this.appointment.rightAscension.hours = this.data.rightAscension.seconds
+            this.appointment.rightAscension.minutes = this.data.rightAscension.minutes
+            this.appointment.rightAscension.seconds = this.data.rightAscension.seconds
             this.appointment.declination.value = this.data.declination.value
             this.edit = true
         },

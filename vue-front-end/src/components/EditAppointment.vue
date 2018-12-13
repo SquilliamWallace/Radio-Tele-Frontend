@@ -31,11 +31,10 @@
                     </v-flex>
                     <v-flex xs12 sm4>
                          <v-text-field
-                         v-model="form.rightAscension.hours"
+                         v-model="appointmentObj.rightAscension.hours"
                          :rules="[rules.rightAscHours]"
                          color="blue darken-2"
-                         :error=form.rightAscension.hasError
-                         :error-messages=form.rightAscension.errorMessage
+                         :error=appointmentObj.rightAscension.hasError
                          label="Right Ascension Hours"
                          type="number"
                          mask="##"
@@ -47,11 +46,10 @@
                     -->
                      <v-flex xs12 sm4>
                          <v-text-field
-                         v-model="form.rightAscension.minutes"
+                         v-model="appointmentObj.rightAscension.minutes"
                          :rules="[rules.rightAscMinutes]"
                          color="blue darken-2"
-                         :error=form.rightAscension.hasError
-                         :error-messages=form.rightAscension.errorMessage
+                         :error=appointmentObj.rightAscension.hasError
                          label="Right Ascension Minutes"
                          type="number"
                          mask="##"
@@ -63,11 +61,10 @@
                     -->
                      <v-flex xs12 sm4>
                          <v-text-field
-                         v-model="form.rightAscension.seconds"
+                         v-model="appointmentObj.rightAscension.seconds"
                          :rules="[rules.rightAscSeconds]"
                          color="blue darken-2"
-                         :error=form.rightAscension.hasError
-                         :error-messages=form.rightAscension.errorMessage
+                         :error=appointmentObj.rightAscension.hasError
                          label="Right Ascension Seconds"
                          type="number"
                          mask="##"
@@ -150,15 +147,14 @@ export default {
                 endTime: new Date(this.appointmentObj.end.value).toUTCString(),
                 telescopeId: this.appointmentObj.telescopeId.value,
                 isPublic: !this.appointmentObj.privacy.value,
-                hours: this.form.rightAscension.hours,
-                minutes: this.form.rightAscension.minutes,
-                seconds: this.form.rightAscension.seconds,
+                hours: this.appointmentObj.rightAscension.hours,
+                minutes: this.appointmentObj.rightAscension.minutes,
+                seconds: this.appointmentObj.rightAscension.seconds,
                 declination: this.appointmentObj.declination.value
             });
             console.log(data)
             ApiDriver.Appointment.update(this.appointmentObj.id.value, data).then((response) => {
                 HttpResponse.then(response, (data) => {
-                    this.appointmentObj.rightAscension = this.form.rightAscension
                     this.$emit('edited', this.appointmentObj)
                     this.$emit('input');
 
@@ -199,9 +195,9 @@ export default {
     },
     computed: {
         validRequest() {
-            return (this.form.rightAscension.hours &&
-                    this.form.rightAscension.minutes &&
-                    this.form.rightAscension.seconds &&
+            return (this.appointmentObj.rightAscension.hours &&
+                    this.appointmentObj.rightAscension.minutes &&
+                    this.appointmentObj.rightAscension.seconds &&
                     this.appointmentObj.declination.value &&
                     this.appointmentObj.start.value &&
                     this.appointmentObj.end.value)
