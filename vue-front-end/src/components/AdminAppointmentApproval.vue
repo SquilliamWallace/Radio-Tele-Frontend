@@ -128,6 +128,7 @@ import ApiDriver from '../ApiDriver';
 import HttpResponse from '../utils/HttpResponse';
 import CurrentUserValidation from  '../utils/CurrentUserValidation';
 import Loading from "../components/Loading"
+import moment from 'moment'
 export default {
     name:'AdminAppointmentApproval',
     data(){
@@ -207,8 +208,8 @@ export default {
         populateData(data){
             for(var index in data.content){
                 let appointment = data.content[index];
-                appointment.startTime = new Date(appointment.startTime);
-                appointment.endTime = new Date(appointment.endTime);
+                appointment.startTime = moment(appointment.startTime).format('MM-DD-YYYY hh:mm A');
+                appointment.endTime = moment(appointment.endTime).format('MM-DD-YYYY hh:mm A');
                 this.appointments.push(appointment);
             }
         }
