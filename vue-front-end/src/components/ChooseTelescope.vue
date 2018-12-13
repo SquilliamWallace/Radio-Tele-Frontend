@@ -3,7 +3,7 @@
     "change telescope" button on the scheduler page
 -->
 <template dark>
-    <v-dialog dark hide-overlay :value="value" @input="$emit('input')" persistent width="50%">
+    <v-dialog dark :value="value" @input="$emit('input')" persistent width="50%">
             <v-card flat>
                 <v-card-title class="headline">Choose Telescope</v-card-title>
                 <v-form ref="form" @submit.prevent="submit" refs="form">
@@ -40,7 +40,7 @@ export default {
                 "Scale Model",
                 "Virtual"
             ],
-            telescopeName: ""
+            telescopeName: "John Rudy Park"
         }
     },
     props: {
