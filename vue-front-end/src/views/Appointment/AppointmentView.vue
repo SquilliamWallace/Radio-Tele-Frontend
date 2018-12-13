@@ -34,7 +34,8 @@
             <v-list-tile>
                 <v-list-tile-content class="white--text">
                     <v-list-tile-title>Coordinates:</v-list-tile-title>
-                    <v-list-tile-sub-title class="pl-3">Right Ascension: {{ data.rightAscension.value }}, Declination: {{ data.declination.value }}</v-list-tile-sub-title>
+                    <v-list-tile-sub-title class="pl-3" v-if="data.declination.value > 0">Right Ascension: {{ data.rightAscension.value }}, Declination: +{{ data.declination.value }}</v-list-tile-sub-title>
+                    <v-list-tile-sub-title class="pl-3" v-if="data.declination.value <= 0">Right Ascension: {{ data.rightAscension.value }}, Declination: {{ data.declination.value }}</v-list-tile-sub-title>
                 </v-list-tile-content>
             </v-list-tile>
             <v-divider></v-divider>
