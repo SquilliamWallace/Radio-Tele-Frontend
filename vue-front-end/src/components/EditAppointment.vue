@@ -29,18 +29,51 @@
                         required
                         ></v-text-field>
                     </v-flex>
-                    <v-flex xs12 sm6>
-                        <v-text-field
-                        v-model="appointmentObj.rightAscension.value"
-                        :rules="[rules.numRequired]"
-                        :error=appointmentObj.rightAscension.hasError
-                        :error-messages=appointmentObj.rightAscension.errorMessage
-                        color="blue darken-2"
-                        label="Right Ascension"
-                        type="number"
-                        required
-                        ></v-text-field>
-                    </v-flex>
+                    <v-flex xs12 sm4>
+                         <v-text-field
+                         v-model="form.rightAscension.hours"
+                         :rules="[rules.rightAscHours]"
+                         color="blue darken-2"
+                         :error=form.rightAscension.hasError
+                         :error-messages=form.rightAscension.errorMessage
+                         label="Right Ascension Hours"
+                         type="number"
+                         mask="##"
+                         required
+                         ></v-text-field>
+                     </v-flex>
+                     <!--
+                        Same as Right Ascension Hours, except checks for minutes error handling
+                    -->
+                     <v-flex xs12 sm4>
+                         <v-text-field
+                         v-model="form.rightAscension.minutes"
+                         :rules="[rules.rightAscMinutes]"
+                         color="blue darken-2"
+                         :error=form.rightAscension.hasError
+                         :error-messages=form.rightAscension.errorMessage
+                         label="Right Ascension Minutes"
+                         type="number"
+                         mask="##"
+                         required
+                         ></v-text-field>
+                     </v-flex>
+                     <!--
+                        Same as Right Ascension Hours, except checks for seconds error handling
+                    -->
+                     <v-flex xs12 sm4>
+                         <v-text-field
+                         v-model="form.rightAscension.seconds"
+                         :rules="[rules.rightAscSeconds]"
+                         color="blue darken-2"
+                         :error=form.rightAscension.hasError
+                         :error-messages=form.rightAscension.errorMessage
+                         label="Right Ascension Seconds"
+                         type="number"
+                         mask="##"
+                         required
+                         ></v-text-field>
+                     </v-flex>
                     <v-flex xs12 sm6>
                         <v-text-field
                         v-model="appointmentObj.declination.value"
@@ -87,8 +120,19 @@ import CustomErrorHandler from '../utils/CustomErrorHandler.js';
 export default {
     data() {
         return {
+            form: {
+                rightAscension: {
+                        hours: null,
+                        minutes: null,
+                        seconds: null,
+                        hasError: false
+                },
+            },
             rules: {
                 dateRequired: val => (val && val.length > 0) || 'Required field',
+                rightAscHours: val => (val && val.toString().length > 0 && val < 24 && val >= 0) || 'Must be between 0 and 23 hours',
+                rightAscMinutes: val => (val && val.toString().length > 0 && val < 60 && val >= 0) || 'Must be between 0 and 59 minutes',
+                rightAscSeconds: val => (val && val.toString().length > 0 && val < 60 && val >= 0) || 'Must be between 0 and 59 seconds',
                 numRequired: val => (val && val.toString().length > 0) || 'Required field'
             }
         }
@@ -106,12 +150,15 @@ export default {
                 endTime: new Date(this.appointmentObj.end.value).toUTCString(),
                 telescopeId: this.appointmentObj.telescopeId.value,
                 isPublic: !this.appointmentObj.privacy.value,
-                rightAscension: this.appointmentObj.rightAscension.value,
+                hours: this.form.rightAscension.hours,
+                minutes: this.form.rightAscension.minutes,
+                seconds: this.form.rightAscension.seconds,
                 declination: this.appointmentObj.declination.value
             });
-
+            console.log(data)
             ApiDriver.Appointment.update(this.appointmentObj.id.value, data).then((response) => {
                 HttpResponse.then(response, (data) => {
+                    this.appointmentObj.rightAscension = this.form.rightAscension
                     this.$emit('edited', this.appointmentObj)
                     this.$emit('input');
 
@@ -152,7 +199,9 @@ export default {
     },
     computed: {
         validRequest() {
-            return (this.appointmentObj.rightAscension.value &&
+            return (this.form.rightAscension.hours &&
+                    this.form.rightAscension.minutes &&
+                    this.form.rightAscension.seconds &&
                     this.appointmentObj.declination.value &&
                     this.appointmentObj.start.value &&
                     this.appointmentObj.end.value)

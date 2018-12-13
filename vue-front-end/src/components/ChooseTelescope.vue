@@ -36,11 +36,11 @@ export default {
         name: 'Telescope'
         return {
             telescopes: [
-                "John Rudy Park",
+                "John C. Rudy County Park", 
                 "Scale Model",
                 "Virtual"
             ],
-            telescopeName: ""
+            telescopeName: "John C. Rudy County Park"
         }
     },
     props: {
