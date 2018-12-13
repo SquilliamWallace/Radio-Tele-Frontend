@@ -89,7 +89,7 @@ export default {
         return {
             rules: {
                 dateRequired: val => (val && val.length > 0) || 'Required field',
-                numRequired: val => (val && val.toString().length > 0) || 'Required field'
+                numRequired: val => (val && val.toString().length > 0 && val <=90 && val >= -90) || 'Must be between 90 and -90'
             }
         }
     },
