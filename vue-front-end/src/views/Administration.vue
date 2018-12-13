@@ -11,10 +11,6 @@
         <v-tabs-slider color="white"></v-tabs-slider>
 
         <v-tab>
-            User Management
-            <v-icon>account_box</v-icon>
-        </v-tab>
-        <v-tab>
             Logging
             <v-icon>work</v-icon>
         </v-tab>
@@ -26,10 +22,10 @@
           Appointment Management
           <v-icon>event</v-icon>
         </v-tab>
-
-        <v-tab-item>
-          <admin-user-management></admin-user-management>
-        </v-tab-item>
+        <v-tab>
+            User Management
+            <v-icon>account_box</v-icon>
+        </v-tab>
         
         <v-tab-item>
           <admin-log></admin-log>
@@ -43,6 +39,9 @@
             <admin-appointment-approval></admin-appointment-approval>
         </v-tab-item>
         
+        <v-tab-item>
+          <admin-user-management></admin-user-management>
+        </v-tab-item>
       </v-tabs>
 
   </div>
