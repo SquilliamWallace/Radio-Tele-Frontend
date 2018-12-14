@@ -152,7 +152,6 @@ export default {
                 seconds: this.appointmentObj.rightAscension.seconds,
                 declination: this.appointmentObj.declination.value
             });
-            console.log(data)
             ApiDriver.Appointment.update(this.appointmentObj.id.value, data).then((response) => {
                 HttpResponse.then(response, (data) => {
                     this.$emit('edited', this.appointmentObj)

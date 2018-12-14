@@ -303,11 +303,9 @@ export default {
                 passwordConfirm: this.changePasswordForm.passwordConfirm.value,
                 id: this.changePasswordForm.id.value
             });
-            console.log(form)
             
 
             ApiDriver.User.changePassword(this.profile.id.value, form).then(response => {
-                console.log(response)
                 // Handle the response
                 HttpResponse.then(response, data => {
                     // Success alert

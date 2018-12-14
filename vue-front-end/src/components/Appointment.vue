@@ -276,7 +276,6 @@ export default {
                 } else if (field == "ALLOTTED_TIME" && !this.$store.state.isGuest) {
                    //Changing startTime and endTime back to currnt time instead of UTC to display on request modal
                    //Also adding telescope name into Obj to display on request form
-                   console.log(this.eventObj.start)
                    formObj.startTime = this.eventObj.start
                    formObj.endTime = this.eventObj.end
                    formObj.telescope = this.telescopeName

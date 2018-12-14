@@ -226,7 +226,6 @@ export default {
             this.data.isPublic.value = !appointmentObj.privacy.value
         },
         populateData(data) {
-            console.log(data)
             // Populate the appointment information 
             this.data.id.value = data.id
             this.data.telescopeId.value = data.telescopeId
