@@ -77,7 +77,7 @@
                             </v-card>
                         </v-dialog>
 
-                        <v-btn color="primary darken-1" @click.native="passReset = true">Edit Password</v-btn>
+                        <v-btn v-if="$store.state.currentUserId == profile.id.value" color="primary darken-1" @click.native="passReset = true">Edit Password</v-btn>
                         <!-- Password change modal -->
                          <v-dialog v-model = "passReset" persistent max-width="600px" dark>
                             <v-card>

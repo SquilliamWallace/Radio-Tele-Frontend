@@ -5,7 +5,7 @@
         <v-card v-if="appointments.length <= 0" flat>
             <v-card-title primary-title class="justify-center">No Appointments Require Approval</v-card-title>
             <v-card-text>
-                <div>Come back later to see if any users tried to request an appointment</div>
+                <div>You will be notified if any users tried to create an appointment beyond their time constraints</div>
             </v-card-text>
         </v-card>
         <v-card v-if="appointments.length > 0" width = "100s%" align-center>

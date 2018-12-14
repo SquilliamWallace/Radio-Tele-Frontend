@@ -19,7 +19,7 @@
                 <v-list-tile class="list-item" v-for="appointment in completedAppointments" :key="appointment.id" v-bind:href="'/appointments/' + appointment.id + '/view'">
                     <v-list-tile-content v-if="completedAppointments.length > 0">
                         <v-list-tile-title v-if="appointment.celestialBody">
-                            Celestial Body: {{ appointment.celestialBody }}
+                            Appointment #{{ appointment.id }}
                         </v-list-tile-title>
                         <v-list-tile-title v-if="appointment.coordinates">
                             Coordinates: {{ appointment.coordinates }}
