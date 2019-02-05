@@ -40,8 +40,8 @@
             <!-- 
                 Button to toggle boolean to display the choose telescope modal.
             -->
-            <v-btn v-show="!this.tele" v-on:click="toggleChooseTelescope" ripple>Change Telescope</v-btn>
-            <v-btn @click="createEvent">Schedule Appointment</v-btn>
+            <v-btn dark v-show="!this.tele" v-on:click="toggleChooseTelescope" ripple>Change Telescope</v-btn>
+            <v-btn dark @click="createEvent">Schedule Appointment</v-btn>
             
             
             <!-- 
