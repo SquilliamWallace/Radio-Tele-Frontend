@@ -69,7 +69,7 @@
                     this allows us to call the calendar by id and get information about it inside of our methods.
                 }
             -->
-            <full-calendar @change-telescope="toggleChooseTelescope" @event-created="createEvent" @event-selected="openEvent" :events="events" :header="header" @view-render="changedViews" id="calendar"></full-calendar>
+            <full-calendar @change-telescope="toggleChooseTelescope" @event-selected="openEvent" :events="events" :header="header" @view-render="changedViews" id="calendar"></full-calendar>
             
             <v-layout justify-center>
                 <!-- 
@@ -224,11 +224,6 @@ export default {
         // This method is called anytime someone created an event on the calendar
         // Obj is the event Obj created by the callendar when someone drags and drops a new event
         createEvent: function(Obj) {
-            // this.event is the obj that is passes to the CreateEvent Modal, so set its variables based on the Obj form calendar
-            this.event.allDay = Obj.allDay
-            this.event.start = moment(Obj.start).format('YYYY-MM-DD hh:mm A')
-            this.event.end = moment(Obj.end).format('YYYY-MM-DD hh:mm A')
-            
             // Set openCreateModal to true so that Appointment.vue component displays
             this.openCreateModal = true;
         },

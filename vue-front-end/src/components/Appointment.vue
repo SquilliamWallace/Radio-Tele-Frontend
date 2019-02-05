@@ -24,7 +24,7 @@
                         :rules="[rules.dateRequired]"
                             Makes sure that their is input in the start date field
                     -->
-                    <v-flex xs12 sm6>
+                    <!-- <v-flex xs12 sm6>
                         <v-text-field
                         v-model="eventObj.start"
                         :rules="[rules.dateRequired]"
@@ -32,11 +32,38 @@
                         label="Start Time"
                         required
                         ></v-text-field>
+                    </v-flex> -->
+                    <v-flex xs12 sm6>
+                        <div class="title-style">Start Date/Time</div>
+                        <v-date-picker
+                        v-model="startDate"
+                        landscape
+                        width="175"
+                        ></v-date-picker>
+                        <v-time-picker
+                        v-model="startTime"
+                        landscape
+                        width="175"
+                        v-on:update:period="captureStartPeriod($event)"
+                        ></v-time-picker>
+                    </v-flex>
+                    <v-flex xs12 sm6>
+                        <div class="title-style">End Date/Time</div>
+                        <v-date-picker
+                        v-model="endDate"
+                        landscape
+                        width="175"
+                        ></v-date-picker>
+                        <v-time-picker
+                        v-model="endTime"
+                        landscape
+                        width="175"
+                        ></v-time-picker>
                     </v-flex>
                     <!--
                         Same as Start Time above
                     -->
-                    <v-flex xs12 sm6>
+                    <!-- <v-flex xs12 sm6>
                         <v-text-field
                         v-model="eventObj.end"
                         :rules="[rules.dateRequired]"
@@ -44,7 +71,7 @@
                         label="End Time"
                         required
                         ></v-text-field>
-                    </v-flex>
+                    </v-flex> -->
                     <!--
                         Right Ascension Hours
 
@@ -200,6 +227,12 @@ export default {
                     hasError: false
                 }
             },
+            startDate: "",
+            startTime: "",
+            endDate: "",
+            endTime: "",
+            start: "",
+            end: "",
             /* This is the rules obj used in the form validation.
                 val => (true or false logic) || 'text to display if false
             */
@@ -214,7 +247,6 @@ export default {
         }
     },
     props: {
-        eventObj: {},
         value: false
     },
     methods: {
@@ -231,12 +263,14 @@ export default {
         // Method to submit to back end
         submit() {
             // Clears the errors first to make sure that if backend sends back any errors we only display the current errors
+            this.start = this.startDate + " " + this.startTime;
+            this.end = this.endDate + " " + this.endTime;
             this.clearErrors();
             // set up form to send to back end with data from form obj
             let form = {
                 userId: this.$store.state.currentUserId,
-                startTime: new Date(this.eventObj.start).toUTCString(),
-                endTime: new Date(this.eventObj.end).toUTCString(),
+                startTime: new Date(this.start).toUTCString(),
+                endTime: new Date(this.end).toUTCString(),
                 telescopeId: this.telescopes.indexOf(this.telescopeName) + 1,
                 isPublic: !this.form.isPrivate.value,
                 hours: this.form.rightAscension.hours,
@@ -274,10 +308,10 @@ export default {
                 } else if (field === "DECLINATION") {
                     CustomErrorHandler.populateError(this.form.declination, message)
                 } else if (field == "ALLOTTED_TIME" && !this.$store.state.isGuest) {
-                   //Changing startTime and endTime back to currnt time instead of UTC to display on request modal
+                   //Changing startTime and endTime back to current time instead of UTC to display on request modal
                    //Also adding telescope name into Obj to display on request form
-                   formObj.startTime = this.eventObj.start
-                   formObj.endTime = this.eventObj.end
+                   formObj.startTime = this.start
+                   formObj.endTime = this.end
                    formObj.telescope = this.telescopeName
                    //Sends the information of the form to the requestAppointment function on Scheduler Page.
                    this.$emit('request-appointment', formObj)
@@ -289,13 +323,18 @@ export default {
         },
         clearErrors() {
             CustomErrorHandler.clearError(this.form.rightAscension);
+        },
+        captureStartPeriod(payload) {
+            console.log(payload);
         }
     },
     computed: {
         formIsValid() {
             return (
-                this.eventObj.start &&
-                this.eventObj.end &&
+                this.startTime &&
+                this.endTime &&
+                this.startDate &&
+                this.endDate &&
                 this.form.rightAscension.hours,
                 this.form.rightAscension.minutes,
                 this.form.rightAscension.seconds,
@@ -306,5 +345,7 @@ export default {
 }
 </script>
 <style scoped>
-
+.title-style{
+    padding-bottom: 10px;
+}
 </style>
