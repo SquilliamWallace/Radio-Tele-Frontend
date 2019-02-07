@@ -1,5 +1,5 @@
 <template dark>
-    <v-dialog dark hide-overlay :value="value" @input="$emit('input')" persistent width="50%">
+    <v-dialog fullscreen dark hide-overlay :value="value" @input="$emit('input')" persistent width="50%">
             <v-card flat>
                 <v-card-title class="headline">Schedule Appointment</v-card-title>
                 <v-snackbar
