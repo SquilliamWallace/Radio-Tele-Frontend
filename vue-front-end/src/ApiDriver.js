@@ -37,10 +37,10 @@ export default {
         return axios.put(this.namespace + "/" + userId + "/changePassword", data, Headers.retrieveHeaders())
       },
       unapproved: function(data) {
-        return axios.get("/api/roles/unapproved" + "?page=" + data.pageNumber + "&size=" + data.pageSize, Headers.retrieveHeaders())
+        return axios.get(baseUrl + "roles/unapproved" + "?page=" + data.pageNumber + "&size=" + data.pageSize, Headers.retrieveHeaders())
       },
       approve: function(data) {
-        return axios.put("/api/roles/validate", data, Headers.retrieveHeaders())
+        return axios.put(baseUrl + "roles/validate", data, Headers.retrieveHeaders())
       },
       Appointment: {
         namespace: baseUrl + "users",
@@ -77,13 +77,13 @@ export default {
         return axios.get(this.namespace + "/" + appointmentId + "/rf-data", Headers.retrieveHeaders())
       },
       update: function(appointmentId, data) {
-        return axios.put("/api/appointments/" + appointmentId, data, Headers.retrieveHeaders())
+        return axios.put(baseUrl + "appointments/" + appointmentId, data, Headers.retrieveHeaders())
       },
       cancel: function(appointmentId) {
-        return axios.put("/api/appointments/" + appointmentId + "/cancel", Headers.retrieveHeaders())
+        return axios.put(baseUrl + "appointments/" + appointmentId + "/cancel", Headers.retrieveHeaders())
       },
       completedAppointments: function(userId, pageNumber, pageSize) {
-        return axios.get("/api/users/" + userId + "/appointments/completedList?page=" + pageNumber + "&size=" + pageSize, Headers.retrieveHeaders());
+        return axios.get(baseUrl + "users/" + userId + "/appointments/completedList?page=" + pageNumber + "&size=" + pageSize, Headers.retrieveHeaders());
       },
       futureAppointments: function(userId, pageNumber, pageSize) {
         return axios.get(baseUrl + "users/" + userId + "/appointments/futureList?page=" + pageNumber + "&size=" + pageSize, Headers.retrieveHeaders());
@@ -97,10 +97,10 @@ export default {
     },
     Log: {
       viewLogs: function(pageNumber, pageSize){
-        return axios.get("/api/logs?pageNumber=" + pageNumber + "&pageSize=" + pageSize, Headers.retrieveHeaders())
+        return axios.get(baseUrl + "logs?pageNumber=" + pageNumber + "&pageSize=" + pageSize, Headers.retrieveHeaders())
       },
       retrieveErrors: function(id){
-        return axios.get("/api/logs/" + id + "/errors", )
+        return axios.get(baseUrl + "logs/" + id + "/errors", )
       }
     },
     Auth: {
