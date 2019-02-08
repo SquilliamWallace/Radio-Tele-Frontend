@@ -13,6 +13,7 @@ export default {
         return new Vuex.Store({
             strict: true,
             state: {
+                token: null,
                 currentUserId: null,
                 isUser: false,
                 isGuest: false,
@@ -25,6 +26,9 @@ export default {
                 information: ""
             },
             mutations: {
+                embedToken(state, token) {
+                    state.token = token
+                },
                 login(state, data) {
                     state.currentUserId = data.userId;
     
@@ -52,6 +56,7 @@ export default {
                     state.isResearcher = false;
                     state.isMember = false;
                     state.isAdmin = false;
+                    state.token = null
                 },
                 loading(state, value) {
                     state.isLoading = value;

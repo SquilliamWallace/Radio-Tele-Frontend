@@ -4,7 +4,9 @@ export default {
     // Return a json object with the content type specified as application/json
     retrieveHeaders: function() {
         return { 
-            headers: {'Content-Type': 'application/json' }
+            headers: {
+                'Content-Type': 'application/json'
+            }
         }
     }
 }

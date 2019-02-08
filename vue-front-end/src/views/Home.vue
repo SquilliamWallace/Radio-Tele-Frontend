@@ -50,7 +50,7 @@ export default {
       handleLoggedIn() {
         // Call the auth api endpoint so we can populate
         // the Vue store with user information
-        ApiDriver.Auth.User().then((response) => {
+        ApiDriver.Auth.User(this.$store.state.token).then((response) => {
           HttpResponse.then(response, (data) => {
             // Commit the data to the store and update the vue app
             this.$store.commit("login", data.data);

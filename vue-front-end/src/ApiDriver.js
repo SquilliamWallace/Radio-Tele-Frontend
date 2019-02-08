@@ -104,8 +104,8 @@ export default {
       }
     },
     Auth: {
-      User: function() {
-        return axios.get(baseUrl + "auth")
+      User: function(token) {
+        return axios.get(baseUrl + "auth", { headers: { Authorization: token }});
       },
       Admin: function() {
         return axios.get(baseUrl + "authAdmin")
@@ -113,7 +113,7 @@ export default {
     },
 
     login: function(data) {
-      return axios.post(baseUrl + "login?email=" + data.username.value + "&password=" + data.password.value, JSON.stringify(data), Headers.retrieveHeaders())
+      return axios.post("/login?email=" + data.username.value + "&password=" + data.password.value, JSON.stringify(data), Headers.retrieveHeaders())
     },
     logout: function () {
       return axios.post(baseUrl + "logout", {}, Headers.retrieveHeaders())

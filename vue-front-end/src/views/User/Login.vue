@@ -112,11 +112,13 @@ export default {
       submit() {
           // Make the API call
           ApiDriver.login(this.data).then(response => {
+              let that = this;
               // Clear any errors
               this.clearErrors();
 
               // Redirect on success
-              if(response.data.includes("bundle.js")){
+              if(response.headers.authorization){
+                that.$store.commit("embedToken", response.headers.authorization);
                 router.push('/home');
               } else {
                   // Populate error messages for the form fields
