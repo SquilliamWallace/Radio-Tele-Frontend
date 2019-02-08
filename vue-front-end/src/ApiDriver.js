@@ -86,7 +86,7 @@ export default {
         return axios.get("/api/users/" + userId + "/appointments/completedList?page=" + pageNumber + "&size=" + pageSize, Headers.retrieveHeaders());
       },
       futureAppointments: function(userId, pageNumber, pageSize) {
-        return axios.get("/api/users/" + userId + "/appointments/futureList?page=" + pageNumber + "&size=" + pageSize, Headers.retrieveHeaders());
+        return axios.get(baseUrl + "users/" + userId + "/appointments/futureList?page=" + pageNumber + "&size=" + pageSize, Headers.retrieveHeaders());
       },
       publicAppointments: function(page, size) {
         return axios.get(this.namespace + "/publicCompleted?page=" + page + "&size=" + size, Headers.retrieveHeaders())
