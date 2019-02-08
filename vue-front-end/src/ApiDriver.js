@@ -108,7 +108,7 @@ export default {
         return axios.get(baseUrl + "auth", Headers.retrieveHeaders());
       },
       Admin: function() {
-        return axios.get(baseUrl + "authAdmin")
+        return axios.get(baseUrl + "authAdmin", Headers.retrieveHeaders());
       }
     },
 
