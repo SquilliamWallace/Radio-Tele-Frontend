@@ -1,3 +1,5 @@
+import store from '../store/modules/VuexStore'
+
 // All data sent to the back-end must be specified as application/json
 // so Spring knows how to handle it
 export default {
@@ -5,7 +7,8 @@ export default {
     retrieveHeaders: function() {
         return { 
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': store.getters.token
             }
         }
     }
