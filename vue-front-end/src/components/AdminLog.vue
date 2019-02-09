@@ -46,20 +46,34 @@
         </tr>
       </template>
       <template slot="footer">
-        <td :colspan="headers.length">
-          <v-pagination
-            circle
-            v-model="pageDisplay"
-            :length="numPages"
-            @input = "next"
-            :total-visible="15"
-            ></v-pagination>
-        </td>
+        
+            
+          
+        
       </template>
       <v-alert slot="no-results" :value="true" color="error" icon="warning">
           Your search for "{{ search }}" found no results.
       </v-alert>  
     </v-data-table>
+        <v-pagination
+                circle
+                v-model="pageDisplay"
+                :length="numPages"
+                @input = "next"
+                :total-visible="15"
+            ></v-pagination>
+        <v-layout justify-center>
+            <v-flex xs12 sm1>
+                <v-select
+                v-model="selectedPageSize"
+                :items="pageSizeList"
+                label="Items per page"
+                v-on:change="this.pageSizeUpdate"
+                
+                ></v-select>
+            </v-flex>
+        </v-layout>
+
     </v-card>
     <v-dialog dark v-model="toggleDetailedView">
         <loading v-if="$store.state.isLoading"></loading>
@@ -118,11 +132,12 @@ export default {
                 sortBy: 'name',
                 totalItems: 0,
                 page: 1,
-                rowsPerPage: 25
+                rowsPerPage: 55
             },
             currentLog: {},
             pageNumber: 0,
             pageSize: 25,
+            selectedPageSize: "15",
             pageDisplay: 1,
             numPages: 0,
             totalLogs: 0,
@@ -137,6 +152,9 @@ export default {
                 {text: 'User ID', value: 'userId'},
                 {text: 'Username', value: 'userName'}
             ],
+            pageSizeList: [
+                '15', '25', '35', '55'
+            ]
          
         }
             
@@ -144,7 +162,7 @@ export default {
     methods: {
         getLogs() {
             this.$store.commit("loading", true);
-            ApiDriver.Log.viewLogs(this.pageNumber, this.pageSize).then((response) => {
+            ApiDriver.Log.viewLogs(this.pageNumber, parseInt(this.selectedPageSize),10).then((response) => {
                 HttpResponse.then(response, (data) => {
                     this.populateData(data.data)
                     this.totalLogs = data.data.totalElements;
@@ -173,6 +191,7 @@ export default {
             });
         },
         populateData(data){
+            console.log(data)
             for (var index in data.content) {
                 let log = data.content[index];
                 if (!log.userId) {
@@ -216,6 +235,10 @@ export default {
             this.pageDisplay = page;
             this.logs = [];
             this.getLogs();
+        },
+        pageSizeUpdate(){
+            this.logs = []
+            this.getLogs()
         },
         changeSort (column) {
             if (this.pagination.sortBy === column) {
