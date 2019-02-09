@@ -149,7 +149,7 @@ export default {
             
             pageNumber: 0,
             // Set this to 15?
-            pageSize: 1,
+            pageSize: 15,
             pageDisplay: 1,
             numPages: 0,
 
