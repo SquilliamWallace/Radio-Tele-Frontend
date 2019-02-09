@@ -25,10 +25,10 @@ export default {
         return axios.put(this.namespace + "/" + userId + "/changePassword", data, Headers.retrieveHeaders())
       },
       ban: function(userId, message) {
-        return axios.put(this.namespace + "/" + userId + "/ban?message=" + message, Headers.retrieveHeaders());
+        return axios.put(this.namespace + "/" + userId + "/ban?message=" + message, {}, Headers.retrieveHeaders());
       },
       unban: function(userId) {
-        return axios.put(this.namespace + "/" + userId + "/unban")
+        return axios.put(this.namespace + "/" + userId + "/unban", {}, Headers.retrieveHeaders())
       },
       changeEmail: function(userId, data) {
         return axios.post(this.namespace + "/" + userId + "/updateEmail", data, Headers.retrieveHeaders())
@@ -100,7 +100,7 @@ export default {
         return axios.get(baseUrl + "logs?pageNumber=" + pageNumber + "&pageSize=" + pageSize, Headers.retrieveHeaders())
       },
       retrieveErrors: function(id){
-        return axios.get(baseUrl + "logs/" + id + "/errors", )
+        return axios.get(baseUrl + "logs/" + id + "/errors", Headers.retrieveHeaders())
       }
     },
     Auth: {
