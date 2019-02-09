@@ -88,9 +88,9 @@
                         <h3>Affected Record ID:</h3>
                         <span>{{currentLog.affectedRecordId}}</span>
                     </v-flex>
-                    <v-flex xs12 sm12>
-                        <h2 v-if="!currentLog.success">Errors:</h2>
-                        <li v-bind:key="error.id" v-for="error in currentLog.errors" v-if="!currentLog.success">
+                    <v-flex xs12 sm12 v-if="!currentLog.success">
+                        <h2>Errors:</h2>
+                        <li v-bind:key="error.id" v-for="error in currentLog.errors">
                             {{error.field}} {{error.message}}
                         </li>
                     </v-flex>
