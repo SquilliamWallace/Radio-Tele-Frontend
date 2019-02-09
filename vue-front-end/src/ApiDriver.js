@@ -36,8 +36,8 @@ export default {
       changePassword: function(userId, data) {
         return axios.put(this.namespace + "/" + userId + "/changePassword", data, Headers.retrieveHeaders())
       },
-      unapproved: function(data) {
-        return axios.get("/api/roles/unapproved" + "?page=" + data.pageNumber + "&size=" + data.pageSize)
+      unapproved: function(pageNumber, pageSize) {
+        return axios.get("/api/roles/unapproved" + "?page=" + pageNumber + "&size=" + pageSize)
       },
       approve: function(data) {
         return axios.put("/api/roles/validate", data, Headers.retrieveHeaders())

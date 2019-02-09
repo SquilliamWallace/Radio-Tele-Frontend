@@ -8,6 +8,9 @@
                 <div>You will be notified is any user registers and requires role approval</div>
             </v-card-text>
         </v-card>
+        <!-- 
+        Start of User Approval
+        -->
         <v-card v-if="users.length > 0" width = "100s%" align-center>
                 <v-list >
                     <v-list-tile @click="''" v-for="user in users" :key = "user.id" >
@@ -30,6 +33,18 @@
                     </v-list-tile>
                 </v-list>
         </v-card>
+        <!-- 
+        Add pagination below the entries 
+        -->
+        <div>
+            <v-pagination
+                circle
+                v-model="pageDisplay"
+                @input = "next"
+                :length="numPages"
+                :total-visible="15"
+            ></v-pagination>
+        </div>
         <!-- this dialog is called when the approve button is pressed -->
          <v-dialog dark v-model = "confirm" persistent max-width="700px">
             <v-card>
@@ -119,8 +134,7 @@ export default {
     data(){
         return{
             data: {
-                pageNumber: 0,
-                pageSize: 50 
+                page: 1
             },
             form: {
                 roleId: {
@@ -132,6 +146,12 @@ export default {
             },
             users: [],
             confirm: false,
+            
+            pageNumber: 0,
+            // Set this to 15?
+            pageSize: 1,
+            pageDisplay: 1,
+            numPages: 0,
 
             // user info
             
@@ -170,18 +190,27 @@ export default {
             
         },
         getUnapprovedUsers(){
-            ApiDriver.User.unapproved(this.data).then((response) => {
+            ApiDriver.User.unapproved(this.pageNumber, this.pageSize).then((response) => {
                 HttpResponse.then(response, (data) => {
+                    console.log(data)
                     this.populateData(data.data)
                 },(status, errors) => {})
                 
             })
         },
         populateData(data){
+            console.log(data.totalPages)
             for(var index in data.content){
                 let user = data.content[index];
                 this.users.push(user);
             }
+            this.numPages = data.totalPages;
+        },
+        next(page){
+            this.pageNumber = page - 1;
+            this.pageDisplay = page;
+            this.users = [];
+            this.getUnapprovedUsers();
         }
     },
     mounted: function(){
