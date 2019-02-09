@@ -115,7 +115,6 @@ export default {
               let that = this;
               // Clear any errors
               this.clearErrors();
-              console.log(response);
 
               // Redirect on success
               if(response.headers.authorization){
