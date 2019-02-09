@@ -20,8 +20,7 @@
                          :error=data.username.hasError
                          :error-messages=data.username.errorMessage
                          label="Email" 
-                         required 
-                         v-on:keyup.enter="submit"></v-text-field>
+                         required></v-text-field>
                     </v-flex>
                     <v-flex xs12>
                         <v-text-field 
@@ -31,8 +30,7 @@
                         :error-messages=data.password.errorMessage 
                         label="Password" 
                         type="password" 
-                        required 
-                        v-on:keyup.enter="submit"></v-text-field>
+                        required></v-text-field>
                     </v-flex>
                     <v-flex xs12>
                         <v-btn color="primary" @click="submit">Login</v-btn>
@@ -110,11 +108,12 @@ export default {
     },
     methods: {
       submit() {
+          // Clear any errors
+          this.clearErrors();
+          
           // Make the API call
           ApiDriver.login(this.data).then(response => {
               let that = this;
-              // Clear any errors
-              this.clearErrors();
 
               // Redirect on success
               if(response.headers.authorization){
@@ -125,6 +124,10 @@ export default {
                   CustomErrorHandler.populateError(this.data.username, this.generalErrorMessage);
                   CustomErrorHandler.populateError(this.data.password, this.generalErrorMessage);
               }
+          }).catch(error => {
+              // Populate error messages for the form fields
+            CustomErrorHandler.populateError(this.data.username, this.generalErrorMessage);
+            CustomErrorHandler.populateError(this.data.password, this.generalErrorMessage);
           });
       },
       submitResetRequest() {
