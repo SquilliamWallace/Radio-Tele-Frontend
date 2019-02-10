@@ -20,8 +20,7 @@
                          :error=data.username.hasError
                          :error-messages=data.username.errorMessage
                          label="Email" 
-                         required 
-                         v-on:keyup.enter="submit"></v-text-field>
+                         required></v-text-field>
                     </v-flex>
                     <v-flex xs12>
                         <v-text-field 
@@ -31,7 +30,7 @@
                         :error-messages=data.password.errorMessage 
                         label="Password" 
                         type="password" 
-                        required 
+                        required
                         v-on:keyup.enter="submit"></v-text-field>
                     </v-flex>
                     <v-flex xs12>
@@ -110,19 +109,26 @@ export default {
     },
     methods: {
       submit() {
+          // Clear any errors
+          this.clearErrors();
+
           // Make the API call
           ApiDriver.login(this.data).then(response => {
-              // Clear any errors
-              this.clearErrors();
+              let that = this;
 
               // Redirect on success
-              if(response.data.includes("bundle.js")){
+              if(response.headers.authorization){
+                that.$store.commit("embedToken", response.headers.authorization);
                 router.push('/home');
               } else {
                   // Populate error messages for the form fields
                   CustomErrorHandler.populateError(this.data.username, this.generalErrorMessage);
                   CustomErrorHandler.populateError(this.data.password, this.generalErrorMessage);
               }
+          }).catch(error => {
+              // Populate error messages for the form fields
+            CustomErrorHandler.populateError(this.data.username, this.generalErrorMessage);
+            CustomErrorHandler.populateError(this.data.password, this.generalErrorMessage);
           });
       },
       submitResetRequest() {
