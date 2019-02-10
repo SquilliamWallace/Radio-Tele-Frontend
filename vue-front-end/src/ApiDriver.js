@@ -80,7 +80,7 @@ export default {
         return axios.put(baseUrl + "appointments/" + appointmentId, data, Headers.retrieveHeaders())
       },
       cancel: function(appointmentId) {
-        return axios.put(baseUrl + "appointments/" + appointmentId + "/cancel", Headers.retrieveHeaders())
+        return axios.put(baseUrl + "appointments/" + appointmentId + "/cancel", {}, Headers.retrieveHeaders())
       },
       completedAppointments: function(userId, pageNumber, pageSize) {
         return axios.get(baseUrl + "users/" + userId + "/appointments/completedList?page=" + pageNumber + "&size=" + pageSize, Headers.retrieveHeaders());

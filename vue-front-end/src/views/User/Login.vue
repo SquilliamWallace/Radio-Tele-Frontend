@@ -20,8 +20,7 @@
                          :error=data.username.hasError
                          :error-messages=data.username.errorMessage
                          label="Email" 
-                         required
-                         v-on:keyup.enter="submit"></v-text-field>
+                         required></v-text-field>
                     </v-flex>
                     <v-flex xs12>
                         <v-text-field 
