@@ -5,7 +5,7 @@
         <v-card v-if="users.length <= 0" flat>
             <v-card-title primary-title class="justify-center">No Users Require Approval</v-card-title>
             <v-card-text>
-                <div>You will be notified is any user registers and requires role approval</div>
+                <div>You will be notified if any users register and require role approval</div>
             </v-card-text>
         </v-card>
         <v-card v-if="users.length > 0" width = "100s%" align-center>
