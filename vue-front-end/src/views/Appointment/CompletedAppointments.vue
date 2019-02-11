@@ -95,8 +95,8 @@ export default {
             for (var index in data.content) {
                 let appointment = data.content[index];
                 appointment.celestialBody = "Alpha Centauri";
-                appointment.startTime = moment(appointment.startTime).add(4, 'hours').format('MM/DD/YYYY hh:mm:ss A');
-                appointment.endTime = moment(appointment.endTime).add(4, 'hours').format('MM/DD/YYYY hh:mm:ss A');
+                appointment.startTime = moment(appointment.startTime).format('MM/DD/YYYY hh:mm:ss A');
+                appointment.endTime = moment(appointment.endTime).format('MM/DD/YYYY hh:mm:ss A');
                 this.completedAppointments.push(appointment);
                 this.numPages = data.totalPages;
             }
