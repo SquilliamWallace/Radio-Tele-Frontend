@@ -395,7 +395,12 @@ export default {
     mounted() {
         // Retrieve the user information when loaded onto the DOM
         this.retrieveInformation()
-        this.$store.commit("updateInfo", {page: "View Profile", info: "This page shows the information for the user\n that is currently logged in."})
+        if(!this.$store.state.isAdmin){
+            this.$store.commit("updateInfo", {page: "View Profile", info: "This page shows the information for the user\n that is currently logged in."})
+        }
+        else{
+            this.$store.commit("updateInfo", {page: "View Profile", info: "This page shows the information for the selected user.\n From here you can view the user's information to check\n for inappropriate or falsified content, as well as view\n their completed and future appointments."})
+        }
     }
 }
 </script>
