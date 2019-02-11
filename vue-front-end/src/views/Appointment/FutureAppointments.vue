@@ -40,6 +40,16 @@
             :length="numPages"
             @input="next"></v-pagination>
         </div>
+         <v-layout justify-center>
+            <v-flex xs12 sm1>
+                <v-select
+                v-model="selectedPageSize"
+                :items="pageSizeList"
+                label="Items per page"
+                v-on:change="this.pageSizeUpdate"
+                ></v-select>
+            </v-flex>
+        </v-layout>
     </div>
 </template>
 <script>
@@ -59,7 +69,11 @@ export default {
             pageSize: 25,
             numPages: 0,
             last: false,
-            futureAppointments: []
+            futureAppointments: [],
+            selectedPageSize: "1",
+            pageSizeList: [
+                '1', '2', '3', '4'
+            ]
         }
     },
     methods: {
@@ -68,7 +82,7 @@ export default {
             this.$store.commit("loading", true);
 
             // Make the API call
-            ApiDriver.Appointment.futureAppointments(this.$route.params.userId, this.pageNumber, this.pageSize)
+            ApiDriver.Appointment.futureAppointments(this.$route.params.userId, this.pageNumber, this.selectedPageSize)
                 .then(response => {
                     // Handle the server response
                     HttpResponse.then(response, data => {
@@ -106,7 +120,11 @@ export default {
             this.pageDisplay = page;
             this.futureAppointments = [];
             this.getFutureAppointments();
-        }
+        },
+        pageSizeUpdate(){
+            this.futureAppointments = []
+            this.getFutureAppointments()
+        },
     },
     mounted: function() {
         // Retrieve the future appointments when loaded onto the DOM
