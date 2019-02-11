@@ -48,7 +48,7 @@
                         </v-card-text>
                     </v-flex>
                     <v-textarea
-                        v-if= "action == 'ban'"
+                    v-if = "action === 'ban'"
                         background-color = "white"
                         outline
                         label="Reason for ban"
@@ -139,6 +139,7 @@ export default {
             this.$store.commit("loading", true);
             ApiDriver.User.allUsers(this.data).then((response) => {
                 HttpResponse.then(response, data => {
+                    console.log(response)
                     this.populateData(data.data)
                 }, (status, errors) => {})
             }).catch((error) => {
@@ -164,12 +165,28 @@ export default {
         },
         banUser(userId, message){
             ApiDriver.User.ban(userId, message).then((response) => {
-                location.reload();
+               console.log(response)
+                if(response.status === 200){
+                    for(var i in this.users){
+                        if(this.users[i].id === userId){
+                            this.users[i].status = "Banned"
+                        }
+                    }
+                }
             })
         },
         unbanUser(userId){
             ApiDriver.User.unban(userId).then((response) => {
-                location.reload();
+                console.log(response)
+                if(response.status === 200){
+                    for(var i in this.users){
+                        if(this.users[i].id === userId){
+                            this.users[i].status = "Active"
+                        }
+                    }
+                }
+                 console.log(response.status)
+                 
             })
         }
     },
