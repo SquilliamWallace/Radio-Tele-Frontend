@@ -88,7 +88,7 @@
                         :error=form.accountType.hasError
                         :error-messages=form.accountType.errorMessage
                         color="blue darken-2"
-                        label="Account Type"
+                        label="Account Type**"
                         required
                         ></v-select>
                     </v-flex>
@@ -117,6 +117,9 @@
                             <a href="javascript:;" @click.stop="terms = true">terms of service?</a>
                         </div>
                         </v-checkbox>
+                    </v-flex>
+                    <v-flex xs12>
+                        <div>**Any user account type other than "Guest" will require the approval of an administrator</div>
                     </v-flex>
                     </v-layout>
                 </v-container>
