@@ -19,7 +19,6 @@
       :items="logs"
       :pagination.sync="pagination"
       select-all
-      item-key="name"
       class="elevation-1"
     >
       <template slot="headers" slot-scope="props">

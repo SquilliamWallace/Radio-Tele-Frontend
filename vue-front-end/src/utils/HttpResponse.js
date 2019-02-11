@@ -8,7 +8,7 @@ export default {
     then: function(response, successHandler, errorHandler) {
         let data = response.data
         let statusCode = data.statusCode
-
+        
         // This should not happen. This means a server-side 
         // REST Controller is not returning anything!
         if (!statusCode) {

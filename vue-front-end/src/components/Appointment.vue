@@ -88,8 +88,6 @@
                             This displays any text inside form.rightAscension.errorMessage if :error=true
                             errorMessage is handled on backend and sent back to front end. 
 
-                        mask="##"
-                            forces the input of this field to only be 2 numbers, no text allowed
                     -->
                     <v-flex xs12 sm4>
                          <v-text-field
@@ -100,7 +98,7 @@
                          :error-messages=form.rightAscension.errorMessage
                          label="Right Ascension Hours"
                          type="number"
-                         mask="##"
+                         class="number"
                          required
                          ></v-text-field>
                      </v-flex>
@@ -116,7 +114,7 @@
                          :error-messages=form.rightAscension.errorMessage
                          label="Right Ascension Minutes"
                          type="number"
-                         mask="##"
+                         class="number"
                          required
                          ></v-text-field>
                      </v-flex>
@@ -132,7 +130,6 @@
                          :error-messages=form.rightAscension.errorMessage
                          label="Right Ascension Seconds"
                          type="number"
-                         mask="##"
                          required
                          ></v-text-field>
                      </v-flex>
@@ -347,5 +344,12 @@ export default {
 <style scoped>
 .title-style{
     padding-bottom: 10px;
+}
+.number input[type='number'] {
+    -moz-appearance:textfield;
+}
+.number input::-webkit-outer-spin-button,
+.number input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
 }
 </style>

@@ -92,7 +92,8 @@ import Loading from "../components/Loading"
       this.authenticate()
       this.$store.commit("updateInfo", {page: "Administration", info: "- User Management: On this page, individual user\n profiles can be viewed by clicking the account icon.\n Users can be banned with the gavel icon or unbanned\n with the lock icon.\n" + "\n" +
                                                                       "- Logging: On this page, all database transactions can\n be viewed with associated information. Click on an\n individual log in the table to get more detailed\n information.\n" + "\n" +
-                                                                      "- User Approval: This page displays a list of users with\n unapproved roles. Upon clicking the approve button, a\n pop-up will appear that will allow you to select\n the role you wish to assign."})
+                                                                      "- User Approval: This page displays a list of users with\n unapproved roles. Upon clicking the approve button, a\n pop-up will appear that will allow you to select\n the role you wish to assign.\n" + "\n" +
+                                                                      "- Appointment Management: This page displays a list of appointments\n which require administrator approval. This could be due to an\n appointment that is scheduled for an extended period of time, or\n one in which a user has exceeded their total allotted time."})
     }
   }
 </script>
