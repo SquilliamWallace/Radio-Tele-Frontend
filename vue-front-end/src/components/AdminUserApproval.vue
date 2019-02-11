@@ -25,7 +25,7 @@
                                             firstName, userLast = user.userInfo.lastName, userId = user.userInfo.id, userPhone = user.userInfo.phoneNumber, 
                                             userStatus = user.userInfo.status, userRequestedRole =user.role.charAt(0) + user.role.slice(1).toLowerCase(),
                                             form.roleId.value = user.id">
-                            Approve
+                            Choose Role
                         </v-btn>
                     </v-list-tile>
                 </v-list>
