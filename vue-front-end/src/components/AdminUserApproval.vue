@@ -192,14 +192,12 @@ export default {
         getUnapprovedUsers(){
             ApiDriver.User.unapproved(this.pageNumber, this.pageSize).then((response) => {
                 HttpResponse.then(response, (data) => {
-                    console.log(data)
                     this.populateData(data.data)
                 },(status, errors) => {})
                 
             })
         },
         populateData(data){
-            console.log(data.totalPages)
             for(var index in data.content){
                 let user = data.content[index];
                 this.users.push(user);
