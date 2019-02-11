@@ -37,7 +37,7 @@
         Add pagination below the entries 
         -->
         <div>
-            <v-pagination
+            <v-pagination v-if="numPages!=0"
                 circle
                 v-model="pageDisplay"
                 @input = "next"
