@@ -174,6 +174,7 @@ export default {
         populateData(data){
             for (var index in data.content) {
                 let log = data.content[index];
+                log.timestamp = new Date(log.timestamp);
                 if (!log.userId) {
                     log.userId = 'N/A';
                     log.userName = 'N/A';
@@ -226,7 +227,7 @@ export default {
         },
         toggleDetails (event) {
             this.currentLog = event;
-            this.currentLog.timestamp = moment(this.currentLog.timestamp).format('MMMM Do YYYY, h:mm:ss a');
+            this.currentLog.timestamp = moment(this.currentLog.timestamp).format('MMMM Do YYYY, h:mm:ss A');
             this.toggleDetailedView = !this.toggleDetailedView
         }
         
