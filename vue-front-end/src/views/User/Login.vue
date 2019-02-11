@@ -19,15 +19,20 @@
                          v-model="data.username.value"
                          :error=data.username.hasError
                          :error-messages=data.username.errorMessage
+                         light
+                         background-color ="white"
                          label="Email" 
                          required></v-text-field>
                     </v-flex>
                     <v-flex xs12>
-                        <v-text-field 
+                        <v-text-field class = "pl-1"
                         name="password" 
                         v-model="data.password.value"
+                        single-line
                         :error=data.password.hasError
-                        :error-messages=data.password.errorMessage 
+                        :error-messages=data.password.errorMessage
+                        background-color="white"
+                        light
                         label="Password" 
                         type="password" 
                         required
