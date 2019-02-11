@@ -127,7 +127,7 @@ export default {
                     value: ""
                 },
                 assignedRole: {
-                    value: ""
+                    value: 'Guest'
                 }
             },
             users: [],
