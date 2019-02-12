@@ -96,6 +96,7 @@
                          color="blue darken-2"
                          :error=form.rightAscension.hasError
                          :error-messages=form.rightAscension.errorMessage
+                         :validate-on-blur=true
                          label="Right Ascension Hours"
                          type="number"
                          class="number"
@@ -112,6 +113,7 @@
                          color="blue darken-2"
                          :error=form.rightAscension.hasError
                          :error-messages=form.rightAscension.errorMessage
+                         :validate-on-blur=true
                          label="Right Ascension Minutes"
                          type="number"
                          class="number"
@@ -128,6 +130,7 @@
                          color="blue darken-2"
                          :error=form.rightAscension.hasError
                          :error-messages=form.rightAscension.errorMessage
+                         :validate-on-blur=true
                          label="Right Ascension Seconds"
                          type="number"
                          required
@@ -141,6 +144,7 @@
                         color="blue darken-2"
                         :error=form.declination.hasError
                         :error-messages=form.declination.errorMessage
+                        :validate-on-blur=true
                         label="Declination"
                         type="number"
                         required
@@ -254,6 +258,12 @@ export default {
              this.form.rightAscension.minutes = null;
              this.form.rightAscension.seconds = null;
              this.form.declination.value = null;
+             this.start = "";
+             this.end = "";
+             this.startTime = "";
+             this.endTime = "";
+             this.startDate = "";
+             this.endDate = "";
              this.clearErrors();
              this.$emit('close-modal');
         },
