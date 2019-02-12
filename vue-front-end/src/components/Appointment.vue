@@ -2,15 +2,6 @@
     <v-dialog fullscreen dark hide-overlay :value="value" @input="$emit('input')" persistent width="50%">
             <v-card flat>
                 <v-card-title class="headline">Schedule Appointment</v-card-title>
-                <v-snackbar
-                v-model="snackbar"
-                absolute
-                top
-                right
-                color="success">
-                <span>Appointment Created</span>
-                <v-icon dark>check_circle</v-icon>
-                </v-snackbar>
                 <v-form ref="form" @submit.prevent="submit" refs="form">
                 <v-container grid-list-xl fluid>
                     <v-layout wrap>
@@ -243,8 +234,7 @@ export default {
                 rightAscMinutes: val => (val && val.toString().length > 0 && val < 60 && val >= 0) || 'Must be between 0 and 59 minutes',
                 rightAscSeconds: val => (val && val.toString().length > 0 && val < 60 && val >= 0) || 'Must be between 0 and 59 seconds',
                 numRequired: val => (val && val.toString().length > 0 && val <=90 && val >= -90) || 'Must be between 90 and -90'
-            },
-            snackbar: false,
+            }
         }
     },
     props: {
@@ -289,7 +279,6 @@ export default {
             ApiDriver.Appointment.create(JSON.stringify(form)).then((response) => {
                 HttpResponse.then(response, (data) => {
                     // If returns SUCCESS
-                    this.snackbar = true;
                     // Reset form before closing Modal as user can schedule multiple Appointments without leaving Scheduler Page
                     this.resetForm()
                         
