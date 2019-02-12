@@ -37,6 +37,12 @@
                 </div>
             </v-list-tile>
         </v-list>
+        <v-pagination
+            circle
+            v-model="pageDisplay"
+            :length="numPages"
+            @input="next">
+        </v-pagination>
             
             <!-- This dialog is called when the ban or unban button is pressed -->
         <v-dialog v-model = "confirm" persistent max-width="600px">
@@ -84,8 +90,7 @@ export default {
     data(){
         return{
             data: {
-               pageNumber: 0,
-               pageSize: 50,
+               
             },
             users: [],
             filtered: [],
@@ -99,6 +104,12 @@ export default {
             icon:'',
             filterTypes: ['Email','User Id'],
             filterType: 'Email',
+
+            //pagination
+            pageNumber: 1,
+            pageDisplay: 1,
+            pageSize: 3,
+            numPages: 0,
 
             // Ban-related
             banMessage: "",
@@ -137,9 +148,9 @@ export default {
         },
         getUsers(){
             this.$store.commit("loading", true);
-            ApiDriver.User.allUsers(this.data).then((response) => {
+            ApiDriver.User.allUsers(this.pageNumber, this.pageSize).then((response) => {
                 HttpResponse.then(response, data => {
-                    console.log(response)
+                    //console.log(response)
                     this.populateData(data.data)
                 }, (status, errors) => {})
             }).catch((error) => {
@@ -154,6 +165,7 @@ export default {
             });
         },
         populateData(data){
+            console.log(data)
             for (var index in data.content) {
                 let user = data.content[index];
                 if (!user.membershipRole) {
@@ -162,6 +174,16 @@ export default {
                 this.users.push(user);
                 this.unfiltered.push(user)
             }
+            this.numPages = data.totalPages;
+            
+        },
+        next(page) {
+            // Handle retrieving a new page of information
+            this.pageNumber = page - 1;
+            this.pageDisplay = page;
+            this.users = [];
+            this.filtered = [];
+            this.getUsers();
         },
         banUser(userId, message){
             ApiDriver.User.ban(userId, message).then((response) => {
