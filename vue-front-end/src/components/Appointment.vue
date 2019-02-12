@@ -88,6 +88,8 @@
                             This displays any text inside form.rightAscension.errorMessage if :error=true
                             errorMessage is handled on backend and sent back to front end. 
 
+                        mask="##"
+                            forces the input of this field to only be 2 numbers, no text allowed
                     -->
                     <v-flex xs12 sm4>
                          <v-text-field
@@ -98,7 +100,7 @@
                          :error-messages=form.rightAscension.errorMessage
                          label="Right Ascension Hours"
                          type="number"
-                         class="number"
+                         mask="##"
                          required
                          ></v-text-field>
                      </v-flex>
@@ -114,7 +116,7 @@
                          :error-messages=form.rightAscension.errorMessage
                          label="Right Ascension Minutes"
                          type="number"
-                         class="number"
+                         mask="##"
                          required
                          ></v-text-field>
                      </v-flex>
@@ -130,6 +132,7 @@
                          :error-messages=form.rightAscension.errorMessage
                          label="Right Ascension Seconds"
                          type="number"
+                         mask="##"
                          required
                          ></v-text-field>
                      </v-flex>
@@ -165,13 +168,13 @@
                         Added to form to make sure user knows which telescope they are scheduling for
                     -->
                     <v-flex xs12 sm6>
-                        <v-select
-                        v-model="telescopeName"
-                        :items="telescopes"
+                        <v-text-field
+                        v-model=telescope.name
                         color="blue darken-2"
-                        label="Telescope"
+                        readonly="true"
+                        label=Telescope
                         required
-                        ></v-select>
+                        ></v-text-field>
                     </v-flex>
                     </v-layout>
                 </v-container>
@@ -203,12 +206,6 @@ export default {
     data() {
         name: 'Appointment'
         return {
-            telescopes: [
-                "John C. Rudy County Park", 
-                "Scale Model",
-                "Virtual"
-            ],
-            telescopeName: "John C. Rudy County Park", 
             form: {
                 isPrivate: {
                     value: false
@@ -244,6 +241,7 @@ export default {
         }
     },
     props: {
+        telescope: {},
         value: false
     },
     methods: {
@@ -268,7 +266,7 @@ export default {
                 userId: this.$store.state.currentUserId,
                 startTime: new Date(this.start).toUTCString(),
                 endTime: new Date(this.end).toUTCString(),
-                telescopeId: this.telescopes.indexOf(this.telescopeName) + 1,
+                telescopeId: this.telescope.id,
                 isPublic: !this.form.isPrivate.value,
                 hours: this.form.rightAscension.hours,
                 minutes: this.form.rightAscension.minutes,
@@ -309,7 +307,7 @@ export default {
                    //Also adding telescope name into Obj to display on request form
                    formObj.startTime = this.start
                    formObj.endTime = this.end
-                   formObj.telescope = this.telescopeName
+                   formObj.telescope = this.telescope.name
                    //Sends the information of the form to the requestAppointment function on Scheduler Page.
                    this.$emit('request-appointment', formObj)
                    this.resetForm()
@@ -344,12 +342,5 @@ export default {
 <style scoped>
 .title-style{
     padding-bottom: 10px;
-}
-.number input[type='number'] {
-    -moz-appearance:textfield;
-}
-.number input::-webkit-outer-spin-button,
-.number input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
 }
 </style>
