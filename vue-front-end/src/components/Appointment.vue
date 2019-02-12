@@ -171,7 +171,7 @@
                         <v-text-field
                         v-model=telescope.name
                         color="blue darken-2"
-                        readonly="true"
+                        :readonly=true
                         label=Telescope
                         required
                         ></v-text-field>

@@ -34,7 +34,7 @@
                 Display the name of the telescope at the top of the page
                 Display Large text to make sure viewer is aware of which tele they are looking at
             -->
-            <h1 justify-center>{{ telescopeName }}</h1>
+            <h1 justify-center>{{ selectedTelescope.name }}</h1>
             
             
             <!-- 
