@@ -139,7 +139,6 @@ export default {
             this.$store.commit("loading", true);
             ApiDriver.User.allUsers(this.data).then((response) => {
                 HttpResponse.then(response, data => {
-                    console.log(response)
                     this.populateData(data.data)
                 }, (status, errors) => {})
             }).catch((error) => {

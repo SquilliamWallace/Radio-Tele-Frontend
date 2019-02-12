@@ -234,8 +234,8 @@ export default {
             this.data.userLastName.value = data.userLastName
             this.data.eventUserId.value = data.userId
             this.data.isPublic.value = data.public
-            this.data.startTime.value = moment(data.startTime).format('MM-DD-YYYY hh:mm A')
-            this.data.endTime.value = moment(data.endTime).format('MM-DD-YYYY hh:mm A')
+            this.data.startTime.value = moment(new Date(data.startTime), 'MM-DD-YYYY hh:mm A', false)
+            this.data.endTime.value = moment(new Date(data.endTime), 'MM-DD-YYYY hh:mm A', false)
             this.data.status.value = data.status
             this.data.rightAscension.value = data.rightAscension.toFixed(2);
             this.data.rightAscension.hours = data.hours,

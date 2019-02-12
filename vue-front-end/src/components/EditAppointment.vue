@@ -126,7 +126,7 @@ export default {
                 },
             },
             rules: {
-                dateRequired: val => (val && val.length > 0) || 'Required field',
+                dateRequired: val => (val && val.toString().length > 0) || 'Required field',
                 rightAscHours: val => (val && val.toString().length > 0 && val < 24 && val >= 0) || 'Must be between 0 and 23 hours',
                 rightAscMinutes: val => (val && val.toString().length > 0 && val < 60 && val >= 0) || 'Must be between 0 and 59 minutes',
                 rightAscSeconds: val => (val && val.toString().length > 0 && val < 60 && val >= 0) || 'Must be between 0 and 59 seconds',
