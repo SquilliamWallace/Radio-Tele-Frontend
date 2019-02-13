@@ -34,13 +34,23 @@
     </v-card>
     <br>
     <div class="text-xs-center">
-            <v-pagination
+        <v-pagination
             circle
             v-model="pageDisplay"
             :length="numPages"
             @input="next"
-            ></v-pagination>
-        </div>
+        ></v-pagination>
+         <v-layout justify-center>
+            <v-flex xs12 sm1>
+                <v-select
+                v-model="selectedPageSize"
+                :items="pageSizeList"
+                label="Items per page"
+                v-on:change="this.pageSizeUpdate"
+                ></v-select>
+            </v-flex>
+        </v-layout>
+    </div>
 </div>
 </template>
 <script>
@@ -57,10 +67,13 @@ export default {
         return {
             pageNumber: 0,
             pageDisplay: 1,
-            pageSize: 25,
             numPages: 0,
             last: false,
-            completedAppointments: []
+            completedAppointments: [],
+             selectedPageSize: "1",
+            pageSizeList: [
+                '1', '2', '3', '4'
+            ]
         }
     },
     methods: {
@@ -69,7 +82,7 @@ export default {
             this.$store.commit("loading", true);
 
             // Make the API call
-            ApiDriver.User.Appointment.completedAppointments(this.$route.params.userId, this.pageNumber, this.pageSize)
+            ApiDriver.User.Appointment.completedAppointments(this.$route.params.userId, this.pageNumber, this.selectedPageSize)
                 .then(response => {
                     // Handle the server response
                     HttpResponse.then(response, data => {
@@ -107,7 +120,11 @@ export default {
             this.pageDisplay = page;
             this.completedAppointments = [];
             this.getCompletedAppointments();
-        }
+        },
+        pageSizeUpdate(){
+            this.completedAppointments = []
+            this.getCompletedAppointments()
+        },
     },
     mounted: function() {
         // Retrieve the completed appointments when loaded onto the DOM
