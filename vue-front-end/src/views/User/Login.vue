@@ -6,6 +6,7 @@
                 <v-layout row wrap>
                     <v-flex width = "10px" xs12>
                         <v-card-text class = "headline">Login</v-card-text>
+                        
                     </v-flex>
                 </v-layout>
             </v-container>
@@ -112,14 +113,11 @@ export default {
       submit() {
           // Make the API call
           ApiDriver.login(this.data).then(response => {
-              let that = this;
               // Clear any errors
               this.clearErrors();
-              console.log(response);
 
               // Redirect on success
-              if(response.headers.authorization){
-                that.$store.commit("embedToken", response.headers.authorization);
+              if(response.data.includes("bundle.js")){
                 router.push('/home');
               } else {
                   // Populate error messages for the form fields
@@ -171,9 +169,17 @@ export default {
     }
 }
 </script>
+
 <style scoped>
 .register-style{
     justify-content: center;
     text-align: center;
+}
+.v-form{
+    background-color: rgba(66,66,66,.9);
+    float: left;
+}
+.button{
+    float: left !important; 
 }
 </style>

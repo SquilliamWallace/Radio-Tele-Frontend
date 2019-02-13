@@ -1,7 +1,8 @@
 <template>
     <v-app>
+        <v-parallax height="100%"  src="https://images.pexels.com/photos/110854/pexels-photo-110854.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260">
         <v-container v-bind:style="{ padding:'50px' }">
-            <v-card flat>
+            <v-card flat class="v-card">
                 <v-form ref="form" @submit.prevent="submit" refs="form">
                 <v-container grid-list-xl fluid>
                     <v-layout wrap>
@@ -168,6 +169,7 @@
             </v-card>
         </v-container>
         <form-confirmation v-model="confirmModal"></form-confirmation>
+        </v-parallax>
     </v-app>
 </template>
 
@@ -340,5 +342,9 @@ import CustomErrorHandler from "../../utils/CustomErrorHandler";
 </script>
     
 <style scoped>
-
+    .v-card{
+        background-color: rgba(66,66,66,.95) !important;
+        border: 2px;
+        border-color: black;
+    }
 </style>
