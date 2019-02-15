@@ -76,23 +76,23 @@ export default {
             });
         },
         handleAccountDisabled(errors) {
-        let message = "";
+            let message = "";
 
-        // There will only ever be one error in this scenario
-        for (var index in errors) {
-          message = errors[index][0]
+            // There will only ever be one error in this scenario
+            for (var index in errors) {
+                message = errors[index][0]
+            }
+
+            // Display the error message in an alert
+            this.$swal({
+                title: '<span style="color:#f0ead6">Error!</span>',
+                html: '<span style="color:#f0ead6">' + message + '</span>',
+                type: 'error',
+                background: '#302f2f'
+            }).then(response => {
+                router.push('/')
+            });
         }
-
-        // Display the error message in an alert
-        this.$swal({
-          title: '<span style="color:#f0ead6">Error!</span>',
-          html: '<span style="color:#f0ead6">' + message + '</span>',
-          type: 'error',
-          background: '#302f2f'
-        }).then(response => {
-            router.push('/')
-        });
-      }
     },
     mounted() {
         // Verify the user is logged in

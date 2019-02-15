@@ -77,6 +77,12 @@
                             </v-card>
                         </v-dialog>
 
+                        <!-- 
+                            linked component: RequestRole.vue
+                            <request-role></request-role>
+                        -->
+                        <v-btn v-if="$store.state.currentUserId == profile.id.value" color="primary darken-1" @click.native="roleChange = true">Change Role</v-btn>
+
                         <v-btn v-if="$store.state.currentUserId == profile.id.value" color="primary darken-1" @click.native="passReset = true">Edit Password</v-btn>
                         <!-- Password change modal -->
                          <v-dialog v-model = "passReset" persistent max-width="600px" dark>
@@ -173,7 +179,8 @@ export default {
             passResetRules: {
                 required: val => val.length > 0 || 'This field is required',
                 passMatch: val => val === this.changePasswordForm.password.value || 'Passwords do not match'
-            }
+            },
+            roleChange: false
         }
     },
     components: {
