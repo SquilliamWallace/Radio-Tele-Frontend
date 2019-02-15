@@ -11,11 +11,12 @@
                 </v-layout>
             </v-container>
         <v-card-text>
-            <v-form>
-                <v-container grid-list-md>
+            <v-form class="form">
+                <v-container grid-list-md >
                     <v-layout wrap>
                     <v-flex xs12>
                         <v-text-field
+                        class="text-field"
                          name="email"
                          v-model="data.username.value"
                          :error=data.username.hasError
@@ -26,6 +27,7 @@
                     </v-flex>
                     <v-flex xs12>
                         <v-text-field 
+                        class="text-field"
                         name="password" 
                         v-model="data.password.value"
                         :error=data.password.hasError
@@ -35,15 +37,17 @@
                         required 
                         v-on:keyup.enter="submit"></v-text-field>
                     </v-flex>
-                    <v-flex xs12>
+                    <v-flex xs12
+                    class="button-flex">
                         <v-btn color="primary" @click="submit">Login</v-btn>
                     </v-flex>
-                    <v-flex class="register-style" xs12>
+                    <v-flex class="button-flex" xs12>
                         <v-btn color="primary" @click="registerRedirect">
                             <div>Register New Account</div>
                         </v-btn>
                     </v-flex>
-                    <v-flex xs12>
+                    <v-flex xs12 
+                    class="button-flex">
                         <v-dialog v-model="requestPasswordReset" max-width="600px" dark>
                             <v-btn slot="activator" color="primary darken-1">Forgot your password?</v-btn>
                             <v-card>
@@ -171,15 +175,19 @@ export default {
 </script>
 
 <style scoped>
-.register-style{
+.button-flex{
     justify-content: center;
     text-align: center;
 }
-.v-form{
-    background-color: rgba(66,66,66,.9);
-    float: left;
+
+.text-field{
+    width: 65%
 }
-.button{
-    float: left !important; 
+
+.form{
+   background-color: rgba(66,66,66,.9);
+ 
+    width: 40%;
+       justify-self: center;
 }
 </style>
