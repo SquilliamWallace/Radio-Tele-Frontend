@@ -61,8 +61,8 @@ export default {
       request: function (data) {
         return axios.post(this.namespace + "/request", data, Headers.retrieveHeaders())
       },
-      unapprovedRequest: function (data) {
-        return axios.get(this.namespace + "/listRequested?page=" + data.pageNumber + "&size=" + data.pageSize, Headers.retrieveHeaders())
+      unapprovedRequest: function (pageNumber, pageSize) {
+        return axios.get(this.namespace + "/listRequested?page=" + pageNumber + "&size=" + pageSize, Headers.retrieveHeaders())
       },
       approveRequest: function (appointmentId, isApprove) {
         return axios.put(this.namespace + "/" + appointmentId + "/validate?isApprove=" + isApprove, {}, Headers.retrieveHeaders());
