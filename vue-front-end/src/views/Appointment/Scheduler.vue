@@ -76,6 +76,10 @@
                 <!-- 
                     linked component: Appointment.vue
                     
+                    :telescope="selectedTelescope"
+                        Retrieves the telescope object(id, name) from Appointment, and assigns
+                        its values to selectedTelescope
+
                     v-model="openCreateModal" {
                         this.openCreateModal: boolean
                         displays modal only if openCreateModal is set to true

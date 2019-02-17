@@ -36,6 +36,9 @@ export default {
       changePassword: function(userId, data) {
         return axios.put(this.namespace + "/" + userId + "/changePassword", data, Headers.retrieveHeaders())
       },
+      changeRoleRequest: function(userId, role, data) {
+        return axios.post(this.namespace + "/" + userId + "/role/request?role=" + role, data, Headers.retrieveHeaders())  
+      },
       unapproved: function(pageNumber, pageSize) {
         return axios.get(baseUrl + "roles/unapproved" + "?page=" + pageNumber + "&size=" + pageSize, Headers.retrieveHeaders())
       },
