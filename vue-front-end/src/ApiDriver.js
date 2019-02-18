@@ -18,8 +18,8 @@ export default {
       update: function(userId, data) {
         return axios.put(this.namespace + "/" + userId, data, Headers.retrieveHeaders());
       },
-      allUsers: function(data) {
-        return axios.get(this.namespace + "?page=" + data.pageNumber + "&size=" + data.pageSize, Headers.retrieveHeaders());
+      allUsers: function(pageNumber, pageSize) {
+        return axios.get(this.namespace + "?page=" + pageNumber + "&size=" + pageSize, Headers.retrieveHeaders());
       },
       changePassword: function(userId) {
         return axios.put(this.namespace + "/" + userId + "/changePassword", data, Headers.retrieveHeaders())
