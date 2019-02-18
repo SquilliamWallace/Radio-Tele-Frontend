@@ -2,6 +2,8 @@
     <v-dialog dark :value="value" @input="$emit('input')" persistent width="30%">
             <v-card flat>
                 <v-card-title class="headline">Request New Role</v-card-title>
+                <!-- @submit.prevent="submit"
+                     prevents the page from reloading when submit is called -->
                 <v-form ref="form" @submit.prevent="submit" refs="form">
                 <v-container grid-list-xs fluid>
                     <v-flex xs12 sm6>
@@ -15,18 +17,16 @@
                     </v-flex>
                 </v-container>
                 <v-card-actions>
-                    <!--  -->
                     <!-- Submit button -->
                     <v-btn 
+                    @click.native=submit
                     color="green"
-                    type="submit"
                     >Submit</v-btn>
                     <v-spacer></v-spacer>
                     <!-- Cancel button -->
                     <v-btn 
+                    @click.native=cancel
                     color="red" 
-                    :cancel=true
-                    type="cancel"
                     >Cancel</v-btn>
                 </v-card-actions>
                 </v-form>
@@ -35,7 +35,6 @@
 </template>
 
 <script>
-// TODO: clean these up
 import { error } from 'util';
 import router from '../router';
 import HttpResponse from '../utils/HttpResponse';
@@ -59,8 +58,15 @@ export default {
 
     methods: {
         submit() {
+            // This line sends the User's choice from the list of roles to the
+            // parent, through use of @chosen="parentFunction"
             this.$emit("chosen", this.defaultRole)
-            //console.log(this.defaultRole)
+            this.$emit('input')
+        }, 
+        cancel() {
+            // Pass a false value to ViewProfile to indicate that we want
+            // the modal closed, through the use of @false="cancelRoleRequest"
+            this.$emit("cancel", false)
             this.$emit('input')
         }
 

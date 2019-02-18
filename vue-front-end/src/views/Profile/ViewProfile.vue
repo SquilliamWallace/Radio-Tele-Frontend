@@ -28,13 +28,40 @@
                         <div class = "headline text-xs-left">Membership <v-icon>person</v-icon></div>
                         <div id = "profileInfo" class = "text-xs-left">{{ profile.type.value }}</div>
                         <v-divider></v-divider>
+
+                        <!-- 
+                            linked component: RequestRole.vue
+                            
+                            v-model="updateRole" {
+                                this.updateRole: boolean
+                                displays modal only if updateRole is set to true
+                            }
+
+                            v-on:close-modal="roleChange = false" {
+                                sets this.roleChange to false, to make the modal not display
+                            }
+
+                            @chosen="changeRoleRequest"
+                                Recieve User's requested role from the RequestRole component, 
+                                and pass it to changeRoleRequest method
+                        -->
+                        <v-btn v-if="$store.state.currentUserId == profile.id.value" color="primary darken-1" v-on:click="toggleUpdateRole">Request New Role</v-btn>
+                            <request-role v-model="updateRole" v-on:close-modal="updateRole = false" @false="cancelRoleRequest" @chosen="changeRoleRequest"></request-role>
+                            
                     </v-card>
                 </v-flex>
                 <v-flex xs12>
                     <br><br><br>
                     <div>
+                        <!-- 
+                            Edit Profile
+                        -->
                         <v-btn color="primary darken-1" @click="editRedirect">Edit Profile</v-btn>
                         <v-dialog v-model="dialog" v-if="showChangeEmailButton" max-width="600px" dark>
+
+                        <!--
+                            Change Email Modal
+                        -->
                             <v-btn slot="activator" color="primary darken-1">Change Email</v-btn>
                             <v-card>
                                 <v-card-title class="justify-center">
@@ -79,27 +106,9 @@
                         </v-dialog>
 
                         <!-- 
-                            linked component: RequestRole.vue
-                            
-                            v-model="updateRole" {
-                                this.updateRole: boolean
-                                displays modal only if updateRole is set to true
-                            }
-
-                            v-on:close-modal="roleChange = false" {
-                                sets this.roleChange to false, to make the modal not display
-                            }
-
-                            @chosen="changeRoleRequest"
-                                Recieve User's requested role from the RequestRole component, 
-                                and pass it to changeRoleRequest method
+                            Edit Password Modal
                         -->
-                        <v-btn v-if="$store.state.currentUserId == profile.id.value" color="primary darken-1" v-on:click="toggleUpdateRole">Request New Role</v-btn>
-                            <request-role v-model="updateRole" v-on:close-modal="updateRole = false" @chosen="changeRoleRequest"></request-role>
-                        
-                        
                         <v-btn v-if="$store.state.currentUserId == profile.id.value" color="primary darken-1" @click.native="passReset = true">Edit Password</v-btn>
-                        <!-- Password change modal -->
                          <v-dialog v-model = "passReset" persistent max-width="600px" dark>
                             <v-card>
                                 <v-container>
@@ -264,6 +273,11 @@ export default {
             }   
             this.showChangeEmailButton = (data.id === this.$store.state.currentUserId)
         },
+        cancelRoleRequest(boolean) {
+            console.log(boolean)
+            if(!boolean)
+                changeRole = false;
+        },
         changeEmailRequest() {
             // Clear any errors
             this.clearErrors();
@@ -375,7 +389,6 @@ export default {
             Admin User Approval page
         */
         changeRoleRequest: function(newRole) {
-            //console.log(newRole);
              // Populate the data
             let data = JSON.stringify({
                 role: newRole.toUpperCase()
