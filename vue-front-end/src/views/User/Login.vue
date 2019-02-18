@@ -1,54 +1,40 @@
 <template>
-<div>
-    <v-parallax height="100%"  src="https://images.pexels.com/photos/110854/pexels-photo-110854.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260">
-    <v-flex>
-            <v-container>
-                <v-layout row wrap>
-                    <v-flex width = "10px" xs12>
-                        <v-card-text class = "headline">Login</v-card-text>
-                        
-                    </v-flex>
-                </v-layout>
-            </v-container>
-        <v-card-text>
-            <v-form class="form">
-                <v-container grid-list-md >
-                    <v-layout wrap>
-                    <v-flex xs12>
-                        <v-text-field
-                        class="text-field"
+  <v-app >
+    <v-content>
+        <v-parallax height ="100%" src="https://images.pexels.com/photos/110854/pexels-photo-110854.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" >
+      <v-container fluid fill-height>
+        <v-layout align-center justify-center>
+          <v-flex xs12 sm8 md4 >
+            <v-card class="elevation-12" >
+              <v-toolbar dark color="primary">
+                <v-toolbar-title>Login form</v-toolbar-title>
+                <v-spacer></v-spacer>
+              </v-toolbar>
+              <v-card-text>
+                <v-form>
+                   <v-text-field
                          name="email"
                          v-model="data.username.value"
                          :error=data.username.hasError
                          :error-messages=data.username.errorMessage
                          label="Email" 
+                         prepend-icon = "person"
                          required 
                          v-on:keyup.enter="submit"></v-text-field>
-                    </v-flex>
-                    <v-flex xs12>
-                        <v-text-field 
-                        class="text-field"
+                 <v-text-field 
                         name="password" 
                         v-model="data.password.value"
                         :error=data.password.hasError
                         :error-messages=data.password.errorMessage 
                         label="Password" 
+                        prepend-icon = "lock"
                         type="password" 
                         required 
                         v-on:keyup.enter="submit"></v-text-field>
-                    </v-flex>
-                    <v-flex xs12
-                    class="button-flex">
-                        <v-btn color="primary" @click="submit">Login</v-btn>
-                    </v-flex>
-                    <v-flex class="button-flex" xs12>
-                        <v-btn color="primary" @click="registerRedirect">
-                            <div>Register New Account</div>
-                        </v-btn>
-                    </v-flex>
-                    <v-flex xs12 
-                    class="button-flex">
-                        <v-dialog v-model="requestPasswordReset" max-width="600px" dark>
+                </v-form>
+              </v-card-text>
+              <v-card-actions>
+                  <v-dialog v-model="requestPasswordReset" max-width="600px" dark>
                             <v-btn slot="activator" color="primary darken-1">Forgot your password?</v-btn>
                             <v-card>
                                 <v-card-title class="justify-center">
@@ -73,14 +59,16 @@
                                 </v-card-text>
                             </v-card>
                         </v-dialog>
-                    </v-flex>
-                    </v-layout>
-                </v-container>
-            </v-form> 
-        </v-card-text>
-    </v-flex>
-    </v-parallax>
-</div>
+                <v-spacer></v-spacer>
+                <v-btn color="primary">Login</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-flex>
+        </v-layout>
+      </v-container>
+      </v-parallax>
+    </v-content>
+  </v-app>
 </template>
 
 <script>
@@ -175,19 +163,7 @@ export default {
 </script>
 
 <style scoped>
-.button-flex{
-    justify-content: center;
-    text-align: center;
-}
-
-.text-field{
-    width: 65%
-}
-
-.form{
-   background-color: rgba(66,66,66,.9);
- 
-    width: 40%;
-       justify-self: center;
+.v-card{
+    opacity: 50%;
 }
 </style>
