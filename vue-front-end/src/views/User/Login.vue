@@ -1,17 +1,18 @@
 <template>
-  <v-app >
+  <v-app>
     <v-content>
-        <v-parallax height ="100%" src="https://images.pexels.com/photos/110854/pexels-photo-110854.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" >
-      <v-container fluid fill-height>
-        <v-layout align-center justify-center>
-          <v-flex xs12 sm8 md4 >
-            <v-card class="elevation-12" >
-              <v-toolbar dark color="primary">
+       <v-parallax height ="100%" src="https://images.pexels.com/photos/110854/pexels-photo-110854.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260">
+        <v-container grid-list-md fluid fill-height>
+        <v-layout align-center justify-center >
+          
+          <v-flex xs12 sm8 md6 >
+            <v-card class="elevation-12" color="rgba(66,66,66,.9)">
+              <v-toolbar dark color="rgba(110,110,140,.8)">
                 <v-toolbar-title>Login form</v-toolbar-title>
                 <v-spacer></v-spacer>
               </v-toolbar>
               <v-card-text>
-                <v-form>
+                <v-form >
                    <v-text-field
                          name="email"
                          v-model="data.username.value"
@@ -35,7 +36,7 @@
               </v-card-text>
               <v-card-actions>
                   <v-dialog v-model="requestPasswordReset" max-width="600px" dark>
-                            <v-btn slot="activator" color="primary darken-1">Forgot your password?</v-btn>
+                            <v-btn slot="activator" color="primary darken-2">Forgot your password?</v-btn>
                             <v-card>
                                 <v-card-title class="justify-center">
                                     <span class="headline">Request Password Reset</span>
@@ -60,9 +61,13 @@
                             </v-card>
                         </v-dialog>
                 <v-spacer></v-spacer>
-                <v-btn color="primary">Login</v-btn>
+                <v-btn color="primary" @click="submit">Login</v-btn>
               </v-card-actions>
+              <div class="register">Don't have an account? <a @click="registerRedirect">Register Here!</a></div>
             </v-card>
+            
+            
+            
           </v-flex>
         </v-layout>
       </v-container>
@@ -163,7 +168,11 @@ export default {
 </script>
 
 <style scoped>
-.v-card{
+.elevation-12{
     opacity: 50%;
+}
+.register{
+    font-size: 30px;
+    font: 100;
 }
 </style>
