@@ -11,34 +11,37 @@
         <v-tabs-slider color="white"></v-tabs-slider>
 
         <v-tab>
-            User Management
-            <v-icon>account_box</v-icon>
-        </v-tab>
-        <v-tab>
             Logging
             <v-icon>work</v-icon>
         </v-tab>
         <v-tab>
-            Surveillance
-            <v-icon>videocam</v-icon>
+            User Approval
+            <v-icon>check_circle</v-icon>
         </v-tab>
         <v-tab>
           Appointment Management
           <v-icon>event</v-icon>
         </v-tab>
-
-        <v-tab-item>
-          <admin-user-management></admin-user-management>
-        </v-tab-item>
+        <v-tab>
+            User Management
+            <v-icon>account_box</v-icon>
+        </v-tab>
         
         <v-tab-item>
           <admin-log></admin-log>
         </v-tab-item>
 
         <v-tab-item>
-            
+            <admin-user-approval></admin-user-approval>
+        </v-tab-item>
+
+        <v-tab-item>
+            <admin-appointment-approval></admin-appointment-approval>
         </v-tab-item>
         
+        <v-tab-item>
+          <admin-user-management></admin-user-management>
+        </v-tab-item>
       </v-tabs>
 
   </div>
@@ -51,6 +54,9 @@ import HttpResponse from '../utils/HttpResponse';
 import NavigationBar from '../components/NavigationBar.vue';
 import router from '../router';
 import CurrentUserValidation from '../utils/CurrentUserValidation';
+import AdminUserApproval from '../components/AdminUserApproval.vue';
+import AdminAppointmentApproval from '../components/AdminAppointmentApproval.vue';
+import Loading from "../components/Loading"
  export default {
      name: 'admin',
     data () {
@@ -77,10 +83,17 @@ import CurrentUserValidation from '../utils/CurrentUserValidation';
     components: {
         AdminUserManagement,
         NavigationBar,
-        AdminLog
+        AdminLog,
+        AdminUserApproval,
+        Loading,
+        AdminAppointmentApproval
     },
     mounted() {
       this.authenticate()
+      this.$store.commit("updateInfo", {page: "Administration", info: "- User Management: On this page, individual user\n profiles can be viewed by clicking the account icon.\n Users can be banned with the gavel icon or unbanned\n with the lock icon.\n" + "\n" +
+                                                                      "- Logging: On this page, all database transactions can\n be viewed with associated information. Click on an\n individual log in the table to get more detailed\n information.\n" + "\n" +
+                                                                      "- User Approval: This page displays a list of users with\n unapproved roles. Upon clicking the approve button, a\n pop-up will appear that will allow you to select\n the role you wish to assign.\n" + "\n" +
+                                                                      "- Appointment Management: This page displays a list of appointments\n which require administrator approval. This could be due to an\n appointment that is scheduled for an extended period of time, or\n one in which a user has exceeded their total allotted time."})
     }
   }
 </script>

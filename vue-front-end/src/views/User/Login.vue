@@ -1,6 +1,6 @@
 <template>
 <div>
-    <v-parallax style = "height:100%;" src="https://images.pexels.com/photos/110854/pexels-photo-110854.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260">
+    <v-parallax height="100%"  src="https://images.pexels.com/photos/110854/pexels-photo-110854.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260">
     <v-flex>
             <v-container>
                 <v-layout row wrap>
@@ -20,8 +20,7 @@
                          :error=data.username.hasError
                          :error-messages=data.username.errorMessage
                          label="Email" 
-                         required 
-                         v-on:keyup.enter="submit"></v-text-field>
+                         required></v-text-field>
                     </v-flex>
                     <v-flex xs12>
                         <v-text-field 
@@ -31,12 +30,16 @@
                         :error-messages=data.password.errorMessage 
                         label="Password" 
                         type="password" 
-                        required 
+                        required
                         v-on:keyup.enter="submit"></v-text-field>
                     </v-flex>
                     <v-flex xs12>
-                        <div>Don't have an account?</div>
-                        <a @click="registerRedirect">Register Here!</a>
+                        <v-btn color="primary" @click="submit">Login</v-btn>
+                    </v-flex>
+                    <v-flex class="register-style" xs12>
+                        <v-btn color="primary" @click="registerRedirect">
+                            <div>Register New Account</div>
+                        </v-btn>
                     </v-flex>
                     <v-flex xs12>
                         <v-dialog v-model="requestPasswordReset" max-width="600px" dark>
@@ -53,6 +56,7 @@
                                         :error=data.reqPassEmail.hasError
                                         :error-messages=data.reqPassEmail.errorMessage
                                         label="Enter Email Address"
+                                        v-on:keyup.enter="submitResetRequest"
                                         required
                                         ></v-text-field>
                                     </v-container>
@@ -66,7 +70,6 @@
                     </v-flex>
                     </v-layout>
                 </v-container>
-                <v-btn color="white" flat @click="submit">Login</v-btn>
             </v-form> 
         </v-card-text>
     </v-flex>
@@ -106,19 +109,26 @@ export default {
     },
     methods: {
       submit() {
+          // Clear any errors
+          this.clearErrors();
+
           // Make the API call
           ApiDriver.login(this.data).then(response => {
-              // Clear any errors
-              this.clearErrors();
+              let that = this;
 
               // Redirect on success
-              if(response.data.includes("bundle.js")){
+              if(response.headers.authorization){
+                that.$store.commit("embedToken", response.headers.authorization);
                 router.push('/home');
               } else {
                   // Populate error messages for the form fields
                   CustomErrorHandler.populateError(this.data.username, this.generalErrorMessage);
                   CustomErrorHandler.populateError(this.data.password, this.generalErrorMessage);
               }
+          }).catch(error => {
+              // Populate error messages for the form fields
+            CustomErrorHandler.populateError(this.data.username, this.generalErrorMessage);
+            CustomErrorHandler.populateError(this.data.password, this.generalErrorMessage);
           });
       },
       submitResetRequest() {
@@ -165,5 +175,8 @@ export default {
 }
 </script>
 <style scoped>
-
+.register-style{
+    justify-content: center;
+    text-align: center;
+}
 </style>

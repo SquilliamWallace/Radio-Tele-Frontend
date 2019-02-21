@@ -12,6 +12,7 @@
                                 label="First Name"
                                 :error=profile.firstName.hasError
                                 :error-messages=profile.firstName.errorMessage
+                                v-on:keyup.enter="updateInformation"
                                 required>
                             </v-text-field>
                         </v-flex>
@@ -21,6 +22,7 @@
                                 label="Last Name"
                                 :error=profile.lastName.hasError
                                 :error-messages=profile.lastName.errorMessage
+                                v-on:keyup.enter="updateInformation"
                                 required>
                             </v-text-field>
                         </v-flex>
@@ -31,7 +33,7 @@
                                 :error-messages=profile.phone.errorMessage
                                 mask='phone'
                                 label="Phone Number (Optional)"
-                            >
+                                v-on:keyup.enter="updateInformation">
                             </v-text-field>
                         </v-flex>
                         <v-flex xs12>
@@ -39,7 +41,8 @@
                                 v-model="profile.company.value"
                                 :error=profile.company.hasError
                                 :error-messages=profile.company.errorMessage
-                                label="Company Affiliation (Optional)">
+                                label="Company Affiliation (Optional)"
+                                v-on:keyup.enter="updateInformation">
                             </v-text-field>
                         </v-flex>
                     </v-container>
@@ -102,6 +105,7 @@ export default {
     },
     retrieveInformation() {
         let that = this;
+        // Set the loading flag to true
         this.$store.commit("loading", true);
         // Call the retrieve method
         ApiDriver.User.get(this.$route.params.userId).then(response => {
@@ -183,6 +187,7 @@ export default {
   mounted() {
       // Retrieve the information when the DOM is loaded
       this.retrieveInformation();
+      this.$store.commit("updateInfo", {page: "Edit Profile", info: "Fill out the form below to edit the information for\n your user profile."})
   }
 };
 </script>

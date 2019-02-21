@@ -13,7 +13,7 @@ Vue.use(Vuetify)
 Vue.use(Vuex)
 Vue.use(VueSweetAlert2)
 
-const store = VueStore.StoreFactory()
+const store = VueStore;
 
 window.onload = function() {
   var app = new Vue({

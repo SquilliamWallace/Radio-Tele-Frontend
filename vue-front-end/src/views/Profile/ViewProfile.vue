@@ -7,7 +7,7 @@
                 <v-flex xs4>
                 <v-card class = "elevation-0" color = "transparent">
                     <v-avatar size = "200">
-                            <img src="https://i.kym-cdn.com/entries/icons/original/000/009/803/spongebob-squarepants-patrick-spongebob-patrick-star-background-225039.jpg" alt="Patrick">
+                            <img src="https://icdn3.digitaltrends.com/image/50395182-infinite-space-background-with-silhouette-of-telescope.jpg?ver=1" alt="Patrick">
                         </v-avatar>
                         <div class = "headline">{{ profile.firstName.value }} {{ profile.lastName.value }}</div>
                 </v-card>
@@ -46,10 +46,11 @@
                                             name="newEmail"
                                             v-model="changeEmailForm.email.value"
                                             :error=changeEmailForm.email.hasError
-                                            :rules=[rules.required]
+                                            :rules="[rules.required]"
                                             :error-messages=changeEmailForm.email.errorMessage
                                             :validate-on-blur=true
                                             label="Enter New Email Address"
+                                            v-on:keyup.enter="changeEmailRequest"
                                             required
                                             ></v-text-field>
                                         </v-flex>
@@ -63,6 +64,7 @@
                                             :error-messages=changeEmailForm.emailConfirm.errorMessage
                                             :validate-on-blur=true
                                             label="Confirm New Email Address"
+                                            v-on:keyup.enter="changeEmailRequest"
                                             required
                                             ></v-text-field>
                                         </v-flex>
@@ -74,6 +76,52 @@
                                 </v-card-text>
                             </v-card>
                         </v-dialog>
+
+                        <v-btn v-if="$store.state.currentUserId == profile.id.value" color="primary darken-1" @click.native="passReset = true">Edit Password</v-btn>
+                        <!-- Password change modal -->
+                         <v-dialog v-model = "passReset" persistent max-width="600px" dark>
+                            <v-card>
+                                <v-container>
+                                    <v-flex xs12>
+                                        <v-card-text class = "headline">
+                                            Change Password
+                                        </v-card-text>
+                                    </v-flex>
+                                    <v-flex xs12>
+                                        <v-text-field 
+                                        :error=changePasswordForm.currentPassword.hasError
+                                        :rules="[passResetRules.required]"
+                                        :error-messages=changePasswordForm.currentPassword.errorMessage
+                                        :validate-on-blur=true
+                                        v-model="changePasswordForm.currentPassword.value" label="Old Password" type="password" required></v-text-field>
+                                    </v-flex>
+                                    <v-flex xs12>
+                                        <v-text-field 
+                                        :error=changePasswordForm.password.hasError
+                                        :rules="[passResetRules.required, passResetRules.passMatch]"
+                                        :error-messages=changePasswordForm.password.errorMessage
+                                        :validate-on-blur=true
+                                        v-model="changePasswordForm.password.value" label="New Password" type="password" required></v-text-field>
+                                    </v-flex>
+                                    <v-flex xs12>
+                                        <v-text-field
+                                        :error=changePasswordForm.passwordConfirm.hasError
+                                        :rules="[passResetRules.required, passResetRules.passMatch]" 
+                                        :error-messages=changePasswordForm.passwordConfirm.errorMessage
+                                        :validate-on-blur=true
+                                        v-model="changePasswordForm.passwordConfirm.value" label="Verify Password" type="password" required></v-text-field>
+                                    </v-flex>
+                                    <v-flex xs12>
+                                        <v-card-text></v-card-text>
+                                    </v-flex>
+
+                                    <v-btn @click.native="changePasswordRequest" color="green" >Submit</v-btn>
+                                    <v-btn @click.native="clearPassReset" color = "red">Cancel</v-btn>
+                                    
+                                </v-container>
+                            </v-card>
+                        </v-dialog>
+
                         <v-btn color="primary darken-1" @click="completedAppointmentsRedirect">View Completed Observations</v-btn>
                         <v-btn color="primary darken-1" @click="futureAppointmentsRedirect">View Future Observations</v-btn>
                     </div>
@@ -108,12 +156,24 @@ export default {
                 email: { value: "" },
                 emailConfirm: { value: "" }
             },
+            changePasswordForm: {
+                currentPassword: {value: ""},
+                password: {value: ""},
+                passwordConfirm: {value: ""},
+                id: {value: ""}
+            },
             rules: {
                 required: val => val.length > 0 || 'This field is required',
                 emailMatch: val => val === this.changeEmailForm.email.value || 'Emails do not match'
             },
             dialog: false,
-            showChangeEmailButton: false
+            showChangeEmailButton: false,
+
+            passReset: false,
+            passResetRules: {
+                required: val => val.length > 0 || 'This field is required',
+                passMatch: val => val === this.changePasswordForm.password.value || 'Passwords do not match'
+            }
         }
     },
     components: {
@@ -195,8 +255,8 @@ export default {
                     // Success alert
                     this.$swal({
                         title: '<span style="color:#f0ead6">Success!<span>',
-                        html: '<span style="color:#f0ead6">You should receive an email shortly' + 
-                        ' containing a link to accept your email change<span>',
+                        html: '<span style="color:#f0ead6">You should receive an email shortly at ' + 
+                        this.changeEmailForm.email.value + ' containing a link to accept your email change<span>',
                         type: 'success',
                         background: '#302f2f'
                     }).then(response => {
@@ -226,12 +286,87 @@ export default {
                 HttpResponse.generalError(this, message, false)
             });
         },
+        clearPassReset() { //resets form values to nothing
+            this.passReset = false
+            this.clearErrors()
+            this.changePasswordForm.currentPassword.value = ''
+            this.changePasswordForm.password.value = ''
+            this.changePasswordForm.passwordConfirm.value = ''
+        },
+        changePasswordRequest() {
+
+
+            this.changePasswordForm.id.value = this.profile.id.value
+            let form = JSON.stringify({
+                currentPassword: this.changePasswordForm.currentPassword.value,
+                password: this.changePasswordForm.password.value,
+                passwordConfirm: this.changePasswordForm.passwordConfirm.value,
+                id: this.changePasswordForm.id.value
+            });
+            
+
+            ApiDriver.User.changePassword(this.profile.id.value, form).then(response => {
+                // Handle the response
+                HttpResponse.then(response, data => {
+                    // Success alert
+                    this.$swal({
+                        title: '<span style="color:#f0ead6">Success!<span>',
+                        html: '<span style="color:#f0ead6">Your password has been changed',
+                        type: 'success',
+                        background: '#302f2f'
+                    }).then(response => {
+                        // Clear out the modal's information
+                        this.clearPassReset();
+                    });
+                }, (status, errors) => {
+                    // Access Denied
+                    if (parseInt(status) === 403) {
+                        // Call the generic access denied handler
+                        HttpResponse.accessDenied(this)
+                    } 
+                    // Not Found
+                    else if (parseInt(status) === 404) {
+                        // Call the generic invalid resource id handler
+                        HttpResponse.notFound(that, errors)
+                    } 
+                    // Bad request
+                    else {
+                        // Handle errors
+                        this.passResetErrorHandler(errors)
+                    }
+                })
+            }).catch(errors => {
+                // Handle an erroneous API call
+                let message = "An error occurred changing this user's password"
+                HttpResponse.generalError(this, message, false)
+            });
+
+            
+            
+        },
         clearDialog() {
             // Clear out the modal
             this.clearErrors();
             this.dialog = false;
             this.changeEmailForm.email.value = "";
             this.changeEmailForm.emailConfirm.value = "";
+        },
+        passResetErrorHandler(errors){
+            // populate error messages for form
+            for(var field in errors){
+                let message = errors[field][0];
+
+                if(field === "CURRENT_PASSWORD"){
+                    CustomErrorHandler.populateError(this.changePasswordForm.currentPassword, message);
+                }else if(field === "PASSWORD"){
+                    CustomErrorHandler.populateError(this.changePasswordForm.password, message);
+                }else if(field === "PASSWORD_CONFIRM"){
+                    CustomErrorHandler.populateError(this.changePasswordForm.passwordConfirm, message);
+                }else{
+                    HttpResponse.generalError(this, message, false);
+                }
+            }
+            this.$forceUpdate();
         },
         handleErrors(errors) {
             // Populate error messages for the form
@@ -252,11 +387,20 @@ export default {
         clearErrors() {
             CustomErrorHandler.clearError(this.changeEmailForm.email);
             CustomErrorHandler.clearError(this.changeEmailForm.emailConfirm);
+            CustomErrorHandler.clearError(this.changePasswordForm.currentPassword)
+            CustomErrorHandler.clearError(this.changePasswordForm.password)
+            CustomErrorHandler.clearError(this.changePasswordForm.passwordConfirm)
         }
     },
     mounted() {
         // Retrieve the user information when loaded onto the DOM
         this.retrieveInformation()
+        if(!this.$store.state.isAdmin){
+            this.$store.commit("updateInfo", {page: "View Profile", info: "This page shows the information for the user\n that is currently logged in."})
+        }
+        else{
+            this.$store.commit("updateInfo", {page: "View Profile", info: "This page shows the information for the selected user.\n From here you can view the user's information to check\n for inappropriate or falsified content, as well as view\n their completed and future appointments."})
+        }
     }
 }
 </script>

@@ -19,7 +19,7 @@
                     <v-list-tile class="list-item" v-for="appointment in futureAppointments" :key="appointment.id" v-bind:href="'/appointments/' + appointment.id + '/view'">
                         <v-list-tile-content v-if="futureAppointments.length > 0">
                             <v-list-tile-title v-if="appointment.celestialBody">
-                                Celestial Body: {{ appointment.celestialBody }}
+                                Appointment #{{ appointment.id }}
                             </v-list-tile-title>
                             <v-list-tile-title v-if="appointment.coordinates">
                                 Coordinates: {{ appointment.coordinates }}
@@ -40,6 +40,16 @@
             :length="numPages"
             @input="next"></v-pagination>
         </div>
+         <v-layout justify-center>
+            <v-flex xs12 sm1>
+                <v-select
+                v-model="selectedPageSize"
+                :items="pageSizeList"
+                label="Items per page"
+                v-on:change="this.pageSizeUpdate"
+                ></v-select>
+            </v-flex>
+        </v-layout>
     </div>
 </template>
 <script>
@@ -59,7 +69,11 @@ export default {
             pageSize: 25,
             numPages: 0,
             last: false,
-            futureAppointments: []
+            futureAppointments: [],
+            selectedPageSize: "1",
+            pageSizeList: [
+                '1', '2', '3', '4'
+            ]
         }
     },
     methods: {
@@ -68,7 +82,7 @@ export default {
             this.$store.commit("loading", true);
 
             // Make the API call
-            ApiDriver.Appointment.futureAppointments(this.$route.params.userId, this.pageNumber, this.pageSize)
+            ApiDriver.Appointment.futureAppointments(this.$route.params.userId, this.pageNumber, this.selectedPageSize)
                 .then(response => {
                     // Handle the server response
                     HttpResponse.then(response, data => {
@@ -94,8 +108,8 @@ export default {
             for (var index in data.content) {
                 let appointment = data.content[index];
                 appointment.celestialBody = "Alpha Centauri"
-                appointment.startTime = moment(appointment.startTime).add(4, 'hours').format('MM/DD/YYYY hh:mm:ss A');
-                appointment.endTime = moment(appointment.endTime).add(4, 'hours').format('MM/DD/YYYY hh:mm:ss A');
+                appointment.startTime = moment(appointment.startTime).format('MM/DD/YYYY hh:mm:ss A');
+                appointment.endTime = moment(appointment.endTime).format('MM/DD/YYYY hh:mm:ss A');
                 this.futureAppointments.push(appointment);
                 this.numPages = data.totalPages;
             }
@@ -106,11 +120,16 @@ export default {
             this.pageDisplay = page;
             this.futureAppointments = [];
             this.getFutureAppointments();
-        }
+        },
+        pageSizeUpdate(){
+            this.futureAppointments = []
+            this.getFutureAppointments()
+        },
     },
     mounted: function() {
         // Retrieve the future appointments when loaded onto the DOM
         this.getFutureAppointments();
+        this.$store.commit("updateInfo", {page: "Individual Future Appointments", info: "This page displays all of your future appointments.\n Click on an individual appointment to view more\n details."})
     },
     components: {
         NavigationBar,

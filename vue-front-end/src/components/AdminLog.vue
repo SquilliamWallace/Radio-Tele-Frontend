@@ -1,129 +1,140 @@
 <template>
-    <v-container width = "100%">
-        <div>
-            <v-layout row wrap>
-                <v-flex v-for="item in headers" :key="item.header" xs2>
-                    <v-card  color="transparent" class = "elevation-0 headline">
-                        <v-card-text class="text-xs-center">{{item.header}}</v-card-text>
-                    </v-card>
-                </v-flex>
-            </v-layout>
-        </div>
-        <v-divider></v-divider>
-        <v-layout row wrap v-for="log in logs" :key="log.id">
-            <v-flex xs2>
-                <v-tooltip bottom>
-                    <v-card  color="transparent" class = "elevation-0 " slot = "activator">
-                        <v-card-text class="text-xs-center">{{log.id}}</v-card-text>
-                    </v-card>
-                    <span>Log ID</span>
-                </v-tooltip>
-            </v-flex>
-            <v-flex xs2>
-                <v-tooltip bottom>
-                    <v-card  color="transparent" class = "elevation-0 " slot = "activator">
-                        <v-card-text class="text-xs-center">{{log.action}} {{log.affectedTable}}</v-card-text>
-                    </v-card>
-                    <span>Action</span>
-                </v-tooltip>
-            </v-flex>
-            <v-flex xs2>
-                <v-tooltip bottom>
-                <v-card  color="transparent" class = "elevation-0 " slot = "activator">
-                    <v-card-text class="text-xs-center">{{log.affectedRecordId}}</v-card-text>
-                </v-card>
-                <span>Record ID</span>
-                </v-tooltip>
-            </v-flex>
-            <v-flex xs2>
-                <v-tooltip bottom>
-                    <v-card  color="transparent" class = "elevation-0 " slot = "activator">
-                        <v-card-text class="text-xs-center">{{log.success}}</v-card-text>
-                    </v-card>
-                    <span>Success</span>
-                </v-tooltip>
-            </v-flex>
-            <v-flex xs2>
-                <v-tooltip bottom>
-                    <v-card  color="transparent" class = "elevation-0 " slot = "activator">
-                        <v-card-text class="text-xs-center">{{log.userId}}</v-card-text>
-                    </v-card>
-                    <span>User ID</span>
-                </v-tooltip>
-            </v-flex>
-            <v-flex xs2>
-                <v-tooltip bottom>
-                    <v-card  color="transparent" class = "elevation-0 " slot = "activator">
-                        <v-card-text class="text-xs-center">{{log.userFirstName}} {{log.userLastName}}</v-card-text>
-                    </v-card>
-                    <span>Name</span>
-                </v-tooltip>
-            </v-flex>
-        </v-layout>
-        <div class="text-xs-center">
-            <v-pagination
+<div>
+    <loading v-if="$store.state.isLoading"></loading>
+    <v-card v-if="!$store.state.isLoading">
+      <v-card-title>
+        <v-text-field
+          v-model="search"
+          append-icon="search"
+          label="Search"
+          single-line
+          hide-details
+        ></v-text-field>
+      </v-card-title>
+    <v-data-table
+      @input="toggleDetails($event[0])"
+      v-if="!$store.state.isLoading"
+      hide-actions
+      :headers="headers"
+      :items="logs"
+      :pagination.sync="pagination"
+      select-all
+      class="elevation-1"
+    >
+      <template slot="headers" slot-scope="props">
+        <tr>
+          <th
+            v-for="header in props.headers"
+            :key="header.text"
+            :class="['column sortable', pagination.descending ? 'desc' : 'asc', header.value === pagination.sortBy ? 'active' : '']"
+            @click="changeSort(header.value)"
+          >
+            <v-icon small>arrow_upward</v-icon>
+            {{ header.text }}
+          </th>
+        </tr>
+      </template>
+      <template slot="items" slot-scope="props">
+        <tr :active="props.selected" @click="props.selected = !props.selected">
+          <td>{{ props.item.id }}</td>
+          <td>{{ props.item.action }}</td>
+          <td>{{ props.item.affectedRecordId }}</td>
+          <td>{{ props.item.success }}</td>
+          <td>{{ props.item.userId }}</td>
+          <td>{{ props.item.userName}}</td>
+        </tr>
+      </template>
+      <template slot="footer">
+        <td :colspan="headers.length">
+          <v-pagination
             circle
             v-model="pageDisplay"
             :length="numPages"
             @input = "next"
-            :total-visible="7"
+            :total-visible="15"
             ></v-pagination>
-        </div>
-    </v-container>
-    
-             
-            <!-- <v-list>
-                <v-container>
-                    <v-list-tile v-for="log in logs" :key = log.id>
-                        <span>
-                            <v-list-tile-title class="text-sm-left">User Id</v-list-tile-title>
-                            <v-list-tile-sub-title class="text-sm-left"> {{log.userId}}</v-list-tile-sub-title>
-                        </span>
-                        <v-spacer></v-spacer>
-                        <span v-bind:style="{ color : '', fontWeight: 'bold'}">User Id:&nbsp;</span> {{ log.userId }} 
-                        <span>
-                            <v-list-tile-title class="text-sm-left">Name</v-list-tile-title>
-                            <v-list-tile-sub-title class="text-sm-left"> {{log.userFirstName}} {{log.userLastName}}</v-list-tile-sub-title>
-                        </span>
-                        
-                        <v-spacer></v-spacer>
-                        <span v-bind:style="{ color : '', fontWeight: 'bold'}">Action:&nbsp;</span> {{ log.action }} {{ log.affectedTable }}
-                        <span>
-                            <v-list-tile-title class="text-xs-left">Action</v-list-tile-title>
-                            <v-list-tile-sub-title class="text-sm-left"> {{log.action}} {{log.affectedTable}}</v-list-tile-sub-title>
-                        </span>
-                        <v-spacer></v-spacer>
-                    
-                </v-list-tile>
+        </td>
+      </template>
+      <v-alert slot="no-results" :value="true" color="error" icon="warning">
+          Your search for "{{ search }}" found no results.
+      </v-alert>  
+    </v-data-table>
+    </v-card>
+    <v-dialog dark v-model="toggleDetailedView">
+        <loading v-if="$store.state.isLoading"></loading>
+        <v-card v-if="!$store.state.isLoading" class="card-style">
+            <h1 v-if="currentLog.success">Log Number {{currentLog.id}}: Successful Operation</h1>
+            <h1 v-if="!currentLog.success">Log Number {{currentLog.id}}: Unsuccessful Operation</h1>
+            <v-container grid-list-xl fluid>
+                <v-layout wrap>
+                    <v-flex xs12 sm12>
+                        <h2>Date of Occurrence:</h2>
+                        <span>{{currentLog.timestamp}}</span>
+                    </v-flex>
+                    <v-flex xs12 sm6>
+                        <h3>Attempted Operation:</h3>
+                        <span>{{currentLog.action}}</span>
+                    </v-flex>
+                    <v-flex xs12 sm6>
+                        <h3>Name of User:</h3>
+                        <span>{{currentLog.userName}}</span>
+                    </v-flex>
+                    <v-flex xs12 sm6>
+                        <h3>Affected Table:</h3>
+                        <span>{{currentLog.affectedTable}}</span>
+                    </v-flex>
+                    <v-flex xs12 sm6>
+                        <h3>Affected Record ID:</h3>
+                        <span>{{currentLog.affectedRecordId}}</span>
+                    </v-flex>
+                    <v-flex xs12 sm12 v-if="!currentLog.success">
+                        <h2>Errors:</h2>
+                        <li v-bind:key="error.id" v-for="error in currentLog.errors">
+                            {{error.field}} {{error.message}}
+                        </li>
+                    </v-flex>
+                </v-layout>
                 </v-container>
-            </v-list> -->
-            
-            
-        
+            <v-card-actions>
+                <v-btn flat color="blue" @click="toggleDetailedView = !toggleDetailedView">Close</v-btn>
+          </v-card-actions>
+        </v-card>
+    </v-dialog>
+    </div>
 </template>
 <script>
 import router from '../router';
 import ApiDriver from '../ApiDriver';
 import HttpResponse from '../utils/HttpResponse';
 import CurrentUserValidation from  '../utils/CurrentUserValidation';
+import Loading from "../components/Loading"
+import moment from 'moment'
 export default {
     name: 'AdminLog',
     data() {
         return {
-            
+            pagination: {
+                sortBy: 'name',
+                totalItems: 0,
+                page: 1,
+                rowsPerPage: 25
+            },
+            currentLog: {},
             pageNumber: 0,
-            pageSize: 50,
+            pageSize: 25,
             pageDisplay: 1,
             numPages: 0,
-            
+            totalLogs: 0,
+            toggleDetailedView: false,
             logs: [],
+            search: '',
             headers: [
-                {header: 'Log ID'},
-                {header: 'Action'},
-                {header: 'Record ID'},
-                {header: 'Success'},
-                {header: 'User ID'},
-                {header: 'Name'}
+                {text: 'Log ID', value: 'id'},
+                {text: 'Action', value: 'action'},
+                {text: 'Record ID', value: 'affectedRecordId'},
+                {text: 'Success', value: 'success'},
+                {text: 'User ID', value: 'userId'},
+                {text: 'Username', value: 'userName'}
             ],
          
         }
@@ -131,10 +142,13 @@ export default {
     },
     methods: {
         getLogs() {
+            this.$store.commit("loading", true);
             ApiDriver.Log.viewLogs(this.pageNumber, this.pageSize).then((response) => {
-                console.log(response)
                 HttpResponse.then(response, (data) => {
                     this.populateData(data.data)
+                    this.totalLogs = data.data.totalElements;
+                    this.pagination.totalItems = this.totalLogs;
+                    this.$store.commit("loading", false);
                 }, (status, errors) => {
                     if (parseInt(status) === 403) {
                         this.$swal({
@@ -145,6 +159,7 @@ export default {
                         });
                         CurrentUserValidation.validateCurrentUser(this.$store);
                     }
+                    this.$store.commit("loading", false);
                 })
             }).catch((error) => {
                 this.$swal({
@@ -153,24 +168,45 @@ export default {
                             type: 'error',
                             background: '#302f2f'
                         });
-                console.log(error)
+                this.$store.commit("loading", false);
             });
         },
         populateData(data){
-            
             for (var index in data.content) {
                 let log = data.content[index];
                 if (!log.userId) {
-                    log.userId = 'N/a';
-                    log.userFirtName = 'N/a';
-                    log.userLastName = "N/a";
+                    log.userId = 'N/A';
+                    log.userName = 'N/A';
                     
                 }
                 if(!log.affectedRecordId){
-                    log.affectedRecordId = 'N/a';
+                    log.affectedRecordId = 'N/A';
+                }
+                if(log.userFirstName && log.userLastName){
+                    log.userName = log.userFirstName + ' ' + log.userLastName;
+                }
+                else{
+                    log.userName = "No User Logged In"
                 }
                 this.logs.push(log);
-                
+                if(!log.success){
+                    ApiDriver.Log.retrieveErrors(log.id).then((response) => {
+                        HttpResponse.then(response, (data) => {
+                        log.errors = data.data;
+                    })
+                }, (status, errors) => {
+                        // Access Denied
+                        if (parseInt(status) === 403) {
+                            // Call the generic access denied handler
+                            HttpResponse.accessDenied(this);
+                        } 
+                        // Invalid Resource Id
+                        else if (parseInt(status) === 404) {
+                            // Call the generic not found handler
+                            HttpResponse.notFound(this, errors);
+                        }
+                    });
+                }
             }
             this.numPages = data.totalPages;
         },
@@ -179,11 +215,27 @@ export default {
             this.pageDisplay = page;
             this.logs = [];
             this.getLogs();
+        },
+        changeSort (column) {
+            if (this.pagination.sortBy === column) {
+                this.pagination.descending = !this.pagination.descending
+            } else {
+                this.pagination.sortBy = column
+                this.pagination.descending = false
+            }
+        },
+        toggleDetails (event) {
+            this.currentLog = event;
+            this.currentLog.timestamp = moment(this.currentLog.timestamp).format('MMMM Do YYYY, h:mm:ss a');
+            this.toggleDetailedView = !this.toggleDetailedView
         }
         
     },
     mounted: function(){
         this.getLogs()
+    },
+    components: {
+        Loading
     }
 }
 </script>
@@ -191,6 +243,9 @@ export default {
     .transparent {
         background-color: transparent!important;
         border-color: transparent!important;
+    }
+    .card-style {
+        padding: 10px;
     }
 </style>
 

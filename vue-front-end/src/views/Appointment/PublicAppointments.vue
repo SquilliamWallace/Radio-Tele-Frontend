@@ -18,7 +18,7 @@
                     <v-list-tile class="list-item" v-for="appointment in publicAppointments" :key="appointment.id" v-bind:href="'/appointments/' + appointment.id + '/view'">
                         <v-list-tile-content v-if="publicAppointments.length > 0">
                             <v-list-tile-title v-if="appointment.celestialBody">
-                            Celestial Body: {{ appointment.celestialBody }}
+                            Appointment #{{ appointment.id }}
                             </v-list-tile-title>
                             <v-list-tile-title v-if="appointment.coordinates">
                                 Coordinates: {{ appointment.coordinates }}
@@ -98,8 +98,8 @@ export default {
             for (var index in data.content) {
                 let appointment = data.content[index];
                 appointment.celestialBody = "Alpha Centauri";
-                appointment.startTime = moment(appointment.startTime).add(4, 'hours').format('MM/DD/YYYY hh:mm:ss A');
-                appointment.endTime = moment(appointment.endTime).add(4, 'hours').format('MM/DD/YYYY hh:mm:ss A');
+                appointment.startTime = moment(appointment.startTime).format('MM/DD/YYYY hh:mm:ss A');
+                appointment.endTime = moment(appointment.endTime).format('MM/DD/YYYY hh:mm:ss A');
                 this.publicAppointments.push(appointment);
                 this.numPages = data.totalPages;
             }
@@ -115,6 +115,7 @@ export default {
     mounted: function() {
         // Retrieve the public appointments when loaded onto the DOM
         this.getPublicAppointments();
+        this.$store.commit("updateInfo", {page: "Completed Public Appointments", info: "This page displays all public appointments that have\n been completed. Click on an individual appointment\n to view more details."})
     },
     components: {
         NavigationBar,

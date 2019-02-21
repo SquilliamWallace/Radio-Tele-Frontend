@@ -11,24 +11,20 @@
           </v-img>
   
           <v-card-title primary-title>
-            <div>
-              <div class="headline">Buzzfeed loves our telescope!</div>
-              <span class="grey--text">Featured in top 10 radio telescopes</span>
+            <div style="padding: 25px;">
+              <div class="headline">Welcome to the York County Astronomical Society Radio Telescope!</div>
+              <span class="grey--text">The York County Astronomical Society, Inc. is a non-profit organization dedicated to the advancement of the science of astronomy.
+
+              The York County Astronomical Society was started in 1989, and currently has about 70 members in 4 counties in Pennsylvania as well as in Maryland and Delaware. 
+
+              The Society also has special programs to showcase eclipses, meteor showers, comets, and other special events.
+
+              The Society operates The York Learning Center Planetarium bringing astronomy to the public, presenting astronomical shows and related astronomy programs of the night sky.
+  
+              The Society owns 5 research-grade telescopes, an 18” Dobsonian, 14” Dobsonian and a 12” computerized goto telescope, a 10" SCT telescope, a 4.5” Newtonian telescope, a 4” Astro-Physics Refractor telescope. In addition for loan to members, the Society owns two 8” Dobsonian telescopes, a Celestron NexStar i 8 GoTo telescope with GPS and a Coronado PST solar telescope.
+              </span>
             </div>
           </v-card-title>
-  
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn icon @click="show = !show">
-              <v-icon>{{ show ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</v-icon>
-            </v-btn>
-          </v-card-actions>
-  
-          <v-slide-y-transition>
-            <v-card-text v-show="show">
-              I hope that one day my software gets featured on buzzfeed, that's how i'll know i made it.
-            </v-card-text>
-          </v-slide-y-transition>
         </v-card>
     </v-parallax>
 </div>
@@ -54,7 +50,7 @@ export default {
       handleLoggedIn() {
         // Call the auth api endpoint so we can populate
         // the Vue store with user information
-        ApiDriver.Auth.User().then((response) => {
+        ApiDriver.Auth.User(this.$store.state.token).then((response) => {
           HttpResponse.then(response, (data) => {
             // Commit the data to the store and update the vue app
             this.$store.commit("login", data.data);
@@ -73,6 +69,7 @@ export default {
           message = errors[index][0]
         }
 
+        // Display the error message in an alert
         this.$swal({
           title: '<span style="color:#f0ead6">Error!</span>',
           html: '<span style="color:#f0ead6">' + message + '</span>',
@@ -86,6 +83,7 @@ export default {
   mounted() {
     // Handle the log in when the DOM is loaded
     this.handleLoggedIn();
+    this.$store.commit("updateInfo", {page: "Home", info: "Welcome to the York County Astronomical Society\n Radio Telescope application!"})
   }
 };
 </script>

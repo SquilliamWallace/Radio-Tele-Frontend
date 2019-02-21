@@ -4,6 +4,7 @@
       <v-toolbar-side-icon @click="showDrawer=!showDrawer"></v-toolbar-side-icon>    
       <v-toolbar-title class="title-style" @click="homeRedirect">YCAS Radio Telescope</v-toolbar-title>
       <v-spacer></v-spacer>
+      <v-icon dark class="help-style" @click="toggleInfo">help_outline</v-icon>
       <v-toolbar-items class="hidden-sm-and-down">
           <v-btn @click="viewProfile">Profile</v-btn>
           <v-btn @click="logout">Logout</v-btn>
@@ -21,6 +22,16 @@
             </v-list-tile>
         </v-list>
     </v-navigation-drawer>
+    <v-dialog dark v-model="showInfo" max-width="50%">
+         <v-card class="help-modal-style">
+          <v-card-title style="justify-content: center;">
+            <h2>{{$store.state.currentPage}}</h2>
+          </v-card-title>
+          <v-card-text>
+            <pre>{{$store.state.information}}</pre>
+          </v-card-text>
+         </v-card>
+    </v-dialog>
     </div>
 </template>
 
@@ -32,9 +43,9 @@ export default {
     data() {
         return {
             showDrawer: false,
+            showInfo: false,
             items: [
               { title: 'Scheduling Calendar', icon: 'dashboard', path: '/scheduler' },
-              { title: 'Administration', path: '/admin' },
               { title: 'Public Appointments', path: '/appointments/public' },
               { title: 'Completed Appointments', path: '/users/' + this.$store.state.currentUserId + '/appointments/completed' },
               { title: 'Future Appointments', path: '/users/' + this.$store.state.currentUserId + '/appointments/future' },
@@ -60,6 +71,14 @@ export default {
             ApiDriver.logout();
             this.$store.commit("logout");
             router.push('/');
+        },
+        toggleInfo() {
+            this.showInfo = !this.showInfo;
+        }
+    },
+    mounted() {
+        if(this.$store.state.isAdmin){
+            this.items.push({ title: 'Administration', path: '/admin' })
         }
     }
 }
@@ -77,5 +96,12 @@ export default {
     position: absolute;
     margin-top: 64px !important;
     z-index: 99 !important;
+}
+.help-style{
+    padding-right: 20px;
+    cursor: pointer;
+}
+.help-modal-style{
+    padding: 20px;
 }
 </style>

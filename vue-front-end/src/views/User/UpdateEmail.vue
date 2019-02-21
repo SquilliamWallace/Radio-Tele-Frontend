@@ -66,6 +66,7 @@ export default {
                         HttpResponse.generalError(this, message, true)
                     });
                 }).catch(errors => {
+                    // Handle an erroneous API call
                     let message = "An error occurred changing this user's email address";
                     HttpResponse.generalError(this, message, true)
                 });
