@@ -424,19 +424,6 @@ export default {
     }
 }
 
-<<<<<<< HEAD
-// $(window).load(function() {
-// $('#calendar').fullCalendar({
-//     themeSystem: 'jquery-ui',
-//     header: {
-//       left: 'prev,next today',
-//       center: 'title',
-//       right: 'month,agendaWeek,agendaDay,listMonth'
-//     }
-//     });
-// });
-=======
->>>>>>> development
 </script>
 
 

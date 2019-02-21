@@ -1,11 +1,7 @@
 const axios = require('axios');
 import Headers from './utils/Headers';
 
-<<<<<<< HEAD
 let baseUrl = "https://prod-api.ycpradiotelescope.com:8080/api/";
-=======
-let baseUrl = "http://api.ycpradiotelescope.com:8080/api/";
->>>>>>> development
 export default {
     //API endpoints go here
     User: {
@@ -117,11 +113,7 @@ export default {
     },
 
     login: function(data) {
-<<<<<<< HEAD
-      return axios.post(baseUrl + "login?email=" + data.username.value + "&password=" + data.password.value, JSON.stringify(data))
-=======
       return axios.post("http://api.ycpradiotelescope.com:8080/login?email=" + data.username.value + "&password=" + data.password.value, JSON.stringify(data))
->>>>>>> development
     },
     logout: function () {
       return axios.post(baseUrl + "logout", {}, Headers.retrieveHeaders())
