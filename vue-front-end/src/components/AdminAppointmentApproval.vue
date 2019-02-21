@@ -39,6 +39,23 @@
                     </v-list-tile>
                 </v-list>
         </v-card>
+         <div class="text-xs-center">
+            <v-pagination
+            circle
+            v-model="pageDisplay"
+            :length="numPages"
+            @input="next"></v-pagination>
+        </div>
+        <v-layout justify-center>
+            <v-flex xs12 sm1>
+                <v-select
+                v-model="selectedPageSize"
+                :items="pageSizeList"
+                label="Items per page"
+                v-on:change="this.pageSizeUpdate"
+                ></v-select>
+            </v-flex>
+        </v-layout>
         <!-- this dialog is called when the approve button is pressed -->
          <v-dialog dark v-model="confirm" persistent max-width="700px">
             <v-card>
@@ -134,9 +151,17 @@ export default {
     data(){
         return{
             data: {
-                pageNumber: 0,
-                pageSize: 50 
+            
             },
+            //pagination
+            pageDisplay: 1,
+            numPages: 0,
+            pageNumber: 0,
+            selectedPageSize: "1",
+            pageSizeList: [
+                '1', '2', '3', '4'
+            ],
+
             form: {
                 roleId: {
                     value: ""
@@ -198,7 +223,7 @@ export default {
             
         },
         getUnapprovedAppointments(){
-            ApiDriver.Appointment.unapprovedRequest(this.data).then((response) => {
+            ApiDriver.Appointment.unapprovedRequest(this.pageNumber, this.selectedPageSize).then((response) => {
                 HttpResponse.then(response, (data) => {
                     this.populateData(data.data)
                 },(status, errors) => {})
@@ -206,13 +231,26 @@ export default {
             })
         },
         populateData(data){
+            console.log(data)
             for(var index in data.content){
                 let appointment = data.content[index];
                 appointment.startTime = moment(appointment.startTime).format('MM-DD-YYYY hh:mm A');
                 appointment.endTime = moment(appointment.endTime).format('MM-DD-YYYY hh:mm A');
                 this.appointments.push(appointment);
             }
-        }
+            this.numPages = data.totalPages;
+        },
+        next(page) {
+            // Handle retrieving a new page of information
+            this.pageNumber = page - 1;
+            this.pageDisplay = page;
+            this.appointments = [];
+            this.getUnapprovedAppointments();
+        },
+        pageSizeUpdate(){
+            this.appointments = []
+            this.getUnapprovedAppointments()
+        },
     },
     mounted: function(){
         this.getUnapprovedAppointments();

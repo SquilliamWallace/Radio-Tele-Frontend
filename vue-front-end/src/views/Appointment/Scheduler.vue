@@ -34,7 +34,7 @@
                 Display the name of the telescope at the top of the page
                 Display Large text to make sure viewer is aware of which tele they are looking at
             -->
-            <h1 justify-center>{{ telescopeName }}</h1>
+            <h1 justify-center>{{ selectedTelescope.name }}</h1>
             
             
             <!-- 
@@ -76,9 +76,10 @@
                 <!-- 
                     linked component: Appointment.vue
                     
-                    :eventObj="event" {
-                        passes the event that was created on the calander to the modal
-                    }
+                    :telescope="selectedTelescope"
+                        Retrieves the telescope object(id, name) from Appointment, and assigns
+                        its values to selectedTelescope
+
                     v-model="openCreateModal" {
                         this.openCreateModal: boolean
                         displays modal only if openCreateModal is set to true
@@ -90,7 +91,7 @@
                         sets this.openCreateModel to false, to make the modal not display
                     }
                 -->
-                <create-appointment :eventObj="event" v-model="openCreateModal" @request-appointment="requestAppointment" @created-event="createdEvent" v-on:close-modal="openCreateModal = false"></create-appointment>
+                <create-appointment :telescope="selectedTelescope" v-model="openCreateModal" @request-appointment="requestAppointment" @created-event="createdEvent" v-on:close-modal="openCreateModal = false"></create-appointment>
 
                 <!-- 
                     linked component: RequestAppointment.vue
@@ -145,13 +146,15 @@ export default {
             openRequestModal: false,
             privateEventModal: false,
             tele: true,
-            telescopeId: "",
+            selectedTelescope: {
+                id: null,
+                name: ""
+            },
             telescopes: [
                 "John C. Rudy County Park", 
                 "Scale Model",
                 "Virtual"
             ],
-            telescopeName: '',
 
             /* 
                 This is the header bound to the FullCalendar.vue component
@@ -254,7 +257,7 @@ export default {
                 end: new Date(data.endTime),
                 public: data.isPublic,
                 start: new Date(data.startTime),
-                telescopeId: data.telescopeId,
+                telescopeId: data.selectedTelescope.id,
                 userId: data.userId,
                 editable: false,
                 draggable: false
@@ -262,7 +265,7 @@ export default {
             
             // This checks that the viewer scheduled the event for the telescope they are looking at currently
             // If so add it to the this.events to be displayed; Else do nothing
-            if (this.telescopeId == event.telescopeId){
+            if (this.selectedTelescope.id == event.selectedTelescope.id){
                 this.events.push(event)
             }
         },
@@ -275,8 +278,8 @@ export default {
             // If the telescopeId is set, that means a viewer is looking for data on that telescope
             // Call funciton populateDataBetweenData(this.telescopeId) to get the data they are wanting to display
             // Else they have not selected any telescope and do not try grabbing data from a null reference
-            if( this.telescopeId != "") {
-                this.populateDataBetweenDates(this.telescopeId, false)
+            if (this.selectedTelescope.id) {
+                this.populateDataBetweenDates(this.selectedTelescope.id, false)
             }
         },
         /*
@@ -331,10 +334,10 @@ export default {
 
             // This sets the telescopeId of the page to the id. Used for initializing the data of this.telescopeId when they first choose a telescope to view
             // is setting itself to itself if populateDataBetweenDates() is called from changedViews()
-            this.telescopeId = id
+            this.selectedTelescope.id = id
 
             // Get the name of the telescope based on the telescopeId, to display at top of page
-            this.telescopeName = this.telescopes[id-1] + " Radio Telescope"
+            this.selectedTelescope.name = this.telescopes[id-1] + " Radio Telescope"
 
             // Call back-end Api with data set above.
             ApiDriver.Appointment.listAppointmentsBetweenDates(data).then((response) => {
