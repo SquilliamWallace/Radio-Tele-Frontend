@@ -24,10 +24,10 @@ const store = new Vuex.Store({
         information: ""
     },
     mutations: {
-        embedToken(state, token) {
+        embedToken: function(state, token) {
             state.token = token
         },
-        login(state, data) {
+        login: function(state, data) {
             state.currentUserId = data.userId;
 
             for (var idx in data.roles) {
@@ -46,7 +46,7 @@ const store = new Vuex.Store({
                 }
             }
         },
-        logout(state) {
+        logout: function(state) {
             state.currentUserId = null;
             state.isUser = false;
             state.isGuest = false;
@@ -56,10 +56,10 @@ const store = new Vuex.Store({
             state.isAdmin = false;
             state.token = null
         },
-        loading(state, value) {
+        loading: function(state, value) {
             state.isLoading = value;
         },
-        updateInfo(state, pageInfo) {
+        updateInfo: function(state, pageInfo) {
             state.currentPage = pageInfo.page;
             state.information = pageInfo.info;
         }
