@@ -22,7 +22,7 @@
                     </v-list-tile-sub-title>
                 </v-list-tile-content>
                 <v-spacer></v-spacer>
-                <v-btn icon v-bind:href = "'http://localhost:8081/users/' + user.id + '/view'">
+                <v-btn icon v-bind:href="'/#/users/' + user.id + '/view'">
                     <v-icon>account_circle</v-icon>
                 </v-btn>
                 <div v-if = "user.status === 'Active'">
