@@ -11,11 +11,11 @@
             </v-card-title>
             <v-card-text v-if="publicAppointments.length === 0">
                 <div>There are no completed public observations! Help contribute to the cause!</div>
-                <a href="/scheduler">Click here to schedule a public observation</a>
+                <a href="/#/scheduler">Click here to schedule a public observation</a>
             </v-card-text>
             <v-card-title v-else>
                 <v-list three-line>
-                    <v-list-tile class="list-item" v-for="appointment in publicAppointments" :key="appointment.id" v-bind:href="'/appointments/' + appointment.id + '/view'">
+                    <v-list-tile class="list-item" v-for="appointment in publicAppointments" :key="appointment.id" v-bind:href="'/#/appointments/' + appointment.id + '/view'">
                         <v-list-tile-content v-if="publicAppointments.length > 0">
                             <v-list-tile-title v-if="appointment.celestialBody">
                             Appointment #{{ appointment.id }}
