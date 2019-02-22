@@ -68,6 +68,7 @@ import CustomErrorHandler from "../../utils/CustomErrorHandler";
 import CurrentUserValidation from '../../utils/CurrentUserValidation'
 import Loading from "../../components/Loading"
 export default {
+  title: "Radio Telescope 1.0.0",
   name: "EditProfile",
   data() {
     return {

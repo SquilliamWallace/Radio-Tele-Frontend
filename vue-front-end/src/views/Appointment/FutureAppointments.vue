@@ -61,6 +61,7 @@ import NavigationBar from '../../components/NavigationBar';
 import Loading from '../../components/Loading'
 import HttpResponse from '../../utils/HttpResponse';
 export default {
+    title: "Radio Telescope 1.0.0",
     name: 'FutureAppointments',
     data() {
         return {

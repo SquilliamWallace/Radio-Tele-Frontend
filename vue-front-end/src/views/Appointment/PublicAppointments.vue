@@ -56,6 +56,7 @@ import moment from 'moment';
 import NavigationBar from '../../components/NavigationBar';
 import Loading from '../../components/Loading'
 export default {
+    title: "Radio Telescope 1.0.0",
     name: 'PublicAppointments',
     data() {
         return {
