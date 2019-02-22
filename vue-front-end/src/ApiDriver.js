@@ -18,8 +18,8 @@ export default {
       update: function(userId, data) {
         return axios.put(this.namespace + "/" + userId, data, Headers.retrieveHeaders());
       },
-      allUsers: function(data) {
-        return axios.get(this.namespace + "?page=" + data.pageNumber + "&size=" + data.pageSize, Headers.retrieveHeaders());
+      allUsers: function(pageNumber, pageSize) {
+        return axios.get(this.namespace + "?page=" + pageNumber + "&size=" + pageSize, Headers.retrieveHeaders());
       },
       changePassword: function(userId) {
         return axios.put(this.namespace + "/" + userId + "/changePassword", data, Headers.retrieveHeaders())
@@ -35,6 +35,9 @@ export default {
       },
       changePassword: function(userId, data) {
         return axios.put(this.namespace + "/" + userId + "/changePassword", data, Headers.retrieveHeaders())
+      },
+      changeRoleRequest: function(userId, role, data) {
+        return axios.post(this.namespace + "/" + userId + "/role/request?role=" + role, data, Headers.retrieveHeaders())  
       },
       unapproved: function(pageNumber, pageSize) {
         return axios.get(baseUrl + "roles/unapproved" + "?page=" + pageNumber + "&size=" + pageSize, Headers.retrieveHeaders())
@@ -61,8 +64,8 @@ export default {
       request: function (data) {
         return axios.post(this.namespace + "/request", data, Headers.retrieveHeaders())
       },
-      unapprovedRequest: function (data) {
-        return axios.get(this.namespace + "/listRequested?page=" + data.pageNumber + "&size=" + data.pageSize, Headers.retrieveHeaders())
+      unapprovedRequest: function (pageNumber, pageSize) {
+        return axios.get(this.namespace + "/listRequested?page=" + pageNumber + "&size=" + pageSize, Headers.retrieveHeaders())
       },
       approveRequest: function (appointmentId, isApprove) {
         return axios.put(this.namespace + "/" + appointmentId + "/validate?isApprove=" + isApprove, {}, Headers.retrieveHeaders());

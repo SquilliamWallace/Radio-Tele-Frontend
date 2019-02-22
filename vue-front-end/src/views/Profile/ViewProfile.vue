@@ -1,4 +1,5 @@
 <template>
+    <v-app>
     <div>
         <navigation-bar></navigation-bar>
         <loading v-show="$store.state.isLoading"></loading>
@@ -27,13 +28,40 @@
                         <div class = "headline text-xs-left">Membership <v-icon>person</v-icon></div>
                         <div id = "profileInfo" class = "text-xs-left">{{ profile.type.value }}</div>
                         <v-divider></v-divider>
+
+                        <!-- 
+                            linked component: RequestRole.vue
+                            
+                            v-model="updateRole" {
+                                this.updateRole: boolean
+                                displays modal only if updateRole is set to true
+                            }
+
+                            v-on:close-modal="roleChange = false" {
+                                sets this.roleChange to false, to make the modal not display
+                            }
+
+                            @chosen="changeRoleRequest"
+                                Recieve User's requested role from the RequestRole component, 
+                                and pass it to changeRoleRequest method
+                        -->
+                        <v-btn v-if="$store.state.currentUserId == profile.id.value" color="primary darken-1" v-on:click="toggleUpdateRole">Request New Role</v-btn>
+                            <request-role v-model="updateRole" v-on:close-modal="updateRole = false" @false="cancelRoleRequest" @chosen="changeRoleRequest"></request-role>
+                            
                     </v-card>
                 </v-flex>
                 <v-flex xs12>
                     <br><br><br>
                     <div>
+                        <!-- 
+                            Edit Profile
+                        -->
                         <v-btn color="primary darken-1" @click="editRedirect">Edit Profile</v-btn>
                         <v-dialog v-model="dialog" v-if="showChangeEmailButton" max-width="600px" dark>
+
+                        <!--
+                            Change Email Modal
+                        -->
                             <v-btn slot="activator" color="primary darken-1">Change Email</v-btn>
                             <v-card>
                                 <v-card-title class="justify-center">
@@ -77,8 +105,10 @@
                             </v-card>
                         </v-dialog>
 
+                        <!-- 
+                            Edit Password Modal
+                        -->
                         <v-btn v-if="$store.state.currentUserId == profile.id.value" color="primary darken-1" @click.native="passReset = true">Edit Password</v-btn>
-                        <!-- Password change modal -->
                          <v-dialog v-model = "passReset" persistent max-width="600px" dark>
                             <v-card>
                                 <v-container>
@@ -129,6 +159,7 @@
             </v-layout>
         </v-container>
     </div>
+    </v-app>
 </template>
 
 <script>
@@ -139,6 +170,7 @@ import HttpResponse from '../../utils/HttpResponse'
 import CurrentUserValidation from '../../utils/CurrentUserValidation'
 import Loading from "../../components/Loading"
 import CustomErrorHandler from '../../utils/CustomErrorHandler';
+import RequestRole from '../../components/RequestRole.vue';
 export default {
     name: "ViewProfile",
     data() {
@@ -173,12 +205,14 @@ export default {
             passResetRules: {
                 required: val => val.length > 0 || 'This field is required',
                 passMatch: val => val === this.changePasswordForm.password.value || 'Passwords do not match'
-            }
+            },
+            updateRole: false
         }
     },
     components: {
       NavigationBar,
-      Loading
+      Loading,
+      RequestRole
     },
     methods: {
         editRedirect() {
@@ -238,6 +272,11 @@ export default {
                 this.profile.type.value = "Pending Approval";
             }   
             this.showChangeEmailButton = (data.id === this.$store.state.currentUserId)
+        },
+        cancelRoleRequest(boolean) {
+            console.log(boolean)
+            if(!boolean)
+                changeRole = false;
         },
         changeEmailRequest() {
             // Clear any errors
@@ -344,6 +383,53 @@ export default {
             
             
         },
+        /*
+            This function is called when submit is called on RequestRole component
+            newRole is passed to the back-end and a request is placed on the
+            Admin User Approval page
+        */
+        changeRoleRequest: function(newRole) {
+             // Populate the data
+            let data = JSON.stringify({
+                role: newRole.toUpperCase()
+            });
+            // Call the api method
+            ApiDriver.User.changeRoleRequest(this.profile.id.value, newRole.toUpperCase()).then(response => {
+                // Handle the response
+                HttpResponse.then(response, data => {
+                // Success alert
+                    this.$swal({
+                        title: '<span style="color:#f0ead6">Request Sent<span>',
+                        html: '<span style="color:#f0ead6">It will be reviewed by an Administrator<span>',
+                        type: 'success',
+                        background: '#302f2f'
+                    }).then(response => {
+                        // Clear out the modal's information
+                        this.clearDialog();
+                    });
+                }, (status, errors) => {
+                    // Access Denied
+                    if (parseInt(status) === 403) {
+                        // Call the generic access denied handler
+                        HttpResponse.accessDenied(this)
+                    } 
+                    // Not Found
+                    else if (parseInt(status) === 404) {
+                        // Call the generic invalid resource id handler
+                        HttpResponse.notFound(that, errors)
+                    } 
+                    // Bad request
+                    else {
+                        // Handle errors
+                        this.handleErrors(errors)
+                    }
+                })
+            }).catch(errors => {
+                // Handle an erroneous API call
+                let message = "An error occurred requesting a role change"
+                HttpResponse.generalError(this, message, false)
+            });
+        },
         clearDialog() {
             // Clear out the modal
             this.clearErrors();
@@ -390,7 +476,11 @@ export default {
             CustomErrorHandler.clearError(this.changePasswordForm.currentPassword)
             CustomErrorHandler.clearError(this.changePasswordForm.password)
             CustomErrorHandler.clearError(this.changePasswordForm.passwordConfirm)
-        }
+        },
+        // This method is called from the button, and toggles the modal
+        toggleUpdateRole() {
+            this.updateRole = !this.updateRole;
+        },
     },
     mounted() {
         // Retrieve the user information when loaded onto the DOM
