@@ -88,8 +88,10 @@
                         :error=form.accountType.hasError
                         :error-messages=form.accountType.errorMessage
                         color="blue darken-2"
-                        label="Account Type**"
+                        label="Account Type"
                         required
+                        hint="Any user account type other than 'Guest' will require the approval of an administrator"
+                        persistent-hint
                         ></v-select>
                     </v-flex>
                     <v-flex xs12 sm6>
@@ -117,9 +119,6 @@
                             <a href="javascript:;" @click.stop="terms = true">terms of service?</a>
                         </div>
                         </v-checkbox>
-                    </v-flex>
-                    <v-flex xs12>
-                        <div>**Any user account type other than "Guest" will require the approval of an administrator</div>
                     </v-flex>
                     </v-layout>
                 </v-container>
@@ -163,6 +162,7 @@ import FormConfirmation from '../../components/FormConfirmation';
 import HttpResponse from '../../utils/HttpResponse';
 import CustomErrorHandler from "../../utils/CustomErrorHandler";
     export default {
+    title: "Radio Telescope 1.0.0",
     data () {
       return {
           form: {

@@ -11,12 +11,12 @@
         </v-card-title>
         <v-card-text v-if="completedAppointments.length === 0">
             <div>You do not have any completed observations.
-                <a href="/scheduler">Click here to schedule an observation</a>
+                <a href="/#/scheduler">Click here to schedule an observation</a>
             </div>
         </v-card-text>
          <v-card-title v-else>
             <v-list two-line>
-                <v-list-tile class="list-item" v-for="appointment in completedAppointments" :key="appointment.id" v-bind:href="'/appointments/' + appointment.id + '/view'">
+                <v-list-tile class="list-item" v-for="appointment in completedAppointments" :key="appointment.id" v-bind:href="'/#/appointments/' + appointment.id + '/view'">
                     <v-list-tile-content v-if="completedAppointments.length > 0">
                         <v-list-tile-title v-if="appointment.celestialBody">
                             Appointment #{{ appointment.id }}
@@ -34,13 +34,23 @@
     </v-card>
     <br>
     <div class="text-xs-center">
-            <v-pagination
+        <v-pagination
             circle
             v-model="pageDisplay"
             :length="numPages"
             @input="next"
-            ></v-pagination>
-        </div>
+        ></v-pagination>
+         <v-layout justify-center>
+            <v-flex xs12 sm1>
+                <v-select
+                v-model="selectedPageSize"
+                :items="pageSizeList"
+                label="Items per page"
+                v-on:change="this.pageSizeUpdate"
+                ></v-select>
+            </v-flex>
+        </v-layout>
+    </div>
 </div>
 </template>
 <script>
@@ -52,15 +62,19 @@ import moment from 'moment';
 import NavigationBar from '../../components/NavigationBar'
 import Loading from "../../components/Loading"
 export default {
+    title: "Radio Telescope 1.0.0",
     name: 'CompletedAppointments',
     data() {
         return {
             pageNumber: 0,
             pageDisplay: 1,
-            pageSize: 25,
             numPages: 0,
             last: false,
-            completedAppointments: []
+            completedAppointments: [],
+             selectedPageSize: "1",
+            pageSizeList: [
+                '1', '2', '3', '4'
+            ]
         }
     },
     methods: {
@@ -69,7 +83,7 @@ export default {
             this.$store.commit("loading", true);
 
             // Make the API call
-            ApiDriver.User.Appointment.completedAppointments(this.$route.params.userId, this.pageNumber, this.pageSize)
+            ApiDriver.User.Appointment.completedAppointments(this.$route.params.userId, this.pageNumber, this.selectedPageSize)
                 .then(response => {
                     // Handle the server response
                     HttpResponse.then(response, data => {
@@ -107,7 +121,11 @@ export default {
             this.pageDisplay = page;
             this.completedAppointments = [];
             this.getCompletedAppointments();
-        }
+        },
+        pageSizeUpdate(){
+            this.completedAppointments = []
+            this.getCompletedAppointments()
+        },
     },
     mounted: function() {
         // Retrieve the completed appointments when loaded onto the DOM

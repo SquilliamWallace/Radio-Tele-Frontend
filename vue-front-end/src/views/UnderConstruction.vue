@@ -10,6 +10,7 @@
 <script>
 import NavigationBar from "../components/NavigationBar.vue";
 export default {
+    title: "Radio Telescope 1.0.0",
     name: "UnderConstruction",
     components: {
         NavigationBar

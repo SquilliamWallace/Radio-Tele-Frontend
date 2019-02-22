@@ -71,6 +71,23 @@
             </v-card>
         </v-dialog>
     </v-card>
+        <div class="text-xs-center">
+            <v-pagination
+            circle
+            v-model="pageDisplay"
+            :length="numPages"
+            @input="next"></v-pagination>
+        </div>
+        <v-layout justify-center>
+            <v-flex xs12 sm1>
+                <v-select
+                v-model="selectedPageSize"
+                :items="pageSizeList"
+                label="Items per page"
+                v-on:change="this.pageSizeUpdate"
+                ></v-select>
+            </v-flex>
+        </v-layout>
     </div>
 </template>
 <script>
@@ -84,8 +101,7 @@ export default {
     data(){
         return{
             data: {
-               pageNumber: 0,
-               pageSize: 50,
+               
             },
             users: [],
             filtered: [],
@@ -104,7 +120,16 @@ export default {
             banMessage: "",
 
             //search
-            searchParam: ''
+            searchParam: '',
+
+            //pagination
+            pageNumber: 0,
+            numPages: 0,
+            pageDisplay: 1,
+            selectedPageSize: "1",
+            pageSizeList: [
+                '1', '2', '3', '4'
+            ]
         }
     },
     methods:{
@@ -136,8 +161,8 @@ export default {
             this.users = this.filtered
         },
         getUsers(){
-            this.$store.commit("loading", true);
-            ApiDriver.User.allUsers(this.data).then((response) => {
+            //this.$store.commit("loading", true);
+            ApiDriver.User.allUsers(this.pageNumber,this.selectedPageSize).then((response) => {
                 HttpResponse.then(response, data => {
                     console.log(response)
                     this.populateData(data.data)
@@ -162,6 +187,22 @@ export default {
                 this.users.push(user);
                 this.unfiltered.push(user)
             }
+            this.numPages = data.totalPages;
+        },
+        next(page) {
+            // Handle retrieving a new page of information
+            this.pageNumber = page - 1;
+            this.pageDisplay = page;
+            this.users = [];
+            this.unfiltered = [];
+            this.filtered = [];
+            this.getUsers();
+        },
+         pageSizeUpdate(){
+            this.users = []
+            this.unfiltered = [];
+            this.filtered = [];
+            this.getUsers()
         },
         banUser(userId, message){
             ApiDriver.User.ban(userId, message).then((response) => {
