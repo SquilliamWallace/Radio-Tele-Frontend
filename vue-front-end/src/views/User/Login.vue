@@ -85,7 +85,7 @@ import CurrentUserValidation from '../../utils/CurrentUserValidation';
 import CustomErrorHandler from '../../utils/CustomErrorHandler';
 import HttpResponse from '../../utils/HttpResponse';
 export default {
-    title: "Radio Telescope 1.0.0",
+    title: "Radio Telescope 1.1.0",
     name: "Login",
     data () {
         return {

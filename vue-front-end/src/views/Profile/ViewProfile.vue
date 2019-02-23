@@ -172,7 +172,7 @@ import Loading from "../../components/utility/Loading"
 import CustomErrorHandler from '../../utils/CustomErrorHandler';
 import RequestRole from '../../components/user/RequestRole.vue';
 export default {
-    title: "Radio Telescope 1.0.0",
+    title: "Radio Telescope 1.1.0",
     name: "ViewProfile",
     data() {
         return {

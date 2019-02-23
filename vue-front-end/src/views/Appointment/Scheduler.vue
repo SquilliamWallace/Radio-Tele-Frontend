@@ -135,7 +135,7 @@ import ChooseTelescope from "../../components/appointment/ChooseTelescope"
 import RequestAppointment from "../../components/appointment/RequestAppointment"
 
 export default {
-    title: "Radio Telescope 1.0.0",
+    title: "Radio Telescope 1.1.0",
     name: 'Scheduler',
     data() {
         return {

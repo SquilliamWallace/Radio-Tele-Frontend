@@ -162,7 +162,7 @@ import FormConfirmation from '../../components/utility/FormConfirmation';
 import HttpResponse from '../../utils/HttpResponse';
 import CustomErrorHandler from "../../utils/CustomErrorHandler";
     export default {
-    title: "Radio Telescope 1.0.0",
+    title: "Radio Telescope 1.1.0",
     data () {
       return {
           form: {
