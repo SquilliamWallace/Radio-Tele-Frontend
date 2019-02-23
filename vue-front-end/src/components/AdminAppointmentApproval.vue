@@ -157,9 +157,9 @@ export default {
             pageDisplay: 1,
             numPages: 0,
             pageNumber: 0,
-            selectedPageSize: "1",
+            selectedPageSize: "10",
             pageSizeList: [
-                '1', '2', '3', '4'
+                '10', '25', '50', '100'
             ],
 
             form: {

@@ -136,7 +136,7 @@ export default {
             currentLog: {},
             pageNumber: 0,
             pageSize: 25,
-            selectedPageSize: "15",
+            selectedPageSize: "10",
             pageDisplay: 1,
             numPages: 0,
             totalLogs: 0,
@@ -152,7 +152,7 @@ export default {
                 {text: 'Username', value: 'userName'}
             ],
             pageSizeList: [
-                '15', '25', '35', '55'
+                '10', '25', '50', '100'
             ]
          
         }

@@ -126,9 +126,9 @@ export default {
             pageNumber: 0,
             numPages: 0,
             pageDisplay: 1,
-            selectedPageSize: "1",
+            selectedPageSize: "10",
             pageSizeList: [
-                '1', '2', '3', '4'
+                '10', '25', '50', '100'
             ]
         }
     },
