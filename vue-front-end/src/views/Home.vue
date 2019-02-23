@@ -37,7 +37,7 @@ import router from '../router';
 import HttpResponse from '../utils/HttpResponse';
 import { error } from 'util';
 export default {
-  title: "Radio Telescope 1.0.0",
+  title: "Radio Telescope 1.1.0",
   name: "Home",
   data() {
     return {

@@ -37,7 +37,7 @@ import RfDataGraph from '../../components/visualization/RfDataGraph';
 import moment from 'moment';
 import Chart from 'chart.js';
 export default {
-    title: "Radio Telescope 1.0.0",
+    title: "Radio Telescope 1.1.0",
     name: 'RFData',
     data() {
         return {

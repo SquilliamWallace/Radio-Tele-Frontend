@@ -58,7 +58,7 @@ import AdminUserApproval from '../components/admin/AdminUserApproval.vue';
 import AdminAppointmentApproval from '../components/admin/AdminAppointmentApproval.vue';
 import Loading from "../components/utility/Loading"
  export default {
-    title: "Radio Telescope 1.0.0",
+    title: "Radio Telescope 1.1.0",
     name: 'admin',
     data () {
       return {

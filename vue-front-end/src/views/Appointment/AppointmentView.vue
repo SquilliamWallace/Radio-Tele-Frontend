@@ -92,7 +92,7 @@ import EditAppointment from "../../components/appointment/EditAppointment.vue"
 import Loading from "../../components/utility/Loading"
 import { throws } from 'assert';
 export default {
-    title: "Radio Telescope 1.0.0",
+    title: "Radio Telescope 1.1.0",
     name: "AppointmentView",
     data() {
         return {
