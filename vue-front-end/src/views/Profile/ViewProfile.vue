@@ -275,9 +275,9 @@ export default {
             this.showChangeEmailButton = (data.id === this.$store.state.currentUserId)
         },
         cancelRoleRequest(boolean) {
-            console.log(boolean)
-            if(!boolean)
+            if(!boolean) {
                 changeRole = false;
+            }
         },
         changeEmailRequest() {
             // Clear any errors

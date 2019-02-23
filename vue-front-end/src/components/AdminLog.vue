@@ -136,7 +136,7 @@ export default {
             currentLog: {},
             pageNumber: 0,
             pageSize: 25,
-            selectedPageSize: "15",
+            selectedPageSize: "10",
             pageDisplay: 1,
             numPages: 0,
             totalLogs: 0,
@@ -152,7 +152,7 @@ export default {
                 {text: 'Username', value: 'userName'}
             ],
             pageSizeList: [
-                '15', '25', '35', '55'
+                '10', '25', '50', '100'
             ]
          
         }
@@ -190,7 +190,6 @@ export default {
             });
         },
         populateData(data){
-            console.log(data)
             for (var index in data.content) {
                 let log = data.content[index];
                 if (!log.userId) {

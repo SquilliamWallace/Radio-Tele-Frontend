@@ -1,5 +1,5 @@
 <template>
-<div>
+<div id="parallax-wrap">
     <v-parallax height="100%"  src="https://images.pexels.com/photos/110854/pexels-photo-110854.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260">
     <v-flex>
             <v-container>
@@ -176,6 +176,10 @@ export default {
 }
 </script>
 <style scoped>
+#parallax-wrap {
+  height: 100%
+}
+
 .register-style{
     justify-content: center;
     text-align: center;

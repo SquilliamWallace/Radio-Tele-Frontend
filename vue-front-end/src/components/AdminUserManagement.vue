@@ -22,7 +22,7 @@
                     </v-list-tile-sub-title>
                 </v-list-tile-content>
                 <v-spacer></v-spacer>
-                <v-btn icon v-bind:href = "'http://localhost:8081/users/' + user.id + '/view'">
+                <v-btn icon v-bind:href="'/#/users/' + user.id + '/view'">
                     <v-icon>account_circle</v-icon>
                 </v-btn>
                 <div v-if = "user.status === 'Active'">
@@ -126,9 +126,9 @@ export default {
             pageNumber: 0,
             numPages: 0,
             pageDisplay: 1,
-            selectedPageSize: "1",
+            selectedPageSize: "10",
             pageSizeList: [
-                '1', '2', '3', '4'
+                '10', '25', '50', '100'
             ]
         }
     },
@@ -164,7 +164,6 @@ export default {
             //this.$store.commit("loading", true);
             ApiDriver.User.allUsers(this.pageNumber,this.selectedPageSize).then((response) => {
                 HttpResponse.then(response, data => {
-                    console.log(response)
                     this.populateData(data.data)
                 }, (status, errors) => {})
             }).catch((error) => {
@@ -206,7 +205,6 @@ export default {
         },
         banUser(userId, message){
             ApiDriver.User.ban(userId, message).then((response) => {
-               console.log(response)
                 if(response.status === 200){
                     for(var i in this.users){
                         if(this.users[i].id === userId){
@@ -218,7 +216,6 @@ export default {
         },
         unbanUser(userId){
             ApiDriver.User.unban(userId).then((response) => {
-                console.log(response)
                 if(response.status === 200){
                     for(var i in this.users){
                         if(this.users[i].id === userId){
@@ -226,8 +223,6 @@ export default {
                         }
                     }
                 }
-                 console.log(response.status)
-                 
             })
         }
     },
