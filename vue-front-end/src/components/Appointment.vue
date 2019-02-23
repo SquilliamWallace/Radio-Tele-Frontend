@@ -318,9 +318,6 @@ export default {
         },
         clearErrors() {
             CustomErrorHandler.clearError(this.form.rightAscension);
-        },
-        captureStartPeriod(payload) {
-            console.log(payload);
         }
     },
     computed: {
