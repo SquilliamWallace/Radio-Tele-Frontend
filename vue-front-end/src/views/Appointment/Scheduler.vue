@@ -133,6 +133,7 @@ import PrivateEvent from "../../components/PrivateEvent"
 import Loading from "../../components/Loading"
 import ChooseTelescope from "../../components/ChooseTelescope"
 import RequestAppointment from "../../components/RequestAppointment"
+import $ from 'jquery'
 
 export default {
     title: "Radio Telescope 1.0.0",
@@ -258,7 +259,7 @@ export default {
                 end: new Date(data.endTime),
                 public: data.isPublic,
                 start: new Date(data.startTime),
-                telescopeId: data.selectedTelescope.id,
+                telescopeId: data.telescopeId,
                 userId: data.userId,
                 editable: false,
                 draggable: false
