@@ -17,10 +17,10 @@
 </template>
 
 <script>
-import router from '../router'
-import ApiDriver from '../ApiDriver'
-import HttpResponse from '../utils/HttpResponse'
-import CurrentUserValidation from '../utils/CurrentUserValidation'
+import router from '../../router'
+import ApiDriver from '../../ApiDriver'
+import HttpResponse from '../../utils/HttpResponse'
+import CurrentUserValidation from '../../utils/CurrentUserValidation'
 import { error } from 'util';
 export default {
     name: "cancel-appointment",

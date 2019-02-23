@@ -31,9 +31,9 @@ import router from '../../router';
 import ApiDriver from '../../ApiDriver';
 import HttpResponse from '../../utils/HttpResponse';
 import CurrentUserValidation from  '../../utils/CurrentUserValidation';
-import NavigationBar from '../../components/NavigationBar';
-import Loading from '../../components/Loading';
-import RfDataGraph from '../../components/RfDataGraph';
+import NavigationBar from '../../components/utility/NavigationBar';
+import Loading from '../../components/utility/Loading';
+import RfDataGraph from '../../components/visualization/RfDataGraph';
 import moment from 'moment';
 import Chart from 'chart.js';
 export default {

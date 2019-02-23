@@ -196,12 +196,12 @@
 </template>
 
 <script>
-import Event from '../main.js'
-import ApiDriver from '../ApiDriver'
-import HttpResponse from '../utils/HttpResponse'
-import CurrentUserValidation from '../utils/CurrentUserValidation'
-import router from '../router';
-import CustomErrorHandler from '../utils/CustomErrorHandler.js';
+import Event from '../../main.js'
+import ApiDriver from '../../ApiDriver'
+import HttpResponse from '../../utils/HttpResponse'
+import CurrentUserValidation from '../../utils/CurrentUserValidation'
+import router from '../../router';
+import CustomErrorHandler from '../../utils/CustomErrorHandler.js';
 export default {
     data() {
         name: 'Appointment'

@@ -57,8 +57,8 @@ import router from '../../router';
 import ApiDriver from '../../ApiDriver';
 import CurrentUserValidation from '../../utils/CurrentUserValidation';
 import moment from 'moment';
-import NavigationBar from '../../components/NavigationBar';
-import Loading from '../../components/Loading'
+import NavigationBar from '../../components/utility/NavigationBar';
+import Loading from '../../components/utility/Loading'
 import HttpResponse from '../../utils/HttpResponse';
 export default {
     title: "Radio Telescope 1.0.0",

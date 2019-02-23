@@ -122,18 +122,18 @@
 
 <script type="application/javascript">
 import {FullCalendar} from 'vue-full-calendar'
-import NavigationBar from '../../components/NavigationBar.vue'
+import NavigationBar from '../../components/utility/NavigationBar.vue'
 import router from '../../router'
 import moment from 'moment'
-import CreateAppointment from '../../components/Appointment.vue'
+import CreateAppointment from '../../components/appointment/Appointment.vue'
 import ApiDriver from '../../ApiDriver'
 import HttpResponse from '../../utils/HttpResponse'
 import CurrentUserValidation from '../../utils/CurrentUserValidation'
-import PrivateEvent from "../../components/PrivateEvent"
-import Loading from "../../components/Loading"
-import ChooseTelescope from "../../components/ChooseTelescope"
-import RequestAppointment from "../../components/RequestAppointment"
 import $ from 'jquery'
+import PrivateEvent from "../../components/appointment/PrivateEvent"
+import Loading from "../../components/utility/Loading"
+import ChooseTelescope from "../../components/appointment/ChooseTelescope"
+import RequestAppointment from "../../components/appointment/RequestAppointment"
 
 export default {
     title: "Radio Telescope 1.0.0",

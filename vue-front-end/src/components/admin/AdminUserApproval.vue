@@ -124,11 +124,11 @@
 </div>
 </template>
 <script>
-import router from '../router';
-import ApiDriver from '../ApiDriver';
-import HttpResponse from '../utils/HttpResponse';
-import CurrentUserValidation from  '../utils/CurrentUserValidation';
-import Loading from "../components/Loading"
+import router from '../../router';
+import ApiDriver from '../../ApiDriver';
+import HttpResponse from '../../utils/HttpResponse';
+import CurrentUserValidation from  '../../utils/CurrentUserValidation';
+import Loading from "../../components/utility/Loading"
 export default {
     name:'AdminUserApproval',
     data(){

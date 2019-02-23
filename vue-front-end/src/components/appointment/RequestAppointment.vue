@@ -24,9 +24,9 @@
 </template>
 
 <script>
-import router from '../router'
-import ApiDriver from '../ApiDriver'
-import HttpResponse from '../utils/HttpResponse'
+import router from '../../router'
+import ApiDriver from '../../ApiDriver'
+import HttpResponse from '../../utils/HttpResponse'
 
 export default {
     name: "requestForm",
