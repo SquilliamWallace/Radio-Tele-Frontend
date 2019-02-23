@@ -59,8 +59,8 @@ import ApiDriver from '../../ApiDriver';
 import HttpResponse from '../../utils/HttpResponse';
 import CurrentUserValidation from '../../utils/CurrentUserValidation';
 import moment from 'moment';
-import NavigationBar from '../../components/NavigationBar'
-import Loading from "../../components/Loading"
+import NavigationBar from '../../components/utility/NavigationBar'
+import Loading from "../../components/utility/Loading"
 export default {
     title: "Radio Telescope 1.0.0",
     name: 'CompletedAppointments',

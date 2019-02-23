@@ -158,7 +158,7 @@
 <script>
 import router from '../../router';
 import ApiDriver from '../../ApiDriver';
-import FormConfirmation from '../../components/FormConfirmation';
+import FormConfirmation from '../../components/utility/FormConfirmation';
 import HttpResponse from '../../utils/HttpResponse';
 import CustomErrorHandler from "../../utils/CustomErrorHandler";
     export default {

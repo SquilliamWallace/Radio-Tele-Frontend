@@ -36,8 +36,8 @@
 </template>
 
 <script>
-import router from '../router';
-import ApiDriver from '../ApiDriver'
+import router from '../../router';
+import ApiDriver from '../../ApiDriver'
 export default {
     name: 'NavigationBar',
     data() {

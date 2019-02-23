@@ -78,7 +78,7 @@
 </template>
 
 <script>
-import NavigationBar from '../../components/NavigationBar.vue';
+import NavigationBar from '../../components/utility/NavigationBar.vue';
 import ApiDriver from '../../ApiDriver';
 import router from '../../router';
 import CurrentUserValidation from '../../utils/CurrentUserValidation';

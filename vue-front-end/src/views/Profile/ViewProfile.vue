@@ -163,14 +163,14 @@
 </template>
 
 <script>
-import NavigationBar from '../../components/NavigationBar.vue'
+import NavigationBar from '../../components/utility/NavigationBar.vue'
 import ApiDriver from '../../ApiDriver'
 import router from '../../router'
 import HttpResponse from '../../utils/HttpResponse'
 import CurrentUserValidation from '../../utils/CurrentUserValidation'
-import Loading from "../../components/Loading"
+import Loading from "../../components/utility/Loading"
 import CustomErrorHandler from '../../utils/CustomErrorHandler';
-import RequestRole from '../../components/RequestRole.vue';
+import RequestRole from '../../components/user/RequestRole.vue';
 export default {
     title: "Radio Telescope 1.0.0",
     name: "ViewProfile",
