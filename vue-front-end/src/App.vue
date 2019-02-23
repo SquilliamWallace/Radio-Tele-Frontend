@@ -39,4 +39,8 @@ export default {
 #nav a.router-link-exact-active {
   color: #42b983;
 }
+
+.v-parallax {
+  height: 100%
+}
 </style>

@@ -190,7 +190,6 @@ export default {
             });
         },
         populateData(data){
-            console.log(data)
             for (var index in data.content) {
                 let log = data.content[index];
                 if (!log.userId) {
