@@ -231,7 +231,6 @@ export default {
             })
         },
         populateData(data){
-            console.log(data)
             for(var index in data.content){
                 let appointment = data.content[index];
                 appointment.startTime = moment(appointment.startTime).format('MM-DD-YYYY hh:mm A');

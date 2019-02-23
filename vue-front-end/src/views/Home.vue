@@ -1,5 +1,5 @@
 <template>
-<div>
+<div id="parallax-wrap">
     <v-parallax style = "height:100%;" src="https://images.pexels.com/photos/110854/pexels-photo-110854.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260">
     <navigation-bar class="nav-style"></navigation-bar>
     <v-spacer></v-spacer>
@@ -90,6 +90,10 @@ export default {
 </script>
 
 <style scoped>
+#parallax-wrap {
+  height: 100%
+}
+
 .nav-style {
   margin-left: -1rem;
   margin-right: -1rem;
