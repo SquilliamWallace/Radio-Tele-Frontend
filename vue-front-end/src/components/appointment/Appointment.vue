@@ -20,7 +20,6 @@
                             Bind the data of this input field with eventObj.start
                             which is passed in as a prop so will display the data automatically but allow for editing if they
                             selected the time slot wrong.
-
                         :rules="[rules.dateRequired]"
                             Makes sure that their is input in the start date field
                     -->
@@ -74,22 +73,15 @@
                     </v-flex> -->
                     <!--
                         Right Ascension Hours
-
                         v-model="form.rightAscension.hours"
                             Bind the data of this input field with form.rightAscension.hours
-
                         :rules="[rules.rightAscHours]"
                             Makes sure that the input here is between 0 and 24
-
                         :error = form.rightAscension.hasError
                             This is a boolean decleration to display or not display the error messages
-
                         :error-messages= form.rightAscension.errorMessage
                             This displays any text inside form.rightAscension.errorMessage if :error=true
                             errorMessage is handled on backend and sent back to front end. 
-
-                        mask="##"
-                            forces the input of this field to only be 2 numbers, no text allowed
                     -->
                     <v-flex xs12 sm4>
                          <v-text-field
@@ -100,7 +92,7 @@
                          :error-messages=form.rightAscension.errorMessage
                          label="Right Ascension Hours"
                          type="number"
-                         mask="##"
+                         class="number"
                          required
                          ></v-text-field>
                      </v-flex>
@@ -116,7 +108,7 @@
                          :error-messages=form.rightAscension.errorMessage
                          label="Right Ascension Minutes"
                          type="number"
-                         mask="##"
+                         class="number"
                          required
                          ></v-text-field>
                      </v-flex>
@@ -132,7 +124,6 @@
                          :error-messages=form.rightAscension.errorMessage
                          label="Right Ascension Seconds"
                          type="number"
-                         mask="##"
                          required
                          ></v-text-field>
                      </v-flex>
@@ -152,7 +143,6 @@
                     <!--
                         v-if="this.$store.state.isResearcher || this.$store.state.isAdmin"
                             only display this part of the form if current user is researcher or admin
-
                         This is a simple checkbox to choose to make the appointment private or not
                     -->
                     <v-flex v-if="this.$store.state.isResearcher || this.$store.state.isAdmin" xs12>
@@ -168,13 +158,13 @@
                         Added to form to make sure user knows which telescope they are scheduling for
                     -->
                     <v-flex xs12 sm6>
-                        <v-text-field
-                        v-model=telescope.name
+                        <v-select
+                        v-model="telescopeName"
+                        :items="telescopes"
                         color="blue darken-2"
-                        :readonly=true
-                        label=Telescope
+                        label="Telescope"
                         required
-                        ></v-text-field>
+                        ></v-select>
                     </v-flex>
                     </v-layout>
                 </v-container>
@@ -206,6 +196,12 @@ export default {
     data() {
         name: 'Appointment'
         return {
+            telescopes: [
+                "John C. Rudy County Park", 
+                "Scale Model",
+                "Virtual"
+            ],
+            telescopeName: "John C. Rudy County Park", 
             form: {
                 isPrivate: {
                     value: false
@@ -241,7 +237,6 @@ export default {
         }
     },
     props: {
-        telescope: {},
         value: false
     },
     methods: {
@@ -266,7 +261,7 @@ export default {
                 userId: this.$store.state.currentUserId,
                 startTime: new Date(this.start).toUTCString(),
                 endTime: new Date(this.end).toUTCString(),
-                telescopeId: this.telescope.id,
+                telescopeId: this.telescopes.indexOf(this.telescopeName) + 1,
                 isPublic: !this.form.isPrivate.value,
                 hours: this.form.rightAscension.hours,
                 minutes: this.form.rightAscension.minutes,
@@ -297,7 +292,6 @@ export default {
         handleErrors(errors, formObj) {
             for (var field in errors) {
                 let message = errors[field][0];
-
                 if (field === "RIGHT_ASCENSION") {
                     CustomErrorHandler.populateError(this.form.rightAscension, message)
                 } else if (field === "DECLINATION") {
@@ -307,7 +301,7 @@ export default {
                    //Also adding telescope name into Obj to display on request form
                    formObj.startTime = this.start
                    formObj.endTime = this.end
-                   formObj.telescope = this.telescope.name
+                   formObj.telescope = this.telescopeName
                    //Sends the information of the form to the requestAppointment function on Scheduler Page.
                    this.$emit('request-appointment', formObj)
                    this.resetForm()
@@ -318,6 +312,9 @@ export default {
         },
         clearErrors() {
             CustomErrorHandler.clearError(this.form.rightAscension);
+        },
+        captureStartPeriod(payload) {
+            console.log(payload);
         }
     },
     computed: {
@@ -339,5 +336,12 @@ export default {
 <style scoped>
 .title-style{
     padding-bottom: 10px;
+}
+.number input[type='number'] {
+    -moz-appearance:textfield;
+}
+.number input::-webkit-outer-spin-button,
+.number input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
 }
 </style>
