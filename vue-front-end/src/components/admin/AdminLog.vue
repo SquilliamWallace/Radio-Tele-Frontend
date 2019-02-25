@@ -131,7 +131,7 @@ export default {
                 sortBy: 'name',
                 totalItems: 0,
                 page: 1,
-                rowsPerPage: 55
+                rowsPerPage: 100
             },
             currentLog: {},
             pageNumber: 0,
