@@ -73,8 +73,9 @@
                 <!-- 
                     linked component: Appointment.vue
                     
-                    :eventObj="event" {
-                        passes the event that was created on the calander to the modal
+                    :telescopeName="telescopeName" {
+                        :telescopeName is a prop in Appointment, and the value
+                        in the local telescopeName data object is passed to it
                     }
                     v-model="openCreateModal" {
                         this.openCreateModal: boolean
@@ -87,7 +88,7 @@
                         sets this.openCreateModel to false, to make the modal not display
                     }
                 -->
-                <create-appointment :eventObj="event" v-model="openCreateModal" @request-appointment="requestAppointment" @created-event="createdEvent" v-on:close-modal="openCreateModal = false"></create-appointment>
+                <create-appointment :telescopeName="telescopeName" v-model="openCreateModal" @request-appointment="requestAppointment" @created-event="createdEvent" v-on:close-modal="openCreateModal = false"></create-appointment>
 
                 <!-- 
                     linked component: RequestAppointment.vue

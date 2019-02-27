@@ -75,11 +75,13 @@ export default {
         },
         loadStore() {
             // On clicking the drawer, add two buttons that require data from the store to function
-            this.items.push({ title: 'Completed Appointments', path: '/users/' + this.$store.state.currentUserId + '/appointments/completed' })
-            this.items.push({ title: 'Future Appointments', path: '/users/' + this.$store.state.currentUserId + '/appointments/future' })
+            if(this.items.length < 5){
+                this.items.push({ title: 'Completed Appointments', path: '/users/' + this.$store.state.currentUserId + '/appointments/completed' })
+                this.items.push({ title: 'Future Appointments', path: '/users/' + this.$store.state.currentUserId + '/appointments/future' })
+            }
             
             // On clicking the drawer, check if the user is an Admin
-            if(this.$store.state.isAdmin){
+            if(this.$store.state.isAdmin && this.items.length < 5){
                 this.items.push({ title: 'Administration', path: '/admin' })
             }
         }
