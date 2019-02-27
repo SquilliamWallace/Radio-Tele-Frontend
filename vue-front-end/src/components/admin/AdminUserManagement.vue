@@ -276,7 +276,6 @@ export default {
     },
     components: {
         Loading,
-        AdminUserSearch
     }
 }
 
