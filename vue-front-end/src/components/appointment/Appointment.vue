@@ -197,11 +197,10 @@ export default {
         name: 'Appointment'
         return {
             telescopes: [
-                "John C. Rudy County Park", 
-                "Scale Model",
-                "Virtual"
+                "John C. Rudy County Park Radio Telescope", 
+                "Scale Model Radio Telescope",
+                "Virtual Radio Telescope"
             ],
-            telescopeName: "John C. Rudy County Park", 
             form: {
                 isPrivate: {
                     value: false
@@ -237,7 +236,8 @@ export default {
         }
     },
     props: {
-        value: false
+        value: false,
+        telescopeName: ''
     },
     methods: {
         // Method to reset the form then close the modal
