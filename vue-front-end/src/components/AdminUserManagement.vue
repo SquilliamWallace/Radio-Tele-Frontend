@@ -2,14 +2,31 @@
 <div>
     <loading v-if="$store.state.isLoading"></loading>
     <v-card v-if="!$store.state.isLoading" width = "100%">
-        <v-layout row wrap>
-            <v-text-field  v-on:keyup.enter="search(searchParam)" v-on:keyup.down="reset" clearable v-model = "searchParam" class="ml-2 mr-2" label="Search..." append-icon="search" dark></v-text-field>
-            <v-select
+        <v-layout row >
+            <v-text-field  v-on:keyup.enter="formatSearchParams" v-on:keyup.down="reset" clearable v-model = "searchParam" class="ml-2 mr-2" label="Search..." append-icon="search" dark></v-text-field>
+            <!-- <v-select
             :items="filterTypes"
             label="Filter by"
             v-model="filterType"
             ></v-select>
-            <v-btn @click="reset" class="mt-3 mr-4">Clear</v-btn>
+            -->
+        <v-flex xs12 sm4>    
+            <v-select
+            v-model="chosenFilters"
+            :items="filterTypes"
+            :menu-props="{ maxHeight: '400' }"
+            label="Filters"
+            multiple
+            clearable
+            hint="Select Filters"
+            persistent-hint
+            ></v-select>
+        </v-flex>
+        <v-btn @click="getUsers" class="mt-3 mr-0">Clear</v-btn> 
+        <v-btn @click="formatSearchParams" class="mt-3 mr-2">Search</v-btn> 
+        
+            
+            
         </v-layout>
         <v-list >
             <v-list-tile v-for="user in users" :key = "user.id"  @click="hover = !hover">
@@ -37,7 +54,8 @@
                 </div>
             </v-list-tile>
         </v-list>
-            
+
+        
             <!-- This dialog is called when the ban or unban button is pressed -->
         <v-dialog v-model = "confirm" persistent max-width="600px">
             <v-card>
@@ -96,6 +114,7 @@ import ApiDriver from '../ApiDriver';
 import HttpResponse from '../utils/HttpResponse';
 import CurrentUserValidation from  '../utils/CurrentUserValidation';
 import Loading from "../components/Loading"
+import AdminUserSearch from '../components/AdminUserSearch'
 export default {
     name: 'AdminUserManagement',
     data(){
@@ -104,8 +123,6 @@ export default {
                
             },
             users: [],
-            filtered: [],
-            unfiltered: [],
             viewUserId: '',
             hover: false,
             confirm: false,
@@ -113,58 +130,69 @@ export default {
             chosenUserName: '',
             action: '',
             icon:'',
-            filterTypes: ['Email','User Id'],
-            filterType: 'Email',
 
             // Ban-related
             banMessage: "",
 
             //search
+            chosenFilters: [],
             searchParam: '',
+            filterTypes: ['First Name','Last Name','Email','Company'],
+            chosenFiltersString: '',
+            filteredSet: false,
+
+            //adv search
+            advSearch: true,
 
             //pagination
             pageNumber: 0,
             numPages: 0,
             pageDisplay: 1,
-            selectedPageSize: "1",
+            selectedPageSize: "20",
             pageSizeList: [
-                '1', '2', '3', '4'
+                '20', '30', '40', '50'
             ]
         }
     },
     methods:{
         reset(){
+            //clear selected filters
+            chosenFilters = []
             this.users = this.unfiltered
         },
-        search(param){
-           this.filtered = []
-           if(param === ''){
-               this.users = this.unfiltered
-           }
-            //for filter based on email
-            else if(this.filterType === "Email"){
-                for (var i = 0; i < this.users.length; i++) {
-                    if(this.users[i].email.split('@')[0].toLowerCase() === param.split('@')[0].toLowerCase()){
-                        this.filtered.push(this.users[i])
-                    }
-                }
-            }
-            // for filter based on user id
-            else if(this.filterType === "User Id"){
-                for (var i = 0; i < this.users.length; i++) {
-                    if(this.users[i].id.toString() === param.toString()){
-                        this.filtered.push(this.users[i])
-                    }
-                }
-                
-            }
-            this.users = this.filtered
+        advancedSearch(){
+            this.pageNumber = 0
+            this.users = []
+            //Takes chosenFilters array and sets it to a string with the format "firstName+lastName..."
+            //also sets the values in the array to camel case
+            
+            
+            //console.log(this.chosenFiltersString,this.searchParam)
+            
+            ApiDriver.User.userSearch(this.pageNumber, this.selectedPageSize, this.searchParam, this.chosenFiltersString).then((response) => {
+                HttpResponse.then(response, data => {
+                    console.log(data.data)
+                    this.populateData(data.data)
+                },(status, errors) => {})
+             }).catch((error) => {
+                this.$swal({
+                            title: '<span style="color:#f0ead6">Error!<span>',
+                            html: '<span style="color:#f0ead6">An error occurred when loading the list of users<span>',
+                            type: 'error',
+                            background: '#302f2f'
+                        }).then(response => {
+                            CurrentUserValidation.validateCurrentUser(this.$store);
+                        });
+            });
+                this.chosenFiltersString = ""
         },
         getUsers(){
             //this.$store.commit("loading", true);
+            this.filteredSet = false
+            this.users = []
             ApiDriver.User.allUsers(this.pageNumber,this.selectedPageSize).then((response) => {
                 HttpResponse.then(response, data => {
-                    console.log(response)
+                    console.log(data.data)
                     this.populateData(data.data)
                 }, (status, errors) => {})
             }).catch((error) => {
@@ -179,30 +207,48 @@ export default {
             });
         },
         populateData(data){
+            console.log(this.filteredSet)
             for (var index in data.content) {
                 let user = data.content[index];
                 if (!user.membershipRole) {
                     user.membershipRole = 'Pending Approval';
                 }
                 this.users.push(user);
-                this.unfiltered.push(user)
+                this.numPages = data.totalPages;
             }
-            this.numPages = data.totalPages;
+            
         },
         next(page) {
             // Handle retrieving a new page of information
             this.pageNumber = page - 1;
             this.pageDisplay = page;
             this.users = [];
-            this.unfiltered = [];
-            this.filtered = [];
-            this.getUsers();
+            if(!this.filteredSet){
+                this.getUsers()
+            }else{
+                this.advancedSearch()
+            }
+            
+        },
+        formatSearchParams(){
+            for(var i in this.chosenFilters){
+                this.chosenFilters[i] = this.chosenFilters[i].replace(" ","")
+                this.chosenFilters[i] = this.chosenFilters[i].charAt(0).toLowerCase() + this.chosenFilters[i].slice(1,this.chosenFilters[i].length)
+                if (i !== 0) {
+                    this.chosenFiltersString = this.chosenFiltersString + "%2B" + this.chosenFilters[i]
+                }
+            }
+             this.chosenFiltersString = this.chosenFiltersString.slice(3,this.chosenFiltersString.length)
+             this.filteredSet = true
+             this.advancedSearch()
         },
          pageSizeUpdate(){
             this.users = []
-            this.unfiltered = [];
-            this.filtered = [];
-            this.getUsers()
+            if(this.filteredSet){
+                this.advancedSearch()
+            }else{
+                this.getUsers()
+            }
         },
         banUser(userId, message){
             ApiDriver.User.ban(userId, message).then((response) => {
@@ -235,11 +281,12 @@ export default {
         this.getUsers();
     },
     components: {
-        Loading
+        Loading,
+        AdminUserSearch
     }
 }
 
 </script>
 <style scoped>
-
+    
 </style>
