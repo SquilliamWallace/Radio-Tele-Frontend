@@ -21,6 +21,9 @@ export default {
       allUsers: function(pageNumber, pageSize) {
         return axios.get(this.namespace + "?page=" + pageNumber + "&size=" + pageSize, Headers.retrieveHeaders());
       },
+      userSearch: function(pageNumber, pageSize, value, search) {
+        return axios.get(this.namespace + "/search" + "?page=" + pageNumber + "&size=" + pageSize + "&value=" + value + "&search=" + search, Headers.retrieveHeaders());
+      },
       changePassword: function(userId) {
         return axios.put(this.namespace + "/" + userId + "/changePassword", data, Headers.retrieveHeaders())
       },
