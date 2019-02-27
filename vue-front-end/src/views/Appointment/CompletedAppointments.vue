@@ -11,12 +11,12 @@
         </v-card-title>
         <v-card-text v-if="completedAppointments.length === 0">
             <div>You do not have any completed observations.
-                <a href="/scheduler">Click here to schedule an observation</a>
+                <a href="/#/scheduler">Click here to schedule an observation</a>
             </div>
         </v-card-text>
          <v-card-title v-else>
             <v-list two-line>
-                <v-list-tile class="list-item" v-for="appointment in completedAppointments" :key="appointment.id" v-bind:href="'/appointments/' + appointment.id + '/view'">
+                <v-list-tile class="list-item" v-for="appointment in completedAppointments" :key="appointment.id" v-bind:href="'/#/appointments/' + appointment.id + '/view'">
                     <v-list-tile-content v-if="completedAppointments.length > 0">
                         <v-list-tile-title v-if="appointment.celestialBody">
                             Appointment #{{ appointment.id }}
@@ -59,9 +59,10 @@ import ApiDriver from '../../ApiDriver';
 import HttpResponse from '../../utils/HttpResponse';
 import CurrentUserValidation from '../../utils/CurrentUserValidation';
 import moment from 'moment';
-import NavigationBar from '../../components/NavigationBar'
-import Loading from "../../components/Loading"
+import NavigationBar from '../../components/utility/NavigationBar'
+import Loading from "../../components/utility/Loading"
 export default {
+    title: "Radio Telescope 1.1.0",
     name: 'CompletedAppointments',
     data() {
         return {
@@ -70,9 +71,9 @@ export default {
             numPages: 0,
             last: false,
             completedAppointments: [],
-             selectedPageSize: "1",
+             selectedPageSize: "10",
             pageSizeList: [
-                '1', '2', '3', '4'
+                '10', '25', '50', '100'
             ]
         }
     },

@@ -39,7 +39,7 @@
                     </v-list-tile-sub-title>
                 </v-list-tile-content>
                 <v-spacer></v-spacer>
-                <v-btn icon v-bind:href = "'http://localhost:8081/users/' + user.id + '/view'">
+                <v-btn icon v-bind:href="'/#/users/' + user.id + '/view'">
                     <v-icon>account_circle</v-icon>
                 </v-btn>
                 <div v-if = "user.status === 'Active'">
@@ -109,12 +109,11 @@
     </div>
 </template>
 <script>
-import router from '../router';
-import ApiDriver from '../ApiDriver';
-import HttpResponse from '../utils/HttpResponse';
-import CurrentUserValidation from  '../utils/CurrentUserValidation';
-import Loading from "../components/Loading"
-import AdminUserSearch from '../components/AdminUserSearch'
+import router from '../../router';
+import ApiDriver from '../../ApiDriver';
+import HttpResponse from '../../utils/HttpResponse';
+import CurrentUserValidation from  '../../utils/CurrentUserValidation';
+import Loading from "../../components/utility/Loading"
 export default {
     name: 'AdminUserManagement',
     data(){
@@ -148,9 +147,9 @@ export default {
             pageNumber: 0,
             numPages: 0,
             pageDisplay: 1,
-            selectedPageSize: "20",
+            selectedPageSize: "10",
             pageSizeList: [
-                '20', '30', '40', '50'
+                '10', '25', '50', '100'
             ]
         }
     },
@@ -192,7 +191,6 @@ export default {
             this.users = []
             ApiDriver.User.allUsers(this.pageNumber,this.selectedPageSize).then((response) => {
                 HttpResponse.then(response, data => {
-                    console.log(data.data)
                     this.populateData(data.data)
                 }, (status, errors) => {})
             }).catch((error) => {
@@ -252,7 +250,6 @@ export default {
         },
         banUser(userId, message){
             ApiDriver.User.ban(userId, message).then((response) => {
-               console.log(response)
                 if(response.status === 200){
                     for(var i in this.users){
                         if(this.users[i].id === userId){
@@ -264,7 +261,6 @@ export default {
         },
         unbanUser(userId){
             ApiDriver.User.unban(userId).then((response) => {
-                console.log(response)
                 if(response.status === 200){
                     for(var i in this.users){
                         if(this.users[i].id === userId){
@@ -272,8 +268,6 @@ export default {
                         }
                     }
                 }
-                 console.log(response.status)
-                 
             })
         }
     },

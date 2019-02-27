@@ -4,7 +4,6 @@
         
         <!-- 
             linked component: NavigationBar.vue
-
             Display Nav Bar at top of Page 
         -->
         <navigation-bar></navigation-bar>
@@ -12,7 +11,6 @@
         
         <!-- 
             linked component: ChooseTelescope.vue
-
             If variable tele is true, display modal to choose which tele to grab information for
             If variable tele is false, dont display modal
             @chosen, is what is used to call changeTelescope method from inside the modal screen
@@ -34,7 +32,7 @@
                 Display the name of the telescope at the top of the page
                 Display Large text to make sure viewer is aware of which tele they are looking at
             -->
-            <h1 justify-center>{{ selectedTelescope.name }}</h1>
+            <h1 justify-center>{{ telescopeName }}</h1>
             
             
             <!-- 
@@ -47,7 +45,6 @@
             <!-- 
                 linked component: FullCalendar.vue (found in node_modules)
                 Vue Full Calendar Docs: https://fullcalendar.io/docs
-
                 Because we are importing the full-calendar node module We have to add the appropriate parameters to the call
                 to allow us to change the config of the default callendar.
                 @event-created="createEvent" {
@@ -76,10 +73,10 @@
                 <!-- 
                     linked component: Appointment.vue
                     
-                    :telescope="selectedTelescope"
-                        Retrieves the telescope object(id, name) from Appointment, and assigns
-                        its values to selectedTelescope
-
+                    :telescopeName="telescopeName" {
+                        :telescopeName is a prop in Appointment, and the value
+                        in the local telescopeName data object is passed to it
+                    }
                     v-model="openCreateModal" {
                         this.openCreateModal: boolean
                         displays modal only if openCreateModal is set to true
@@ -91,7 +88,7 @@
                         sets this.openCreateModel to false, to make the modal not display
                     }
                 -->
-                <create-appointment :telescope="selectedTelescope" v-model="openCreateModal" @request-appointment="requestAppointment" @created-event="createdEvent" v-on:close-modal="openCreateModal = false"></create-appointment>
+                <create-appointment :telescopeName="telescopeName" v-model="openCreateModal" @request-appointment="requestAppointment" @created-event="createdEvent" v-on:close-modal="openCreateModal = false"></create-appointment>
 
                 <!-- 
                     linked component: RequestAppointment.vue
@@ -99,7 +96,6 @@
                     :Appointment="requestApt"
                         Appointment is a prop in the component RequestAppointment
                         requestApt is the Obj being passed in to the prop
-
                     v-model="openRequestModal"
                         Boolean check to display the modal or not
                     
@@ -112,7 +108,6 @@
 
         <!-- 
             linked component: PrivateEvent.vue
-
             Whenever a user clicks on a private event that they do not have access to
             this modal will pop up.
         -->
@@ -122,21 +117,22 @@
 
 <script>
 import {FullCalendar} from 'vue-full-calendar'
-import NavigationBar from '../../components/NavigationBar.vue'
+import NavigationBar from '../../components/utility/NavigationBar.vue'
 import router from '../../router'
 import moment from 'moment'
-import CreateAppointment from '../../components/Appointment.vue'
+import CreateAppointment from '../../components/appointment/Appointment.vue'
 import ApiDriver from '../../ApiDriver'
 import HttpResponse from '../../utils/HttpResponse'
 import CurrentUserValidation from '../../utils/CurrentUserValidation'
-import PrivateEvent from "../../components/PrivateEvent"
-import Loading from "../../components/Loading"
-import ChooseTelescope from "../../components/ChooseTelescope"
-import RequestAppointment from "../../components/RequestAppointment"
+import PrivateEvent from "../../components/appointment/PrivateEvent"
+import Loading from "../../components/utility/Loading"
+import ChooseTelescope from "../../components/appointment/ChooseTelescope"
+import RequestAppointment from "../../components/appointment/RequestAppointment"
 
 export default {
+    title: "Radio Telescope 1.1.0",
     name: 'Scheduler',
-    data() {
+        data() {
         return {
             // Set default variables for page here
             events: [],
@@ -146,16 +142,13 @@ export default {
             openRequestModal: false,
             privateEventModal: false,
             tele: true,
-            selectedTelescope: {
-                id: null,
-                name: ""
-            },
+            telescopeId: "",
             telescopes: [
                 "John C. Rudy County Park", 
                 "Scale Model",
                 "Virtual"
             ],
-
+            telescopeName: '',
             /* 
                 This is the header bound to the FullCalendar.vue component
                 info for header input: https://fullcalendar.io/docs/header
@@ -165,25 +158,19 @@ export default {
                 center: 'title',
                 right:  'month,agendaWeek,agendaDay'
             }
-
             /*
             This is to add a custom button to calendar menu bar.
             Currently unable to actually implement as the calendar is a node imported and so cannot call any function on the page with this.<function name>()
             Leaving the set up for it in if just in case it becomes useful in the future.
-
             Will have to add 
-
             :customButtons="customButtons" 
-
             into the <full-calendar></full-calendar> in the template section as well
-
             EXAMPLE HEADER TO DISPLAY CUSTOM BUTTON
             header: {
                 left:   'prev,next changeTele today',
                 center: 'title',
                 right:  'month,agendaWeek,agendaDay'
             },
-
             customButtons: {
                 changeTele: {
                     text: "Change Telescope",
@@ -218,7 +205,6 @@ export default {
             // If so take to event view page
             } else if (this.$store.state.isAdmin || (this.$store.state.currentUserId == event.userId)){
                 router.push('/appointments/' + event.id + "/view" )
-
             // If event is private and viwer not admin or owner: display Private Event modal
             } else {
                 this.privateEventModal = true;
@@ -231,7 +217,6 @@ export default {
             // Set openCreateModal to true so that Appointment.vue component displays
             this.openCreateModal = true;
         },
-
         // This method is called from inside the Appointment.vue modal if an appointment request to be scheduled 
         // comes back with an ALLOTTED_TIME error. 
         // Passes the obj of the appointment trying to be made into the RequestAppointment.vue modal
@@ -239,7 +224,6 @@ export default {
             this.requestApt = Obj
             this.openRequestModal = true
         },
-
         // Toggles this.tele to display and close the ChooseTelescope.vue component
         toggleChooseTelescope() {
             this.tele = !this.tele
@@ -257,7 +241,7 @@ export default {
                 end: new Date(data.endTime),
                 public: data.isPublic,
                 start: new Date(data.startTime),
-                telescopeId: data.selectedTelescope.id,
+                telescopeId: data.telescopeId,
                 userId: data.userId,
                 editable: false,
                 draggable: false
@@ -265,7 +249,7 @@ export default {
             
             // This checks that the viewer scheduled the event for the telescope they are looking at currently
             // If so add it to the this.events to be displayed; Else do nothing
-            if (this.selectedTelescope.id == event.selectedTelescope.id){
+            if (this.telescopeId == event.telescopeId){
                 this.events.push(event)
             }
         },
@@ -278,8 +262,8 @@ export default {
             // If the telescopeId is set, that means a viewer is looking for data on that telescope
             // Call funciton populateDataBetweenData(this.telescopeId) to get the data they are wanting to display
             // Else they have not selected any telescope and do not try grabbing data from a null reference
-            if (this.selectedTelescope.id) {
-                this.populateDataBetweenDates(this.selectedTelescope.id, false)
+            if( this.telescopeId != "") {
+                this.populateDataBetweenDates(this.telescopeId, false)
             }
         },
         /*
@@ -298,10 +282,8 @@ export default {
                 So if you are in month view, it grabs a month of data at a time, 
                 If you are in week view it grabs just a weeks worth of data, 
                 If day view, only one days worth of data
-
             When the calendar view changes (I.E. someone moves forward to the next month/week/day)
             This function is called again to get the new data to display between the new dates.
-
             Pros:
                 Less bulk of data being sent back from the back end. Quick load times
             Cons:
@@ -315,7 +297,6 @@ export default {
             
             // Get the view of the calendar, so we know what dates to grab data between
             var calendar = $('#calendar')
-
             var vue = $('#calendar').fullCalendar('getView')
             // Set the data to send to the back end.
             /*
@@ -328,17 +309,13 @@ export default {
                 startTime: new Date(vue.start).toUTCString(),
                 endTime: new Date(vue.end).toUTCString()
             }
-
             // Set the $store variable loading to true to display loading screen, as we call the backend and wait for response
             this.$store.commit("loading", true)
-
             // This sets the telescopeId of the page to the id. Used for initializing the data of this.telescopeId when they first choose a telescope to view
             // is setting itself to itself if populateDataBetweenDates() is called from changedViews()
-            this.selectedTelescope.id = id
-
+            this.telescopeId = id
             // Get the name of the telescope based on the telescopeId, to display at top of page
-            this.selectedTelescope.name = this.telescopes[id-1] + " Radio Telescope"
-
+            this.telescopeName = this.telescopes[id-1] + " Radio Telescope"
             // Call back-end Api with data set above.
             ApiDriver.Appointment.listAppointmentsBetweenDates(data).then((response) => {
                 HttpResponse.then(response, (data) => {
@@ -390,7 +367,6 @@ export default {
                         }
                         // Set the $store.loading to false to switch back to displaying content of page.
                         this.$store.commit("loading", false);
-
                         /*
                             THIS IS A PATCH WORK TO GET THE INTIAL LOADING OF EVENTS TO DISPLAY CORRECTLY
                             Will need to figure out why the initial call doesnt function the same as every
@@ -426,7 +402,6 @@ export default {
         this.$store.commit("updateInfo", {page: "Scheduling Calendar", info: "Select a telescope with which you would like to schedule\n an appointment. Click the 'Schedule Appointment' button at\n the top of the page to schedule time with the currently\n selected telescope. The arrows in the top-left can be used to\n change between months/weeks/days, and the buttons in\n the top right will change the current view of the\n calendar."})
     }
 }
-
 </script>
 
 
@@ -434,7 +409,6 @@ export default {
 .loading-dialog {
    background-color: #303030; 
 }
-
 /* 
     Set the padding of top left and right to 2% so calendar isnt right up against edge of browser.
 */

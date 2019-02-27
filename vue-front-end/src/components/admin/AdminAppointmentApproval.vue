@@ -140,11 +140,11 @@
 </div>
 </template>
 <script>
-import router from '../router';
-import ApiDriver from '../ApiDriver';
-import HttpResponse from '../utils/HttpResponse';
-import CurrentUserValidation from  '../utils/CurrentUserValidation';
-import Loading from "../components/Loading"
+import router from '../../router';
+import ApiDriver from '../../ApiDriver';
+import HttpResponse from '../../utils/HttpResponse';
+import CurrentUserValidation from  '../../utils/CurrentUserValidation';
+import Loading from "../../components/utility/Loading"
 import moment from 'moment'
 export default {
     name:'AdminAppointmentApproval',
@@ -157,9 +157,9 @@ export default {
             pageDisplay: 1,
             numPages: 0,
             pageNumber: 0,
-            selectedPageSize: "1",
+            selectedPageSize: "10",
             pageSizeList: [
-                '1', '2', '3', '4'
+                '10', '25', '50', '100'
             ],
 
             form: {
@@ -231,7 +231,6 @@ export default {
             })
         },
         populateData(data){
-            console.log(data)
             for(var index in data.content){
                 let appointment = data.content[index];
                 appointment.startTime = moment(appointment.startTime).format('MM-DD-YYYY hh:mm A');

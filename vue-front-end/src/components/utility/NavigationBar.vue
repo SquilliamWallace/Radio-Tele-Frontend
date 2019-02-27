@@ -1,7 +1,7 @@
 <template>
 <div>
     <v-toolbar class="bar-style" id="titleBar">
-      <v-toolbar-side-icon @click="showDrawer=!showDrawer"></v-toolbar-side-icon>    
+      <v-toolbar-side-icon @click="showDrawer=!showDrawer; loadStore()"></v-toolbar-side-icon>    
       <v-toolbar-title class="title-style" @click="homeRedirect">YCAS Radio Telescope</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-icon dark class="help-style" @click="toggleInfo">help_outline</v-icon>
@@ -36,8 +36,8 @@
 </template>
 
 <script>
-import router from '../router';
-import ApiDriver from '../ApiDriver'
+import router from '../../router';
+import ApiDriver from '../../ApiDriver'
 export default {
     name: 'NavigationBar',
     data() {
@@ -47,8 +47,6 @@ export default {
             items: [
               { title: 'Scheduling Calendar', icon: 'dashboard', path: '/scheduler' },
               { title: 'Public Appointments', path: '/appointments/public' },
-              { title: 'Completed Appointments', path: '/users/' + this.$store.state.currentUserId + '/appointments/completed' },
-              { title: 'Future Appointments', path: '/users/' + this.$store.state.currentUserId + '/appointments/future' },
             ]
         }
     },
@@ -74,13 +72,21 @@ export default {
         },
         toggleInfo() {
             this.showInfo = !this.showInfo;
-        }
-    },
-    mounted() {
-        if(this.$store.state.isAdmin){
-            this.items.push({ title: 'Administration', path: '/admin' })
+        },
+        loadStore() {
+            // On clicking the drawer, add two buttons that require data from the store to function
+            if(this.items.length < 5){
+                this.items.push({ title: 'Completed Appointments', path: '/users/' + this.$store.state.currentUserId + '/appointments/completed' })
+                this.items.push({ title: 'Future Appointments', path: '/users/' + this.$store.state.currentUserId + '/appointments/future' })
+            }
+            
+            // On clicking the drawer, check if the user is an Admin
+            if(this.$store.state.isAdmin && this.items.length < 5){
+                this.items.push({ title: 'Administration', path: '/admin' })
+            }
         }
     }
+    
 }
 </script>
 

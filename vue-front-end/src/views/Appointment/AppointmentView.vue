@@ -82,16 +82,17 @@
     
 </template>
 <script>
-import NavigationBar from '../../components/NavigationBar.vue'
+import NavigationBar from '../../components/utility/NavigationBar.vue'
 import ApiDriver from '../../ApiDriver.js'
 import HttpResponse from '../../utils/HttpResponse'
 import CurrentUserValidation from  '../../utils/CurrentUserValidation'
 import moment from 'moment'
-import CancelAppointment from "../../components/CancelAppointment.vue"
-import EditAppointment from "../../components/EditAppointment.vue"
-import Loading from "../../components/Loading"
+import CancelAppointment from "../../components/appointment/CancelAppointment.vue"
+import EditAppointment from "../../components/appointment/EditAppointment.vue"
+import Loading from "../../components/utility/Loading"
 import { throws } from 'assert';
 export default {
+    title: "Radio Telescope 1.1.0",
     name: "AppointmentView",
     data() {
         return {

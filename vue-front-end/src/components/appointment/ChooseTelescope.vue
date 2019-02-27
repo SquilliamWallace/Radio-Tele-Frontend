@@ -32,9 +32,9 @@
 
 <script>
 import { error } from 'util';
-import router from '../router';
-import HttpResponse from '../utils/HttpResponse';
-import ApiDriver from "../ApiDriver";
+import router from '../../router';
+import HttpResponse from '../../utils/HttpResponse';
+import ApiDriver from "../../ApiDriver";
 
 export default {
     data() {

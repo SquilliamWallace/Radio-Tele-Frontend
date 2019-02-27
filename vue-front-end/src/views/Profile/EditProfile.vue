@@ -60,14 +60,15 @@
 
 <script>
 import router from "../../router";
-import NavigationBar from "../../components/NavigationBar.vue";
-import FormConfirmation from "../../components/FormConfirmation";
+import NavigationBar from "../../components/utility/NavigationBar.vue";
+import FormConfirmation from "../../components/utility/FormConfirmation";
 import ApiDriver from "../../ApiDriver";
 import HttpResponse from "../../utils/HttpResponse";
 import CustomErrorHandler from "../../utils/CustomErrorHandler";
 import CurrentUserValidation from '../../utils/CurrentUserValidation'
-import Loading from "../../components/Loading"
+import Loading from "../../components/utility/Loading"
 export default {
+  title: "Radio Telescope 1.1.0",
   name: "EditProfile",
   data() {
     return {

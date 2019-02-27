@@ -47,18 +47,19 @@
   </div>
 </template>
 <script>
-import AdminLog from '../components/AdminLog.vue'
-import AdminUserManagement from '../components/AdminUserManagement.vue';
+import AdminLog from '../components/admin/AdminLog.vue'
+import AdminUserManagement from '../components/admin/AdminUserManagement.vue';
 import ApiDriver from '../ApiDriver';
 import HttpResponse from '../utils/HttpResponse';
-import NavigationBar from '../components/NavigationBar.vue';
+import NavigationBar from '../components/utility/NavigationBar.vue';
 import router from '../router';
 import CurrentUserValidation from '../utils/CurrentUserValidation';
-import AdminUserApproval from '../components/AdminUserApproval.vue';
-import AdminAppointmentApproval from '../components/AdminAppointmentApproval.vue';
-import Loading from "../components/Loading"
+import AdminUserApproval from '../components/admin/AdminUserApproval.vue';
+import AdminAppointmentApproval from '../components/admin/AdminAppointmentApproval.vue';
+import Loading from "../components/utility/Loading"
  export default {
-     name: 'admin',
+    title: "Radio Telescope 1.1.0",
+    name: 'admin',
     data () {
       return {
         items: [
