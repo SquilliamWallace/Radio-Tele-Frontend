@@ -22,7 +22,7 @@
             persistent-hint
             ></v-select>
         </v-flex>
-        <v-btn @click="getUsers" class="mt-3 mr-0">Clear</v-btn> 
+        <v-btn @click="reset" class="mt-3 mr-0">Clear</v-btn> 
         <v-btn @click="formatSearchParams" class="mt-3 mr-2">Search</v-btn> 
         
             
@@ -149,18 +149,21 @@ export default {
             pageDisplay: 1,
             selectedPageSize: "10",
             pageSizeList: [
-                '10', '25', '50', '100'
+                '10', '20', '50', '100'
             ]
         }
     },
     methods:{
         reset(){
             //clear selected filters
-            chosenFilters = []
-            this.users = this.unfiltered
-        },
-        advancedSearch(){
+            this.chosenFilters = []
             this.pageNumber = 0
+            this.pageDisplay = 1
+            this.getUsers()
+            
+        },
+        advancedSearch(pageNumber){
+            
             this.users = []
             //Takes chosenFilters array and sets it to a string with the format "firstName+lastName..."
             //also sets the values in the array to camel case
@@ -168,9 +171,8 @@ export default {
             
             //console.log(this.chosenFiltersString,this.searchParam)
             
-            ApiDriver.User.userSearch(this.pageNumber, this.selectedPageSize, this.searchParam, this.chosenFiltersString).then((response) => {
+            ApiDriver.User.userSearch(pageNumber, this.selectedPageSize, this.searchParam, this.chosenFiltersString).then((response) => {
                 HttpResponse.then(response, data => {
-                    console.log(data.data)
                     this.populateData(data.data)
                 },(status, errors) => {})
              }).catch((error) => {
@@ -183,7 +185,6 @@ export default {
                             CurrentUserValidation.validateCurrentUser(this.$store);
                         });
             });
-                this.chosenFiltersString = ""
         },
         getUsers(){
             //this.$store.commit("loading", true);
@@ -205,7 +206,6 @@ export default {
             });
         },
         populateData(data){
-            console.log(this.filteredSet)
             for (var index in data.content) {
                 let user = data.content[index];
                 if (!user.membershipRole) {
@@ -224,7 +224,7 @@ export default {
             if(!this.filteredSet){
                 this.getUsers()
             }else{
-                this.advancedSearch()
+                this.advancedSearch(this.pageNumber)
             }
             
         },
@@ -238,12 +238,12 @@ export default {
             }
              this.chosenFiltersString = this.chosenFiltersString.slice(3,this.chosenFiltersString.length)
              this.filteredSet = true
-             this.advancedSearch()
+             this.advancedSearch(0)
         },
-         pageSizeUpdate(){
+        pageSizeUpdate(){
             this.users = []
             if(this.filteredSet){
-                this.advancedSearch()
+                this.advancedSearch(this.pageNumber)
             }else{
                 this.getUsers()
             }
