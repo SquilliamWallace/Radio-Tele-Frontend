@@ -45,9 +45,24 @@
                                 Recieve User's requested role from the RequestRole component, 
                                 and pass it to changeRoleRequest method
                         -->
-                        <v-btn v-if="$store.state.currentUserId == profile.id.value" color="primary darken-1" v-on:click="toggleUpdateRole">Request New Role</v-btn>
+                        
                             <request-role v-model="updateRole" v-on:close-modal="updateRole = false" @false="cancelRoleRequest" @chosen="changeRoleRequest"></request-role>
+                            <v-container>
+                                <v-layout justify-center row>
+                                <v-flex xs12 sm6 >
+                                    <v-select
+                                    v-model="controlValue"
+                                    :items="controls"
+                                    label="Options"
+                                    ></v-select>
+                                </v-flex>
+                                <v-btn color="primary darken-1" @click="controlParser(controlValue)">Action</v-btn>
+                                </v-layout>
+                            </v-container>
                             
+                             
+                            
+                
                     </v-card>
                 </v-flex>
                 <v-flex xs12>
@@ -56,13 +71,11 @@
                         <!-- 
                             Edit Profile
                         -->
-                        <v-btn color="primary darken-1" @click="editRedirect">Edit Profile</v-btn>
                         <v-dialog v-model="dialog" v-if="showChangeEmailButton" max-width="600px" dark>
 
                         <!--
                             Change Email Modal
                         -->
-                            <v-btn slot="activator" color="primary darken-1">Change Email</v-btn>
                             <v-card>
                                 <v-card-title class="justify-center">
                                     <span class="headline">Change Your Email</span>
@@ -108,8 +121,8 @@
                         <!-- 
                             Edit Password Modal
                         -->
-                        <v-btn v-if="$store.state.currentUserId == profile.id.value" color="primary darken-1" @click.native="passReset = true">Edit Password</v-btn>
-                         <v-dialog v-model = "passReset" persistent max-width="600px" dark>
+                        <!-- <v-btn v-if="$store.state.currentUserId == profile.id.value" color="primary darken-1" @click.native="passReset = true">Edit Password</v-btn> -->
+                         <v-dialog v-model="passReset" persistent max-width="600px" dark>
                             <v-card>
                                 <v-container>
                                     <v-flex xs12>
@@ -152,8 +165,12 @@
                             </v-card>
                         </v-dialog>
 
-                        <v-btn color="primary darken-1" @click="completedAppointmentsRedirect">View Completed Observations</v-btn>
-                        <v-btn color="primary darken-1" @click="futureAppointmentsRedirect">View Future Observations</v-btn>
+                        <!-- <v-btn color="primary darken-1" @click="completedAppointmentsRedirect">View Completed Observations</v-btn> -->
+                        <!-- <v-btn color="primary darken-1" @click="futureAppointmentsRedirect">View Future Observations</v-btn> -->
+                        
+                        <!-- Option Selector -->
+                        
+
                     </div>
                 </v-flex>
             </v-layout>
@@ -195,6 +212,12 @@ export default {
                 passwordConfirm: {value: ""},
                 id: {value: ""}
             },
+            controlValue: 'Edit Profile',
+            controls: [
+                'Edit Profile',
+                'View Completed Observations', 
+                'View Future Observations'
+            ],
             rules: {
                 required: val => val.length > 0 || 'This field is required',
                 emailMatch: val => val === this.changeEmailForm.email.value || 'Emails do not match'
@@ -216,6 +239,22 @@ export default {
       RequestRole
     },
     methods: {
+        controlParser(value){
+            console.log(value)
+            if(value === 'Edit Profile'){
+                this.editRedirect()
+            }else if(value === 'Change Password'){
+                this.passReset = true
+            }else if(value === 'Change Email'){
+                this.dialog = true
+            }else if(value === 'Request New Role'){
+                this.updateRole = true
+            }else if(value === 'View Completed Observations'){
+                this.completedAppointmentsRedirect()
+            }else if(value === 'View Future Observations'){
+                this.futureAppointmentsRedirect()
+            }
+        },
         editRedirect() {
             router.push('/users/' + this.$route.params.userId + '/edit')
         },
@@ -486,11 +525,17 @@ export default {
     mounted() {
         // Retrieve the user information when loaded onto the DOM
         this.retrieveInformation()
-        if(!this.$store.state.isAdmin){
+        if (!this.$store.state.isAdmin) {
             this.$store.commit("updateInfo", {page: "View Profile", info: "This page shows the information for the user\n that is currently logged in."})
-        }
-        else{
+        } else {
             this.$store.commit("updateInfo", {page: "View Profile", info: "This page shows the information for the selected user.\n From here you can view the user's information to check\n for inappropriate or falsified content, as well as view\n their completed and future appointments."})
+        }
+
+        if (this.$store.state.currentUserId == this.$route.params.userId) {
+            console.log("end me")
+            this.controls.push("Change Email")
+            this.controls.push("Change Password")
+            this.controls.push("Request New Role")
         }
     }
 }
