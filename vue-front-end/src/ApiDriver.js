@@ -4,6 +4,12 @@ import Headers from './utils/Headers';
 let baseUrl = "http://api.ycpradiotelescope.com:8080/api/";
 export default {
     //API endpoints go here
+    CelestialBodies: {
+      namespace: baseUrl + "celestial-bodies",
+      getCBList: function(pageNumber, pageSize){
+        return axios.get(this.namespace + "?page=" + pageNumber + "size=" + pageSize, Headers.retrieveHeaders());
+      }
+    },
     User: {
       namespace: baseUrl + "users",
       activate: function(token) {
