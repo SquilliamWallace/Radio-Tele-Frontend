@@ -7,7 +7,7 @@ export default {
     CelestialBodies: {
       namespace: baseUrl + "celestial-bodies",
       getCBList: function(pageNumber, pageSize){
-        return axios.get(this.namespace + "?page=" + pageNumber + "size=" + pageSize, Headers.retrieveHeaders());
+        return axios.get(this.namespace + "?page=" + pageNumber + "&size=" + pageSize, Headers.retrieveHeaders());
       }
     },
     User: {
