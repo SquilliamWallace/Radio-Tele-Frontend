@@ -99,6 +99,9 @@ export default {
       },
       listAppointmentsBetweenDates: function(data) {
         return axios.get(this.namespace + "/telescopes/" + data.telescopeId + "/listBetweenDates?startTime=" + data.startTime + "&endTime=" + data.endTime, Headers.retrieveHeaders())
+      },
+      share: function(appointmentId, email) {
+        return axios.post(this.namespace + "/" + appointmentId + "/viewers?email=" + email, {}, Headers.retrieveHeaders())
       }
     },
     Log: {

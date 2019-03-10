@@ -70,6 +70,11 @@
                 <v-btn color="primary" @click="editAppointment">Edit</v-btn>
             </div>
         </v-flex>
+        <v-flex v-if="($store.state.currentUserId === data.eventUserId.value | $store.state.isAdmin) && !$store.state.isLoading && !data.isPublic.value">
+            <div>
+                <v-btn color="primary" @click="shareAppointment">Share</v-btn>
+            </div>
+        </v-flex>
         <v-flex v-if="($store.state.currentUserId === data.eventUserId.value | $store.state.isAdmin) && !complete && !$store.state.isLoading">
             <div>
                 <v-btn color="error" @click="cancelAppointment">Cancel</v-btn>
@@ -77,6 +82,7 @@
         </v-flex>
         </v-layout>
         <edit-appointment :appointmentObj="appointment" v-model="edit" @edited="edited"></edit-appointment>
+        <share-appointment v-model="share"></share-appointment>
         <cancel-appointment v-model="cancel"> </cancel-appointment>
     </div>
     
@@ -89,6 +95,7 @@ import CurrentUserValidation from  '../../utils/CurrentUserValidation'
 import moment from 'moment'
 import CancelAppointment from "../../components/appointment/CancelAppointment.vue"
 import EditAppointment from "../../components/appointment/EditAppointment.vue"
+import ShareAppointment from "../../components/appointment/ShareAppointment"
 import Loading from "../../components/utility/Loading"
 import { throws } from 'assert';
 export default {
@@ -143,6 +150,7 @@ export default {
             ],
             eventUserId: 0,
             edit: false,
+            share: false,
             appointment: {
                 id: {
                     value: null,
@@ -184,6 +192,7 @@ export default {
         NavigationBar,
         EditAppointment,
         CancelAppointment,
+        ShareAppointment,
         Loading
     },
     methods: {
@@ -269,6 +278,9 @@ export default {
             // Reset prop values and close the edit modal
             this.edit = false
             this.appointment = {}
+        },
+        shareAppointment() {
+            this.share = true
         }
     },
     mounted: function() {
