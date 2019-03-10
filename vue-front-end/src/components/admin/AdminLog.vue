@@ -42,6 +42,7 @@
           <td>{{ props.item.success }}</td>
           <td>{{ props.item.userId }}</td>
           <td>{{ props.item.userName}}</td>
+          <td>{{ props.item.status}}</td>
         </tr>
       </template>
       <template slot="footer">
@@ -81,9 +82,13 @@
             <h1 v-if="!currentLog.success">Log Number {{currentLog.id}}: Unsuccessful Operation</h1>
             <v-container grid-list-xl fluid>
                 <v-layout wrap>
-                    <v-flex xs12 sm12>
+                    <v-flex xs12 sm6>
                         <h2>Date of Occurrence:</h2>
                         <span>{{currentLog.timestamp}}</span>
+                    </v-flex>
+                    <v-flex xs12 sm6>
+                        <h2>HTTP Status:</h2>
+                        <span>{{currentLog.status}}</span>
                     </v-flex>
                     <v-flex xs12 sm6>
                         <h3>Attempted Operation:</h3>
@@ -149,7 +154,8 @@ export default {
                 {text: 'Record ID', value: 'affectedRecordId'},
                 {text: 'Success', value: 'success'},
                 {text: 'User ID', value: 'userId'},
-                {text: 'Username', value: 'userName'}
+                {text: 'Username', value: 'userName'},
+                {text: 'HTTP Status', value: 'status'}
             ],
             pageSizeList: [
                 '10', '25', '50', '100'
@@ -190,6 +196,7 @@ export default {
             });
         },
         populateData(data){
+            console.log(data);
             for (var index in data.content) {
                 let log = data.content[index];
                 if (!log.userId) {
