@@ -24,72 +24,96 @@
       </v-card>
     </v-expansion-panel-content>
   </v-expansion-panel> -->
-    <v-card>
-        <v-layout row >
-            <v-text-field clearable class="ml-2 mr-2" label="Search..." append-icon="search" dark></v-text-field>
-                <!-- <v-select
-                :items="filterTypes"
-                label="Filter by"
-                v-model="filterType"
-                ></v-select>
-                -->
-            <v-flex xs12 sm4>    
-                <v-select
-                
-                
-                :menu-props="{ maxHeight: '400' }"
-                label="Filters"
-                multiple
-                clearable
-                hint="Select Filters"
-                persistent-hint
-                ></v-select>
-            </v-flex>
-            <v-btn @click="" class="mt-3 mr-0">Clear</v-btn> 
-            <v-btn @click="" class="mt-3 mr-2">Search</v-btn>      
-        </v-layout>
+    <div>
+        <loading v-if="$store.state.isLoading"></loading>
+        <v-card v-if="!$store.state.isLoading">
+            <v-layout row >
+                <v-text-field clearable class="ml-2 mr-2" label="Search..." append-icon="search" dark></v-text-field>
+                    <!-- <v-select
+                    :items="filterTypes"
+                    label="Filter by"
+                    v-model="filterType"
+                    ></v-select>
+                    -->
+                <v-flex xs12 sm4>    
+                    <v-select
+                    
+                    
+                    :menu-props="{ maxHeight: '400' }"
+                    label="Filters"
+                    multiple
+                    clearable
+                    hint="Select Filters"
+                    persistent-hint
+                    ></v-select>
+                </v-flex>
+                <v-btn @click="" class="mt-3 mr-0">Clear</v-btn> 
+                <v-btn @click="" class="mt-3 mr-2">Search</v-btn>      
+            </v-layout>
 
-        <v-data-table
-      v-if="!$store.state.isLoading"
-      hide-actions
-      :headers="headers"
-      :items="bodies"
-      :pagination.sync="pagination"
-      select-all
-      class="elevation-1"
-    >
-      <template slot="headers" slot-scope="props">
-        <tr>
-          <th
-            class="text-xs-left"
-            v-for="header in props.headers"
-            :key="header.text">
-            <h2>{{ header.text }}</h2>
+            <v-data-table
+        v-if="!$store.state.isLoading"
+        hide-actions
+        :headers="headers"
+        :items="bodies"
+        :pagination.sync="pagination"
+        select-all
+        class="elevation-1"
+        >
+        <template slot="headers" slot-scope="props">
+            <tr>
+            <th
+                class="text-xs-left"
+                v-for="header in props.headers"
+                :key="header.text">
+                <h2>{{ header.text }}</h2>
+                
+            </th>
+            </tr>
+        </template>
+        <template slot="items" slot-scope="props">
+            <tr>
+            <td class="text-xs-left">{{ props.item.name }}</td>
+            <td class="text-xs-left">{{ props.item.id }}</td>
+            <td class="text-xs-left">{{ props.item.declination }}</td>
+            <td class="text-xs-left">{{ props.item.hours }}</td>
+            <td class="text-xs-left">{{ props.item.minutes }}</td>
+            <td class="text-xs-left">{{ props.item.seconds }}</td>
+            </tr>
+        </template>
+        <template slot="footer">
             
-          </th>
-        </tr>
-      </template>
-      <template slot="items" slot-scope="props">
-        <tr>
-          <td class="text-xs-left">{{ props.item.name }}</td>
-          <td class="text-xs-left">{{ props.item.id }}</td>
-          <td class="text-xs-left">{{ props.item.declination }}</td>
-          <td class="text-xs-left">{{ props.item.hours }}</td>
-          <td class="text-xs-left">{{ props.item.minutes }}</td>
-          <td class="text-xs-left">{{ props.item.seconds }}</td>
-        </tr>
-      </template>
-      <template slot="footer">
-        
+                
             
-          
-        
-      </template>
-      <v-alert slot="no-results" :value="true" color="error" icon="warning">
-          Your search for "{{ search }}" found no results.
-      </v-alert>  
-    </v-data-table>  
-    </v-card>
+            
+        </template>
+        <v-alert slot="no-results" :value="true" color="error" icon="warning">
+            Your search for "{{ search }}" found no results.
+        </v-alert>  
+        </v-data-table>
+        <v-container>
+            <div class="text-xs-center">
+            <v-pagination
+                circle
+                v-model="pageDisplay"
+                :length="numPages"
+                :total-visible="7"
+                @input="next"
+            ></v-pagination>
+            <v-layout justify-center>
+                <v-flex xs12 sm1>
+                    <v-select
+                    v-model="selectedPageSize"
+                    :items="pageSizeList"
+                    label="Items per page"
+                    v-on:change="this.pageSizeUpdate"
+                    ></v-select>
+                </v-flex>
+            </v-layout>
+        </div>
+        </v-container>  
+        </v-card>
+    </div>
  
 
 
@@ -109,6 +133,15 @@ export default {
             },
             bodies: [],
             array:[],
+
+            //pagination variables
+            pageNumber: 0,
+            pageDisplay: 1,
+            numPages: 0,
+            selectedPageSize: "1",
+            pageSizeList: [
+                '1', '2', '5', '10'
+            ],
 
             //table data
             search: '',
@@ -131,10 +164,12 @@ export default {
     },
     methods: {
         getCelestialBodies(){
-             ApiDriver.CelestialBodies.getCBList(0,10).then((response) => {
+            this.$store.commit("loading", true);
+             ApiDriver.CelestialBodies.getCBList(this.pageNumber,this.selectedPageSize).then((response) => {
                 HttpResponse.then(response, data => {
                     console.log(data.data)
                     this.populateData(data.data)
+                    this.$store.commit("loading", false);
                 },(status, errors) => {})
              }).catch((error) => {
                  console.log(error)
@@ -162,7 +197,19 @@ export default {
                         {val: data.content[index].seconds, title:'Seconds'} ]})
                 //this.numPages = data.totalPages;
             }
+            this.numPages = data.totalPages;
             //console.log(this.array)   
+        },
+        next(page) {
+            // Handle retrieving a new page of information
+            this.pageNumber = page - 1;
+            this.pageDisplay = page;
+            this.bodies = [];
+            this.getCelestialBodies();
+        },
+        pageSizeUpdate(){
+            this.bodies = []
+            this.getCelestialBodies()
         },
     },
     mounted: function(){
