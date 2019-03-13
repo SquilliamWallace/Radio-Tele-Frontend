@@ -75,7 +75,7 @@ export default {
         },
         loadStore() {
             // On clicking the drawer, add two buttons that require data from the store to function
-            if(this.items.length < 5){
+            if(this.items.length === 2){
                 this.items.push({ title: 'Completed Appointments', path: '/users/' + this.$store.state.currentUserId + '/appointments/completed' })
                 this.items.push({ title: 'Future Appointments', path: '/users/' + this.$store.state.currentUserId + '/appointments/future' })
             }

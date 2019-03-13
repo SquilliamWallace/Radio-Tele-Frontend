@@ -1,20 +1,23 @@
 <template dark>
-    <v-dialog v-model="advSearch" persistent max-width="600px">
-      <v-btn slot="activator" class="mt-3" dark>Adv. Search</v-btn>
+    <v-dialog v-model="advSearch" persistent width="50%">
+      <v-btn slot="activator" class="mt-3" dark>Appointment Search</v-btn>
 
       <v-card>
         <v-container align-content-center>
-            <span  class="headline">Advanced User Search</span>
+            <span  class="headline">User Appointment Search</span>
         </v-container>
         <v-card-text>
           <v-container grid-list-md>
               <v-layout row>
               <v-flex xs6>
                 <v-container fluid>
-                    <v-checkbox label="First "></v-checkbox>
-                    <v-checkbox label="Last Name"></v-checkbox>
-                    <v-checkbox label="Email"></v-checkbox>
-                    <v-checkbox label="Company"></v-checkbox>
+                    <v-checkbox label="Start Date"></v-checkbox>
+                    <v-checkbox label="End Date"></v-checkbox>
+                    <v-checkbox label="Right Ascension Hours"></v-checkbox>
+                    <v-checkbox label="Right Ascension Minutes"></v-checkbox>
+                    <v-checkbox label="Right Ascension Seconds"></v-checkbox>
+                    <v-checkbox label="Declination"></v-checkbox>
+                    <v-checkbox label="Telescope"></v-checkbox>
                 </v-container>
             </v-flex>
              <v-flex xs6>
@@ -32,17 +35,14 @@
           </v-container>
         </v-card-text>
       </v-card>
-    </v-dialog>
+    </v-dialog >
 </template>
 
 <script>
-import { error } from 'util';
-import router from '../router';
-import HttpResponse from '../utils/HttpResponse';
-import ApiDriver from "../ApiDriver";
 
 export default {
     data() {
+        name: "Search Appointment"
         return {
            advSearch: false, 
         }
