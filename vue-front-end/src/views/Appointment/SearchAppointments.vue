@@ -7,6 +7,9 @@
     <navigation-bar></navigation-bar>
     <loading v-if="$store.state.isLoading"></loading>
 
+    <!-- 
+        Beginning of the search modal, which is only rendered if the page is not loading
+    -->
     <v-card v-if="!$store.state.isLoading" width = "100%">
         <v-layout row >
             <!-- 
@@ -47,8 +50,24 @@
         -->
         <v-btn @click="reset" class="mt-3 mr-0">Clear</v-btn> 
         <v-btn @click="formatSearchParams" class="mt-3 mr-2">Search</v-btn> 
-        
         </v-layout>
+
+        <!-- 
+            Beginning of search results
+        -->
+        <v-list >
+            <v-list-tile v-for="user in users" :key = "user.id"  @click="hover = !hover">
+                <v-list-tile-content>
+                    <v-list-tile-title>
+                        {{user.firstName}} {{user.lastName}}: {{user.membershipRole}}
+                    </v-list-tile-title>
+                    <v-list-tile-sub-title>
+                        {{user.email}}
+                    </v-list-tile-sub-title>
+                </v-list-tile-content>
+                <v-spacer></v-spacer>
+            </v-list-tile>
+        </v-list>
     </v-card>
 </div>
 </template>
@@ -58,11 +77,15 @@ import NavigationBar from '../../components/utility/NavigationBar.vue'
 import Loading from "../../components/utility/Loading"
 import ApiDriver from '../../ApiDriver'
 import CurrentUserValidation from  '../../utils/CurrentUserValidation';
+import HttpResponse from '../../utils/HttpResponse';
 
 export default {
     data() {
         name: "Search Appointment"
         return {
+            // Empty array to fill with our search results
+            users: [],
+            
             // Search Variables 
             chosenFilters: [],
             chosenFiltersString: '',
@@ -98,7 +121,7 @@ export default {
             //also sets the values in the array to camel case
             
             
-            console.log(this.chosenFiltersString,this.searchParam)
+            //console.log(this.chosenFiltersString,this.searchParam)
             
             ApiDriver.Appointment.appointmentSearch(pageNumber, this.selectedPageSize, this.searchParam, this.chosenFiltersString).then((response) => {
                 HttpResponse.then(response, data => {
@@ -111,11 +134,35 @@ export default {
                             type: 'error',
                             background: '#302f2f'
                         }).then(response => {
-                            //CurrentUserValidation.validateCurrentUser(this.$store);
+                            CurrentUserValidation.validateCurrentUser(this.$store);
                         });
             });
         },
-        formatSearchParams(){
+
+        // Retrieve the list of users from the back-end by calling populateData, and store it in this.users
+        getUsers() {
+            this.filteredSet = false
+            this.users = []
+            this.$store.commit("loading", true);
+            ApiDriver.User.allUsers(this.pageNumber,this.selectedPageSize).then((response) => {
+                HttpResponse.then(response, data => {
+                    this.populateData(data.data)
+                    this.$store.commit("loading", false);
+                }, (status, errors) => {})
+            }).catch((error) => {
+                this.$swal({
+                            title: '<span style="color:#f0ead6">Error!<span>',
+                            html: '<span style="color:#f0ead6">An error occurred when loading the list of users<span>',
+                            type: 'error',
+                            background: '#302f2f'
+                        }).then(response => {
+                            CurrentUserValidation.validateCurrentUser(this.$store);
+                        });
+            });
+        },
+
+        // Remove white-space from input, and convert search input to camel-case (likeThisYouGuys)
+        formatSearchParams() {
             for(var i in this.chosenFilters){
                 this.chosenFilters[i] = this.chosenFilters[i].replace(" ","")
                 this.chosenFilters[i] = this.chosenFilters[i].charAt(0).toLowerCase() + this.chosenFilters[i].slice(1,this.chosenFilters[i].length)
@@ -127,15 +174,25 @@ export default {
             this.filteredSet = true
             this.advancedSearch(0)
         },
+
+        // Populate this.users array with data 
+        populateData(data){
+            for (var index in data.content) {
+                let user = data.content[index];
+                this.users.push(user);
+                //this.numPages = data.totalPages;
+            } 
+        },
+
+        // Clear search filters and reset pagination
         reset(){
-            // Clear search filters and reset pagination
             this.chosenFilters = [];
             this.pageNumber = 0;
             this.pageDisplay = 1;
         }
     },
     mounted: function() {
-        //console.log("test");
+        this.getUsers();
     }
 }
 </script>
