@@ -9,8 +9,25 @@
 
     <v-card v-if="!$store.state.isLoading" width = "100%">
         <v-layout row >
-            <v-text-field  v-on:keyup.enter="formatSearchParams" v-on:keyup.down="reset" clearable v-model = "searchParam" class="ml-2 mr-2" label="Search..." append-icon="search" dark></v-text-field>
+            <!-- 
+                Render a text box to search
 
+                v-on:keyup.enter="formatSearchParams" {
+                    Calls the formatSearchParams() button when the enter
+                    key is released (i.e pressed and then released)
+                }
+
+                clearable : Creates an X on the text box that allows the user
+                to clear their input instantly
+
+                v-model="searchParam" {
+                    Binds the entered input on the text box to the searchParam variable
+                }
+
+             -->
+            <v-text-field v-on:keyup.enter="formatSearchParams" clearable v-model = "searchParam" class="ml-2 mr-2" label="Search..." append-icon="search" dark></v-text-field>
+
+        <!-- Render a drop down menu with the available filters -->
         <v-flex xs12 sm4>    
             <v-select
             v-model="chosenFilters"
@@ -24,6 +41,10 @@
             ></v-select>
         </v-flex>
         
+        <!-- 
+            Clear and Search buttons, which call the corresponding 
+            reset() and formatSearchParams() methods below
+        -->
         <v-btn @click="reset" class="mt-3 mr-0">Clear</v-btn> 
         <v-btn @click="formatSearchParams" class="mt-3 mr-2">Search</v-btn> 
         
@@ -36,19 +57,27 @@
 import NavigationBar from '../../components/utility/NavigationBar.vue'
 import Loading from "../../components/utility/Loading"
 import ApiDriver from '../../ApiDriver'
+import CurrentUserValidation from  '../../utils/CurrentUserValidation';
 
 export default {
     data() {
         name: "Search Appointment"
         return {
-            ////////////////////////
-            /// Search Variables ///
-            ////////////////////////
+            // Search Variables 
             chosenFilters: [],
-            searchParam: '',
-            filterTypes: ['Full Name', 'First Name', 'Last Name', 'Email', 'Company'],
             chosenFiltersString: '',
-            filteredSet: false
+            filteredSet: false,
+            filterTypes: ['First Name', 'Last Name', 'Email', 'Company'],
+            searchParam: '',
+
+            // Pagination Variables
+            numPages: 0,
+            pageNumber: 0,
+            pageDisplay: 1,
+            pageSizeList: [
+                '10', '25', '50', '100'
+            ],
+            selectedPageSize: "10"
         }
     }, 
 
@@ -69,9 +98,9 @@ export default {
             //also sets the values in the array to camel case
             
             
-            //console.log(this.chosenFiltersString,this.searchParam)
+            console.log(this.chosenFiltersString,this.searchParam)
             
-            ApiDriver.User.userSearch(pageNumber, this.selectedPageSize, this.searchParam, this.chosenFiltersString).then((response) => {
+            ApiDriver.Appointment.appointmentSearch(pageNumber, this.selectedPageSize, this.searchParam, this.chosenFiltersString).then((response) => {
                 HttpResponse.then(response, data => {
                     this.populateData(data.data)
                 },(status, errors) => {})
@@ -82,7 +111,7 @@ export default {
                             type: 'error',
                             background: '#302f2f'
                         }).then(response => {
-                            CurrentUserValidation.validateCurrentUser(this.$store);
+                            //CurrentUserValidation.validateCurrentUser(this.$store);
                         });
             });
         },
