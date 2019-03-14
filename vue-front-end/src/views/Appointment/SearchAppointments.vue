@@ -6,11 +6,16 @@
     -->
     <navigation-bar></navigation-bar>
     <loading v-if="$store.state.isLoading"></loading>
-
+    
     <!-- 
         Beginning of the search modal, which is only rendered if the page is not loading
     -->
     <v-card v-if="!$store.state.isLoading" width = "100%">
+        <!-- 
+            Display the name of the page at the top of the page
+        -->
+        <h1 justify-center>Search Appointments</h1>
+        
         <v-layout row >
             <!-- 
                 Render a text box to search
@@ -55,14 +60,14 @@
         <!-- 
             Beginning of search results
         -->
-        <v-list >
-            <v-list-tile v-for="user in users" :key = "user.id"  @click="hover = !hover">
-                <v-list-tile-content>
+        <v-list v-if="appts !== []">
+            <v-list-tile class="list-item" v-for="appt in appts" :key = "appt.id" v-bind:href="'/#/appointments/' + appt.id + '/view'">
+                <v-list-tile-content> 
                     <v-list-tile-title>
-                        {{user.firstName}} {{user.lastName}}: {{user.membershipRole}}
+                        Appointment #{{ appt.id }}: {{appt.userFirstName}} {{appt.userLastName}}
                     </v-list-tile-title>
                     <v-list-tile-sub-title>
-                        {{user.email}}
+                        Start Time: {{ appt.startTime }}   End Time: {{ appt.endTime }}
                     </v-list-tile-sub-title>
                 </v-list-tile-content>
                 <v-spacer></v-spacer>
@@ -78,19 +83,21 @@ import Loading from "../../components/utility/Loading"
 import ApiDriver from '../../ApiDriver'
 import CurrentUserValidation from  '../../utils/CurrentUserValidation';
 import HttpResponse from '../../utils/HttpResponse';
+import moment from 'moment'
 
 export default {
     data() {
         name: "Search Appointment"
         return {
-            // Empty array to fill with our search results
+            // Empty arrays to fill with our search results
             users: [],
+            appts: [],
             
             // Search Variables 
             chosenFilters: [],
             chosenFiltersString: '',
             filteredSet: false,
-            filterTypes: ['First Name', 'Last Name', 'Email', 'Company'],
+            filterTypes: ['Full Name','First Name', 'Last Name', 'Email', 'Company'],
             searchParam: '',
 
             // Pagination Variables
@@ -116,21 +123,24 @@ export default {
     methods: {
         advancedSearch(pageNumber){
             
-            this.users = []
-            //Takes chosenFilters array and sets it to a string with the format "firstName+lastName..."
-            //also sets the values in the array to camel case
+            // Reset user and appointment arrays 
+            this.users = [];     
+            this.appts = [];
+
+            // Populate users array first
+            //this.getUsers();
             
-            
-            //console.log(this.chosenFiltersString,this.searchParam)
-            
+            console.log(this.searchParam, this.chosenFiltersString);
+
             ApiDriver.Appointment.appointmentSearch(pageNumber, this.selectedPageSize, this.searchParam, this.chosenFiltersString).then((response) => {
                 HttpResponse.then(response, data => {
-                    this.populateData(data.data)
+                    this.populateAppts(data.data)
+                    //console.log(response);
                 },(status, errors) => {})
              }).catch((error) => {
                 this.$swal({
                             title: '<span style="color:#f0ead6">Error!<span>',
-                            html: '<span style="color:#f0ead6">An error occurred when loading the list of users<span>',
+                            html: '<span style="color:#f0ead6">An error occurred when loading the list of appointments<span>',
                             type: 'error',
                             background: '#302f2f'
                         }).then(response => {
@@ -146,7 +156,7 @@ export default {
             this.$store.commit("loading", true);
             ApiDriver.User.allUsers(this.pageNumber,this.selectedPageSize).then((response) => {
                 HttpResponse.then(response, data => {
-                    this.populateData(data.data)
+                    this.populateUsers(data.data)
                     this.$store.commit("loading", false);
                 }, (status, errors) => {})
             }).catch((error) => {
@@ -163,30 +173,59 @@ export default {
 
         // Remove white-space from input, and convert search input to camel-case (likeThisYouGuys)
         formatSearchParams() {
+            // Reset our filter string to prevent errors with subsequent calls
+            this.chosenFiltersString = ''
+
             for(var i in this.chosenFilters){
                 this.chosenFilters[i] = this.chosenFilters[i].replace(" ","")
-                this.chosenFilters[i] = this.chosenFilters[i].charAt(0).toLowerCase() + this.chosenFilters[i].slice(1,this.chosenFilters[i].length)
                 if (i !== 0) {
                     this.chosenFiltersString = this.chosenFiltersString + "%2B" + this.chosenFilters[i]
                 }
             }
-            this.chosenFiltersString = this.chosenFiltersString.slice(3,this.chosenFiltersString.length)
+            
+            this.chosenFiltersString = this.chosenFiltersString.slice(3,this.chosenFiltersString.length);
+            
+            // Add user to the beginning of the filter to satisfy back-end requirements
+            if(this.chosenFiltersString.length != 0) {
+                this.chosenFiltersString = "user" + this.chosenFiltersString;
+            }
+
+            // Reset our filters array to prevent errors with subsequent calls
+            this.chosenFilters = [];
+
             this.filteredSet = true
             this.advancedSearch(0)
         },
 
         // Populate this.users array with data 
-        populateData(data){
+        populateUsers(data){
             for (var index in data.content) {
+                //console.log(data.content[index]);
                 let user = data.content[index];
                 this.users.push(user);
                 //this.numPages = data.totalPages;
             } 
         },
 
+        // Populate this.appts array with data 
+        populateAppts(data){
+            for (var index in data.content) {
+                console.log(data.content[index]);
+                let appt = data.content[index];
+                
+                appt.startTime = moment(appt.startTime).format('MM-DD-YYYY hh:mm A');
+                appt.endTime = moment(appt.endTime).format('MM-DD-YYYY hh:mm A');
+                this.appts.push(appt);
+                //this.numPages = data.totalPages;
+            } 
+        },
+
         // Clear search filters and reset pagination
         reset(){
+            this.appts = [];
+            this.users = [];
             this.chosenFilters = [];
+            this.chosenFiltersString = '';
             this.pageNumber = 0;
             this.pageDisplay = 1;
         }
