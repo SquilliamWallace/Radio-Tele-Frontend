@@ -16,6 +16,7 @@ import CompletedAppointments from './views/Appointment/CompletedAppointments'
 import FutureAppointments from './views/Appointment/FutureAppointments'
 import UpdateEmail from './views/User/UpdateEmail'
 import PublicAppointments from './views/Appointment/PublicAppointments'
+import SearchAppointments from './views/Appointment/SearchAppointments'
 
 Vue.use(Router)
 
@@ -105,6 +106,11 @@ const router = new Router({
       path: '/appointments/public',
       name: 'PublicAppointments',
       component: PublicAppointments
+    },
+    {
+      path: '/appointments/search',
+      name: 'SearchAppointments',
+      component: SearchAppointments
     }
   ]
 })

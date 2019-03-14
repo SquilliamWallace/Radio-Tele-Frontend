@@ -102,6 +102,9 @@ export default {
       },
       share: function(appointmentId, email) {
         return axios.post(this.namespace + "/" + appointmentId + "/viewers?email=" + email, {}, Headers.retrieveHeaders())
+      },
+      appointmentSearch: function(pageNumber, pageSize, value, search) {
+        return axios.get(this.namespace + "/search" + "?page=" + pageNumber + "&size=" + pageSize + "&value=" + value + "&search=" + search, Headers.retrieveHeaders());
       }
     },
     Log: {

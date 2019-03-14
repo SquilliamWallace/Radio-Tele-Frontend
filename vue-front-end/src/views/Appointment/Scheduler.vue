@@ -36,27 +36,10 @@
             
             
             <!-- 
-                Button to toggle boolean to display various modals:
-                
-                Change Telescope
-                Schedule Appointment
-                Search Appointment
+                Button to toggle boolean to display the choose telescope modal.
             -->
             <v-btn dark v-show="!this.tele" v-on:click="toggleChooseTelescope" ripple>Change Telescope</v-btn>
             <v-btn dark v-show="!this.tele" @click="createEvent">Schedule Appointment</v-btn>
-            <!--<v-btn dark v-show="!this.tele" @click="searchAppointments">Search Appointment</v-btn>-->
-            
-            
-            <!-- 
-                linked component: SearchAppointment.vue
-
-                v-model="openSearchModal"
-                    Boolean to check whether to display the modal or not
-
-                v-on:close-modal="openSearchModal = false"
-                    if the modal is closed, set openSearchModal boolean back to false
-                -->
-            <search-appointment v-model="openSearchModal" v-on:close-modal="openSearchModal = false"></search-appointment>
             
             
             <!-- 
@@ -120,7 +103,6 @@
                         if the modal is closed, set the boolean variable openRequestModal back to false
                 -->
                 <request-appointment :Appointment="requestApt" v-model="openRequestModal" v-on:close-modal="openRequestModal = false"></request-appointment>
-
             </v-layout>
         </v-app>
 
@@ -139,7 +121,6 @@ import NavigationBar from '../../components/utility/NavigationBar.vue'
 import router from '../../router'
 import moment from 'moment'
 import CreateAppointment from '../../components/appointment/Appointment.vue'
-import SearchAppointment from '../../components/appointment/SearchAppointment'
 import ApiDriver from '../../ApiDriver'
 import HttpResponse from '../../utils/HttpResponse'
 import CurrentUserValidation from '../../utils/CurrentUserValidation'
@@ -159,7 +140,6 @@ export default {
             requestApt: {},
             openCreateModal: false,
             openRequestModal: false,
-            openSearchModal: false,
             privateEventModal: false,
             tele: true,
             telescopeId: "",
@@ -211,8 +191,7 @@ export default {
         PrivateEvent,
         Loading,
         ChooseTelescope,
-        RequestAppointment,
-        SearchAppointment
+        RequestAppointment
     },
     // Functions used on this page, called by other functions or called by components loaded on page
     methods: {
@@ -417,14 +396,7 @@ export default {
                     })
             });
             
-        },
-        // This method simply opens the linked SearchAppointment component
-        searchAppointments: function(Obj) {
-            // Set openSearchModal to true so that SearchAppointment.vue component displays
-            //console.log(this.openSearchModal);
-            this.openSearchModal = true;
         }
-
     },
     mounted: function() {
         this.$store.commit("updateInfo", {page: "Scheduling Calendar", info: "Select a telescope with which you would like to schedule\n an appointment. Click the 'Schedule Appointment' button at\n the top of the page to schedule time with the currently\n selected telescope. The arrows in the top-left can be used to\n change between months/weeks/days, and the buttons in\n the top right will change the current view of the\n calendar."})
