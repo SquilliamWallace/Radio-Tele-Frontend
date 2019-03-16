@@ -90,7 +90,8 @@
         <v-alert slot="no-results" :value="true" color="error" icon="warning">
             Your search for "{{ search }}" found no results.
         </v-alert>  
-        </v-data-table>
+        </v-data-table> 
+        </v-card>
         <v-container>
             <div class="text-xs-center">
             <v-pagination
@@ -111,8 +112,7 @@
                 </v-flex>
             </v-layout>
         </div>
-        </v-container>  
-        </v-card>
+        </v-container> 
     </div>
  
 
@@ -128,6 +128,31 @@ export default {
     name: 'CelestialBodies',
     data(){
         return{
+            form: {
+                name: {
+                   value: "Test01",
+                   hasError: false
+               },
+               hours:{
+                   value: 4,
+                   hasError: false
+               },
+               minutes:{
+                   value: 11,
+                   hasError: false
+               },
+               seconds:{
+                   value: 1,
+                   hasError: false
+               },
+               declination:{
+                   value: 1,
+                   hasError: false
+               }
+            },
+            rules:{
+
+            },
             data: {
                
             },
@@ -138,9 +163,9 @@ export default {
             pageNumber: 0,
             pageDisplay: 1,
             numPages: 0,
-            selectedPageSize: "1",
+            selectedPageSize: "10",
             pageSizeList: [
-                '1', '2', '5', '10'
+                '10', '20', '50', '100'
             ],
 
             //table data
@@ -152,17 +177,42 @@ export default {
                 rowsPerPage: 100
             },
             headers: [
-                {text: 'Celestial Body', value: 'name'},
-          { text: 'Id', value: 'id' },
-          { text: 'Declination', value: 'declination' },
-          { text: 'Hours', value: 'hours' },
-          { text: 'Minutes', value: 'minutes' },
-          { text: 'Seconds', value: 'seconds' }
+            {text: 'Celestial Body', value: 'name'},
+            { text: 'Id', value: 'id' },
+            { text: 'Declination', value: 'declination' },
+            { text: 'Hours', value: 'hours' },
+            { text: 'Minutes', value: 'minutes' },
+            { text: 'Seconds', value: 'seconds' }
         ],
              
         }
     },
     methods: {
+        submit(){
+            let data = JSON.stringify({
+                name: this.form.name.value,
+                hours: this.form.hours.value,
+                minutes: this.form.minutes.value,
+                seconds: this.form.seconds.value,
+                declination: this.form.declination.value
+            })
+
+            ApiDriver.CelestialBodies.createCB(data).then((response) => {
+               HttpResponse.then(response, data => {
+                    //this.$store.commit("loading", false);
+                },(status, errors) => {}) 
+            }).catch((error) => {
+                 console.log(error)
+                this.$swal({
+                            title: '<span style="color:#f0ead6">Error!<span>',
+                            html: '<span style="color:#f0ead6">An error occurred when loading the celestial bodies list<span>',
+                            type: 'error',
+                            background: '#302f2f'
+                        }).then(response => {
+                            CurrentUserValidation.validateCurrentUser(this.$store);
+                        });
+            });
+        },
         getCelestialBodies(){
             this.$store.commit("loading", true);
              ApiDriver.CelestialBodies.getCBList(this.pageNumber,this.selectedPageSize).then((response) => {
@@ -172,7 +222,7 @@ export default {
                     this.$store.commit("loading", false);
                 },(status, errors) => {})
              }).catch((error) => {
-                 console.log(error)
+                 console.log("HELLO")
                 this.$swal({
                             title: '<span style="color:#f0ead6">Error!<span>',
                             html: '<span style="color:#f0ead6">An error occurred when loading the celestial bodies list<span>',
@@ -215,6 +265,9 @@ export default {
     mounted: function(){
         this.getCelestialBodies();
     },
+    components: {
+        Loading
+    }
 }
 </script>
 <style scoped>

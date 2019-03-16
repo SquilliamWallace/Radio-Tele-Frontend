@@ -8,6 +8,10 @@ export default {
       namespace: baseUrl + "celestial-bodies",
       getCBList: function(pageNumber, pageSize){
         return axios.get(this.namespace + "?page=" + pageNumber + "&size=" + pageSize, Headers.retrieveHeaders());
+      },
+      createCB: function(data){
+        
+        return axios.post(baseUrl + "celestial-body", data, Headers.retrieveHeaders())
       }
     },
     User: {
