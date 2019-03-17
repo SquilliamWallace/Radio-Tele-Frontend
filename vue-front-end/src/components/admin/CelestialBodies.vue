@@ -91,27 +91,29 @@
             Your search for "{{ search }}" found no results.
         </v-alert>  
         </v-data-table> 
+        <create-celestial-body v-bind="errorsList" v-on:sendValues="recieveValues($event)"></create-celestial-body>
         </v-card>
         <v-container>
             <div class="text-xs-center">
-            <v-pagination
-                circle
-                v-model="pageDisplay"
-                :length="numPages"
-                :total-visible="7"
-                @input="next"
-            ></v-pagination>
-            <v-layout justify-center>
-                <v-flex xs12 sm1>
-                    <v-select
-                    v-model="selectedPageSize"
-                    :items="pageSizeList"
-                    label="Items per page"
-                    v-on:change="this.pageSizeUpdate"
-                    ></v-select>
-                </v-flex>
-            </v-layout>
-        </div>
+                <v-pagination
+                    circle
+                    v-model="pageDisplay"
+                    :length="numPages"
+                    :total-visible="7"
+                    @input="next"
+                ></v-pagination>
+                <v-layout justify-center>
+                    <v-flex xs12 sm1>
+                        <v-select
+                        v-model="selectedPageSize"
+                        :items="pageSizeList"
+                        label="Items per page"
+                        v-on:change="this.pageSizeUpdate"
+                        ></v-select>
+                    </v-flex>
+                </v-layout>
+            </div>
+            
         </v-container> 
     </div>
  
@@ -124,32 +126,46 @@ import ApiDriver from '../../ApiDriver';
 import HttpResponse from '../../utils/HttpResponse';
 import CurrentUserValidation from  '../../utils/CurrentUserValidation';
 import Loading from "../../components/utility/Loading"
+import CreateCelestialBody from '../../components/CreateCelestialBody.vue'
 export default {
     name: 'CelestialBodies',
     data(){
         return{
             form: {
                 name: {
-                   value: "Test01",
-                   hasError: false
+                   value: "",
+                   hasError: false,
+                   errorMsg: ""
                },
                hours:{
-                   value: 4,
-                   hasError: false
+                   value: '',
+                   hasError: false,
+                   errorMsg: ""
                },
                minutes:{
-                   value: 11,
-                   hasError: false
+                   value: '',
+                   hasError: false,
+                   errorMsg: ""
                },
                seconds:{
-                   value: 1,
-                   hasError: false
+                   value: '',
+                   hasError: false,
+                   errorMsg: ""
                },
                declination:{
-                   value: 1,
-                   hasError: false
+                   value: '',
+                   hasError: false,
+                   errorMsg: "There is an error"
                }
             },
+            errorsList: {
+                name: "please worked",
+                hour: "",
+                min: "",
+                sec: "",
+                dec: ""
+            },
+
             rules:{
 
             },
@@ -188,7 +204,7 @@ export default {
         }
     },
     methods: {
-        submit(){
+        create(){
             let data = JSON.stringify({
                 name: this.form.name.value,
                 hours: this.form.hours.value,
@@ -200,9 +216,23 @@ export default {
             ApiDriver.CelestialBodies.createCB(data).then((response) => {
                HttpResponse.then(response, data => {
                     //this.$store.commit("loading", false);
-                },(status, errors) => {}) 
+                },(status, errors) => {
+                    if(errors.DECLINATION){
+                        this.form.declination.errorMsg = errors.DECLINATION
+                    }
+                    else if(errors.HOURS){
+                        this.form.hours.errorMsg = errors.HOURS
+                    }
+                    else if(errors.MINUTES){
+                        this.form.seconds.errorMsg = errors.MINUTES
+                    }
+                    else if(errors.SECONDS){
+                        this.form.seconds.errorMsg = errors.SECONDS
+                    }
+                    console.log(errors)
+                }) 
             }).catch((error) => {
-                 console.log(error)
+                console.log(error)
                 this.$swal({
                             title: '<span style="color:#f0ead6">Error!<span>',
                             html: '<span style="color:#f0ead6">An error occurred when loading the celestial bodies list<span>',
@@ -222,7 +252,7 @@ export default {
                     this.$store.commit("loading", false);
                 },(status, errors) => {})
              }).catch((error) => {
-                 console.log("HELLO")
+                 console.log(errors)
                 this.$swal({
                             title: '<span style="color:#f0ead6">Error!<span>',
                             html: '<span style="color:#f0ead6">An error occurred when loading the celestial bodies list<span>',
@@ -261,12 +291,25 @@ export default {
             this.bodies = []
             this.getCelestialBodies()
         },
+        recieveValues: function(vals){
+            this.form.name.value = vals.name
+            this.form.declination.value = vals.dec
+            this.form.hours.value = vals.hour
+            this.form.minutes.value = vals.min
+            this.form.seconds.value = vals.sec
+
+            console.log("this is the hour" + vals.hour)
+            
+            this.create()
+        }
     },
     mounted: function(){
         this.getCelestialBodies();
+        //this.create();
     },
     components: {
-        Loading
+        Loading,
+        CreateCelestialBody
     }
 }
 </script>

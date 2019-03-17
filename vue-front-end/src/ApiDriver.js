@@ -11,7 +11,7 @@ export default {
       },
       createCB: function(data){
         
-        return axios.post(baseUrl + "celestial-body", data, Headers.retrieveHeaders())
+        return axios.post(this.namespace, data, Headers.retrieveHeaders())
       }
     },
     User: {
