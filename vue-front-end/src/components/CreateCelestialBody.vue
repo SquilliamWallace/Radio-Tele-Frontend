@@ -1,10 +1,10 @@
 <template dark>
     <v-dialog v-model="advSearch" persistent max-width="600px">
-      <v-btn slot="activator" dark icon class="mt-3 " dark><v-icon>add_circle_outline</v-icon></v-btn>
+      <v-btn slot="activator" dark icon class="mt-3 " ><v-icon>add_circle_outline</v-icon></v-btn>
 
       <v-card>
         <v-container align-content-center>
-            <span  class="headline">{{ errorsList }}</span>
+            <span  class="headline">Add Celestial Body</span>
 
             <v-container fluid>
                     <v-text-field
@@ -45,6 +45,7 @@ import HttpResponse from '../utils/HttpResponse';
 import ApiDriver from "../ApiDriver";
 
 export default {
+    props:['formErrors'],
     name: 'CreateCelestialBody',
     data() {
         return {
@@ -61,12 +62,12 @@ export default {
         
     },
 
-    props:['errorsList'],
 
     methods: {
         sendValues:function(){
             
             this.$emit('sendValues',this.vals)
+            //console.log(this.formErrors)
         }
     }
 }

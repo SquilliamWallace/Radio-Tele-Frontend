@@ -91,7 +91,7 @@
             Your search for "{{ search }}" found no results.
         </v-alert>  
         </v-data-table> 
-        <create-celestial-body v-bind="errorsList" v-on:sendValues="recieveValues($event)"></create-celestial-body>
+        <create-celestial-body :formErrors="errorsList" v-on:sendValues="recieveValues($event)"></create-celestial-body>
         </v-card>
         <v-container>
             <div class="text-xs-center">
@@ -159,7 +159,7 @@ export default {
                }
             },
             errorsList: {
-                name: "please worked",
+                name: "please work",
                 hour: "",
                 min: "",
                 sec: "",
