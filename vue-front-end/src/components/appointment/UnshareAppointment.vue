@@ -2,11 +2,6 @@
     <v-dialog width="50%" dark :value="value" @input="$emit('input')">
         <v-card>
             <v-card-title>Select Users with which you would like to unshare your appointment</v-card-title>
-            <admin-user-management>
-                <template slot-scope="user">
-                    <v-checkbox @mousedown="populateUser(user)" v-model="selectedUsers[user.id]"></v-checkbox>
-                </template>
-            </admin-user-management>
             <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="green darken-1" @click="unshare">Unshare</v-btn>
