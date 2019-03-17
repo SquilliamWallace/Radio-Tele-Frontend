@@ -75,6 +75,11 @@
                 <v-btn color="primary" @click="shareAppointment">Share</v-btn>
             </div>
         </v-flex>
+        <v-flex v-if="($store.state.currentUserId === data.eventUserId.value | $store.state.isAdmin) && !$store.state.isLoading && !data.isPublic.value">
+            <div>
+                <v-btn color="primary" @click="unshareAppointment">Unshare</v-btn>
+            </div>
+        </v-flex>
         <v-flex v-if="($store.state.currentUserId === data.eventUserId.value | $store.state.isAdmin) && !complete && !$store.state.isLoading">
             <div>
                 <v-btn color="error" @click="cancelAppointment">Cancel</v-btn>
@@ -83,6 +88,7 @@
         </v-layout>
         <edit-appointment :appointmentObj="appointment" v-model="edit" @edited="edited"></edit-appointment>
         <share-appointment v-model="share"></share-appointment>
+        <unshare-appointment v-model="unshare"></unshare-appointment>
         <cancel-appointment v-model="cancel"> </cancel-appointment>
     </div>
     
@@ -96,6 +102,7 @@ import moment from 'moment'
 import CancelAppointment from "../../components/appointment/CancelAppointment.vue"
 import EditAppointment from "../../components/appointment/EditAppointment.vue"
 import ShareAppointment from "../../components/appointment/ShareAppointment"
+import UnshareAppointment from "../../components/appointment/UnshareAppointment"
 import Loading from "../../components/utility/Loading"
 import { throws } from 'assert';
 export default {
@@ -151,6 +158,7 @@ export default {
             eventUserId: 0,
             edit: false,
             share: false,
+            unshare: false,
             appointment: {
                 id: {
                     value: null,
@@ -193,6 +201,7 @@ export default {
         EditAppointment,
         CancelAppointment,
         ShareAppointment,
+        UnshareAppointment,
         Loading
     },
     methods: {
@@ -281,6 +290,9 @@ export default {
         },
         shareAppointment() {
             this.share = true
+        },
+        unshareAppointment() {
+            this.unshare = true
         }
     },
     mounted: function() {
