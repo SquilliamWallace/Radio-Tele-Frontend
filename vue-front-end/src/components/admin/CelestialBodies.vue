@@ -159,7 +159,7 @@ export default {
                }
             },
             errorsList: {
-                name: "please work",
+                name: "",
                 hour: "",
                 min: "",
                 sec: "",
@@ -217,18 +217,22 @@ export default {
                HttpResponse.then(response, data => {
                     //this.$store.commit("loading", false);
                 },(status, errors) => {
+                    //Populates error message for form, clears form if no errors are fixed
                     if(errors.DECLINATION){
-                        this.form.declination.errorMsg = errors.DECLINATION
-                    }
-                    else if(errors.HOURS){
-                        this.form.hours.errorMsg = errors.HOURS
-                    }
-                    else if(errors.MINUTES){
-                        this.form.seconds.errorMsg = errors.MINUTES
-                    }
-                    else if(errors.SECONDS){
-                        this.form.seconds.errorMsg = errors.SECONDS
-                    }
+                        this.errorsList.dec = errors.DECLINATION[0]
+                    } else{this.errorsList.dec = ""}
+                    if(errors.HOURS){
+                        this.errorsList.hour = errors.HOURS[0]
+                    } else{this.errorsList.hour = ""}
+                    if(errors.MINUTES){
+                        this.errorsList.min = errors.MINUTES[0]
+                    } else{this.errorsList.min = ""}
+                    if(errors.SECONDS){
+                        this.errorsList.sec = errors.SECONDS[0]
+                    } else{this.errorsList.sec = ""}
+                    if(errors.NAME){
+                        this.errorsList.name = errors.NAME[0]
+                    } else{this.errorsList.name = ""}
                     console.log(errors)
                 }) 
             }).catch((error) => {

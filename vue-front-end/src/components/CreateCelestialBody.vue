@@ -11,22 +11,27 @@
                         v-model="vals.name"
                         label="Name"
                     ></v-text-field>
+                    <span style="color:red;font-size:12px">{{formErrors.name}}</span>
                     <v-text-field
                         v-model="vals.dec"
                         label="Declination"
                     ></v-text-field>
+                    <span style="color:red;font-size:12px">{{formErrors.dec}}</span>
                     <v-text-field
                         v-model="vals.hour"
                         label="Hours"
                     ></v-text-field>
+                    <span style="color:red;font-size:12px">{{formErrors.hour}}</span>
                     <v-text-field
                         v-model="vals.min"
                         label="Minutes"
                     ></v-text-field>
+                    <span style="color:red;font-size:12px">{{formErrors.min}}</span>
                     <v-text-field
                         v-model="vals.sec"
                         label="Seconds"
                     ></v-text-field>
+                    <span style="color:red;font-size:12px">{{formErrors.sec}}</span>
                     <v-container>
                     <v-btn @click="advSearch=false" color="Red" dark >Cancel</v-btn>
                     <v-btn @click="sendValues()" color="Green" dark >Submit</v-btn>
@@ -67,7 +72,7 @@ export default {
         sendValues:function(){
             
             this.$emit('sendValues',this.vals)
-            //console.log(this.formErrors)
+            console.log(this.formErrors.dec)
         }
     }
 }
