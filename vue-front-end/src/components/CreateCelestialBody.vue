@@ -1,5 +1,5 @@
 <template dark>
-    <v-dialog v-model="advSearch" persistent max-width="600px">
+    <v-dialog v-model="celestialBodyForm" persistent max-width="600px">
       <v-btn slot="activator" dark icon class="mt-3 " ><v-icon>add_circle_outline</v-icon></v-btn>
 
       <v-card>
@@ -10,30 +10,48 @@
                     <v-text-field
                         v-model="vals.name"
                         label="Name"
+                        :error=formErrors.name.hasError
+                        :error-messages=formErrors.name.errorMessage
                     ></v-text-field>
-                    <span style="color:red;font-size:12px">{{formErrors.name}}</span>
+                    <!-- <span style="color:red;font-size:12px">{{formErrors.name}}</span> -->
                     <v-text-field
                         v-model="vals.dec"
                         label="Declination"
+                        type="number"
+                        :rules="[rules.numRequired]"
+                        :error=formErrors.declination.hasError
+                        :error-messages=formErrors.declination.errorMessage
                     ></v-text-field>
-                    <span style="color:red;font-size:12px">{{formErrors.dec}}</span>
+                    <!-- <span style="color:red;font-size:12px">{{formErrors.dec}}</span> -->
                     <v-text-field
                         v-model="vals.hour"
                         label="Hours"
+                        type="number"
+                        :rules="[rules.rightAscHours]"
+                        :error=formErrors.hours.hasError
+                        :error-messages=formErrors.hours.errorMessage
                     ></v-text-field>
-                    <span style="color:red;font-size:12px">{{formErrors.hour}}</span>
+                    <!-- <span style="color:red;font-size:12px">{{formErrors.hour}}</span> -->
                     <v-text-field
                         v-model="vals.min"
                         label="Minutes"
+                        type="number"
+                        :rules="[rules.rightAscMinutes]"
+                        :error=formErrors.minutes.hasError
+                        :error-messages=formErrors.minutes.errorMessage
                     ></v-text-field>
-                    <span style="color:red;font-size:12px">{{formErrors.min}}</span>
+                    <!-- <span style="color:red;font-size:12px">{{formErrors.min}}</span> -->
                     <v-text-field
                         v-model="vals.sec"
                         label="Seconds"
+                        type="number"
+                        :rules="[rules.rightAscSeconds]"
+                        :error=formErrors.seconds.hasError
+                        :error-messages=formErrors.seconds.errorMessage
                     ></v-text-field>
-                    <span style="color:red;font-size:12px">{{formErrors.sec}}</span>
+                    <!-- <span style="color:red;font-size:12px">{{formErrors.sec}}</span> -->
                     <v-container>
-                    <v-btn @click="advSearch=false" color="Red" dark >Cancel</v-btn>
+                    <v-btn @click="cancel" color="Red" dark >Cancel</v-btn>
                     <v-btn @click="sendValues()" color="Green" dark >Submit</v-btn>
                     </v-container>
                 </v-container>
@@ -48,32 +66,74 @@ import { error } from 'util';
 import router from '../router';
 import HttpResponse from '../utils/HttpResponse';
 import ApiDriver from "../ApiDriver";
+import CustomErrorHandler from "../utils/CustomErrorHandler";
+
 
 export default {
-    props:['formErrors'],
+    props:['formErrors','success'],
     name: 'CreateCelestialBody',
     data() {
         return {
-            advSearch: false, 
+            celestialBodyForm: false, 
             vals:[
                 {name: ""},
                 {hour: ""},
                 {min: ""},
                 {sec: ""},
                 {dec: ""},
-            ]
+            ],
+            rules:{
+                rightAscHours: val => (val && val.toString().length > 0 && val < 24 && val >= 0) || 'Must be between 0 and 23 hours',
+                rightAscMinutes: val => (val && val.toString().length > 0 && val < 60 && val >= 0) || 'Must be between 0 and 59 minutes',
+                rightAscSeconds: val => (val && val.toString().length > 0 && val < 60 && val >= 0) || 'Must be between 0 and 59 seconds',
+                numRequired: val => (val && val.toString().length > 0 && val <=90 && val >= -90) || 'Must be between 90 and -90'
+            },
             
         }
         
     },
-
-
     methods: {
         sendValues:function(){
-            
             this.$emit('sendValues',this.vals)
-            console.log(this.formErrors.dec)
-        }
+            this.closeForm()
+        },
+        closeForm(){
+            if(this.success === true){
+                this.celestialBodyForm = false
+            }
+        },
+        resetForm:function(){
+            this.$emit('resetForm')
+        },
+        clearErrors() {
+          // Clear all error fields
+          CustomErrorHandler.clearError(this.formErrors.name);
+          CustomErrorHandler.clearError(this.formErrors.declination);
+          CustomErrorHandler.clearError(this.formErrors.hours);
+          CustomErrorHandler.clearError(this.formErrors.minutes);
+          CustomErrorHandler.clearError(this.formErrors.seconds);
+      },
+      cancel() {
+          this.formErrors.name.value = ""
+          this.formErrors.name.hasError = false
+
+          this.formErrors.declination.value = ""
+          this.formErrors.declination.hasError = false
+
+          this.formErrors.hours.value = ""
+          this.formErrors.hours.hasError = false
+
+          this.formErrors.minutes.value = ""
+          this.formErrors.minutes.hasError = false
+
+          this.formErrors.seconds.value = ""
+          this.formErrors.seconds.hasError = false
+
+
+          this.celestialBodyForm = false
+          this.resetForm()
+          this.clearErrors()
+      }
     }
 }
 </script>

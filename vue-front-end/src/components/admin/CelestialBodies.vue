@@ -72,7 +72,7 @@
             </tr>
         </template>
         <template slot="items" slot-scope="props">
-            <tr>
+            <tr @click="updateForm(props.item.name, props.item.id, props.item.declination, props.item.hours, props.item.minutes, props.item.seconds)">
             <td class="text-xs-left">{{ props.item.name }}</td>
             <td class="text-xs-left">{{ props.item.id }}</td>
             <td class="text-xs-left">{{ props.item.declination }}</td>
@@ -83,15 +83,12 @@
         </template>
         <template slot="footer">
             
-                
-            
-            
         </template>
         <v-alert slot="no-results" :value="true" color="error" icon="warning">
             Your search for "{{ search }}" found no results.
         </v-alert>  
         </v-data-table> 
-        <create-celestial-body :formErrors="errorsList" v-on:sendValues="recieveValues($event)"></create-celestial-body>
+        <create-celestial-body :success="success" :formErrors="form" v-on:resetForm="resetForm($event)" v-on:sendValues="recieveValues($event)"></create-celestial-body>
         </v-card>
         <v-container>
             <div class="text-xs-center">
@@ -113,7 +110,6 @@
                     </v-flex>
                 </v-layout>
             </div>
-            
         </v-container> 
     </div>
  
@@ -127,6 +123,7 @@ import HttpResponse from '../../utils/HttpResponse';
 import CurrentUserValidation from  '../../utils/CurrentUserValidation';
 import Loading from "../../components/utility/Loading"
 import CreateCelestialBody from '../../components/CreateCelestialBody.vue'
+import CustomErrorHandler from '../../utils/CustomErrorHandler.js';
 export default {
     name: 'CelestialBodies',
     data(){
@@ -155,7 +152,7 @@ export default {
                declination:{
                    value: '',
                    hasError: false,
-                   errorMsg: "There is an error"
+                   errorMsg: ""
                }
             },
             errorsList: {
@@ -165,10 +162,8 @@ export default {
                 sec: "",
                 dec: ""
             },
-
-            rules:{
-
-            },
+            success: false,
+            CBForm: false,
             data: {
                
             },
@@ -214,26 +209,47 @@ export default {
             })
 
             ApiDriver.CelestialBodies.createCB(data).then((response) => {
+                let that = this;
                HttpResponse.then(response, data => {
                     //this.$store.commit("loading", false);
+                    if(data.statusCode === "200"){
+                        this.success = true
+                        console.log("Success booolean: ", this.success)
+                    }
                 },(status, errors) => {
                     //Populates error message for form, clears form if no errors are fixed
                     if(errors.DECLINATION){
-                        this.errorsList.dec = errors.DECLINATION[0]
-                    } else{this.errorsList.dec = ""}
+                        this.form.declination.hasError = true
+                        for(var index in errors.DECLINATION){
+                            this.form.declination.errorMsg = this.form.declination.errorMsg + errors.DECLINATION[index] + "\n"
+                        }
+                    } else{this.form.declination.errorMsg = ""}
                     if(errors.HOURS){
-                        this.errorsList.hour = errors.HOURS[0]
-                    } else{this.errorsList.hour = ""}
+                        this.form.hours.hasError = true
+                        for(var index in errors.HOURS){
+                            this.form.hours.errorMsg = this.form.hours.errorMsg + errors.HOURS[index] + "\n"
+                        }
+                    } else{this.form.hours.errorMsg = ""}
                     if(errors.MINUTES){
-                        this.errorsList.min = errors.MINUTES[0]
-                    } else{this.errorsList.min = ""}
+                        this.form.minutes.hasError = true
+                        for(var index in errors.MINUTES){
+                            this.form.minutes.errorMsg = this.form.minutes.errorMsg + errors.MINUTES[index] + "\n"
+                        }
+                    } else{this.form.minutes.errorMsg = ""}
                     if(errors.SECONDS){
-                        this.errorsList.sec = errors.SECONDS[0]
-                    } else{this.errorsList.sec = ""}
+                        this.form.seconds.hasError = true
+                        for(var index in errors.SECONDS){
+                            this.form.seconds.errorMsg = this.form.seconds.errorMsg + errors.SECONDS[index] + "\n"
+                        }
+                    } else{this.form.seconds.errorMsg = ""}
                     if(errors.NAME){
-                        this.errorsList.name = errors.NAME[0]
-                    } else{this.errorsList.name = ""}
+                        this.form.name.hasError = true
+                        for(var index in errors.NAME){
+                            this.form.name.errorMsg = this.form.name.errorMsg + errors.NAME[index] + "\n"
+                        }
+                    } else{this.form.name.errorMsg = ""}
                     console.log(errors)
+                    that.handleErrors(errors)
                 }) 
             }).catch((error) => {
                 console.log(error)
@@ -284,6 +300,24 @@ export default {
             this.numPages = data.totalPages;
             //console.log(this.array)   
         },
+        handleErrors(errors) {
+          // Populate the field error messages
+          for (var field in errors) {
+              let message = errors[field][0];
+
+              if (field === "NAME") {
+                  CustomErrorHandler.populateError(this.form.name, message);
+              } else if (field === "HOURS") {
+                  CustomErrorHandler.populateError(this.form.hours, message);
+              } else if (field === "MINUTES") {
+                  CustomErrorHandler.populateError(this.form.minutes, message);
+              } else if (field === "SECONDS") {
+                  CustomErrorHandler.populateError(this.form.seconds, message);
+              }else if (field === "DECLINATION") {
+                  CustomErrorHandler.populateError(this.form.declination, message);
+              }  
+          }
+      },
         next(page) {
             // Handle retrieving a new page of information
             this.pageNumber = page - 1;
@@ -302,10 +336,28 @@ export default {
             this.form.minutes.value = vals.min
             this.form.seconds.value = vals.sec
 
-            console.log("this is the hour" + vals.hour)
             
             this.create()
-        }
+        },
+        updateForm(name,id,dec,hours,min,sec,){
+            console.log(name)
+        },
+        resetForm: function(){
+            this.form.name.value = ""
+            this.form.name.hasError = false
+
+            this.form.declination.value = ""
+            this.form.declination.hasError = false
+
+            this.form.hours.value = ""
+            this.form.hours.hasError = false
+
+            this.form.minutes.value = ""
+            this.form.minutes.hasError = false
+
+            this.form.seconds.value = ""
+            this.form.seconds.hasError = false
+        },
     },
     mounted: function(){
         this.getCelestialBodies();
