@@ -75,6 +75,11 @@
                 <v-btn color="primary" @click="shareAppointment">Share</v-btn>
             </div>
         </v-flex>
+        <v-flex v-if="($store.state.currentUserId === data.eventUserId.value | $store.state.isAdmin) && !$store.state.isLoading && !data.isPublic.value">
+            <div>
+                <v-btn color="primary" @click="unshareAppointment">Unshare</v-btn>
+            </div>
+        </v-flex>
         <v-flex v-if="($store.state.currentUserId === data.eventUserId.value | $store.state.isAdmin) && !complete && !$store.state.isLoading">
             <div>
                 <v-btn color="error" @click="cancelAppointment">Cancel</v-btn>
@@ -83,6 +88,7 @@
         </v-layout>
         <edit-appointment :appointmentObj="appointment" v-model="edit" @edited="edited"></edit-appointment>
         <share-appointment v-model="share"></share-appointment>
+        <unshare-appointment v-model="unshare"></unshare-appointment>
         <cancel-appointment v-model="cancel"> </cancel-appointment>
     </div>
     
@@ -96,6 +102,7 @@ import moment from 'moment'
 import CancelAppointment from "../../components/appointment/CancelAppointment.vue"
 import EditAppointment from "../../components/appointment/EditAppointment.vue"
 import ShareAppointment from "../../components/appointment/ShareAppointment"
+import UnshareAppointment from "../../components/appointment/UnshareAppointment"
 import Loading from "../../components/utility/Loading"
 import { throws } from 'assert';
 export default {
@@ -103,6 +110,14 @@ export default {
     name: "AppointmentView",
     data() {
         return {
+            startArray: [],
+            endArray: [],
+            startDateArray: [],
+            endDateArray: [],
+            startTimeArray: [],
+            endTimeArray: [],
+            startPmHour: 0,
+            endPmHour: 0,
             data: {
                 id: {
                     value: null
@@ -151,6 +166,7 @@ export default {
             eventUserId: 0,
             edit: false,
             share: false,
+            unshare: false,
             appointment: {
                 id: {
                     value: null,
@@ -167,6 +183,18 @@ export default {
                 end: {
                     value: null,
                     hasError: false
+                },
+                startTime: {
+                    value: null
+                },
+                startDate: {
+                    value: null
+                },
+                endTime: {
+                    value: null
+                },
+                endDate: {
+                    value: null
                 },
                 telescopeId: {
                     value: null,
@@ -193,6 +221,7 @@ export default {
         EditAppointment,
         CancelAppointment,
         ShareAppointment,
+        UnshareAppointment,
         Loading
     },
     methods: {
@@ -220,7 +249,7 @@ export default {
                     }
                 })
             }).catch((error) => {
-                // Handle an errorneous API call
+                // Handle an erroneous API call
                 let message = "An error occurred when loading this observation";
                 HttpResponse.generalError(this, message, true);
             });
@@ -263,6 +292,33 @@ export default {
             this.appointment.privacy.value = !this.data.isPublic.value
             this.appointment.start.value = this.data.startTime.value
             this.appointment.end.value = this.data.endTime.value
+            // I apologize for this, it's gross but i had no other choice, the v-time and date pickers are very particular about the values they can model to
+            this.startArray = this.appointment.start.value.split(" ")
+            this.endArray = this.appointment.end.value.split(" ")
+            this.startDateArray = this.startArray[0].split("-")
+            this.appointment.startDate.value = this.startDateArray[2] + "-" + this.startDateArray[0] + "-" + this.startDateArray[1]
+            this.startTimeArray = this.startArray[1].split(":")
+            if(this.startArray[2] == "PM" && this.startTimeArray[0] !== "12" && !this.startTimeArray[1] !== "00"){
+                this.startPmHour = parseInt(this.startTimeArray[0], 10) +12;
+                this.startTimeArray[0] = this.startPmHour.toString();
+            }
+            else if(this.startArray[2] == "AM" && this.startTimeArray[0] == "12" && this.startTimeArray[1] == "00"){
+                this.startPmHour = parseInt(this.startTimeArray[0], 10) - 12;
+                this.startTimeArray[0] = this.startPmHour.toString() + "0";
+            }
+            this.appointment.startTime.value= this.startTimeArray[0] + ":" + this.startTimeArray[1]
+            this.endDateArray = this.startArray[0].split("-")
+            this.appointment.endDate.value = this.endDateArray[2] + "-" + this.endDateArray[0] + "-" + this.endDateArray[1]
+            this.endTimeArray = this.endArray[1].split(":")
+            if(this.endArray[2] == "PM" && this.endTimeArray[0] !== "12" && !this.endTimeArray[1] !== "00"){
+                this.endPmHour = parseInt(this.endTimeArray[0], 10) +12;
+                this.endTimeArray[0] = this.endPmHour;
+            }
+            else if(this.endArray[2] == "AM" && this.endTimeArray[0] == "12" && this.endTimeArray[1] == "00"){
+                this.endPmHour = parseInt(this.endTimeArray[0], 10) - 12;
+                this.endTimeArray[0] = this.endPmHour.toString() + "0";
+            }
+            this.appointment.endTime.value= this.endTimeArray[0] + ":" + this.endTimeArray[1]
             this.appointment.telescopeId.value = this.data.telescopeId.value
             this.appointment.rightAscension.hours = this.data.rightAscension.hours
             this.appointment.rightAscension.minutes = this.data.rightAscension.minutes
@@ -281,6 +337,9 @@ export default {
         },
         shareAppointment() {
             this.share = true
+        },
+        unshareAppointment() {
+            this.unshare = true
         }
     },
     mounted: function() {

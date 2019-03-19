@@ -53,10 +53,10 @@
                                     <v-select
                                     v-model="controlValue"
                                     :items="controls"
-                                    label="Options"
+                                    label="Navigation"
                                     ></v-select>
                                 </v-flex>
-                                <v-btn color="primary darken-1" @click="controlParser(controlValue)">Action</v-btn>
+                                <v-btn color="primary darken-1" @click="controlParser(controlValue)">Go</v-btn>
                                 </v-layout>
                             </v-container>
                             

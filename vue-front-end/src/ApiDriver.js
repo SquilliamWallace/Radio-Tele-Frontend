@@ -105,6 +105,12 @@ export default {
       },
       appointmentSearch: function(pageNumber, pageSize, value, search) {
         return axios.get(this.namespace + "/search" + "?page=" + pageNumber + "&size=" + pageSize + "&value=" + value + "&search=" + search, Headers.retrieveHeaders());
+      },
+      unshare: function(appointmentId, userId) {
+        return axios.delete(this.namespace + "/" + appointmentId + "/viewers?userId=" + userId, Headers.retrieveHeaders())
+      },
+      sharedUsers: function(appointmentId, page, size) {
+        return axios.get(this.namespace + "/" + appointmentId + "/viewers?page=" + page + "&size=" + size, Headers.retrieveHeaders())
       }
     },
     Log: {

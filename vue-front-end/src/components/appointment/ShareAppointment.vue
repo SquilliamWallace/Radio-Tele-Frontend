@@ -43,6 +43,7 @@ export default {
                         type: 'success',
                         background: '#302f2f'
                     });
+                    this.$emit('input');
                 }, (status, errors) => {
                     if(parseInt(status)==403){
                         HttpResponse.accessDenied(this)
@@ -57,6 +58,7 @@ export default {
                 })
             })
             }
+            this.$emit('input')
         },
         toggleModal() {
             this.$emit('input');
