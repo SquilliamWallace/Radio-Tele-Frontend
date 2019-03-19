@@ -88,6 +88,7 @@ export default {
                 rightAscSeconds: val => (val && val.toString().length > 0 && val < 60 && val >= 0) || 'Must be between 0 and 59 seconds',
                 numRequired: val => (val && val.toString().length > 0 && val <=90 && val >= -90) || 'Must be between 90 and -90'
             },
+            successFlag: this.success
             
         }
         
@@ -95,44 +96,27 @@ export default {
     methods: {
         sendValues:function(){
             this.$emit('sendValues',this.vals)
-            this.closeForm()
+            
         },
         closeForm(){
             if(this.success === true){
-                this.celestialBodyForm = false
+                
             }
         },
         resetForm:function(){
             this.$emit('resetForm')
         },
-        clearErrors() {
-          // Clear all error fields
-          CustomErrorHandler.clearError(this.formErrors.name);
-          CustomErrorHandler.clearError(this.formErrors.declination);
-          CustomErrorHandler.clearError(this.formErrors.hours);
-          CustomErrorHandler.clearError(this.formErrors.minutes);
-          CustomErrorHandler.clearError(this.formErrors.seconds);
-      },
       cancel() {
-          this.formErrors.name.value = ""
-          this.formErrors.name.hasError = false
-
-          this.formErrors.declination.value = ""
-          this.formErrors.declination.hasError = false
-
-          this.formErrors.hours.value = ""
-          this.formErrors.hours.hasError = false
-
-          this.formErrors.minutes.value = ""
-          this.formErrors.minutes.hasError = false
-
-          this.formErrors.seconds.value = ""
-          this.formErrors.seconds.hasError = false
-
-
+          
           this.celestialBodyForm = false
+          
+          this.vals.name = ""
+          this.vals.hour = ""
+          this.vals.min = ""
+          this.vals.sec = ""
+          this.vals.dec = ""
+
           this.resetForm()
-          this.clearErrors()
       }
     }
 }

@@ -162,14 +162,11 @@ export default {
                 sec: "",
                 dec: ""
             },
-            success: false,
-            CBForm: false,
+            success: true,
             data: {
                
             },
             bodies: [],
-            array:[],
-
             //pagination variables
             pageNumber: 0,
             pageDisplay: 1,
@@ -213,8 +210,7 @@ export default {
                HttpResponse.then(response, data => {
                     //this.$store.commit("loading", false);
                     if(data.statusCode === "200"){
-                        this.success = true
-                        console.log("Success booolean: ", this.success)
+                        success = true
                     }
                 },(status, errors) => {
                     //Populates error message for form, clears form if no errors are fixed
@@ -262,6 +258,7 @@ export default {
                             CurrentUserValidation.validateCurrentUser(this.$store);
                         });
             });
+            this.success = false
         },
         getCelestialBodies(){
             this.$store.commit("loading", true);
@@ -288,14 +285,6 @@ export default {
             for (var index in data.content) {
                 let body = data.content[index];
                 this.bodies.push(body);
-                this.array.push(
-                    {name: data.content[index].name, items:[ 
-                        {val: data.content[index].id, title:'Id'}, 
-                        {val: data.content[index].declination, title:'Declination'}, 
-                        {val: data.content[index].hours, title:'Hours'}, 
-                        {val: data.content[index].minutes, title:'Minutes'}, 
-                        {val: data.content[index].seconds, title:'Seconds'} ]})
-                //this.numPages = data.totalPages;
             }
             this.numPages = data.totalPages;
             //console.log(this.array)   
@@ -317,6 +306,14 @@ export default {
                   CustomErrorHandler.populateError(this.form.declination, message);
               }  
           }
+      },
+      clearErrors() {
+          // Clear all error fields
+          CustomErrorHandler.clearError(this.form.name);
+          CustomErrorHandler.clearError(this.form.declination);
+          CustomErrorHandler.clearError(this.form.hours);
+          CustomErrorHandler.clearError(this.form.minutes);
+          CustomErrorHandler.clearError(this.form.seconds);
       },
         next(page) {
             // Handle retrieving a new page of information
@@ -343,9 +340,12 @@ export default {
             console.log(name)
         },
         resetForm: function(){
+
+            this.clearErrors()
+
             this.form.name.value = ""
             this.form.name.hasError = false
-
+            console.log("this is the name after clear: " + this.form.name.value)
             this.form.declination.value = ""
             this.form.declination.hasError = false
 
