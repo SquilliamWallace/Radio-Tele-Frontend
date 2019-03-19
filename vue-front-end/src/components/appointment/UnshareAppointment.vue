@@ -16,28 +16,28 @@
                     <v-checkbox @mousedown="populateUser(user)" v-model="selectedUsers[user.id]"></v-checkbox>
                 </v-list-tile>
             </v-list>
+            <div v-if="numPages>1 && !$store.state.isLoading" class="text-xs-center">
+                <v-pagination
+                circle
+                v-model="pageDisplay"
+                :length="numPages"
+                @input="next"></v-pagination>
+            </div>
+            <v-layout v-if="!$store.state.isLoading" justify-center>
+                <v-flex xs12 sm1>
+                    <v-select
+                    v-model="selectedPageSize"
+                    :items="pageSizes"
+                    label="Items per page"
+                    v-on:change="this.pageSizeUpdate"
+                    ></v-select>
+                </v-flex>
+            </v-layout>
             <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="green darken-1" @click="unshare">Unshare</v-btn>
                 <v-btn color="red darken-1" @click.native="toggleModal">Cancel</v-btn>
             </v-card-actions>
-        <div v-if="numPages>1 && !$store.state.isLoading" class="text-xs-center">
-            <v-pagination
-            circle
-            v-model="pageDisplay"
-            :length="numPages"
-            @input="next"></v-pagination>
-        </div>
-        <v-layout v-if="!$store.state.isLoading" justify-center>
-            <v-flex xs12 sm1>
-                <v-select
-                v-model="selectedPageSize"
-                :items="pageSizes"
-                label="Items per page"
-                v-on:change="this.pageSizeUpdate"
-                ></v-select>
-            </v-flex>
-        </v-layout>
         </v-card>
     </v-dialog>
 </template>
@@ -63,7 +63,7 @@ export default {
             numPages: 0,
             page: 0,
             shownPage: 1,
-            selectedPageSize: 10,
+            selectedPageSize: "10",
             pageSizes: [
                 '10', '25', '50', '100'
             ]
