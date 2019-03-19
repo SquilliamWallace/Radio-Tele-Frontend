@@ -58,6 +58,7 @@ export default {
                 })
             })
             }
+            this.$emit('input')
         },
         toggleModal() {
             this.$emit('input');

@@ -103,8 +103,8 @@ export default {
       share: function(appointmentId, email) {
         return axios.post(this.namespace + "/" + appointmentId + "/viewers?email=" + email, {}, Headers.retrieveHeaders())
       },
-      unshare: function(appointmentId, email) {
-        return axios.delete(this.namespace + "/" + appointmentId + "/viewers?email=" + email, {}, Headers.retrieveHeaders())
+      unshare: function(appointmentId, userId) {
+        return axios.delete(this.namespace + "/" + appointmentId + "/viewers?userId=" + userId, Headers.retrieveHeaders())
       },
       sharedUsers: function(appointmentId, page, size) {
         return axios.get(this.namespace + "/" + appointmentId + "/viewers?page=" + page + "&size=" + size, Headers.retrieveHeaders())
