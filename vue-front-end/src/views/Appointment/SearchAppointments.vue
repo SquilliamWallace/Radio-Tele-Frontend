@@ -209,7 +209,7 @@ export default {
                 this.chosenFiltersString = "user" + this.chosenFiltersString;
 
                 // Make sure that userFullName can only be selected by itself
-                if(this.chosenFiltersString.includes(userFullName) && this.chosenFiltersString > 12) {
+                if(this.chosenFiltersString.includes("FullName") && this.chosenFiltersString.length > 12) {
                     this.chosenFiltersString = "userFullName";
                 }
             }
@@ -219,8 +219,6 @@ export default {
 
             this.filteredSet = true
             this.advancedSearch(0)
-
-            console.log(this.chosenFiltersString);
         },
 
         // Populate this.appts array with data 
