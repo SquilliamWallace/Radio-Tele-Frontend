@@ -14,7 +14,7 @@
         <!-- 
             Display the name of the page at the top of the page
         -->
-        <h1 justify-center>Search Appointments</h1>
+        <h1 justify-center>{{this.name}}</h1>
         
         <v-layout row >
             <!-- 
@@ -67,13 +67,55 @@
                         Appointment #{{ appt.id }}: {{appt.userFirstName}} {{appt.userLastName}}
                     </v-list-tile-title>
                     <v-list-tile-sub-title>
-                        Start Time: {{ appt.startTime }}   End Time: {{ appt.endTime }}
+                        Start Time: {{ appt.startTime }} 
+                        End Time: {{ appt.endTime }}
+                        <v-spacer></v-spacer>    
                     </v-list-tile-sub-title>
                 </v-list-tile-content>
-                <v-spacer></v-spacer>
             </v-list-tile>
         </v-list>
     </v-card>
+    
+    <!-- 
+        Beginning of Pagination
+
+        Conditionally rendered if $store.state.isLoading = false
+
+        Top Block represents the pagination numbers themselves: {
+            circle: circular buttons,
+            v-model="pageDisplay": 2-way data binded to 'pageDisplay'
+            :length="numPages": Number of pages = 'numPages'
+            @input="next": Clicking on a page number will call the next() method
+        }
+
+        Bottom Block represents how many items are displayed per page: {
+            v-model="selectedPageSize": 2 way data binded to 'selectedPageSize',
+            :items="pageSizeList": list items are retrieved from 'pageSizeList'
+            label="Items per page": Sets the text over the drop-down box to "Items per page",
+            v-on:change="this.pageSizeUpdate": on selecting a new page size, call pageSizeUpdate()
+            :total-visible
+        }
+    -->
+        <div v-if="!$store.state.isLoading" class="text-xs-center">
+            <v-pagination
+            circle
+            v-model="pageDisplay"
+            :length="numPages"
+            @input="next"
+            :total-visible="15"
+            ></v-pagination>
+        </div>
+
+        <v-layout v-if="!$store.state.isLoading" justify-center>
+            <v-flex xs12 sm1>
+                <v-select
+                v-model="selectedPageSize"
+                :items="pageSizeList"
+                label="Items per page"
+                v-on:change="this.pageSizeUpdate"
+                ></v-select>
+            </v-flex>
+        </v-layout>
 </div>
 </template>
 
@@ -87,10 +129,11 @@ import moment from 'moment'
 
 export default {
     data() {
-        name: "Search Appointment"
         return {
-            // Empty arrays to fill with our search results
-            users: [],
+            // Name to render at the top of the page
+            name: "Search Appointments",
+
+            // Empty array to fill with our search results
             appts: [],
             
             // Search Variables 
@@ -123,14 +166,10 @@ export default {
     methods: {
         advancedSearch(pageNumber){
             
-            // Reset user and appointment arrays 
-            this.users = [];     
+            // Reset Appointment array   
             this.appts = [];
-
-            // Populate users array first
-            //this.getUsers();
             
-            console.log(this.searchParam, this.chosenFiltersString);
+            //console.log(this.searchParam, this.chosenFiltersString);
 
             ApiDriver.Appointment.appointmentSearch(pageNumber, this.selectedPageSize, this.searchParam, this.chosenFiltersString).then((response) => {
                 HttpResponse.then(response, data => {
@@ -149,28 +188,6 @@ export default {
             });
         },
 
-        // Retrieve the list of users from the back-end by calling populateData, and store it in this.users
-        getUsers() {
-            this.filteredSet = false
-            this.users = []
-            this.$store.commit("loading", true);
-            ApiDriver.User.allUsers(this.pageNumber,this.selectedPageSize).then((response) => {
-                HttpResponse.then(response, data => {
-                    this.populateUsers(data.data)
-                    this.$store.commit("loading", false);
-                }, (status, errors) => {})
-            }).catch((error) => {
-                this.$swal({
-                            title: '<span style="color:#f0ead6">Error!<span>',
-                            html: '<span style="color:#f0ead6">An error occurred when loading the list of users<span>',
-                            type: 'error',
-                            background: '#302f2f'
-                        }).then(response => {
-                            CurrentUserValidation.validateCurrentUser(this.$store);
-                        });
-            });
-        },
-
         // Remove white-space from input, and convert search input to camel-case (likeThisYouGuys)
         formatSearchParams() {
             // Reset our filter string to prevent errors with subsequent calls
@@ -178,6 +195,8 @@ export default {
 
             for(var i in this.chosenFilters){
                 this.chosenFilters[i] = this.chosenFilters[i].replace(" ","")
+
+                // Add a space and user to the appended chosenFilterString
                 if (i !== 0) {
                     this.chosenFiltersString = this.chosenFiltersString + "%2B" + this.chosenFilters[i]
                 }
@@ -188,6 +207,11 @@ export default {
             // Add user to the beginning of the filter to satisfy back-end requirements
             if(this.chosenFiltersString.length != 0) {
                 this.chosenFiltersString = "user" + this.chosenFiltersString;
+
+                // Make sure that userFullName can only be selected by itself
+                if(this.chosenFiltersString.includes(userFullName) && this.chosenFiltersString > 12) {
+                    this.chosenFiltersString = "userFullName";
+                }
             }
 
             // Reset our filters array to prevent errors with subsequent calls
@@ -195,43 +219,53 @@ export default {
 
             this.filteredSet = true
             this.advancedSearch(0)
-        },
 
-        // Populate this.users array with data 
-        populateUsers(data){
-            for (var index in data.content) {
-                //console.log(data.content[index]);
-                let user = data.content[index];
-                this.users.push(user);
-                //this.numPages = data.totalPages;
-            } 
+            console.log(this.chosenFiltersString);
         },
 
         // Populate this.appts array with data 
         populateAppts(data){
             for (var index in data.content) {
-                console.log(data.content[index]);
+                //console.log(data.content[index]);
                 let appt = data.content[index];
                 
                 appt.startTime = moment(appt.startTime).format('MM-DD-YYYY hh:mm A');
                 appt.endTime = moment(appt.endTime).format('MM-DD-YYYY hh:mm A');
                 this.appts.push(appt);
-                //this.numPages = data.totalPages;
+                this.numPages = data.totalPages;
             } 
         },
 
         // Clear search filters and reset pagination
         reset(){
             this.appts = [];
-            this.users = [];
             this.chosenFilters = [];
             this.chosenFiltersString = '';
             this.pageNumber = 0;
             this.pageDisplay = 1;
-        }
+        },
+        
+        // Handle retrieving a new page of information
+        next(page) {
+            this.pageNumber = page - 1;
+            this.pageDisplay = page;
+            this.appts = [];
+            this.unfiltered = [];
+            this.filtered = [];
+            this.advancedSearch(this.pageNumber);
+        },
+
+        // Update the number of items per page
+         pageSizeUpdate(){
+            this.appts = [];
+            this.unfiltered = [];
+            this.filtered = [];
+            this.advancedSearch(this.pageNumber);
+        },        
     },
+
     mounted: function() {
-        this.getUsers();
+
     }
 }
 </script>
