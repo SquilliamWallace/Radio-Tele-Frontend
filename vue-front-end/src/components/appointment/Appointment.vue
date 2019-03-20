@@ -82,6 +82,8 @@
                         :error-messages= form.rightAscension.errorMessage
                             This displays any text inside form.rightAscension.errorMessage if :error=true
                             errorMessage is handled on backend and sent back to front end. 
+                        onkeypress='return event.charCode >= 48 && event.charCode <= 57'
+                            Only allow numbers to be inputted into the form (0 through 9)
                     -->
                     <v-flex xs12 sm4>
                          <v-text-field
@@ -90,6 +92,7 @@
                          color="blue darken-2"
                          :error=form.rightAscension.hasError
                          :error-messages=form.rightAscension.errorMessage
+                         onkeypress='return event.charCode >= 48 && event.charCode <= 57'
                          label="Right Ascension Hours"
                          type="number"
                          class="number"
@@ -106,6 +109,7 @@
                          color="blue darken-2"
                          :error=form.rightAscension.hasError
                          :error-messages=form.rightAscension.errorMessage
+                         onkeypress='return event.charCode >= 48 && event.charCode <= 57'
                          label="Right Ascension Minutes"
                          type="number"
                          class="number"
@@ -122,12 +126,17 @@
                          color="blue darken-2"
                          :error=form.rightAscension.hasError
                          :error-messages=form.rightAscension.errorMessage
+                         onkeypress='return event.charCode >= 48 && event.charCode <= 57'
                          label="Right Ascension Seconds"
                          type="number"
                          required
                          ></v-text-field>
                      </v-flex>
-                     <!-- Pretty much same as Right Ascension -->
+                     <!-- Pretty much same as Right Ascension 
+                     
+                        onkeypress='return event.charCode == 45 || (event.charCode >= 48 && event.charCode <= 57)'
+                            Only allow numerical inputs and - (minus) as input can be negative
+                     -->
                     <v-flex xs12 sm6>
                         <v-text-field
                         v-model="form.declination.value"
@@ -135,6 +144,7 @@
                         color="blue darken-2"
                         :error=form.declination.hasError
                         :error-messages=form.declination.errorMessage
+                        onkeypress='return event.charCode == 45 || (event.charCode >= 48 && event.charCode <= 57)'
                         label="Declination"
                         type="number"
                         required
@@ -315,6 +325,11 @@ export default {
         },
         captureStartPeriod(payload) {
             console.log(payload);
+        },
+        numbersOnly(val) {
+            console.log(val);
+            val = val.replace(/[^0-9]/g, '');
+            return val;
         }
     },
     computed: {

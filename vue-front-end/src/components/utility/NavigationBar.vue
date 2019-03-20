@@ -46,6 +46,7 @@ export default {
             showInfo: false,
             items: [
               { title: 'Scheduling Calendar', icon: 'dashboard', path: '/scheduler' },
+              { title: 'Search Appointments', path: '/appointments/search' },
               { title: 'Public Appointments', path: '/appointments/public' },
             ]
         }
@@ -75,13 +76,13 @@ export default {
         },
         loadStore() {
             // On clicking the drawer, add two buttons that require data from the store to function
-            if(this.items.length < 5){
+            if(this.items.length === 3){
                 this.items.push({ title: 'Completed Appointments', path: '/users/' + this.$store.state.currentUserId + '/appointments/completed' })
                 this.items.push({ title: 'Future Appointments', path: '/users/' + this.$store.state.currentUserId + '/appointments/future' })
             }
             
             // On clicking the drawer, check if the user is an Admin
-            if(this.$store.state.isAdmin && this.items.length < 5){
+            if(this.$store.state.isAdmin && this.items.length < 6){
                 this.items.push({ title: 'Administration', path: '/admin' })
             }
         }
@@ -98,7 +99,7 @@ export default {
     width: 100%;
 }
 .nav-drawer{
-    max-height:300px !important;
+    max-height:320px !important;
     position: absolute;
     margin-top: 64px !important;
     z-index: 99 !important;

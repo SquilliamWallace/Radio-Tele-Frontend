@@ -1,6 +1,6 @@
 <template dark>
     <v-dialog v-model="advSearch" persistent max-width="600px">
-      <v-btn slot="activator" class="mt-3 "dark>Adv. Search</v-btn>
+      <v-btn slot="activator" class="mt-3" dark>Adv. Search</v-btn>
 
       <v-card>
         <v-container align-content-center>
@@ -11,7 +11,7 @@
               <v-layout row>
               <v-flex xs6>
                 <v-container fluid>
-                    <v-checkbox label="First Name"></v-checkbox>
+                    <v-checkbox label="First "></v-checkbox>
                     <v-checkbox label="Last Name"></v-checkbox>
                     <v-checkbox label="Email"></v-checkbox>
                     <v-checkbox label="Company"></v-checkbox>
