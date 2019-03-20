@@ -13,7 +13,8 @@ export default {
         return axios.post(this.namespace, data, Headers.retrieveHeaders())
       },
       updateCB: function(celestialBodyId, data){
-        return axios.put(this.namespace, + "/" + celestialBodyId, data, Headers.retrieveHeaders())
+        console.log("just before API call: " + celestialBodyId)
+        return axios.put(this.namespace + "/" + celestialBodyId, data, Headers.retrieveHeaders())
       }
     },
     User: {
