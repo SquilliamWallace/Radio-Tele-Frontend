@@ -10,8 +10,10 @@ export default {
         return axios.get(this.namespace + "?page=" + pageNumber + "&size=" + pageSize, Headers.retrieveHeaders());
       },
       createCB: function(data){
-        
         return axios.post(this.namespace, data, Headers.retrieveHeaders())
+      },
+      updateCB: function(celestialBodyId, data){
+        return axios.put(this.namespace, + "/" + celestialBodyId, data, Headers.retrieveHeaders())
       }
     },
     User: {
