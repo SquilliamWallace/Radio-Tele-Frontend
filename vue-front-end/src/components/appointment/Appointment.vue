@@ -226,10 +226,10 @@ export default {
                     hasError: false
                 }
             },
-            startDate: "",
-            startTime: "",
-            endDate: "",
-            endTime: "",
+            sDate: '',
+            sTime: '',
+            eDate: '',
+            eTime: '',
             start: "",
             end: "",
             /* This is the rules obj used in the form validation.
@@ -247,7 +247,13 @@ export default {
     },
     props: {
         value: false,
-        telescopeName: ''
+        telescopeName: '',
+
+        // Props to pass into the data fields start/endTime and date
+        startTime: '',
+        endTime: '',
+        startDate: '',
+        endDate: ''
     },
     methods: {
         // Method to reset the form then close the modal
@@ -278,6 +284,7 @@ export default {
                 seconds: this.form.rightAscension.seconds,
                 declination: this.form.declination.value
             };
+            
             // Call appropriate API CALL and send form in json format
             ApiDriver.Appointment.create(JSON.stringify(form)).then((response) => {
                 HttpResponse.then(response, (data) => {
@@ -345,6 +352,10 @@ export default {
                 this.form.declination.value
             )
         }
+    },
+    
+    mounted: function() {
+        
     }
 }
 </script>

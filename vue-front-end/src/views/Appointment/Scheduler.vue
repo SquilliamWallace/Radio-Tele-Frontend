@@ -47,8 +47,8 @@
                 Vue Full Calendar Docs: https://fullcalendar.io/docs
                 Because we are importing the full-calendar node module We have to add the appropriate parameters to the call
                 to allow us to change the config of the default callendar.
-                @event-created="createEvent" {
-                    this says that whenever an event is created on the calendar call the method createEvent
+                @event-created="createDragEvent" {
+                    whenever an event is created by dragging and dropping on the calendar, call the method createDragEvent
                 }
                 @event-selected="openEvent" {
                     this says that whenever an event is clicked, call the openEvent method
@@ -67,12 +67,28 @@
                     this allows us to call the calendar by id and get information about it inside of our methods.
                 }
             -->
-            <full-calendar @change-telescope="toggleChooseTelescope" @event-selected="openEvent" :events="events" :header="header" @view-render="changedViews" id="calendar"></full-calendar>
+            <full-calendar @change-telescope="toggleChooseTelescope" @event-created="createDragEvent" @event-selected="openEvent" :events="events" :header="header" @view-render="changedViews" id="calendar"></full-calendar>
             
             <v-layout justify-center>
                 <!-- 
                     linked component: Appointment.vue
                     
+                    :telescopeName="telescopeName" {
+                        :telescopeName is a prop in Appointment, and the value
+                        in the local telescopeName data object is passed to it
+                    }
+                    :telescopeName="telescopeName" {
+                        :telescopeName is a prop in Appointment, and the value
+                        in the local telescopeName data object is passed to it
+                    }
+                    :telescopeName="telescopeName" {
+                        :telescopeName is a prop in Appointment, and the value
+                        in the local telescopeName data object is passed to it
+                    }
+                    :telescopeName="telescopeName" {
+                        :telescopeName is a prop in Appointment, and the value
+                        in the local telescopeName data object is passed to it
+                    }
                     :telescopeName="telescopeName" {
                         :telescopeName is a prop in Appointment, and the value
                         in the local telescopeName data object is passed to it
@@ -88,7 +104,7 @@
                         sets this.openCreateModel to false, to make the modal not display
                     }
                 -->
-                <create-appointment :telescopeName="telescopeName" v-model="openCreateModal" @request-appointment="requestAppointment" @created-event="createdEvent" v-on:close-modal="openCreateModal = false"></create-appointment>
+                <create-appointment :startTime="event.startTime" :startDate="event.startDate" :endTime="event.endTime" :endDate="event.endDate" :telescopeName="telescopeName" v-model="openCreateModal" @request-appointment="requestAppointment" @created-event="createdEvent" v-on:close-modal="openCreateModal = false"></create-appointment>
 
                 <!-- 
                     linked component: RequestAppointment.vue
@@ -149,6 +165,7 @@ export default {
                 "Virtual"
             ],
             telescopeName: '',
+
             /* 
                 This is the header bound to the FullCalendar.vue component
                 info for header input: https://fullcalendar.io/docs/header
@@ -211,12 +228,30 @@ export default {
             }
         },
         
-        // This method is called anytime someone created an event on the calendar
-        // Obj is the event Obj created by the callendar when someone drags and drops a new event
+        // This method is called when the Schedule Appointment button is pressed
         createEvent: function(Obj) {
+            // Reset the event to avoid errors when multiple appointments are made in a single session
+            this.event = {};
+
+            // Display the create-appointment modal
+            this.openCreateModal = true;
+        },
+
+        // This method is called when a drag and drop event is created
+        createDragEvent: function(Obj) {
+            // this.event is the obj that is passes to the CreateEvent Modal, so set its variables based on the Obj form calendar
+            this.event.allDay = Obj.allDay
+
+            // Properly format the time and date before we pass it to the create-modal
+            this.event.startTime = moment(Obj.start).format('HH:mm');
+            this.event.startDate = moment(Obj.start).format('YYYY-MM-DD')
+            this.event.endTime = moment(Obj.end).format('HH:mm');
+            this.event.endDate = moment(Obj.end).format('YYYY-MM-DD')
+
             // Set openCreateModal to true so that Appointment.vue component displays
             this.openCreateModal = true;
         },
+
         // This method is called from inside the Appointment.vue modal if an appointment request to be scheduled 
         // comes back with an ALLOTTED_TIME error. 
         // Passes the obj of the appointment trying to be made into the RequestAppointment.vue modal
