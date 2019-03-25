@@ -73,21 +73,9 @@
                 <!-- 
                     linked component: Appointment.vue
                     
-                    :telescopeName="telescopeName" {
-                        :telescopeName is a prop in Appointment, and the value
-                        in the local telescopeName data object is passed to it
-                    }
-                    :telescopeName="telescopeName" {
-                        :telescopeName is a prop in Appointment, and the value
-                        in the local telescopeName data object is passed to it
-                    }
-                    :telescopeName="telescopeName" {
-                        :telescopeName is a prop in Appointment, and the value
-                        in the local telescopeName data object is passed to it
-                    }
-                    :telescopeName="telescopeName" {
-                        :telescopeName is a prop in Appointment, and the value
-                        in the local telescopeName data object is passed to it
+                    :dragEvent="event" {
+                        :dragEvent is a prop in Appointment, and "event" is passed to the Appointment
+                        to handle auto populating the form on the create-appointment modal. Only used
                     }
                     :telescopeName="telescopeName" {
                         :telescopeName is a prop in Appointment, and the value
@@ -100,11 +88,11 @@
                     @created-event="createdEvent" {
                         allows for the modal to call the method createdEvent() with the function this.$emit("created-event")
                     }
-                    v-on:close-modal="openCreateModal = false" {
+                    close-modal="openCreateModal = false" {
                         sets this.openCreateModel to false, to make the modal not display
                     }
                 -->
-                <create-appointment :startTime="event.startTime" :startDate="event.startDate" :endTime="event.endTime" :endDate="event.endDate" :telescopeName="telescopeName" v-model="openCreateModal" @request-appointment="requestAppointment" @created-event="createdEvent" v-on:close-modal="openCreateModal = false"></create-appointment>
+                <create-appointment :dragEvent="event" :telescopeName="telescopeName" v-model="openCreateModal" @request-appointment="requestAppointment" @created-event="createdEvent" v-on:close-modal="openCreateModal = false"></create-appointment>
 
                 <!-- 
                     linked component: RequestAppointment.vue

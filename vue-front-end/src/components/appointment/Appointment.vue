@@ -226,12 +226,15 @@ export default {
                     hasError: false
                 }
             },
-            sDate: '',
-            sTime: '',
-            eDate: '',
-            eTime: '',
+            startDate: '',
+            startTime: '',
+            endDate: '',
+            endTime: '',
             start: "",
             end: "",
+
+            // Variable to keep track of whether or not we've updated our start/end times 
+            updatedTime: false,
             /* This is the rules obj used in the form validation.
                 val => (true or false logic) || 'text to display if false
             */
@@ -249,11 +252,8 @@ export default {
         value: false,
         telescopeName: '',
 
-        // Props to pass into the data fields start/endTime and date
-        startTime: '',
-        endTime: '',
-        startDate: '',
-        endDate: ''
+        // Event prop to pass into the data fields start/endTime and date
+        dragEvent: {}
     },
     methods: {
         // Method to reset the form then close the modal
@@ -337,6 +337,16 @@ export default {
             console.log(val);
             val = val.replace(/[^0-9]/g, '');
             return val;
+        },
+        updateTime() {
+             // If the event is not empty, it's had values passed into it from the Scheduler page
+            if(Object.keys(this.dragEvent).length !== 0 && (this.startTime != this.dragEvent.startTime || this.endTime != this.dragEvent.endTime)) {
+                this.startTime = this.dragEvent.startTime;
+                this.endTime = this.dragEvent.endTime;
+                this.startDate = this.dragEvent.startDate;
+                this.endDate = this.dragEvent.endDate;
+                this.updatedTime = true;
+            }
         }
     },
     computed: {
@@ -354,8 +364,12 @@ export default {
         }
     },
     
-    mounted: function() {
-        
+    updated: function() {
+        // Update our start and end times based on the passed in prop from Scheduler.vue
+        // This is only necessary in the case of a drag-n-drop appointment, and only needs to be called once
+        if(!this.updatedTime) {
+           this.updateTime();
+        }
     }
 }
 </script>
