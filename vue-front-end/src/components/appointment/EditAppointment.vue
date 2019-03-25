@@ -110,6 +110,7 @@
 </template>
 
 <script>
+import moment from 'moment'
 import Event from '../../main.js'
 import ApiDriver from '../../ApiDriver'
 import HttpResponse from '../../utils/HttpResponse'
@@ -164,6 +165,10 @@ export default {
                 seconds: this.appointmentObj.rightAscension.seconds,
                 declination: this.appointmentObj.declination.value
             });
+            // This resolves View Appointment date refresh bug
+            this.appointmentObj.start.value = moment(this.start).format('MM-DD-YYYY hh:mm A')
+            this.appointmentObj.end.value = moment(this.end).format('MM-DD-YYYY hh:mm A')
+            
             ApiDriver.Appointment.update(this.appointmentObj.id.value, data).then((response) => {
                 HttpResponse.then(response, (data) => {
                     this.$emit('edited', this.appointmentObj)
