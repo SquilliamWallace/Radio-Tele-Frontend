@@ -290,6 +290,10 @@ export default {
                 HttpResponse.then(response, (data) => {
                     // If returns SUCCESS
                     this.snackbar = true;
+
+                    // Reset our updatedTime flag
+                    this.updatedTime = false;
+                    
                     // Reset form before closing Modal as user can schedule multiple Appointments without leaving Scheduler Page
                     this.resetForm()
                         
