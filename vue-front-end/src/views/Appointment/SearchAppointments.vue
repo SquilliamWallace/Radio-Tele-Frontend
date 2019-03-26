@@ -46,6 +46,7 @@
             clearable
             hint="Select Filters"
             persistent-hint
+            @change="this.selectFilter"
             ></v-select>
         </v-flex>
         
@@ -67,9 +68,7 @@
                         Appointment #{{ appt.id }}: {{appt.userFirstName}} {{appt.userLastName}}
                     </v-list-tile-title>
                     <v-list-tile-sub-title>
-                        Start Time: {{ appt.startTime }} 
-                        End Time: {{ appt.endTime }}
-                        <v-spacer></v-spacer>    
+                        Start Time: {{ appt.startTime }} End Time: {{ appt.endTime }}
                     </v-list-tile-sub-title>
                 </v-list-tile-content>
             </v-list-tile>
@@ -169,12 +168,10 @@ export default {
             // Reset Appointment array   
             this.appts = [];
             
-            //console.log(this.searchParam, this.chosenFiltersString);
-
+            // Connect to the back-end API through the method in ApiDriver.js
             ApiDriver.Appointment.appointmentSearch(pageNumber, this.selectedPageSize, this.searchParam, this.chosenFiltersString).then((response) => {
                 HttpResponse.then(response, data => {
                     this.populateAppts(data.data)
-                    //console.log(response);
                 },(status, errors) => {})
              }).catch((error) => {
                 this.$swal({
@@ -241,6 +238,7 @@ export default {
             this.chosenFiltersString = '';
             this.pageNumber = 0;
             this.pageDisplay = 1;
+            this.filterTypes = ['Full Name','First Name', 'Last Name', 'Email', 'Company']
         },
         
         // Handle retrieving a new page of information
@@ -254,15 +252,24 @@ export default {
         },
 
         // Update the number of items per page
-         pageSizeUpdate(){
+        pageSizeUpdate(){
             this.appts = [];
             this.unfiltered = [];
             this.filtered = [];
             this.advancedSearch(this.pageNumber);
-        },        
+        },
+        
+        // Called when a search filter is selected. Resolves possible back-end errors, 
+        // by assuring that the Full Name filter can not be selected with any other filters
+        selectFilter() {
+            // If the Full Name filter is selected with another filter, set chosenFilters to only 'Full Name'
+            if(this.chosenFilters.includes('Full Name') && this.chosenFilters.length > 1) {
+                this.chosenFilters = ['Full Name'];
+            }
+        }
     },
 
-    mounted: function() {
+    updated: function() {
 
     }
 }

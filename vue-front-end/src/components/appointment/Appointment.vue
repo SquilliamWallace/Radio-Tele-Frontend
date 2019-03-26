@@ -226,12 +226,15 @@ export default {
                     hasError: false
                 }
             },
-            startDate: "",
-            startTime: "",
-            endDate: "",
-            endTime: "",
+            startDate: '',
+            startTime: '',
+            endDate: '',
+            endTime: '',
             start: "",
             end: "",
+
+            // Variable to keep track of whether or not we've updated our start/end times 
+            updatedTime: false,
             /* This is the rules obj used in the form validation.
                 val => (true or false logic) || 'text to display if false
             */
@@ -247,7 +250,10 @@ export default {
     },
     props: {
         value: false,
-        telescopeName: ''
+        telescopeName: '',
+
+        // Event prop to pass into the data fields start/endTime and date
+        dragEvent: {}
     },
     methods: {
         // Method to reset the form then close the modal
@@ -278,11 +284,16 @@ export default {
                 seconds: this.form.rightAscension.seconds,
                 declination: this.form.declination.value
             };
+            
             // Call appropriate API CALL and send form in json format
             ApiDriver.Appointment.create(JSON.stringify(form)).then((response) => {
                 HttpResponse.then(response, (data) => {
                     // If returns SUCCESS
                     this.snackbar = true;
+
+                    // Reset our updatedTime flag
+                    this.updatedTime = false;
+                    
                     // Reset form before closing Modal as user can schedule multiple Appointments without leaving Scheduler Page
                     this.resetForm()
                         
@@ -330,6 +341,16 @@ export default {
             console.log(val);
             val = val.replace(/[^0-9]/g, '');
             return val;
+        },
+        updateTime() {
+             // If the event is not empty, it's had values passed into it from the Scheduler page
+            if(Object.keys(this.dragEvent).length !== 0 && (this.startTime != this.dragEvent.startTime || this.endTime != this.dragEvent.endTime)) {
+                this.startTime = this.dragEvent.startTime;
+                this.endTime = this.dragEvent.endTime;
+                this.startDate = this.dragEvent.startDate;
+                this.endDate = this.dragEvent.endDate;
+                this.updatedTime = true;
+            }
         }
     },
     computed: {
@@ -344,6 +365,14 @@ export default {
                 this.form.rightAscension.seconds,
                 this.form.declination.value
             )
+        }
+    },
+    
+    updated: function() {
+        // Update our start and end times based on the passed in prop from Scheduler.vue
+        // This is only necessary in the case of a drag-n-drop appointment, and only needs to be called once
+        if(!this.updatedTime) {
+           this.updateTime();
         }
     }
 }
