@@ -15,7 +15,10 @@ export default {
       updateCB: function(celestialBodyId, data){
         console.log("just before API call: " + celestialBodyId)
         return axios.put(this.namespace + "/" + celestialBodyId, data, Headers.retrieveHeaders())
-      }
+      },
+      searchCB: function(pageNumber, pageSize, value, search) {
+        return axios.get(this.namespace + "/search" + "?page=" + pageNumber + "&size=" + pageSize + "&value=" + value + "&search=" + search, Headers.retrieveHeaders());
+      },
     },
     User: {
       namespace: baseUrl + "users",
