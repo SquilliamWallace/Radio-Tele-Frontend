@@ -160,5 +160,8 @@ export default {
     },
     updateEmail(token) {
       return axios.put(baseUrl + "updateEmail?token=" + token, {}, Headers.retrieveHeaders());
+    },
+    feedback(data) {
+      return axios.post(baseUrl + "feedback", data, Headers.retrieveHeaders());
     }
 }
