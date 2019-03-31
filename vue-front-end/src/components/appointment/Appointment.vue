@@ -1,5 +1,19 @@
 <template dark>
-    <v-dialog fullscreen dark hide-overlay :value="value" @input="$emit('input')" persistent width="50%">
+    <!-- 
+        Define the v-dialog that will pop up when an appointment is being created
+
+        @keydown.esc="resetForm" {
+            Allows the user to close the modal with the escape key, by calling the resetForm method below
+        } 
+        :value="value" {
+            Boolean passed from Appointment.vue's parent, Scheduler.vue,
+            this.value = false when the component is closed, true when it's open
+        }
+        @input="$emit('input') {
+            Emits 'input' back to the parent component (Scheduler.vue)
+        }
+    -->
+    <v-dialog fullscreen dark hide-overlay @keydown.esc="resetForm" :value="value" @input="$emit('input')" persistent width="50%">
             <v-card flat>
                 <v-card-title class="headline">Schedule Appointment</v-card-title>
                 <v-snackbar
@@ -152,7 +166,7 @@
                     </v-flex>
                     <!--
                         v-if="this.$store.state.isResearcher || this.$store.state.isAdmin"
-                            only display this part of the form if current user is researcher or admin
+                        only display this part of the form if current user is researcher or admin
                         This is a simple checkbox to choose to make the appointment private or not
                     -->
                     <v-flex v-if="this.$store.state.isResearcher || this.$store.state.isAdmin" xs12>
@@ -230,8 +244,8 @@ export default {
             startTime: '',
             endDate: '',
             endTime: '',
-            start: "",
-            end: "",
+            //start: "",
+            //end: "",
 
             // Variable to keep track of whether or not we've updated our start/end times 
             updatedTime: false,
@@ -258,13 +272,19 @@ export default {
     methods: {
         // Method to reset the form then close the modal
         resetForm() {
-             this.form.isPrivate.value = false;
-             this.form.rightAscension.hours = null;
-             this.form.rightAscension.minutes = null;
-             this.form.rightAscension.seconds = null;
-             this.form.declination.value = null;
-             this.clearErrors();
-             this.$emit('close-modal');
+            this.startDate = '';
+            this.startTime = '';
+            this.endDate = '';
+            this.endTime = '';
+            this.updatedTime = false;
+            this.form.startTime = '';
+            this.form.isPrivate.value = false;
+            this.form.rightAscension.hours = null;
+            this.form.rightAscension.minutes = null;
+            this.form.rightAscension.seconds = null;
+            this.form.declination.value = null;
+            this.clearErrors();
+            this.$emit('close-modal');
         },
         // Method to submit to back end
         submit() {
@@ -290,9 +310,6 @@ export default {
                 HttpResponse.then(response, (data) => {
                     // If returns SUCCESS
                     this.snackbar = true;
-
-                    // Reset our updatedTime flag
-                    this.updatedTime = false;
                     
                     // Reset form before closing Modal as user can schedule multiple Appointments without leaving Scheduler Page
                     this.resetForm()
@@ -350,6 +367,12 @@ export default {
                 this.startDate = this.dragEvent.startDate;
                 this.endDate = this.dragEvent.endDate;
                 this.updatedTime = true;
+                
+                // Conditionally disable this.updatedTime if the modal is closing
+                // prevents a bug with drag and drop scheduling consecutive appointments
+                if(!this.value) {
+                    this.updatedTime = false;
+                }
             }
         }
     },
@@ -372,7 +395,7 @@ export default {
         // Update our start and end times based on the passed in prop from Scheduler.vue
         // This is only necessary in the case of a drag-n-drop appointment, and only needs to be called once
         if(!this.updatedTime) {
-           this.updateTime();
+            this.updateTime();
         }
     }
 }
