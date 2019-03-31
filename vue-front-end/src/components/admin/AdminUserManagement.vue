@@ -39,19 +39,21 @@
                     </v-list-tile-sub-title>
                 </v-list-tile-content>
                 <v-spacer></v-spacer>
-                <v-btn icon v-bind:href="'/#/users/' + user.id + '/view'">
-                    <v-icon>account_circle</v-icon>
-                </v-btn>
-                <div v-if = "user.status === 'Active'">
-                    <v-btn icon @click="confirm = !confirm, chosenUserId = user.id, action = 'ban', chosenUserName = user.firstName +' '+ user.lastName">
-                        <v-icon>gavel</v-icon>
-                    </v-btn>  
-                </div>
-                <div v-else-if="user.status == 'Banned'">
-                    <v-btn icon @click="confirm = !confirm, chosenUserId = user.id, action = 'unban', chosenUserName = user.firstName +' '+ user.lastName">
-                        <v-icon>lock_open</v-icon>
-                    </v-btn> 
-                </div>
+                <slot v-bind="user">
+                    <v-btn icon v-bind:href="'/#/users/' + user.id + '/view'">
+                        <v-icon>account_circle</v-icon>
+                    </v-btn>
+                    <div v-if = "user.status === 'Active'">
+                        <v-btn icon @click="confirm = !confirm, chosenUserId = user.id, action = 'ban', chosenUserName = user.firstName +' '+ user.lastName">
+                            <v-icon>gavel</v-icon>
+                        </v-btn>  
+                    </div>
+                    <div v-else-if="user.status == 'Banned'">
+                        <v-btn icon @click="confirm = !confirm, chosenUserId = user.id, action = 'unban', chosenUserName = user.firstName +' '+ user.lastName">
+                            <v-icon>lock_open</v-icon>
+                        </v-btn> 
+                    </div>
+                </slot>
             </v-list-tile>
         </v-list>
 
@@ -76,7 +78,6 @@
                         single-line
                         v-model="banMessage"
                     ></v-textarea>
-                    
                     <v-btn @click.native="confirm = false" color = "red">Cancel</v-btn>
                     <span v-if = "action === 'ban'">
                         <v-btn @click="banUser(chosenUserId, banMessage), confirm = false" color = "green" >Submit</v-btn>
@@ -89,14 +90,14 @@
             </v-card>
         </v-dialog>
     </v-card>
-        <div class="text-xs-center">
+        <div v-if="numPages>1 && !$store.state.isLoading" class="text-xs-center">
             <v-pagination
             circle
             v-model="pageDisplay"
             :length="numPages"
             @input="next"></v-pagination>
         </div>
-        <v-layout justify-center>
+        <v-layout v-if="!$store.state.isLoading" justify-center>
             <v-flex xs12 sm1>
                 <v-select
                 v-model="selectedPageSize"
@@ -149,7 +150,7 @@ export default {
             pageDisplay: 1,
             selectedPageSize: "10",
             pageSizeList: [
-                '10', '20', '50', '100'
+                '10', '25', '50', '100'
             ]
         }
     },
@@ -190,9 +191,11 @@ export default {
             //this.$store.commit("loading", true);
             this.filteredSet = false
             this.users = []
+            this.$store.commit("loading", true);
             ApiDriver.User.allUsers(this.pageNumber,this.selectedPageSize).then((response) => {
                 HttpResponse.then(response, data => {
                     this.populateData(data.data)
+                    this.$store.commit("loading", false);
                 }, (status, errors) => {})
             }).catch((error) => {
                 this.$swal({

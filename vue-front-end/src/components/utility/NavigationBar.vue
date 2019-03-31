@@ -4,6 +4,7 @@
       <v-toolbar-side-icon @click="showDrawer=!showDrawer; loadStore()"></v-toolbar-side-icon>    
       <v-toolbar-title class="title-style" @click="homeRedirect">YCAS Radio Telescope</v-toolbar-title>
       <v-spacer></v-spacer>
+      <v-icon dark class="help-style" @click="toggleFeedback">question_answer</v-icon>
       <v-icon dark class="help-style" @click="toggleInfo">help_outline</v-icon>
       <v-toolbar-items class="hidden-sm-and-down">
           <v-btn @click="viewProfile">Profile</v-btn>
@@ -32,6 +33,31 @@
           </v-card-text>
          </v-card>
     </v-dialog>
+    <v-dialog dark v-model="showFeedback" max-width="50%">
+        <v-card class="help-modal-style">
+            <v-card-title>Submit Feedback</v-card-title>
+            <v-card-text>
+                <v-text-field
+                    v-model="data.name"
+                    label="Name (Optional)"
+                ></v-text-field>
+                <v-text-field
+                    v-model="data.priority"
+                    label="Priority"
+                    type="number"
+                    hint="Priority must be between 1-10, 10 denotes highest priority"
+                    persistent-hint
+                ></v-text-field>
+                <v-textarea
+                    v-model="data.comments"
+                    label="Comments"
+                ></v-textarea>
+            </v-card-text>
+            <v-card-actions>
+                <v-btn :disabled="!formIsValid" @click="submitFeedback" color="primary">Submit</v-btn>
+            </v-card-actions>
+        </v-card>
+    </v-dialog>
     </div>
 </template>
 
@@ -44,8 +70,15 @@ export default {
         return {
             showDrawer: false,
             showInfo: false,
+            showFeedback: false,
+            data: {
+                name: "",
+                priority: 1,
+                comments: ""
+            },
             items: [
               { title: 'Scheduling Calendar', icon: 'dashboard', path: '/scheduler' },
+              { title: 'Search Appointments', path: '/appointments/search' },
               { title: 'Public Appointments', path: '/appointments/public' },
             ]
         }
@@ -73,18 +106,43 @@ export default {
         toggleInfo() {
             this.showInfo = !this.showInfo;
         },
+        toggleFeedback() {
+            this.showFeedback = !this.showFeedback;
+        },
         loadStore() {
             // On clicking the drawer, add two buttons that require data from the store to function
-            if(this.items.length < 5){
+            if(this.items.length === 3){
                 this.items.push({ title: 'Completed Appointments', path: '/users/' + this.$store.state.currentUserId + '/appointments/completed' })
                 this.items.push({ title: 'Future Appointments', path: '/users/' + this.$store.state.currentUserId + '/appointments/future' })
             }
             
             // On clicking the drawer, check if the user is an Admin
-            if(this.$store.state.isAdmin && this.items.length < 5){
+            if(this.$store.state.isAdmin && this.items.length < 6){
                 this.items.push({ title: 'Administration', path: '/admin' })
             }
+        },
+        submitFeedback() {
+            this.data.priority = parseInt(this.data.priority);
+            ApiDriver.feedback(this.data).then((response) => {
+                this.$swal({
+                    title: '<span style="color:#f0ead6">Feedback Submitted!<span>',
+                    html: '<span style="color:#f0ead6">Your feedback has been submitted to the developers. Thank you.<span>',
+                    type: 'success',
+                    background: '#302f2f'
+                }).then(response => {
+                    this.showFeedback = false;
+                })
+            })
         }
+    },
+    computed: {
+      formIsValid () {
+        return (
+          this.data.priority <=10 &&
+          this.data.priority>=1 &&
+          this.data.comments
+        )
+      }
     }
     
 }
@@ -98,7 +156,7 @@ export default {
     width: 100%;
 }
 .nav-drawer{
-    max-height:300px !important;
+    max-height:320px !important;
     position: absolute;
     margin-top: 64px !important;
     z-index: 99 !important;

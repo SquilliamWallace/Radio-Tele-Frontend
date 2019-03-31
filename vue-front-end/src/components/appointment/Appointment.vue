@@ -82,6 +82,8 @@
                         :error-messages= form.rightAscension.errorMessage
                             This displays any text inside form.rightAscension.errorMessage if :error=true
                             errorMessage is handled on backend and sent back to front end. 
+                        onkeypress='return event.charCode >= 48 && event.charCode <= 57'
+                            Only allow numbers to be inputted into the form (0 through 9)
                     -->
                     <v-flex xs12 sm4>
                          <v-text-field
@@ -90,6 +92,7 @@
                          color="blue darken-2"
                          :error=form.rightAscension.hasError
                          :error-messages=form.rightAscension.errorMessage
+                         onkeypress='return event.charCode >= 48 && event.charCode <= 57'
                          label="Right Ascension Hours"
                          type="number"
                          class="number"
@@ -106,6 +109,7 @@
                          color="blue darken-2"
                          :error=form.rightAscension.hasError
                          :error-messages=form.rightAscension.errorMessage
+                         onkeypress='return event.charCode >= 48 && event.charCode <= 57'
                          label="Right Ascension Minutes"
                          type="number"
                          class="number"
@@ -122,12 +126,17 @@
                          color="blue darken-2"
                          :error=form.rightAscension.hasError
                          :error-messages=form.rightAscension.errorMessage
+                         onkeypress='return event.charCode >= 48 && event.charCode <= 57'
                          label="Right Ascension Seconds"
                          type="number"
                          required
                          ></v-text-field>
                      </v-flex>
-                     <!-- Pretty much same as Right Ascension -->
+                     <!-- Pretty much same as Right Ascension 
+                     
+                        onkeypress='return event.charCode == 45 || (event.charCode >= 48 && event.charCode <= 57)'
+                            Only allow numerical inputs and - (minus) as input can be negative
+                     -->
                     <v-flex xs12 sm6>
                         <v-text-field
                         v-model="form.declination.value"
@@ -135,6 +144,7 @@
                         color="blue darken-2"
                         :error=form.declination.hasError
                         :error-messages=form.declination.errorMessage
+                        onkeypress='return event.charCode == 45 || (event.charCode >= 48 && event.charCode <= 57)'
                         label="Declination"
                         type="number"
                         required
@@ -216,12 +226,15 @@ export default {
                     hasError: false
                 }
             },
-            startDate: "",
-            startTime: "",
-            endDate: "",
-            endTime: "",
+            startDate: '',
+            startTime: '',
+            endDate: '',
+            endTime: '',
             start: "",
             end: "",
+
+            // Variable to keep track of whether or not we've updated our start/end times 
+            updatedTime: false,
             /* This is the rules obj used in the form validation.
                 val => (true or false logic) || 'text to display if false
             */
@@ -237,7 +250,10 @@ export default {
     },
     props: {
         value: false,
-        telescopeName: ''
+        telescopeName: '',
+
+        // Event prop to pass into the data fields start/endTime and date
+        dragEvent: {}
     },
     methods: {
         // Method to reset the form then close the modal
@@ -268,11 +284,16 @@ export default {
                 seconds: this.form.rightAscension.seconds,
                 declination: this.form.declination.value
             };
+            
             // Call appropriate API CALL and send form in json format
             ApiDriver.Appointment.create(JSON.stringify(form)).then((response) => {
                 HttpResponse.then(response, (data) => {
                     // If returns SUCCESS
                     this.snackbar = true;
+
+                    // Reset our updatedTime flag
+                    this.updatedTime = false;
+                    
                     // Reset form before closing Modal as user can schedule multiple Appointments without leaving Scheduler Page
                     this.resetForm()
                         
@@ -315,6 +336,21 @@ export default {
         },
         captureStartPeriod(payload) {
             console.log(payload);
+        },
+        numbersOnly(val) {
+            console.log(val);
+            val = val.replace(/[^0-9]/g, '');
+            return val;
+        },
+        updateTime() {
+             // If the event is not empty, it's had values passed into it from the Scheduler page
+            if(Object.keys(this.dragEvent).length !== 0 && (this.startTime != this.dragEvent.startTime || this.endTime != this.dragEvent.endTime)) {
+                this.startTime = this.dragEvent.startTime;
+                this.endTime = this.dragEvent.endTime;
+                this.startDate = this.dragEvent.startDate;
+                this.endDate = this.dragEvent.endDate;
+                this.updatedTime = true;
+            }
         }
     },
     computed: {
@@ -329,6 +365,14 @@ export default {
                 this.form.rightAscension.seconds,
                 this.form.declination.value
             )
+        }
+    },
+    
+    updated: function() {
+        // Update our start and end times based on the passed in prop from Scheduler.vue
+        // This is only necessary in the case of a drag-n-drop appointment, and only needs to be called once
+        if(!this.updatedTime) {
+           this.updateTime();
         }
     }
 }

@@ -4,6 +4,22 @@ import Headers from './utils/Headers';
 let baseUrl = "https://prod-api.ycpradiotelescope.com/api/";
 export default {
     //API endpoints go here
+    CelestialBodies: {
+      namespace: baseUrl + "celestial-bodies",
+      getCBList: function(pageNumber, pageSize){
+        return axios.get(this.namespace + "?page=" + pageNumber + "&size=" + pageSize, Headers.retrieveHeaders());
+      },
+      createCB: function(data){
+        return axios.post(this.namespace, data, Headers.retrieveHeaders())
+      },
+      updateCB: function(celestialBodyId, data){
+        console.log("just before API call: " + celestialBodyId)
+        return axios.put(this.namespace + "/" + celestialBodyId, data, Headers.retrieveHeaders())
+      },
+      searchCB: function(pageNumber, pageSize, value, search) {
+        return axios.get(this.namespace + "/search" + "?page=" + pageNumber + "&size=" + pageSize + "&value=" + value + "&search=" + search, Headers.retrieveHeaders());
+      },
+    },
     User: {
       namespace: baseUrl + "users",
       activate: function(token) {
@@ -99,6 +115,18 @@ export default {
       },
       listAppointmentsBetweenDates: function(data) {
         return axios.get(this.namespace + "/telescopes/" + data.telescopeId + "/listBetweenDates?startTime=" + data.startTime + "&endTime=" + data.endTime, Headers.retrieveHeaders())
+      },
+      share: function(appointmentId, email) {
+        return axios.post(this.namespace + "/" + appointmentId + "/viewers?email=" + email, {}, Headers.retrieveHeaders())
+      },
+      appointmentSearch: function(pageNumber, pageSize, value, search) {
+        return axios.get(this.namespace + "/search" + "?page=" + pageNumber + "&size=" + pageSize + "&value=" + value + "&search=" + search, Headers.retrieveHeaders());
+      },
+      unshare: function(appointmentId, userId) {
+        return axios.delete(this.namespace + "/" + appointmentId + "/viewers?userId=" + userId, Headers.retrieveHeaders())
+      },
+      sharedUsers: function(appointmentId, page, size) {
+        return axios.get(this.namespace + "/" + appointmentId + "/viewers?page=" + page + "&size=" + size, Headers.retrieveHeaders())
       }
     },
     Log: {
@@ -132,5 +160,8 @@ export default {
     },
     updateEmail(token) {
       return axios.put(baseUrl + "updateEmail?token=" + token, {}, Headers.retrieveHeaders());
+    },
+    feedback(data) {
+      return axios.post(baseUrl + "feedback", data, Headers.retrieveHeaders());
     }
 }

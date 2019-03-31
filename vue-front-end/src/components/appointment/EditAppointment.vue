@@ -1,33 +1,34 @@
 <!-- Same form type as Appointment.vue except all fields are already populated by the appointment data -->
 <template dark>
-    <v-dialog dark hide-overlay :value="value" @input="$emit('input')" persistent width="50%">
+    <v-dialog fullscreen dark hide-overlay :value="value" @input="$emit('input')" persistent width="50%">
             <v-card flat>
                 <v-card-title class="headline">Edit Appointment</v-card-title>
                 <v-form ref="form" @submit.prevent="submit" refs="form">
                 <v-container grid-list-xl fluid>
                     <v-layout wrap>
                     <v-flex xs12 sm6>
-                        <v-text-field
-                        v-model="appointmentObj.start.value"
-                        :rules="[rules.dateRequired]"
-                        :error=appointmentObj.start.hasError
-                        :error-messages=appointmentObj.start.errorMessage
-                        :valiate-on-blur=true
-                        color="blue darken-2"
-                        label="Start Time"
-                        required
-                        ></v-text-field>
+                        <v-date-picker
+                        v-model="appointmentObj.startDate.value"
+                        landscape
+                        width="175"
+                        ></v-date-picker>
+                        <v-time-picker
+                        v-model="appointmentObj.startTime.value"
+                        landscape
+                        width="175"
+                        ></v-time-picker>
                     </v-flex>
                     <v-flex xs12 sm6>
-                        <v-text-field
-                        v-model="appointmentObj.end.value"
-                        :rules="[rules.dateRequired]"
-                        :error=appointmentObj.end.hasError
-                        :error-messages=appointmentObj.end.errorMessage
-                        color="blue darken-2"
-                        label="End Time"
-                        required
-                        ></v-text-field>
+                        <v-date-picker
+                        v-model="appointmentObj.endDate.value"
+                        landscape
+                        width="175"
+                        ></v-date-picker>
+                        <v-time-picker
+                        v-model="appointmentObj.endTime.value"
+                        landscape
+                        width="175"
+                        ></v-time-picker>
                     </v-flex>
                     <v-flex xs12 sm4>
                          <v-text-field
@@ -109,6 +110,7 @@
 </template>
 
 <script>
+import moment from 'moment'
 import Event from '../../main.js'
 import ApiDriver from '../../ApiDriver'
 import HttpResponse from '../../utils/HttpResponse'
@@ -117,6 +119,12 @@ import CustomErrorHandler from '../../utils/CustomErrorHandler.js';
 export default {
     data() {
         return {
+            startTime: "",
+            startDate: "",
+            endTime: "",
+            endDate: "",
+            start: "",
+            end: "",
             form: {
                 rightAscension: {
                         hours: null,
@@ -141,10 +149,15 @@ export default {
     methods: {
         submit() {
             this.clearErrors();
-
+            this.startDate = this.appointmentObj.startDate.value
+            this.startTime = this.appointmentObj.startTime.value
+            this.endDate = this.appointmentObj.endDate.value
+            this.endTime = this.appointmentObj.endTime.value
+            this.start = this.startDate + " " + this.startTime
+            this.end = this.endDate + " " + this.endTime
             let data = JSON.stringify({
-                startTime: new Date(this.appointmentObj.start.value).toUTCString(),
-                endTime: new Date(this.appointmentObj.end.value).toUTCString(),
+                startTime: new Date(this.start).toUTCString(),
+                endTime: new Date(this.end).toUTCString(),
                 telescopeId: this.appointmentObj.telescopeId.value,
                 isPublic: !this.appointmentObj.privacy.value,
                 hours: this.appointmentObj.rightAscension.hours,
@@ -152,6 +165,10 @@ export default {
                 seconds: this.appointmentObj.rightAscension.seconds,
                 declination: this.appointmentObj.declination.value
             });
+            // This resolves View Appointment date refresh bug
+            this.appointmentObj.start.value = moment(this.start).format('MM-DD-YYYY hh:mm A')
+            this.appointmentObj.end.value = moment(this.end).format('MM-DD-YYYY hh:mm A')
+            
             ApiDriver.Appointment.update(this.appointmentObj.id.value, data).then((response) => {
                 HttpResponse.then(response, (data) => {
                     this.$emit('edited', this.appointmentObj)
