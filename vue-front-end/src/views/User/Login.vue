@@ -84,6 +84,7 @@ import router from '../../router';
 import CurrentUserValidation from '../../utils/CurrentUserValidation';
 import CustomErrorHandler from '../../utils/CustomErrorHandler';
 import HttpResponse from '../../utils/HttpResponse';
+import {checkBrowser} from '../../mixins/BrowserVersion.js'
 export default {
     title: "Radio Telescope 1.1.0",
     name: "Login",
@@ -172,6 +173,9 @@ export default {
           CustomErrorHandler.clearError(this.data.password);
           CustomErrorHandler.clearError(this.data.reqPassEmail);
       }
+    },
+    mounted: function() {
+        checkBrowser(this)
     }
 }
 </script>

@@ -21,7 +21,8 @@ const store = new Vuex.Store({
         isAdmin: false,
         isLoading: false,
         currentPage: "",
-        information: ""
+        information: "",
+        browserType: ""
     },
     mutations: {
         embedToken(state, token) {
@@ -62,6 +63,9 @@ const store = new Vuex.Store({
         updateInfo(state, pageInfo) {
             state.currentPage = pageInfo.page;
             state.information = pageInfo.info;
+        },
+        browserInfo(state, browser) {
+            state.browserType = browser;
         }
     },
     getters: {

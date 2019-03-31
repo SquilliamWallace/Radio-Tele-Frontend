@@ -4,9 +4,7 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin')
 module.exports = {
   //defines the place at which the parser enters the application to begin execution, can be a single point 
   //or an array of multiple points
-    entry: {
-      app: [ 'core-js',
-      './src/main.js']},
+    entry: './src/main.js',
     devServer: {
         port: 8081,
         historyApiFallback: true,
