@@ -244,8 +244,6 @@ export default {
             startTime: '',
             endDate: '',
             endTime: '',
-            //start: "",
-            //end: "",
 
             // Variable to keep track of whether or not we've updated our start/end times 
             updatedTime: false,
@@ -272,10 +270,6 @@ export default {
     methods: {
         // Method to reset the form then close the modal
         resetForm() {
-            this.startDate = '';
-            this.startTime = '';
-            this.endDate = '';
-            this.endTime = '';
             this.updatedTime = false;
             this.form.startTime = '';
             this.form.isPrivate.value = false;
