@@ -100,52 +100,55 @@
                             Only allow numbers to be inputted into the form (0 through 9)
                     -->
                     <v-flex xs12 sm4>
-                         <v-text-field
-                         v-model="form.rightAscension.hours"
-                         :rules="[rules.rightAscHours]"
-                         color="blue darken-2"
-                         :error=form.rightAscension.hasError
-                         :error-messages=form.rightAscension.errorMessage
-                         onkeypress='return event.charCode >= 48 && event.charCode <= 57'
-                         label="Right Ascension Hours"
-                         type="number"
-                         class="number"
-                         required
-                         ></v-text-field>
-                     </v-flex>
+                        <v-text-field
+                        v-model="form.rightAscension.hours"
+                        :rules="[rules.rightAscHours]"
+                        :validate-on-blur="true"
+                        color="blue darken-2"
+                        :error=form.rightAscension.hasError
+                        :error-messages=form.rightAscension.errorMessage
+                        onkeypress='return event.charCode >= 48 && event.charCode <= 57'
+                        label="Right Ascension Hours"
+                        type="number"
+                        class="number"
+                        required
+                        ></v-text-field>
+                    </v-flex>
                      <!--
                         Same as Right Ascension Hours, except checks for minutes error handling
                     -->
-                     <v-flex xs12 sm4>
-                         <v-text-field
-                         v-model="form.rightAscension.minutes"
-                         :rules="[rules.rightAscMinutes]"
-                         color="blue darken-2"
-                         :error=form.rightAscension.hasError
-                         :error-messages=form.rightAscension.errorMessage
-                         onkeypress='return event.charCode >= 48 && event.charCode <= 57'
-                         label="Right Ascension Minutes"
-                         type="number"
-                         class="number"
-                         required
-                         ></v-text-field>
+                    <v-flex xs12 sm4>
+                        <v-text-field
+                        v-model="form.rightAscension.minutes"
+                        :rules="[rules.rightAscMinutes]"
+                        :validate-on-blur="true"
+                        color="blue darken-2"
+                        :error=form.rightAscension.hasError
+                        :error-messages=form.rightAscension.errorMessage
+                        onkeypress='return event.charCode >= 48 && event.charCode <= 57'
+                        label="Right Ascension Minutes"
+                        type="number"
+                        class="number"
+                        required
+                        ></v-text-field>
                      </v-flex>
                      <!--
                         Same as Right Ascension Hours, except checks for seconds error handling
                     -->
-                     <v-flex xs12 sm4>
-                         <v-text-field
-                         v-model="form.rightAscension.seconds"
-                         :rules="[rules.rightAscSeconds]"
-                         color="blue darken-2"
-                         :error=form.rightAscension.hasError
-                         :error-messages=form.rightAscension.errorMessage
-                         onkeypress='return event.charCode >= 48 && event.charCode <= 57'
-                         label="Right Ascension Seconds"
-                         type="number"
-                         required
-                         ></v-text-field>
-                     </v-flex>
+                    <v-flex xs12 sm4>
+                        <v-text-field
+                        v-model="form.rightAscension.seconds"
+                        :rules="[rules.rightAscSeconds]"
+                        :validate-on-blur="true"
+                        color="blue darken-2"
+                        :error=form.rightAscension.hasError
+                        :error-messages=form.rightAscension.errorMessage
+                        onkeypress='return event.charCode >= 48 && event.charCode <= 57'
+                        label="Right Ascension Seconds"
+                        type="number"
+                        required
+                        ></v-text-field>
+                    </v-flex>
                      <!-- Pretty much same as Right Ascension 
                      
                         onkeypress='return event.charCode == 45 || (event.charCode >= 48 && event.charCode <= 57)'
@@ -155,6 +158,7 @@
                         <v-text-field
                         v-model="form.declination.value"
                         :rules="[rules.numRequired]"
+                        :validate-on-blur="true"
                         color="blue darken-2"
                         :error=form.declination.hasError
                         :error-messages=form.declination.errorMessage
@@ -271,7 +275,6 @@ export default {
         // Method to reset the form then close the modal
         resetForm() {
             this.updatedTime = false;
-            this.form.startTime = '';
             this.form.isPrivate.value = false;
             this.form.rightAscension.hours = null;
             this.form.rightAscension.minutes = null;
@@ -367,6 +370,14 @@ export default {
                 if(!this.value) {
                     this.updatedTime = false;
                 }
+            } 
+            // Otherwise, clear our start and end times, since we didn't need to recieve an event,
+            // and our local start and end times may contain data from a previously passed event
+            else if (Object.keys(this.dragEvent).length == 0){
+                this.startTime = '';
+                this.endTime = '';
+                this.startDate = '';
+                this.endDate = '';
             }
         }
     },
