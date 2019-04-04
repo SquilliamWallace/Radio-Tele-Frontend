@@ -30,8 +30,7 @@
                         :error-messages=data.password.errorMessage 
                         label="Password" 
                         type="password" 
-                        required
-                        v-on:keyup.enter="submit"></v-text-field>
+                        required></v-text-field>
                     </v-flex>
                     <v-flex xs12>
                         <v-btn color="primary" @click="submit">Login</v-btn>
