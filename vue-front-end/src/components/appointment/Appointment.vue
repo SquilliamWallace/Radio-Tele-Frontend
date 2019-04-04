@@ -1,5 +1,19 @@
 <template dark>
-    <v-dialog fullscreen dark hide-overlay :value="value" @input="$emit('input')" persistent width="50%">
+    <!-- 
+        Define the v-dialog that will pop up when an appointment is being created
+
+        @keydown.esc="resetForm" {
+            Allows the user to close the modal with the escape key, by calling the resetForm method below
+        } 
+        :value="value" {
+            Boolean passed from Appointment.vue's parent, Scheduler.vue,
+            this.value = false when the component is closed, true when it's open
+        }
+        @input="$emit('input') {
+            Emits 'input' back to the parent component (Scheduler.vue)
+        }
+    -->
+    <v-dialog fullscreen dark hide-overlay @keydown.esc="resetForm" :value="value" @input="$emit('input')" persistent width="50%">
             <v-card flat>
                 <v-card-title class="headline">Schedule Appointment</v-card-title>
                 <v-snackbar
@@ -86,52 +100,55 @@
                             Only allow numbers to be inputted into the form (0 through 9)
                     -->
                     <v-flex xs12 sm4>
-                         <v-text-field
-                         v-model="form.rightAscension.hours"
-                         :rules="[rules.rightAscHours]"
-                         color="blue darken-2"
-                         :error=form.rightAscension.hasError
-                         :error-messages=form.rightAscension.errorMessage
-                         onkeypress='return event.charCode >= 48 && event.charCode <= 57'
-                         label="Right Ascension Hours"
-                         type="number"
-                         class="number"
-                         required
-                         ></v-text-field>
-                     </v-flex>
+                        <v-text-field
+                        v-model="form.rightAscension.hours"
+                        :rules="[rules.rightAscHours]"
+                        :validate-on-blur="true"
+                        color="blue darken-2"
+                        :error=form.rightAscension.hasError
+                        :error-messages=form.rightAscension.errorMessage
+                        onkeypress='return event.charCode >= 48 && event.charCode <= 57'
+                        label="Right Ascension Hours"
+                        type="number"
+                        class="number"
+                        required
+                        ></v-text-field>
+                    </v-flex>
                      <!--
                         Same as Right Ascension Hours, except checks for minutes error handling
                     -->
-                     <v-flex xs12 sm4>
-                         <v-text-field
-                         v-model="form.rightAscension.minutes"
-                         :rules="[rules.rightAscMinutes]"
-                         color="blue darken-2"
-                         :error=form.rightAscension.hasError
-                         :error-messages=form.rightAscension.errorMessage
-                         onkeypress='return event.charCode >= 48 && event.charCode <= 57'
-                         label="Right Ascension Minutes"
-                         type="number"
-                         class="number"
-                         required
-                         ></v-text-field>
+                    <v-flex xs12 sm4>
+                        <v-text-field
+                        v-model="form.rightAscension.minutes"
+                        :rules="[rules.rightAscMinutes]"
+                        :validate-on-blur="true"
+                        color="blue darken-2"
+                        :error=form.rightAscension.hasError
+                        :error-messages=form.rightAscension.errorMessage
+                        onkeypress='return event.charCode >= 48 && event.charCode <= 57'
+                        label="Right Ascension Minutes"
+                        type="number"
+                        class="number"
+                        required
+                        ></v-text-field>
                      </v-flex>
                      <!--
                         Same as Right Ascension Hours, except checks for seconds error handling
                     -->
-                     <v-flex xs12 sm4>
-                         <v-text-field
-                         v-model="form.rightAscension.seconds"
-                         :rules="[rules.rightAscSeconds]"
-                         color="blue darken-2"
-                         :error=form.rightAscension.hasError
-                         :error-messages=form.rightAscension.errorMessage
-                         onkeypress='return event.charCode >= 48 && event.charCode <= 57'
-                         label="Right Ascension Seconds"
-                         type="number"
-                         required
-                         ></v-text-field>
-                     </v-flex>
+                    <v-flex xs12 sm4>
+                        <v-text-field
+                        v-model="form.rightAscension.seconds"
+                        :rules="[rules.rightAscSeconds]"
+                        :validate-on-blur="true"
+                        color="blue darken-2"
+                        :error=form.rightAscension.hasError
+                        :error-messages=form.rightAscension.errorMessage
+                        onkeypress='return event.charCode >= 48 && event.charCode <= 57'
+                        label="Right Ascension Seconds"
+                        type="number"
+                        required
+                        ></v-text-field>
+                    </v-flex>
                      <!-- Pretty much same as Right Ascension 
                      
                         onkeypress='return event.charCode == 45 || (event.charCode >= 48 && event.charCode <= 57)'
@@ -141,6 +158,7 @@
                         <v-text-field
                         v-model="form.declination.value"
                         :rules="[rules.numRequired]"
+                        :validate-on-blur="true"
                         color="blue darken-2"
                         :error=form.declination.hasError
                         :error-messages=form.declination.errorMessage
@@ -152,7 +170,7 @@
                     </v-flex>
                     <!--
                         v-if="this.$store.state.isResearcher || this.$store.state.isAdmin"
-                            only display this part of the form if current user is researcher or admin
+                        only display this part of the form if current user is researcher or admin
                         This is a simple checkbox to choose to make the appointment private or not
                     -->
                     <v-flex v-if="this.$store.state.isResearcher || this.$store.state.isAdmin" xs12>
@@ -230,8 +248,6 @@ export default {
             startTime: '',
             endDate: '',
             endTime: '',
-            start: "",
-            end: "",
 
             // Variable to keep track of whether or not we've updated our start/end times 
             updatedTime: false,
@@ -258,13 +274,14 @@ export default {
     methods: {
         // Method to reset the form then close the modal
         resetForm() {
-             this.form.isPrivate.value = false;
-             this.form.rightAscension.hours = null;
-             this.form.rightAscension.minutes = null;
-             this.form.rightAscension.seconds = null;
-             this.form.declination.value = null;
-             this.clearErrors();
-             this.$emit('close-modal');
+            this.updatedTime = false;
+            this.form.isPrivate.value = false;
+            this.form.rightAscension.hours = null;
+            this.form.rightAscension.minutes = null;
+            this.form.rightAscension.seconds = null;
+            this.form.declination.value = null;
+            this.clearErrors();
+            this.$emit('close-modal');
         },
         // Method to submit to back end
         submit() {
@@ -290,9 +307,6 @@ export default {
                 HttpResponse.then(response, (data) => {
                     // If returns SUCCESS
                     this.snackbar = true;
-
-                    // Reset our updatedTime flag
-                    this.updatedTime = false;
                     
                     // Reset form before closing Modal as user can schedule multiple Appointments without leaving Scheduler Page
                     this.resetForm()
@@ -350,6 +364,20 @@ export default {
                 this.startDate = this.dragEvent.startDate;
                 this.endDate = this.dragEvent.endDate;
                 this.updatedTime = true;
+                
+                // Conditionally disable this.updatedTime if the modal is closing
+                // prevents a bug with drag and drop scheduling consecutive appointments
+                if(!this.value) {
+                    this.updatedTime = false;
+                }
+            } 
+            // Otherwise, clear our start and end times, since we didn't need to recieve an event,
+            // and our local start and end times may contain data from a previously passed event
+            else if (Object.keys(this.dragEvent).length == 0){
+                this.startTime = '';
+                this.endTime = '';
+                this.startDate = '';
+                this.endDate = '';
             }
         }
     },
@@ -372,7 +400,7 @@ export default {
         // Update our start and end times based on the passed in prop from Scheduler.vue
         // This is only necessary in the case of a drag-n-drop appointment, and only needs to be called once
         if(!this.updatedTime) {
-           this.updateTime();
+            this.updateTime();
         }
     }
 }
