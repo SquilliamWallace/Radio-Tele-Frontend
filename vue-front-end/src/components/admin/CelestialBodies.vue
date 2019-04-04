@@ -271,10 +271,30 @@ export default {
       console.log("this is the CB id" + id);
       this.isUpdate = !this.isUpdate;
       this.updateFormVals.name = name;
-      this.updateFormVals.dec = dec;
-      this.updateFormVals.hour = hours;
-      this.updateFormVals.min = min;
-      this.updateFormVals.sec = sec;
+      if (dec){
+        this.updateFormVals.dec = dec;  
+      }
+      else {
+        this.updateFormVals.dec = "-"
+      }
+      if (hours){
+        this.updateFormVals.hour = hours;  
+      }
+      else {
+        this.updateFormVals.hour = "-"
+      }
+      if (min){
+        this.updateFormVals.min = min;  
+      }
+      else {
+        this.updateFormVals.min = "-"
+      }
+      if (sec){
+        this.updateFormVals.sec = sec;  
+      }
+      else {
+        this.updateFormVals.sec = "-"
+      }
       this.updateFormVals.id = id;
     },
     updateBodies: function() {
