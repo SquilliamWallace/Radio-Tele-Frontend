@@ -1,7 +1,7 @@
 const axios = require('axios');
 import Headers from './utils/Headers';
 
-let baseUrl = "https://prod-api.ycpradiotelescope.com/api/";
+let baseUrl = "http://api.ycpradiotelescope.com:8080/api/";
 export default {
     //API endpoints go here
     CelestialBodies: {
@@ -147,7 +147,7 @@ export default {
     },
 
     login: function(data) {
-      return axios.post("https://prod-api.ycpradiotelescope.com/login?email=" + data.username.value + "&password=" + data.password.value, JSON.stringify(data))
+      return axios.post("http://api.ycpradiotelescope.com:8080/login?email=" + data.username.value + "&password=" + data.password.value, JSON.stringify(data))
     },
     logout: function () {
       return axios.post(baseUrl + "logout", {}, Headers.retrieveHeaders())

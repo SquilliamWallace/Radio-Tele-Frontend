@@ -213,7 +213,8 @@ export default {
                 }
             },
             cancel: false,
-            complete: false
+            complete: false,
+            rawEndTime: ""
         }
     },
     components: {
@@ -275,6 +276,8 @@ export default {
             this.data.isPublic.value = data.public
             this.data.startTime.value = moment(data.startTime).format('MM-DD-YYYY hh:mm A')
             this.data.endTime.value = moment(data.endTime).format('MM-DD-YYYY hh:mm A')
+            this.rawEndTime = data.endTime
+            this.complete = moment(this.rawEndTime).isBefore(moment(), 'second')
             this.data.status.value = data.status
             this.data.rightAscension.value = data.rightAscension.toFixed(2);
             this.data.rightAscension.hours = data.hours,
@@ -345,6 +348,7 @@ export default {
     mounted: function() {
         // Retrieve the appointment when loaded onto the DOM
         this.getAppointment()
+        this.complete = moment(this.startTime).isBefore(moment(), 'second')
         this.$store.commit("updateInfo", {page: "View Appointment", info: "This page displays the information for an individual\n appointment. Clicking the button at the bottom of the\n page will direct you to a table which displays all\n of the Radio Frequency data for the displayed\n appointment."})
     }
 }
