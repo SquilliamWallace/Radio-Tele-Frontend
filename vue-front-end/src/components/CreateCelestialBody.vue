@@ -1,5 +1,5 @@
-<template dark>
-    <v-dialog v-model="celestialBodyForm" persistent max-width="600px">
+<template>
+    <v-dialog dark v-model="celestialBodyForm" persistent max-width="600px">
       <v-btn slot="activator" dark icon class="mt-3 " ><v-icon>add_circle_outline</v-icon></v-btn>
 
       <v-card>

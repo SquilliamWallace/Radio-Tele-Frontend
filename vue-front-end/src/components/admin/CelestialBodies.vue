@@ -166,7 +166,6 @@ export default {
   methods: {
     searchBodies(pageNumber) {
       this.bodies = [];
-      console.log("search Param val: " + this.searchParam);
       this.$store.commit("loading", true);
       ApiDriver.CelestialBodies.searchCB(
         pageNumber,
@@ -178,7 +177,6 @@ export default {
           HttpResponse.then(
             response,
             data => {
-              console.log(response);
               this.populateData(data.data);
               this.$store.commit("loading", false);
             },
@@ -219,7 +217,6 @@ export default {
           HttpResponse.then(
             response,
             data => {
-              console.log(data.data);
               this.populateData(data.data);
               this.$store.commit("loading", false);
             },
@@ -227,7 +224,6 @@ export default {
           );
         })
         .catch(error => {
-          console.log(errors);
           this.$swal({
             title: '<span style="color:#f0ead6">Error!<span>',
             html:
@@ -240,13 +236,23 @@ export default {
         });
     },
     populateData(data) {
-      // console.log(data.content[0])
       for (var index in data.content) {
         let body = data.content[index];
+        if(!data.content[index].hours){
+          data.content[index].hours = "-"
+        }
+        if(!data.content[index].minutes){
+          data.content[index].minutes = "-"
+        }
+        if(!data.content[index].seconds){
+          data.content[index].seconds = "-"
+        }
+        if(!data.content[index].declination){
+          data.content[index].declination = "-"
+        }
         this.bodies.push(body);
       }
       this.numPages = data.totalPages;
-      //console.log(this.array)
     },
     next(page) {
       // Handle retrieving a new page of information
@@ -268,7 +274,6 @@ export default {
       }
     },
     updateForm(name, id, dec, hours, min, sec) {
-      console.log("this is the CB id" + id);
       this.isUpdate = !this.isUpdate;
       this.updateFormVals.name = name;
       if (dec){
@@ -298,7 +303,6 @@ export default {
       this.updateFormVals.id = id;
     },
     updateBodies: function() {
-      console.log(this.bodies);
       this.getCelestialBodies();
     }
   },
