@@ -58,6 +58,11 @@ export default {
       changeRoleRequest: function(userId, role, data) {
         return axios.post(this.namespace + "/" + userId + "/role/request?role=" + role, data, Headers.retrieveHeaders())  
       },
+      changeAllottedTime: function(userId, time){
+        console.log("User id is: " + userId)
+        console.log("Amount of time is: " + time)
+        return axios.put(this.namespace + "/" + userId + "/allotted-time" + "?allottedTime=" + time,{}, Headers.retrieveHeaders())
+      },
       unapproved: function(pageNumber, pageSize) {
         return axios.get(baseUrl + "roles/unapproved" + "?page=" + pageNumber + "&size=" + pageSize, Headers.retrieveHeaders())
       },

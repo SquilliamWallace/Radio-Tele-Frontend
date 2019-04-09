@@ -45,7 +45,7 @@
                                 Recieve User's requested role from the RequestRole component, 
                                 and pass it to changeRoleRequest method
                         -->
-                        
+                            <update-allotted-time v-model="UpdateTimeForm" v-bind:user="this.profile.id.value" v-on:close-modal="UpdateTimeForm = false" @false="toggleAllottedTime"></update-allotted-time>
                             <request-role v-model="updateRole" v-on:close-modal="updateRole = false" @false="cancelRoleRequest" @chosen="changeRoleRequest"></request-role>
                             <v-container>
                                 <v-layout justify-center row>
@@ -188,6 +188,7 @@ import CurrentUserValidation from '../../utils/CurrentUserValidation'
 import Loading from "../../components/utility/Loading"
 import CustomErrorHandler from '../../utils/CustomErrorHandler';
 import RequestRole from '../../components/user/RequestRole.vue';
+import UpdateAllottedTime from './UpdateAllottedTime'
 export default {
     title: "Radio Telescope 1.1.0",
     name: "ViewProfile",
@@ -230,13 +231,15 @@ export default {
                 required: val => val.length > 0 || 'This field is required',
                 passMatch: val => val === this.changePasswordForm.password.value || 'Passwords do not match'
             },
-            updateRole: false
+            updateRole: false,
+            UpdateTimeForm: false,
         }
     },
     components: {
       NavigationBar,
       Loading,
-      RequestRole
+      RequestRole,
+      UpdateAllottedTime
     },
     methods: {
         controlParser(value){
@@ -253,6 +256,8 @@ export default {
                 this.completedAppointmentsRedirect()
             }else if(value === 'View Future Observations'){
                 this.futureAppointmentsRedirect()
+            }else if(value === 'Update Allotted Time'){
+                this.UpdateTimeForm = true
             }
         },
         editRedirect() {
@@ -268,7 +273,7 @@ export default {
             let that = this;
             if (!this.$route.params.userId) {
                 router.push('/')
-            } else {    
+            } else {
                 // Set the store's loading boolean to true
                 this.$store.commit("loading", true);
 
@@ -278,6 +283,10 @@ export default {
                     HttpResponse.then(response, (data) => {
                         // Populate the data and set the store's boolean back to false
                         that.populateData(data.data)
+                        //Push controls to control panel
+                        if (this.$store.state.currentUserId != this.$route.params.userId && this.$store.state.isAdmin && this.profile.type.value != "Admin"){
+                            this.controls.push("Update Allotted Time")
+                        }
                         this.$store.commit("loading", false)
                     }, (status, errors) => {
                         // Access Denied
@@ -520,6 +529,9 @@ export default {
         // This method is called from the button, and toggles the modal
         toggleUpdateRole() {
             this.updateRole = !this.updateRole;
+        },
+        toggleAllottedTime(){
+            this.UpdateTimeForm = false
         },
     },
     mounted() {
