@@ -235,6 +235,16 @@ export default {
             UpdateTimeForm: false,
         }
     },
+
+    // Handle refreshing the page when a User navigates to a different profile
+    beforeRouteUpdate (to, from, next) {
+        if(to.params.userId != from.params.userId) {
+            this.$route.params.userId = to.params.userId;
+            this.retrieveInformation();
+            next();
+        }
+    },
+
     components: {
       NavigationBar,
       Loading,
@@ -544,7 +554,6 @@ export default {
         }
 
         if (this.$store.state.currentUserId == this.$route.params.userId) {
-            console.log("end me")
             this.controls.push("Change Email")
             this.controls.push("Change Password")
             this.controls.push("Request New Role")
@@ -562,4 +571,3 @@ export default {
         font-size: 20px;
     }
 </style>
-

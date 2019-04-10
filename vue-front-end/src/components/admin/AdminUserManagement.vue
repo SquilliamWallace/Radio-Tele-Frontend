@@ -279,7 +279,6 @@ export default {
     },
     mounted: function(){
         this.getUsers();
-        console.log(this.users);
     },
     components: {
         Loading,
