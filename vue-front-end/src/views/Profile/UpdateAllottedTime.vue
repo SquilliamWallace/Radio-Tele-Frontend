@@ -1,5 +1,5 @@
-<template dark>
-  <v-dialog :value="value" persistent max-width="600px">
+<template>
+  <v-dialog dark :value="value" persistent max-width="600px">
     <v-card>
       <v-container align-content-center>
         <span class="headline">Update Users Allotted Time</span>

@@ -35,7 +35,6 @@
                           type="password"
                           required
                           outline
-                          v-on:keyup.enter="submit"
                         ></v-text-field>
                       </v-flex>
                       <v-flex>
