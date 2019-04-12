@@ -5,7 +5,7 @@
         <v-card-title class="title font-weight-light">Contact Us</v-card-title>
         <v-card-text class="headline font-weight-bold">If you wish to submit feedback to the developers, click the speech bubble icon in the navigation bar. For other inquiries, or general information on the York County Astronomical Society, please send an email to info@astroyork.com.</v-card-text>
         <v-layout justify-center>
-            <v-img src="http://www.astroyork.com/img/YCAS2018b.jpg"
+            <v-img src="../../public/YCAS2018b_nobackground.png"
             max-width="400"
             max-height="600"
             ></v-img>
