@@ -22,6 +22,9 @@ export default {
     name: "Contact",
     components: {
         NavigationBar
+    },
+    mounted() {
+        this.$store.commit("updateInfo", {page: "Contact Us", info: "This page serves as an informational hub for those looking to contact either the\n developers, or the York County Astronomical Society."})
     }
 }
 </script>

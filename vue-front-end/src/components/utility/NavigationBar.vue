@@ -7,6 +7,7 @@
       <v-icon dark class="help-style" @click="toggleFeedback">question_answer</v-icon>
       <v-icon dark class="help-style" @click="toggleInfo">help_outline</v-icon>
       <v-toolbar-items class="hidden-sm-and-down">
+          <!-- New text links can be added to the navbar here, must be accompanied by a function with the router pushing to an appropriate url-->
           <v-btn @click="credits">Credits</v-btn>
           <v-btn @click="contact">Contact Us</v-btn>
           <v-btn @click="viewProfile">Profile</v-btn>
@@ -25,6 +26,7 @@
             </v-list-tile>
         </v-list>
     </v-navigation-drawer>
+    <!-- The help component, which displays information and instructions on the current page in the application-->
     <v-dialog dark v-model="showInfo" max-width="50%">
          <v-card class="help-modal-style">
           <v-card-title style="justify-content: center;">

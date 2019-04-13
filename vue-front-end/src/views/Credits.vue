@@ -52,6 +52,9 @@ export default {
                 }
             ]
         }
+    },
+    mounted() {
+        this.$store.commit("updateInfo", {page: "Credits", info: "This page serves as a thank you to all current and former developers, both on\n the software and hardware sides of the project."})
     }
 }
 </script>
