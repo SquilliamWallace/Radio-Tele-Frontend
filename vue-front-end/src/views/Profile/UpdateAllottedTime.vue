@@ -56,7 +56,6 @@ export default {
       // One hour is equal to 3600000 ms
       // converting hours to ms
       this.time = this.hours * 3600000;
-      console.log(this.time)
 
       ApiDriver.User.changeAllottedTime(this.user, this.time)
         .then(response => {
@@ -78,7 +77,6 @@ export default {
           );
         })
         .catch(error => {
-          console.log(error);
           this.$swal({
             title: '<span style="color:#f0ead6">Error!<span>',
             html:

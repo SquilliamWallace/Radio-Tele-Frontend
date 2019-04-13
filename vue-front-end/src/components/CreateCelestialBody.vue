@@ -135,7 +135,6 @@ export default {
             }
         },
         update(){
-            console.log("Updateing Celestial Body")
             let data = JSON.stringify({
                 name: this.form.name.value,
                 hours: this.form.hours.value,
@@ -143,14 +142,10 @@ export default {
                 seconds: this.form.seconds.value,
                 declination: this.form.declination.value
             })
-            console.log("about to call api")
-            console.log("the form id is: "+this.updateFormVals.id)
             ApiDriver.CelestialBodies.updateCB(this.updateFormVals.id, data).then((response) => {
-                console.log("update if " + this.updateFormVals.id)
                 let that = this;
                HttpResponse.then(response, data => {
                     //this.$store.commit("loading", false);
-                    console.log(response)
                     if(data.statusCode === "200"){
                         this.celestialBodyForm = false
                         this.resetForm()
@@ -163,36 +158,44 @@ export default {
                         for(var index in errors.DECLINATION){
                             this.form.declination.errorMsg = this.form.declination.errorMsg + errors.DECLINATION[index] + "\n"
                         }
-                    } else{this.form.declination.errorMsg = ""}
+                    } else{
+                        this.form.declination.errorMsg = ""
+                    }
                     if(errors.HOURS){
                         this.form.hours.hasError = true
                         for(var index in errors.HOURS){
                             this.form.hours.errorMsg = this.form.hours.errorMsg + errors.HOURS[index] + "\n"
                         }
-                    } else{this.form.hours.errorMsg = ""}
+                    } else{
+                        this.form.hours.errorMsg = ""
+                    }
                     if(errors.MINUTES){
                         this.form.minutes.hasError = true
                         for(var index in errors.MINUTES){
                             this.form.minutes.errorMsg = this.form.minutes.errorMsg + errors.MINUTES[index] + "\n"
                         }
-                    } else{this.form.minutes.errorMsg = ""}
+                    } else{
+                        this.form.minutes.errorMsg = ""
+                    }
                     if(errors.SECONDS){
                         this.form.seconds.hasError = true
                         for(var index in errors.SECONDS){
                             this.form.seconds.errorMsg = this.form.seconds.errorMsg + errors.SECONDS[index] + "\n"
                         }
-                    } else{this.form.seconds.errorMsg = ""}
+                    } else{
+                        this.form.seconds.errorMsg = ""
+                    }
                     if(errors.NAME){
                         this.form.name.hasError = true
                         for(var index in errors.NAME){
                             this.form.name.errorMsg = this.form.name.errorMsg + errors.NAME[index] + "\n"
                         }
-                    } else{this.form.name.errorMsg = ""}
-                    console.log(errors)
+                    } else{
+                        this.form.name.errorMsg = ""
+                    }
                     that.handleErrors(errors)
                 }) 
             }).catch((error) => {
-                console.log(error)
                 this.$swal({
                             title: '<span style="color:#f0ead6">Error!<span>',
                             html: '<span style="color:#f0ead6">An error occurred when updating the celestial body<span>',
@@ -205,7 +208,6 @@ export default {
             this.useUpdateCall = false
         },
         create(){
-            console.log("Creating Celestial Body")
             let data = JSON.stringify({
                 name: this.form.name.value,
                 hours: this.form.hours.value,
@@ -218,7 +220,6 @@ export default {
                 let that = this;
                HttpResponse.then(response, data => {
                     //this.$store.commit("loading", false);
-                    console.log(response)
                     if(data.statusCode === "200"){
                         this.celestialBodyForm = false
                         this.resetForm()
@@ -231,36 +232,44 @@ export default {
                         for(var index in errors.DECLINATION){
                             this.form.declination.errorMsg = this.form.declination.errorMsg + errors.DECLINATION[index] + "\n"
                         }
-                    } else{this.form.declination.errorMsg = ""}
+                    } else{
+                        this.form.declination.errorMsg = ""
+                    }
                     if(errors.HOURS){
                         this.form.hours.hasError = true
                         for(var index in errors.HOURS){
                             this.form.hours.errorMsg = this.form.hours.errorMsg + errors.HOURS[index] + "\n"
                         }
-                    } else{this.form.hours.errorMsg = ""}
+                    } else{
+                        this.form.hours.errorMsg = ""
+                    }
                     if(errors.MINUTES){
                         this.form.minutes.hasError = true
                         for(var index in errors.MINUTES){
                             this.form.minutes.errorMsg = this.form.minutes.errorMsg + errors.MINUTES[index] + "\n"
                         }
-                    } else{this.form.minutes.errorMsg = ""}
+                    } else{
+                        this.form.minutes.errorMsg = ""
+                    }
                     if(errors.SECONDS){
                         this.form.seconds.hasError = true
                         for(var index in errors.SECONDS){
                             this.form.seconds.errorMsg = this.form.seconds.errorMsg + errors.SECONDS[index] + "\n"
                         }
-                    } else{this.form.seconds.errorMsg = ""}
+                    } else{
+                        this.form.seconds.errorMsg = ""
+                    }
                     if(errors.NAME){
                         this.form.name.hasError = true
                         for(var index in errors.NAME){
                             this.form.name.errorMsg = this.form.name.errorMsg + errors.NAME[index] + "\n"
                         }
-                    } else{this.form.name.errorMsg = ""}
-                    console.log(errors)
+                    } else{
+                        this.form.name.errorMsg = ""
+                    }
                     that.handleErrors(errors)
                 }) 
             }).catch((error) => {
-                console.log(error)
                 this.$swal({
                             title: '<span style="color:#f0ead6">Error!<span>',
                             html: '<span style="color:#f0ead6">An error occurred when creating the celestial body<span>',

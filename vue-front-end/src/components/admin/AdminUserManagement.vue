@@ -172,9 +172,6 @@ export default {
             //Takes chosenFilters array and sets it to a string with the format "firstName+lastName..."
             //also sets the values in the array to camel case
             
-            
-            //console.log(this.chosenFiltersString,this.searchParam)
-            
             ApiDriver.User.userSearch(pageNumber, this.selectedPageSize, this.searchParam, this.chosenFiltersString).then((response) => {
                 HttpResponse.then(response, data => {
                     this.populateData(data.data)

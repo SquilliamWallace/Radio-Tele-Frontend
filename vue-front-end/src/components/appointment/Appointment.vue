@@ -348,11 +348,7 @@ export default {
         clearErrors() {
             CustomErrorHandler.clearError(this.form.rightAscension);
         },
-        captureStartPeriod(payload) {
-            console.log(payload);
-        },
         numbersOnly(val) {
-            console.log(val);
             val = val.replace(/[^0-9]/g, '');
             return val;
         },

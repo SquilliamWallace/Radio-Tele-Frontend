@@ -221,7 +221,6 @@ export default {
         // Populate this.appts array with data 
         populateAppts(data){
             for (var index in data.content) {
-                //console.log(data.content[index]);
                 let appt = data.content[index];
                 
                 appt.startTime = moment(appt.startTime).format('MM-DD-YYYY hh:mm A');

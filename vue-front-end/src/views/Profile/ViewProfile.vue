@@ -253,7 +253,6 @@ export default {
     },
     methods: {
         controlParser(value){
-            console.log(value)
             if(value === 'Edit Profile'){
                 this.editRedirect()
             }else if(value === 'Change Password'){
