@@ -7,6 +7,7 @@
       <v-icon dark class="help-style" @click="toggleFeedback">question_answer</v-icon>
       <v-icon dark class="help-style" @click="toggleInfo">help_outline</v-icon>
       <v-toolbar-items class="hidden-sm-and-down">
+          <v-btn @click="credits">Credits</v-btn>
           <v-btn @click="contact">Contact Us</v-btn>
           <v-btn @click="viewProfile">Profile</v-btn>
           <v-btn @click="logout">Logout</v-btn>
@@ -95,6 +96,9 @@ export default {
         },
         submit() {
             ApiDriver.login(this.data);
+        },
+        credits() {
+            router.push('/credits')
         },
         contact() {
             router.push('/contactus')
