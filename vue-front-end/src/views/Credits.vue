@@ -42,7 +42,7 @@ export default {
                     name: "Cody Spath",
                     major: "Computer Science",
                     work: "Liked integration between the back-end, front-end and control room, as well as learning about deploying an application to production",
-                    liked: "learning about and incoproprating new technologies"
+                    liked: "learning about and incorporating new technologies"
                 },
                 {
                     name: "Garrett Ruths",
