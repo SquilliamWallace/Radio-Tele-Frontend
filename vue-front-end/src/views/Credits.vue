@@ -49,6 +49,54 @@ export default {
                     major: "Computer Science",
                     work: "Liked learning in the unity engine, despite the headaches it caused",
                     liked: "being able to work in a large scale team environment"
+                },
+                {
+                    name: "Rathana Pim",
+                    major: "Computer Science",
+                    work: "Alpha Centauri",
+                    liked: "Alpha Centauri"
+                },
+                {
+                    name: "Zack Henry",
+                    major: "Computer Science",
+                    work: "Alpha Centauri",
+                    liked: "Alpha Centauri"
+                },
+                {
+                    name: "Logan Ferree",
+                    major: "Computer Science",
+                    work: "Alpha Centauri",
+                    liked: "Alpha Centauri"
+                },
+                {
+                    name: "Joseph Hopkins",
+                    major: "Lifting Weights",
+                    work: "Alpha Centauri",
+                    liked: "Alpha Centauri"
+                },
+                {
+                    name: "Jason Porter",
+                    major: "Computer Science",
+                    work: "Alpha Centauri",
+                    liked: "Alpha Centauri"
+                },
+                {
+                    name: "Jacob Majeski",
+                    major: "Computer Science",
+                    work: "Alpha Centauri",
+                    liked: "Alpha Centauri"
+                },
+                {
+                    name: "Ezra Moore",
+                    major: "Computer Science",
+                    work: "Alpha Centauri",
+                    liked: "Alpha Centauri"
+                },
+                {
+                    name: "Chris Garrety",
+                    major: "Computer Science",
+                    work: "Alpha Centauri",
+                    liked: "Alpha Centauri"
                 }
             ]
         }
