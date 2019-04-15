@@ -51,6 +51,24 @@ export default {
                     liked: "being able to work in a large scale team environment"
                 },
                 {
+                    name: "Derek McClellan",
+                    major: "Computer Science",
+                    work: "Liked learning Vue.js and the instant gratification that comes with web development",
+                    liked: "leading a team of talented people to work towards deployment and integration"
+                },
+                {
+                    name: "David Henry",
+                    major: "Computer Science",
+                    work: "Liked playing with the scale model Radio Telescope",
+                    liked: "being able to work on a great project with amazing people"
+                },
+                {
+                    name: "Logan Ferree",
+                    major: "Computer Science",
+                    work: "Liked learning about Kotlin for the back-end software, and being able to break 75% of the unit tests",
+                    liked: "learning new technologies and working on a large project"
+                },
+                {
                     name: "Rathana Pim",
                     major: "Computer Science",
                     work: "Alpha Centauri",
@@ -58,12 +76,6 @@ export default {
                 },
                 {
                     name: "Zack Henry",
-                    major: "Computer Science",
-                    work: "Alpha Centauri",
-                    liked: "Alpha Centauri"
-                },
-                {
-                    name: "Logan Ferree",
                     major: "Computer Science",
                     work: "Alpha Centauri",
                     liked: "Alpha Centauri"
