@@ -76,15 +76,6 @@
                     <!--
                         Same as Start Time above
                     -->
-                    <!-- <v-flex xs12 sm6>
-                        <v-text-field
-                        v-model="eventObj.end"
-                        :rules="[rules.dateRequired]"
-                        color="blue darken-2"
-                        label="End Time"
-                        required
-                        ></v-text-field>
-                    </v-flex> -->
                     <!--
                         Right Ascension Hours
                         v-model="form.rightAscension.hours"
@@ -99,7 +90,7 @@
                         onkeypress='return event.charCode >= 48 && event.charCode <= 57'
                             Only allow numbers to be inputted into the form (0 through 9)
                     -->
-                    <v-flex xs12 sm4>
+                    <v-flex xs12 sm4 v-if="type === 'Point'">
                         <v-text-field
                         v-model="form.rightAscension.hours"
                         :rules="[rules.rightAscHours]"
@@ -117,7 +108,7 @@
                      <!--
                         Same as Right Ascension Hours, except checks for minutes error handling
                     -->
-                    <v-flex xs12 sm4>
+                    <v-flex xs12 sm4 v-if="type === 'Point'">
                         <v-text-field
                         v-model="form.rightAscension.minutes"
                         :rules="[rules.rightAscMinutes]"
@@ -135,7 +126,7 @@
                      <!--
                         Same as Right Ascension Hours, except checks for seconds error handling
                     -->
-                    <v-flex xs12 sm4>
+                    <v-flex xs12 sm4 v-if="type === 'Point'">
                         <v-text-field
                         v-model="form.rightAscension.seconds"
                         :rules="[rules.rightAscSeconds]"
@@ -154,7 +145,7 @@
                         onkeypress='return event.charCode == 45 || (event.charCode >= 48 && event.charCode <= 57)'
                             Only allow numerical inputs and - (minus) as input can be negative
                      -->
-                    <v-flex xs12 sm6>
+                    <v-flex xs12 sm6 v-if="type === 'Point'">
                         <v-text-field
                         v-model="form.declination.value"
                         :rules="[rules.numRequired]"
@@ -194,6 +185,16 @@
                         required
                         ></v-select>
                     </v-flex>
+                    
+                    <v-flex xs12 sm6>
+                        <v-select
+                        v-model="type"
+                        :items="types"
+                        color="blue darken-2"
+                        label="Appointment Type"
+                        required
+                        ></v-select>
+                    </v-flex>
                     </v-layout>
                 </v-container>
                 <v-card-actions>
@@ -229,6 +230,12 @@ export default {
                 "Scale Model Radio Telescope",
                 "Virtual Radio Telescope"
             ],
+            types: [
+                "Point",
+                "Celestial Body",
+                "Drift Scan",
+                "Raster Scan"
+            ],
             form: {
                 isPrivate: {
                     value: false
@@ -248,6 +255,8 @@ export default {
             startTime: '',
             endDate: '',
             endTime: '',
+            type: 'Point',
+            selectedType: '',
 
             // Variable to keep track of whether or not we've updated our start/end times 
             updatedTime: false,
@@ -289,6 +298,10 @@ export default {
             this.start = this.startDate + " " + this.startTime;
             this.end = this.endDate + " " + this.endTime;
             this.clearErrors();
+
+            // Handles making the selected Appointment Type string compatible with the back-end
+            this.handleType();
+
             // set up form to send to back end with data from form obj
             let form = {
                 userId: this.$store.state.currentUserId,
@@ -301,9 +314,9 @@ export default {
                 seconds: this.form.rightAscension.seconds,
                 declination: this.form.declination.value
             };
-            
+                        
             // Call appropriate API CALL and send form in json format
-            ApiDriver.Appointment.create(JSON.stringify(form)).then((response) => {
+            ApiDriver.Appointment.create(JSON.stringify(form), this.selectedType).then((response) => {
                 HttpResponse.then(response, (data) => {
                     // If returns SUCCESS
                     this.snackbar = true;
@@ -343,6 +356,22 @@ export default {
                 } else {
                     HttpResponse.generalError(this, message, false)
                 }
+            }
+        },
+        handleType() {
+            // Handle setting up the proper API call to the back-end
+            console.log(this.type);
+            if(this.type == "Point") {
+                this.selectedType = "coordinate";
+            }
+            else if(this.type == "Celestial Body") {
+                this.selectedType = "celestial-body";
+            }
+            else if(this.type == "Drift Scan") {
+                this.selectedType = "drift-scan";
+            }
+            else if(this.type == "Raster Scan") {
+                this.selectedType = "raster-scan";
             }
         },
         clearErrors() {

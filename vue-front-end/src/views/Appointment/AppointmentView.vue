@@ -25,6 +25,13 @@
                 </v-list-tile-content>
             </v-list-tile>
             <v-divider></v-divider>
+            <v-list-tile>
+                <v-list-tile-content class="white--text">
+                    <v-list-tile-title >Type:</v-list-tile-title>
+                    <v-list-tile-sub-title class = "pl-3">{{ data.type.value }}</v-list-tile-sub-title>
+                </v-list-tile-content>
+            </v-list-tile>
+            <v-divider></v-divider>
             <!-- 
                 Maybe re-implement when able to detect if celestial body being tracked
 
@@ -35,7 +42,10 @@
                 </v-list-tile-content>
             </v-list-tile>
             -->
-            <v-divider></v-divider>
+
+            <!--
+                Conditionally render appointment data depending on Type
+             -->
             <v-list-tile>
                 <v-list-tile-content class="white--text">
                     <v-list-tile-title>Coordinates:</v-list-tile-title>
@@ -154,6 +164,9 @@ export default {
                 },
                 telescopeId: {
                     value: null
+                },
+                type: {
+                    value: null
                 }
             },
             celestialBody: '',
@@ -210,6 +223,22 @@ export default {
                 declination: {
                     value: null,
                     hasError: false
+                },
+                celestialBodyName: {
+                    value: null
+                },
+                azimuth: {
+                    value: null
+                },
+                elevation: {
+                    value: null
+                },
+                coordinates: {
+                    hours: null,
+                    minutes: null,
+                    seconds: null,
+                    rightAscension: null,
+                    declination: null
                 }
             },
             cancel: false,
@@ -267,23 +296,47 @@ export default {
         },
         populateData(data) {
             // Populate the appointment information 
+            // All appointment types contain this data:
             this.data.id.value = data.id
-            this.data.telescopeId.value = data.telescopeId
-            this.telescopeName = this.telescopes[this.data.telescopeId.value - 1]
-            this.data.userFirstName.value = data.userFirstName
-            this.data.userLastName.value = data.userLastName
-            this.data.eventUserId.value = data.userId
-            this.data.isPublic.value = data.public
             this.data.startTime.value = moment(data.startTime).format('MM-DD-YYYY hh:mm A')
             this.data.endTime.value = moment(data.endTime).format('MM-DD-YYYY hh:mm A')
+            this.data.telescopeId.value = data.telescopeId
+            this.data.isPublic.value = data.public
+            this.data.eventUserId.value = data.userId
+            this.data.userFirstName.value = data.userFirstName
+            this.data.userLastName.value = data.userLastName
+            this.data.status.value = data.status
+            this.data.type.value = data.type;
+            this.telescopeName = this.telescopes[this.data.telescopeId.value - 1]
             this.rawEndTime = data.endTime
             this.complete = moment(this.rawEndTime).isBefore(moment(), 'second')
-            this.data.status.value = data.status
-            this.data.rightAscension.value = data.rightAscension.toFixed(2);
-            this.data.rightAscension.hours = data.hours,
-            this.data.rightAscension.minutes = data.minutes,
-            this.data.rightAscension.seconds = data.seconds,
-            this.data.declination.value = data.declination
+
+            // Point type Appointments:
+            if(data.type == 'Point' || data.type == 'Celestial Body') {
+                this.data.rightAscension.value = data.rightAscension.toFixed(2);
+                this.data.rightAscension.hours = data.hours;
+                this.data.rightAscension.minutes = data.minutes;
+                this.data.rightAscension.seconds = data.seconds;
+                this.data.declination.value = data.declination;
+            }
+
+            // Celestial Body type Appointments:
+            if(data.type == 'Celestial Body') {
+                this.data.celestialBodyName.value = data.celestialBodyName;
+            }
+
+            // Drift Scan type Appointments:
+            if(data.type == 'Drift Scan') {
+                this.data.azimuth.value = data.azimuth;
+                this.data.elevation.value = data.elevation;
+            }
+
+            // Raster Scan type Appointments:
+            if(data.type == 'Raster Scan') {
+
+            }
+
+            console.log(data);
             // If the appointment has been completed, mark the boolean
             if (this.data.status.value === 'Completed') {
                 this.complete = true

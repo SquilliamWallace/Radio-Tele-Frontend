@@ -82,8 +82,8 @@ export default {
       view: function (appointmentId) {
         return axios.get(this.namespace + "/" + appointmentId + "/retrieve", Headers.retrieveHeaders())
       },
-      create: function (data) {
-        return axios.post(this.namespace + "/schedule", data, Headers.retrieveHeaders())
+      create: function (data, type) {
+        return axios.post(this.namespace + "/schedule/" + type, data, Headers.retrieveHeaders())
       },
       request: function (data) {
         return axios.post(this.namespace + "/request", data, Headers.retrieveHeaders())
