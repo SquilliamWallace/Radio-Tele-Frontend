@@ -159,6 +159,23 @@
                         required
                         ></v-text-field>
                     </v-flex>
+
+                    <!--
+                        Conditionally display Celestial Body ID field    
+                    -->
+                    <v-flex xs12 sm4 v-if="type === 'Celestial Body'">
+                        <v-text-field
+                        v-model="form.celestialBody.id"
+                        :validate-on-blur="true"
+                        color="blue darken-2"
+                        onkeypress='return event.charCode >= 48 && event.charCode <= 57'
+                        label="Celestial Body ID"
+                        type="number"
+                        class="number"
+                        required
+                        ></v-text-field>
+                     </v-flex>
+
                     <!--
                         v-if="this.$store.state.isResearcher || this.$store.state.isAdmin"
                         only display this part of the form if current user is researcher or admin
@@ -249,6 +266,16 @@ export default {
                 declination: {
                     value: null,
                     hasError: false
+                },
+                celestialBody: {
+                    name: null,
+                    id: null
+                },
+                azimuth: {
+                    value: null
+                },
+                elevation: {
+                    value: null
                 }
             },
             startDate: '',
@@ -265,10 +292,10 @@ export default {
             */
             rules: {
                 dateRequired: val => (val && val.length > 0) || 'Required field',
-                rightAscHours: val => (val && val.toString().length > 0 && val < 24 && val >= 0) || 'Must be between 0 and 23 hours',
-                rightAscMinutes: val => (val && val.toString().length > 0 && val < 60 && val >= 0) || 'Must be between 0 and 59 minutes',
-                rightAscSeconds: val => (val && val.toString().length > 0 && val < 60 && val >= 0) || 'Must be between 0 and 59 seconds',
-                numRequired: val => (val && val.toString().length > 0 && val <=90 && val >= -90) || 'Must be between 90 and -90'
+                rightAscHours: val => (val && val.toString().length > 0 && val < 24 && val >= 0 && this.type === 'Point') || 'Must be between 0 and 23 hours',
+                rightAscMinutes: val => (val && val.toString().length > 0 && val < 60 && val >= 0 && this.type === 'Point') || 'Must be between 0 and 59 minutes',
+                rightAscSeconds: val => (val && val.toString().length > 0 && val < 60 && val >= 0 && this.type === 'Point') || 'Must be between 0 and 59 seconds',
+                numRequired: val => (val && val.toString().length > 0 && val <=90 && val >= -90 && this.type === 'Point') || 'Must be between 90 and -90'
             },
             snackbar: false,
         }
@@ -312,7 +339,8 @@ export default {
                 hours: this.form.rightAscension.hours,
                 minutes: this.form.rightAscension.minutes,
                 seconds: this.form.rightAscension.seconds,
-                declination: this.form.declination.value
+                declination: this.form.declination.value,
+                celestialBodyId: this.form.celestialBody.id
             };
                         
             // Call appropriate API CALL and send form in json format
@@ -408,16 +436,23 @@ export default {
     },
     computed: {
         formIsValid() {
-            return (
-                this.startTime &&
-                this.endTime &&
-                this.startDate &&
-                this.endDate &&
-                this.form.rightAscension.hours,
-                this.form.rightAscension.minutes,
-                this.form.rightAscension.seconds,
-                this.form.declination.value
-            )
+            if(this.type == 'Point') {    
+                return (
+                    this.startTime &&
+                    this.endTime &&
+                    this.startDate &&
+                    this.endDate &&
+                    this.form.rightAscension.hours,
+                    this.form.rightAscension.minutes,
+                    this.form.rightAscension.seconds,
+                    this.form.declination.value
+                )
+            }
+            else if(this.type == 'Celestial Body') {
+                return (
+                    this.form.celestialBody.id
+                )
+            }
         }
     },
     

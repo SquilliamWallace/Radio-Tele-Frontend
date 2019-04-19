@@ -336,7 +336,7 @@ export default {
 
             }
 
-            console.log(data);
+            //console.log(data);
             // If the appointment has been completed, mark the boolean
             if (this.data.status.value === 'Completed') {
                 this.complete = true
