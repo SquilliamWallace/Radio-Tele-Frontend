@@ -161,7 +161,24 @@
                     </v-flex>
 
                     <!--
-                        Conditionally display Celestial Body Selection field    
+                        Conditionally display Celestial Body Selection field  
+
+                        :items="bodies", item-text="name", item-value="id" {
+                            Sets the items in the list to the items in the bodies object,
+                            makes the text that appear in the selection the value of bodies.name,
+                            and sets the variable bound to the model (selectedBody) to bodies.id
+                        } 
+                        :search-input.sync="searchInput" {
+                            Sets the searchInput variable to the text the user types. This is monitored
+                            with a watcher below, and calls the getCelestialBodies method whenever a user
+                            enters text (i.e. autocomplete)
+                        }
+                        placeholder="..." {
+                            Sets the placeholder text in the text box to the text inside of the quotes.
+                        }  
+                        hide-no-data {
+                            Prevents an ugly popup from showing when the user hasn't entered in any text.
+                        }
                     -->
                     <v-flex xs12 sm4 v-if="type === 'Celestial Body'">
                         <v-autocomplete
