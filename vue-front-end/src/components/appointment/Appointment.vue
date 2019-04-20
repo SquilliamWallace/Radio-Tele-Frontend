@@ -161,19 +161,19 @@
                     </v-flex>
 
                     <!--
-                        Conditionally display Celestial Body ID field    
+                        Conditionally display Celestial Body Selection field    
                     -->
                     <v-flex xs12 sm4 v-if="type === 'Celestial Body'">
-                        <v-text-field
-                        v-model="form.celestialBody.id"
-                        :validate-on-blur="true"
-                        color="blue darken-2"
-                        onkeypress='return event.charCode >= 48 && event.charCode <= 57'
-                        label="Celestial Body ID"
-                        type="number"
-                        class="number"
-                        required
-                        ></v-text-field>
+                        <v-autocomplete
+                        v-model="selectedBody"
+                        label="Celestial Body"
+                        :items="bodies"
+                        item-text="name"
+                        item-value="id"
+                        :search-input.sync="searchInput"
+                        placeholder="Enter the name of a Celestial Body"
+                        hide-no-data>
+                        </v-autocomplete>
                      </v-flex>
 
                     <!--
@@ -282,8 +282,15 @@ export default {
             startTime: '',
             endDate: '',
             endTime: '',
+
+            // Variables to keep track of chosen Appointment type
             type: 'Point',
             selectedType: '',
+
+            // Variables to keep track of chosen Celestial Body
+            bodies: [],
+            selectedBody: '',
+            searchInput: '',
 
             // Variable to keep track of whether or not we've updated our start/end times 
             updatedTime: false,
@@ -340,7 +347,7 @@ export default {
                 minutes: this.form.rightAscension.minutes,
                 seconds: this.form.rightAscension.seconds,
                 declination: this.form.declination.value,
-                celestialBodyId: this.form.celestialBody.id
+                celestialBodyId: this.selectedBody
             };
                         
             // Call appropriate API CALL and send form in json format
@@ -432,6 +439,40 @@ export default {
                 this.startDate = '';
                 this.endDate = '';
             }
+        },
+
+        // Methods to grab our celestial bodies and push them into the bodies[] list
+        getCelestialBodies(searchParam) {
+            this.bodies = [];
+            this.$store.commit("loading", true);
+            ApiDriver.CelestialBodies.searchCB(0, 25, searchParam, "name")
+            .then(response => {
+                HttpResponse.then(
+                    response,
+                    data => {
+                    this.populateData(data.data);
+                    this.$store.commit("loading", false);
+                    },
+                    (status, errors) => {}
+                );
+            })
+            .catch(error => {
+                this.$swal({
+                    title: '<span style="color:#f0ead6">Error!<span>',
+                    html:
+                    '<span style="color:#f0ead6">An error occurred when loading the celestial bodies list<span>',
+                    type: "error",
+                    background: "#302f2f"
+                }).then(response => {
+                    CurrentUserValidation.validateCurrentUser(this.$store);
+                });
+            });
+        },
+        populateData(data) {
+            for (var index in data.content) {
+                let body = data.content[index];
+                this.bodies.push(body);
+            }
         }
     },
     computed: {
@@ -450,17 +491,27 @@ export default {
             }
             else if(this.type == 'Celestial Body') {
                 return (
-                    this.form.celestialBody.id
+                    this.selectedBody
                 )
             }
         }
     },
-    
+
     updated: function() {
         // Update our start and end times based on the passed in prop from Scheduler.vue
         // This is only necessary in the case of a drag-n-drop appointment, and only needs to be called once
         if(!this.updatedTime) {
             this.updateTime();
+        }
+    },
+
+    // Watch for the selected Appt Type to change, and clear the form object of past data when it does
+    watch:  {
+        type() {
+            console.log("appt type changed");
+        },
+        searchInput(key) {
+            this.getCelestialBodies(key);
         }
     }
 }
