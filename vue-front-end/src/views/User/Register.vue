@@ -266,7 +266,7 @@ import CustomErrorHandler from "../../utils/CustomErrorHandler";
                     // If the call was a success, redirect to the login page
                     that.$swal({
                         title: '<span style="color:#f0ead6">Account Created!<span>',
-                        html: '<span style="color:#f0ead6">Your account has been created. Please check your email to activate it.<span>',
+                        html: '<span style="color:#f0ead6">Your account has been created! Once an administrator has approved your account, a link will be sent to you in order to activate it.<span>',
                         type: 'success',
                         background: '#302f2f'
                     }).then(response => {
