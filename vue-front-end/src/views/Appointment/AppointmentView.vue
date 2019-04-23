@@ -363,7 +363,7 @@ export default {
 
             // Point type Appointments:
             if(data.type == 'Point') {
-                this.data.rightAscension.value = data.rightAscension;
+                this.data.rightAscension.value = data.rightAscension.toFixed(2);
                 this.data.rightAscension.hours = data.hours;
                 this.data.rightAscension.minutes = data.minutes;
                 this.data.rightAscension.seconds = data.seconds;
@@ -374,7 +374,7 @@ export default {
             if(data.type === 'Celestial Body') {
                 this.appointment.celestialBodyName.value = data.celestialBodyName;
                 if(data.hours != null){
-                    this.data.rightAscension.value = data.rightAscension;
+                    this.data.rightAscension.value = data.rightAscension.toFixed(2);
                     this.data.rightAscension.hours = data.hours;
                     this.data.rightAscension.minutes = data.minutes;
                     this.data.rightAscension.seconds = data.seconds;
