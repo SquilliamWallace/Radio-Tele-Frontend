@@ -32,6 +32,13 @@
                 </v-list-tile-content>
             </v-list-tile>
             <v-divider></v-divider>
+            <!-- if appt type is "Celestial Body" -->
+            <v-list-tile v-if="data.type.value === 'Celestial Body'">
+                <v-list-tile-content class="white--text">
+                    <v-list-tile-title >Celestial Body Name:</v-list-tile-title>
+                    <v-list-tile-sub-title class = "pl-3">{{ appointment.celestialBodyName.value }}</v-list-tile-sub-title>
+                </v-list-tile-content>
+            </v-list-tile>
             <!-- 
                 Maybe re-implement when able to detect if celestial body being tracked
 
@@ -46,14 +53,47 @@
             <!--
                 Conditionally render appointment data depending on Type
              -->
-            <v-list-tile>
+            <v-list-tile v-if="this.data.type.value == 'Raster Scan'">
                 <v-list-tile-content class="white--text">
-                    <v-list-tile-title>Coordinates:</v-list-tile-title>
-                    <v-list-tile-sub-title class="pl-3" v-if="data.declination.value > 0">Right Ascension: {{ data.rightAscension.hours }} Hours {{data.rightAscension.minutes}} Minutes {{data.rightAscension.seconds}} Seconds, Declination: +{{ data.declination.value }}</v-list-tile-sub-title>
-                    <v-list-tile-sub-title class="pl-3" v-if="data.declination.value <= 0">Right Ascension: {{ data.rightAscension.hours }} Hours {{data.rightAscension.minutes}} Minutes {{data.rightAscension.seconds}} Seconds, Declination: {{ data.declination.value }}</v-list-tile-sub-title>
+                    <v-list-tile-title>Coordinate 1:</v-list-tile-title>
+                    <v-flex>
+                        <v-list-tile-sub-title class="pl-3" v-if="data.declination.value > 0">Right Ascension: {{ this.appointment.coordinate1.hours }} Hours {{ this.appointment.coordinate1.minutes }} Minutes {{this.appointment.coordinate1.seconds}} Seconds, Declination: +{{ this.appointment.coordinate1.declination }}</v-list-tile-sub-title>
+                        <v-list-tile-sub-title class="pl-3" v-if="data.declination.value <= 0">Right Ascension: {{ this.appointment.coordinate1.hours }} Hours {{ this.appointment.coordinate1.minutes }} Minutes {{this.appointment.coordinate1.seconds}} Seconds, Declination: {{ this.appointment.coordinate1.declination }}</v-list-tile-sub-title>
+                    </v-flex>
                 </v-list-tile-content>
             </v-list-tile>
             <v-divider></v-divider>
+            <v-list-tile v-if="this.data.type.value == 'Raster Scan'">
+                <v-list-tile-content class="white--text">
+                    <v-list-tile-title>Coordinate 2:</v-list-tile-title>
+                    <v-flex>
+                        <v-list-tile-sub-title class="pl-3" v-if="data.declination.value > 0">Right Ascension: {{ this.appointment.coordinate2.hours }} Hours {{this.appointment.coordinate2.minutes}} Minutes {{this.appointment.coordinate2.seconds}} Seconds, Declination: +{{ this.appointment.coordinate2.declination }}</v-list-tile-sub-title>
+                        <v-list-tile-sub-title class="pl-3" v-if="data.declination.value <= 0">Right Ascension: {{ this.appointment.coordinate2.hours }} Hours {{this.appointment.coordinate2.minutes}} Minutes {{this.appointment.coordinate2.seconds}} Seconds, Declination: {{ this.appointment.coordinate2.declination }}</v-list-tile-sub-title>
+                    </v-flex>
+                </v-list-tile-content>
+            </v-list-tile>
+            <v-list-tile v-if="(this.data.type.value == 'Celestial Body' && this.data.rightAscension.value != '-') || this.data.type.value === 'Point'">
+                <v-list-tile-content class="white--text">
+                    <v-list-tile-title>Coordinates:</v-list-tile-title>
+                    <v-flex>
+                        <v-list-tile-sub-title class="pl-3" v-if="data.declination.value > 0">Right Ascension: {{ data.rightAscension.hours }} Hours {{data.rightAscension.minutes}} Minutes {{data.rightAscension.seconds}} Seconds, Declination: +{{ data.declination.value }}</v-list-tile-sub-title>
+                        <v-list-tile-sub-title class="pl-3" v-if="data.declination.value <= 0">Right Ascension: {{ data.rightAscension.hours }} Hours {{data.rightAscension.minutes}} Minutes {{data.rightAscension.seconds}} Seconds, Declination: {{ data.declination.value }}</v-list-tile-sub-title>
+                    </v-flex>
+                    <v-flex v-if="this.data.type.value == 'Drift Scan'">
+                        <v-list-tile-sub-title class = "pl-3">Elevation: {{ this.appointment.elevation.value }}, Azimuth: {{ this.appointment.azimuth.value }}</v-list-tile-sub-title>
+                    </v-flex>
+                </v-list-tile-content>
+            </v-list-tile>
+            <v-list-tile v-if="this.data.type.value == 'Drift Scan'">
+                <v-list-tile-content class="white--text">
+                    <v-list-tile-title>Orientation:</v-list-tile-title>
+                    <v-flex>
+                        <v-list-tile-sub-title class = "pl-3">Elevation: {{ this.appointment.elevation.value }}, Azimuth: {{ this.appointment.azimuth.value }}</v-list-tile-sub-title>
+                    </v-flex>
+                </v-list-tile-content>
+            </v-list-tile>
+            <v-divider></v-divider>
+
             <v-list-tile>
                 <v-list-tile-content class="white--text">
                     <v-list-tile-title>Telescope Name:
@@ -233,7 +273,15 @@ export default {
                 elevation: {
                     value: null
                 },
-                coordinates: {
+                //raster coordinates
+                coordinate1: {
+                    hours: null,
+                    minutes: null,
+                    seconds: null,
+                    rightAscension: null,
+                    declination: null
+                },
+                coordinate2: {
                     hours: null,
                     minutes: null,
                     seconds: null,
@@ -263,6 +311,7 @@ export default {
             ApiDriver.Appointment.view(this.$route.params.appointmentId).then((response) => {
                 // Handle the server response
                 HttpResponse.then(response, (data) => {
+                    console.log("Response data: " + JSON.stringify(data))
                     // Populate the data and set the store's boolean back to false
                     this.populateData(data.data)
                     this.$store.commit("loading", false);
@@ -280,6 +329,7 @@ export default {
                 })
             }).catch((error) => {
                 // Handle an erroneous API call
+                console.log(error)
                 let message = "An error occurred when loading this observation";
                 HttpResponse.generalError(this, message, true);
             });
@@ -312,7 +362,7 @@ export default {
             this.complete = moment(this.rawEndTime).isBefore(moment(), 'second')
 
             // Point type Appointments:
-            if(data.type == 'Point' || data.type == 'Celestial Body') {
+            if(data.type == 'Point') {
                 this.data.rightAscension.value = data.rightAscension.toFixed(2);
                 this.data.rightAscension.hours = data.hours;
                 this.data.rightAscension.minutes = data.minutes;
@@ -321,19 +371,42 @@ export default {
             }
 
             // Celestial Body type Appointments:
-            if(data.type == 'Celestial Body') {
-                this.data.celestialBodyName.value = data.celestialBodyName;
+            if(data.type === 'Celestial Body') {
+                this.appointment.celestialBodyName.value = data.celestialBodyName;
+                if(data.hours != null){
+                    this.data.rightAscension.value = data.rightAscension.toFixed(2);
+                    this.data.rightAscension.hours = data.hours;
+                    this.data.rightAscension.minutes = data.minutes;
+                    this.data.rightAscension.seconds = data.seconds;
+                    this.data.declination.value = data.declination;
+                }else{
+                    this.data.rightAscension.value = '-';
+                    this.data.rightAscension.hours = '-';
+                    this.data.rightAscension.minutes = '-';
+                    this.data.rightAscension.seconds = '-';
+                    this.data.declination.value = '-';
+                    console.log(this.data.rightAscension.hours)
+                }
             }
 
             // Drift Scan type Appointments:
             if(data.type == 'Drift Scan') {
-                this.data.azimuth.value = data.azimuth;
-                this.data.elevation.value = data.elevation;
+                this.appointment.azimuth.value = data.azimuth;
+                this.appointment.elevation.value = data.elevation;
             }
 
             // Raster Scan type Appointments:
             if(data.type == 'Raster Scan') {
-
+                //coordinate 1
+                this.appointment.coordinate1.hours = data.coordinates[0].hours
+                this.appointment.coordinate1.minutes = data.coordinates[0].minutes
+                this.appointment.coordinate1.seconds = data.coordinates[0].seconds
+                this.appointment.coordinate1.declination = data.coordinates[0].declination
+                //coordinate 2
+                this.appointment.coordinate2.hours = data.coordinates[1].hours
+                this.appointment.coordinate2.minutes = data.coordinates[1].minutes
+                this.appointment.coordinate2.seconds = data.coordinates[1].seconds
+                this.appointment.coordinate2.declination = data.coordinates[1].declination
             }
 
             //console.log(data);
