@@ -103,7 +103,7 @@
                             Select the role you wish to assign to this user.
                         </v-card-text>
                         <v-select
-                            item-valu e= accountTypes[0]
+                            item-value= accountTypes[0]
                             :items="accountTypes"
                             required
                             v-model="form.assignedRole.value"
