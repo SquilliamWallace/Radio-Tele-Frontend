@@ -103,8 +103,9 @@ export default {
       data: function(appointmentId) {
         return axios.get(this.namespace + "/" + appointmentId + "/rf-data", Headers.retrieveHeaders())
       },
-      update: function(appointmentId, data) {
-        return axios.put(baseUrl + "appointments/" + appointmentId, data, Headers.retrieveHeaders())
+      update: function(appointmentId, data, type) {
+        console.log("Appt Id: " + appointmentId + " data: " + data + " type: " + type)
+        return axios.put(baseUrl + "appointments/" + appointmentId + "/" + type, data, Headers.retrieveHeaders())
       },
       cancel: function(appointmentId) {
         return axios.put(baseUrl + "appointments/" + appointmentId + "/cancel", {}, Headers.retrieveHeaders())
