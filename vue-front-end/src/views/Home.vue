@@ -13,16 +13,24 @@
           <v-card-title primary-title>
             <div style="padding: 25px;">
               <div class="headline">Welcome to the York County Astronomical Society Radio Telescope!</div>
-              <span class="grey--text">The York County Astronomical Society, Inc. is a non-profit organization dedicated to the advancement of the science of astronomy.
+              <v-card-text class="grey--text">The York Country Astronomical Society, Inc, is a non-profit organization dedicated to the advancement of the science of astronomy.
 
-              The York County Astronomical Society was started in 1989, and currently has about 70 members in 4 counties in Pennsylvania as well as in Maryland and Delaware. 
+              The York County Astronomical Society was started in 1989, and currently has about 30 members in 4 counties in Pennsylvania.
 
               The Society also has special programs to showcase eclipses, meteor showers, comets, and other special events.
 
-              The Society operates The York Learning Center Planetarium bringing astronomy to the public, presenting astronomical shows and related astronomy programs of the night sky.
-  
-              The Society owns 5 research-grade telescopes, an 18” Dobsonian, 14” Dobsonian and a 12” computerized goto telescope, a 10" SCT telescope, a 4.5” Newtonian telescope, a 4” Astro-Physics Refractor telescope. In addition for loan to members, the Society owns two 8” Dobsonian telescopes, a Celestron NexStar i 8 GoTo telescope with GPS and a Coronado PST solar telescope.
-              </span>
+              The Society operates the York Learning Center Planetarium bringing astronomy to the public, presenting astronomical shows and related astronomy programs of the night sky.
+
+              The Society hosts numerous groups for private star parties, from Boy and Girl Scout troops, church groups, school classes, and company groups. We also hold two Introduction to Astronomy classes each year.
+
+              The Society owns 6 optical telescopes:
+
+              An 18” Dobsonian,
+              a 14” Dobsonian and a 12” Computerized GoTo Telescope,
+              a 10” SCT Telescope,
+              a 4.5” Newtonian Telescope,
+              and a 4” Astro-Physics Refractor Telescope
+              </v-card-text>
             </div>
           </v-card-title>
         </v-card>
