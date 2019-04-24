@@ -69,6 +69,24 @@ export default {
                     liked: "learning new technologies and working on a large project"
                 },
                 {
+                    name: "Felix Diaz",
+                    major: "Computer Engineering",
+                    work: "Liked working on the virtual reality telescope and planetarium, as well as creating the automated movement in C#",
+                    liked: "Creating technology that can introduce people to the joys of radio astronomy and making Kerry's dreams come true"
+                },
+                {
+                    name: "Joseph Hopkins",
+                    major: "Computer Science",
+                    work: "Liked developing the UI/UX of the application",
+                    liked: "Being immersed in new and interesting technologies"
+                },
+                {
+                    name: "Jason Porter",
+                    major: "Computer Science",
+                    work: "Liked developing a C# application that connects the internet to the hardware",
+                    liked: "Implementing his team's work in iterative development cycles"
+                },
+                {
                     name: "Rathana Pim",
                     major: "Computer Science",
                     work: "Alpha Centauri",
@@ -76,18 +94,6 @@ export default {
                 },
                 {
                     name: "Zack Henry",
-                    major: "Computer Science",
-                    work: "Alpha Centauri",
-                    liked: "Alpha Centauri"
-                },
-                {
-                    name: "Joseph Hopkins",
-                    major: "Lifting Weights",
-                    work: "Alpha Centauri",
-                    liked: "Alpha Centauri"
-                },
-                {
-                    name: "Jason Porter",
                     major: "Computer Science",
                     work: "Alpha Centauri",
                     liked: "Alpha Centauri"
