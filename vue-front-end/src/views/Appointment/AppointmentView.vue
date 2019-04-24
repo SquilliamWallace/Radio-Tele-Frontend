@@ -221,6 +221,10 @@ export default {
             share: false,
             unshare: false,
             appointment: {
+                type:{
+                    value: null,
+                    hasError: false
+                },
                 id: {
                     value: null,
                     hasError: false
@@ -268,24 +272,24 @@ export default {
                     value: null
                 },
                 azimuth: {
-                    value: null
+                    value: null,
+                    hasError: false
                 },
                 elevation: {
-                    value: null
+                    value: null,
+                    hasError: false
                 },
                 //raster coordinates
                 coordinate1: {
                     hours: null,
                     minutes: null,
                     seconds: null,
-                    rightAscension: null,
                     declination: null
                 },
                 coordinate2: {
                     hours: null,
                     minutes: null,
                     seconds: null,
-                    rightAscension: null,
                     declination: null
                 }
             },
@@ -360,6 +364,9 @@ export default {
             this.telescopeName = this.telescopes[this.data.telescopeId.value - 1]
             this.rawEndTime = data.endTime
             this.complete = moment(this.rawEndTime).isBefore(moment(), 'second')
+
+            //set appointment type
+            this.appointment.type = data.type
 
             // Point type Appointments:
             if(data.type == 'Point') {
