@@ -22,6 +22,7 @@
                 <rf-data-graph :chartdata="graphData" :styles="graphStyles"></rf-data-graph>
             </div>
         </v-dialog>
+        <v-btn color="primary darken-1" @click="downloadRFData({ filename: 'rf-data.csv'})">Download as CSV</v-btn>
     </div>
   </div>
 </template>
@@ -103,6 +104,54 @@ export default {
         },
         showGraph() {
             this.graphToggle=!this.graphToggle;
+        },
+        convertRFDataToCSV(rfdata) {
+            var result, counter, keys, columnDelim, lineDelim, data;
+
+            data = rfdata.data || null;
+            if (data==null || !data.length) {
+                return null
+            }
+
+            columnDelim = rfdata.columnDelim || ','
+            lineDelim = rfdata.lineDelim || '\n'
+
+            keys = Object.keys(data[0])
+
+            result= ''
+            result += keys.join(columnDelim)
+            result += lineDelim
+
+            data.forEach(function(item) {
+                counter = 0;
+                keys.forEach(function(key) {
+                    if (counter >0) {
+                        result += columnDelim
+                    }
+                    result += item[key]
+                    counter++
+                })
+                result += lineDelim
+            })
+            return result;
+        },
+        downloadRFData(rfdata) {
+            var data, filename, link
+            var csv = this.convertRFDataToCSV({
+                data: this.RFData
+            })
+            if (csv==null){
+                return;
+            }
+            filename = rfdata.filename || 'rfdata.csv'
+            if (!csv.match(/^data:text\/csv/i)) {
+                csv = 'data:text/csv;charset=utf-8,' + csv
+            }
+            data = encodeURI(csv)
+            link = document.createElement('a')
+            link.setAttribute('href', data)
+            link.setAttribute('download', filename)
+            link.click()
         }
     },
     components: {
