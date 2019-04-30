@@ -89,14 +89,14 @@ export default {
                 {
                     name: "Rathana Pim",
                     major: "Computer Science",
-                    work: "Alpha Centauri",
-                    liked: "Alpha Centauri"
+                    work: "Liked learning Kotlin and improving copying and pasting skills",
+                    liked: "Working with great people and in multiple teams"
                 },
                 {
                     name: "Zack Henry",
                     major: "Computer Science",
-                    work: "Alpha Centauri",
-                    liked: "Alpha Centauri"
+                    work: "Liked implementing multiple appointment types on the front-end",
+                    liked: "Getting to know and work with some really cool people"
                 },
                 {
                     name: "Jacob Majeski",
