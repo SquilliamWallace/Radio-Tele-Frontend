@@ -127,9 +127,9 @@ export default {
                 let rfData = data[index];
                 rfData.timeCaptured = moment(rfData.timeCaptured).format('MM/DD/YYYY hh:mm:ss A')
                 this.RFData.push(rfData)
-                console.log(rfData.timeCaptured)
                 this.graphData.labels.push(rfData.timeCaptured)
                 this.graphData.datasets[this.dataIndex].data.push({y: rfData.intensity, x: rfData.timeCaptured})
+                this.graphData.datasets[this.dataIndex].label = 'Appointment #' + rfData.appointmentId
             }
             this.dataIndex +=1;
         },
@@ -214,6 +214,7 @@ export default {
                 let message = "An error occurred when loading the RF data for this observation"
                 HttpResponse.generalError(this, message, true)
             })
+            this.multipleAppointmentToggle = !this.multipleAppointmentToggle;
         }
     },
     components: {
