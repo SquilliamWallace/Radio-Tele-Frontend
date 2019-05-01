@@ -70,20 +70,7 @@ export default {
             graphToggle: false,
             graphData: {
                 labels: [],
-                datasets: [
-                    {
-                        label: 'Radio Frequency Intensity Over Time',
-                        backgroundColor: '#0c03b2',
-                        fill: false,
-                        data: []
-                    },
-                    {
-                        label: 'Radio Frequency Intensity Over Time',
-                        backgroundColor: '#ff0000',
-                        fill: false,
-                        data: []
-                    }
-                ]
+                datasets: []
             },
             rules: {
                 appointmentIdRequired: val => (val && val.length > 0) || 'Required field',
@@ -128,6 +115,9 @@ export default {
                 rfData.timeCaptured = moment(rfData.timeCaptured).format('MM/DD/YYYY hh:mm:ss A')
                 this.RFData.push(rfData)
                 this.graphData.labels.push(rfData.timeCaptured)
+                if(this.graphData.datasets.length <= this.dataIndex){
+                    this.graphData.datasets.push({label: 'Appointment #' + rfData.appointmentId, backgroundColor: '#' + Math.floor(Math.random()*16777215).toString(16), fill: false, data: []})
+                }
                 this.graphData.datasets[this.dataIndex].data.push({y: rfData.intensity, x: rfData.timeCaptured})
                 this.graphData.datasets[this.dataIndex].label = 'Appointment #' + rfData.appointmentId
             }
