@@ -19,7 +19,7 @@
         <v-dialog hide-overlay transition="dialog-bottom-transition" v-model="graphToggle">
             <v-btn color="primary darken-1" slot="activator">View Data Graph</v-btn>
             <div class="graph-style">
-                <rf-data-graph :chartdata="graphData" :styles="graphStyles"></rf-data-graph>
+                <rf-data-graph v-model="graphData" :styles="graphStyles"></rf-data-graph>
             </div>
         </v-dialog>
         <v-dialog width=50% v-model="multipleAppointmentToggle">

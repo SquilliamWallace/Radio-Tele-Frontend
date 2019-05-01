@@ -3,7 +3,7 @@ import { Line } from 'vue-chartjs'
 
 export default {
   extends: Line,
-  props: ['chartdata', 'styles'],
+  props: ['value', 'styles'],
   data() {
       return {
           datacollection: {
@@ -39,7 +39,7 @@ export default {
     }
   },
   mounted () {
-    this.renderChart(this.chartdata, this.options)
+    this.renderChart(this.value, this.options)
   }
 }
 </script>
