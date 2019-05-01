@@ -23,15 +23,15 @@ export default {
                 xAxes: [{
                     display: true,
                     scaleLabel: {
-                    display: true,
-                    labelString: 'Time of Capture'
+                        display: true,
+                        labelString: 'Time of Capture'
                     }
                 }],
                 yAxes: [{
                     display: true,
                     scaleLabel: {
-                    display: true,
-                    labelString: 'Signal Intensity'
+                        display: true,
+                        labelString: 'Signal Intensity'
                     }
                 }]
             }
