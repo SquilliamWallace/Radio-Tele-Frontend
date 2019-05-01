@@ -74,11 +74,13 @@ export default {
                     {
                         label: 'Radio Frequency Intensity Over Time',
                         backgroundColor: '#0c03b2',
+                        fill: false,
                         data: []
                     },
                     {
                         label: 'Radio Frequency Intensity Over Time',
                         backgroundColor: '#ff0000',
+                        fill: false,
                         data: []
                     }
                 ]
@@ -125,8 +127,9 @@ export default {
                 let rfData = data[index];
                 rfData.timeCaptured = moment(rfData.timeCaptured).format('MM/DD/YYYY hh:mm:ss A')
                 this.RFData.push(rfData)
+                console.log(rfData.timeCaptured)
                 this.graphData.labels.push(rfData.timeCaptured)
-                this.graphData.datasets[this.dataIndex].data.push(rfData.intensity)
+                this.graphData.datasets[this.dataIndex].data.push({y: rfData.intensity, x: rfData.timeCaptured})
             }
             this.dataIndex +=1;
         },
