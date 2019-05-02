@@ -338,6 +338,7 @@ export default {
       if (this.appointmentObj.type === "Point") {
         console.log("stringify form...");
         data = JSON.stringify({
+          priority: 'PRIMARY',
           startTime: new Date(this.start).toUTCString(),
           endTime: new Date(this.end).toUTCString(),
           telescopeId: this.appointmentObj.telescopeId.value,
@@ -349,6 +350,7 @@ export default {
         });
       } else if (this.appointmentObj.type === "Celestial Body") {
         data = JSON.stringify({
+          priority: 'PRIMARY',
           startTime: new Date(this.start).toUTCString(),
           endTime: new Date(this.end).toUTCString(),
           telescopeId: this.appointmentObj.telescopeId.value,
@@ -357,6 +359,7 @@ export default {
         });
       } else if (this.appointmentObj.type === "Drift Scan") {
         data = JSON.stringify({
+          priority: 'PRIMARY',
           startTime: new Date(this.start).toUTCString(),
           endTime: new Date(this.end).toUTCString(),
           telescopeId: this.appointmentObj.telescopeId.value,
@@ -366,6 +369,7 @@ export default {
         });
       } else if (this.appointmentObj.type === "Raster Scan") {
         data = JSON.stringify({
+          priority: 'PRIMARY',
           startTime: new Date(this.start).toUTCString(),
           endTime: new Date(this.end).toUTCString(),
           telescopeId: this.appointmentObj.telescopeId.value,
