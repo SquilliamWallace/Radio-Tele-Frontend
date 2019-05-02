@@ -548,6 +548,10 @@ export default {
             this.form.secondCoordinate.seconds = null;
             this.form.secondCoordinate.rightAscension = null;
             this.form.secondCoordinate.declination = null;
+            this.startTime='';
+            this.startDate='';
+            this.endDate='';
+            this.endTime='';
             this.selectedType = null;
             this.selectedBody = null;
             this.clearErrors();
@@ -604,7 +608,10 @@ export default {
                         }
                     });
             });
-            
+            this.startTime=''
+            this.startDate=''
+            this.endDate=''
+            this.endTime=''
         },
         handleErrors(errors, formObj) {
             for (var field in errors) {
@@ -668,14 +675,6 @@ export default {
                     this.updatedTime = false;
                 }
             } 
-            // Otherwise, clear our start and end times, since we didn't need to recieve an event,
-            // and our local start and end times may contain data from a previously passed event
-            else if (Object.keys(this.dragEvent).length == 0){
-                this.startTime = '';
-                this.endTime = '';
-                this.startDate = '';
-                this.endDate = '';
-            }
         },
 
         // Methods to grab our celestial bodies and push them into the bodies[] list
