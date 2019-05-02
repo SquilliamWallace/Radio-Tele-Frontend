@@ -106,9 +106,9 @@ export default {
                 },
                 {
                     name: "Ezra Moore",
-                    major: "Computer Science",
-                    work: "Alpha Centauri",
-                    liked: "Alpha Centauri"
+                    major: "Computer Science/The Spice™",
+                    work: "Liked working with the Hololens and HTC Vive",
+                    liked: "Making the telescope fly..."
                 },
                 {
                     name: "Chris Garrety",
