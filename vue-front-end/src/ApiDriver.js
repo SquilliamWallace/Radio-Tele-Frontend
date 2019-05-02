@@ -82,8 +82,8 @@ export default {
       view: function (appointmentId) {
         return axios.get(this.namespace + "/" + appointmentId + "/retrieve", Headers.retrieveHeaders())
       },
-      create: function (data) {
-        return axios.post(this.namespace + "/schedule", data, Headers.retrieveHeaders())
+      create: function (data, type) {
+        return axios.post(this.namespace + "/schedule/" + type, data, Headers.retrieveHeaders())
       },
       request: function (data) {
         return axios.post(this.namespace + "/request", data, Headers.retrieveHeaders())
@@ -103,8 +103,9 @@ export default {
       data: function(appointmentId) {
         return axios.get(this.namespace + "/" + appointmentId + "/rf-data", Headers.retrieveHeaders())
       },
-      update: function(appointmentId, data) {
-        return axios.put(baseUrl + "appointments/" + appointmentId, data, Headers.retrieveHeaders())
+      update: function(appointmentId, data, type) {
+        console.log("Appt Id: " + appointmentId + " data: " + data + " type: " + type)
+        return axios.put(baseUrl + "appointments/" + appointmentId + "/" + type, data, Headers.retrieveHeaders())
       },
       cancel: function(appointmentId) {
         return axios.put(baseUrl + "appointments/" + appointmentId + "/cancel", {}, Headers.retrieveHeaders())
