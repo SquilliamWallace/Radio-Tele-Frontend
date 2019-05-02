@@ -226,7 +226,7 @@
                         Conditionally display two sets of Coordinate fields
                         (Hours, Minutes, Seconds, Right Ascension, Declination)
                     -->
-                        <v-flex xs12 sm2 v-if="type === 'Raster Scan'">
+                        <v-flex xs12 sm2 row v-if="type === 'Raster Scan'">
                         <v-text-field
                         v-model="form.firstCoordinate.hours"
                         :rules="[rules.rightAscHours]"
@@ -273,18 +273,9 @@
                         ></v-text-field>
                     </v-flex>
                     
-                    <v-flex xs12 sm3 v-if="type === 'Raster Scan'">
-                        <v-text-field
-                        v-model="form.firstCoordinate.rightAscension"
-                        :validate-on-blur="true"
-                        color="blue darken-2"
-                        label="Coordinate 1 Right Ascension"
-                        type="number"
-                        required
-                        ></v-text-field>
-                    </v-flex>
+                    
 
-                    <v-flex xs12 sm3 v-if="type === 'Raster Scan'">
+                    <v-flex xs12 sm6 v-if="type === 'Raster Scan'">
                         <v-text-field
                         v-model="form.firstCoordinate.declination"
                         :rules="[rules.numRequired]"
@@ -348,18 +339,8 @@
                         ></v-text-field>
                     </v-flex>
                     
-                    <v-flex xs12 sm3 v-if="type === 'Raster Scan'">
-                        <v-text-field
-                        v-model="form.secondCoordinate.rightAscension"
-                        :validate-on-blur="true"
-                        color="blue darken-2"
-                        label="Coordinate 2 Right Ascension"
-                        type="number"
-                        required
-                        ></v-text-field>
-                    </v-flex>
 
-                    <v-flex xs12 sm3 v-if="type === 'Raster Scan'">
+                    <v-flex xs12 sm6 v-if="type === 'Raster Scan'">
                         <v-text-field
                         v-model="form.secondCoordinate.declination"
                         :rules="[rules.numRequired]"

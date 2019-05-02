@@ -123,7 +123,7 @@
 
             <!-- If appointment is RASTER SCAN -->
             <v-flex v-if="appointmentObj.type === 'Raster Scan'">
-              <v-flex xs12 sm2>
+              <v-flex>
                 <v-text-field
                   v-model="appointmentObj.coordinate1.hours"
                   :rules="[rules.rightAscHours]"
@@ -138,7 +138,7 @@
                 ></v-text-field>
               </v-flex>
 
-              <v-flex xs12 sm2 >
+              <v-flex>
                 <v-text-field
                   v-model="appointmentObj.coordinate1.minutes"
                   :rules="[rules.rightAscMinutes]"
@@ -154,7 +154,7 @@
                 ></v-text-field>
               </v-flex>
 
-              <v-flex xs12 sm2 >
+              <v-flex>
                 <v-text-field
                   v-model="appointmentObj.coordinate1.seconds"
                   :rules="[rules.rightAscSeconds]"
@@ -169,7 +169,7 @@
                 ></v-text-field>
               </v-flex>
 
-              <v-flex xs12 sm2 >
+              <v-flex>
                 <v-text-field
                   v-model="appointmentObj.coordinate1.declination"
                   :rules="[rules.numRequired]"
@@ -186,7 +186,7 @@
 
               <v-spacer></v-spacer>
 
-              <v-flex xs12 sm2 >
+              <v-flex>
                 <v-text-field
                   v-model="appointmentObj.coordinate2.hours"
                   :rules="[rules.rightAscHours]"
@@ -202,7 +202,7 @@
                 ></v-text-field>
               </v-flex>
 
-              <v-flex xs12 sm2 >
+              <v-flex>
                 <v-text-field
                   v-model="appointmentObj.coordinate2.minutes"
                   :rules="[rules.rightAscMinutes]"
@@ -218,7 +218,7 @@
                 ></v-text-field>
               </v-flex>
 
-              <v-flex xs12 sm2 >
+              <v-flex>
                 <v-text-field
                   v-model="appointmentObj.coordinate2.seconds"
                   :rules="[rules.rightAscSeconds]"
@@ -233,7 +233,7 @@
                 ></v-text-field>
               </v-flex>
 
-              <v-flex xs12 sm2 >
+              <v-flex>
                 <v-text-field
                   v-model="appointmentObj.coordinate2.declination"
                   :rules="[rules.numRequired]"
