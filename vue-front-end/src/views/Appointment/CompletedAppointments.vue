@@ -21,7 +21,7 @@
                         <v-list-tile-title v-if="appointment.celestialBody">
                             Appointment #{{ appointment.id }}
                         </v-list-tile-title>
-                        <v-list-tile-sub-title v-if="appointment.coordinates">
+                        <v-list-tile-sub-title>
                             Type: {{ appointment.type }}
                         </v-list-tile-sub-title>
                         <v-list-tile-sub-title>
