@@ -2,7 +2,7 @@
 <div>
     <navigation-bar></navigation-bar>
     <loading v-show="$store.state.isLoading"></loading>
-    <v-card v-show="!$store.state.isLoading" flat>
+    <v-card v-show="!$store.state.isLoading" flat  width="100%">
         <v-card-title v-if="completedAppointments.length === 0" primary-title class="justify-center">
             <span class="headline">No Completed Observations!</span>
         </v-card-title>
@@ -14,7 +14,7 @@
                 <a href="/#/scheduler">Click here to schedule an observation</a>
             </div>
         </v-card-text>
-         <v-card-title v-else>
+         <div v-else>
             <v-list two-line>
                 <v-list-tile class="list-item" v-for="appointment in completedAppointments" :key="appointment.id" v-bind:href="'/#/appointments/' + appointment.id + '/view'">
                     <v-list-tile-content v-if="completedAppointments.length > 0">
@@ -30,7 +30,7 @@
                     </v-list-tile-content>
                 </v-list-tile>
             </v-list>
-        </v-card-title>
+         </div>
     </v-card>
     <br>
     <div class="text-xs-center">

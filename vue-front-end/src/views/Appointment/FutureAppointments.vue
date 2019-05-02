@@ -14,7 +14,7 @@
                     <a href="/#/scheduler">Click here to schedule an observation</a>
                 </div>
             </v-card-text>
-            <v-card-title v-else>
+            <div v-else>
                 <v-list two-line>
                     <v-list-tile class="list-item" v-for="appointment in futureAppointments" :key="appointment.id" v-bind:href="'/#/appointments/' + appointment.id + '/view'">
                         <v-list-tile-content v-if="futureAppointments.length > 0">
@@ -30,7 +30,7 @@
                         </v-list-tile-content>
                     </v-list-tile>
                 </v-list>
-            </v-card-title>
+            </div>
         </v-card>
         <br>
         <div class="text-xs-center">
