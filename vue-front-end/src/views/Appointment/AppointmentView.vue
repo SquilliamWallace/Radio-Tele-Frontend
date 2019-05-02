@@ -115,22 +115,22 @@
             <v-btn v-if="data.status.value === 'Completed'" color="primary" v-bind:href="'/#/appointments/' + data.id.value + '/rf-data'">View Data</v-btn>
         </v-container>
         <v-layout wrap>
-        <v-flex v-if="($store.state.currentUserId === data.eventUserId.value | $store.state.isAdmin) && !complete && !$store.state.isLoading">
+        <v-flex v-if="($store.state.currentUserId === data.eventUserId.value || $store.state.isAdmin) && !complete && !$store.state.isLoading">
             <div>
                 <v-btn color="primary" @click="editAppointment">Edit</v-btn>
             </div>
         </v-flex>
-        <v-flex v-if="($store.state.currentUserId === data.eventUserId.value | $store.state.isAdmin) && !$store.state.isLoading && !data.isPublic.value">
+        <v-flex v-if="($store.state.currentUserId === data.eventUserId.value || $store.state.isAdmin) && !$store.state.isLoading && !data.isPublic.value">
             <div>
                 <v-btn color="primary" @click="shareAppointment">Share</v-btn>
             </div>
         </v-flex>
-        <v-flex v-if="($store.state.currentUserId === data.eventUserId.value | $store.state.isAdmin) && !$store.state.isLoading && !data.isPublic.value">
+        <v-flex v-if="($store.state.currentUserId === data.eventUserId.value || $store.state.isAdmin) && !$store.state.isLoading && !data.isPublic.value">
             <div>
                 <v-btn color="primary" @click="unshareAppointment">Unshare</v-btn>
             </div>
         </v-flex>
-        <v-flex v-if="($store.state.currentUserId === data.eventUserId.value | $store.state.isAdmin) && !complete && !$store.state.isLoading">
+        <v-flex v-if="($store.state.currentUserId === data.eventUserId.value || $store.state.isAdmin) && !complete && !$store.state.isLoading">
             <div>
                 <v-btn color="error" @click="cancelAppointment">Cancel</v-btn>
             </div>

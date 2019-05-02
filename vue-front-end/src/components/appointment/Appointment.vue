@@ -1,4 +1,4 @@
-<template dark>
+<template>
     <!-- 
         Define the v-dialog that will pop up when an appointment is being created
 
@@ -580,7 +580,8 @@ export default {
                 celestialBodyId: this.selectedBody,
                 azimuth: this.form.azimuth.value,
                 elevation: this.form.elevation.value,
-                coordinates: this.coordinates
+                coordinates: this.coordinates,
+                priority: 'PRIMARY'
             };
                         
             // Call appropriate API CALL and send form in json format
