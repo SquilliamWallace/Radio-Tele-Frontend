@@ -13,7 +13,7 @@
           <v-card-title primary-title>
             <div style="padding: 25px;">
               <div class="headline">Welcome to the York County Astronomical Society Radio Telescope!</div>
-              <v-card-text class="grey--text">The York Country Astronomical Society, Inc, is a non-profit organization dedicated to the advancement of the science of astronomy.
+              <v-card-text class="grey--text">The York County Astronomical Society, Inc, is a non-profit organization dedicated to the advancement of the science of astronomy.
 
               The York County Astronomical Society was started in 1989, and currently has about 30 members in 4 counties in Pennsylvania.
 
