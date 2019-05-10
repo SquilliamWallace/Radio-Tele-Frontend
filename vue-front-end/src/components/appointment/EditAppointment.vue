@@ -13,7 +13,7 @@
       <v-card-title class="headline">Edit Appointment</v-card-title>
       <v-form ref="form" @submit.prevent="submit" refs="form">
         <v-container grid-list-xl fluid>
-          <v-layout row wrap>
+          <v-layout wrap>
             <v-flex xs12 sm6>
               <v-date-picker v-model="appointmentObj.startDate.value" landscape width="175"></v-date-picker>
               <v-time-picker v-model="appointmentObj.startTime.value" landscape width="175"></v-time-picker>
@@ -22,10 +22,10 @@
               <v-date-picker v-model="appointmentObj.endDate.value" landscape width="175"></v-date-picker>
               <v-time-picker v-model="appointmentObj.endTime.value" landscape width="175"></v-time-picker>
             </v-flex>
-
+            
             <!-- If appointment type is POINT -->
-            <v-flex v-if="appointmentObj.type === 'Point'">
-              <v-flex>
+            <v-layout class="ma-2" v-if="appointmentObj.type === 'Point'">
+              <v-flex sm3>
                 <v-text-field
                   v-model="appointmentObj.rightAscension.hours"
                   :rules="[rules.rightAscHours]"
@@ -40,7 +40,7 @@
               <!--
                 Same as Right Ascension Hours, except checks for minutes error handling
               -->
-              <v-flex>
+              <v-flex sm3>
                 <v-text-field
                   v-model="appointmentObj.rightAscension.minutes"
                   :rules="[rules.rightAscMinutes]"
@@ -56,7 +56,7 @@
               <!--
                 Same as Right Ascension Hours, except checks for seconds error handling
               -->
-              <v-flex>
+              <v-flex sm3>
                 <v-text-field
                   v-model="appointmentObj.rightAscension.seconds"
                   :rules="[rules.rightAscSeconds]"
@@ -68,7 +68,7 @@
                   required
                 ></v-text-field>
               </v-flex>
-              <v-flex>
+              <v-flex sm3>
                 <v-text-field
                   v-model="appointmentObj.declination.value"
                   :rules="[rules.numRequired]"
@@ -80,7 +80,7 @@
                   required
                 ></v-text-field>
               </v-flex>
-            </v-flex>
+            </v-layout>
 
             <!-- If appointment type is CELESTIAL BODY -->
             <v-flex v-if="appointmentObj.type === 'Celestial Body'">
@@ -97,18 +97,21 @@
             </v-flex>
 
             <!-- If appointment is DRIFT SCAN -->
-            <v-flex v-if="appointmentObj.type === 'Drift Scan'">
-              <v-text-field
-                v-model="appointmentObj.azimuth.value"
-                :validate-on-blur="true"
-                color="blue darken-2"
-                label="Azimuth"
-                type="number"
-                onkeypress="return event.charCode >= 48 && event.charCode <= 57"
-                :rules="[rules.azimuth]"
-                required
-              ></v-text-field>
-
+            <v-layout class="ma-2" wrap v-if="appointmentObj.type === 'Drift Scan'">
+              <v-flex xs12 sm6>
+                <v-text-field
+                  v-model="appointmentObj.azimuth.value"
+                  :validate-on-blur="true"
+                  color="blue darken-2"
+                  label="Azimuth"
+                  type="number"
+                  onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                  :rules="[rules.azimuth]"
+                  required
+                ></v-text-field>
+              </v-flex>
+              
+            <v-flex xs12 sm6>
               <v-text-field
                 v-model="appointmentObj.elevation.value"
                 :validate-on-blur="true"
@@ -119,11 +122,12 @@
                 :rules="[rules.elevation]"
                 required
               ></v-text-field>
-            </v-flex>
+            </v-flex>  
+            </v-layout>
 
             <!-- If appointment is RASTER SCAN -->
-            <v-flex v-if="appointmentObj.type === 'Raster Scan'">
-              <v-flex>
+            <v-layout wrap class="ma-2" v-if="appointmentObj.type === 'Raster Scan'">
+              <v-flex sm3>
                 <v-text-field
                   v-model="appointmentObj.coordinate1.hours"
                   :rules="[rules.rightAscHours]"
@@ -138,7 +142,7 @@
                 ></v-text-field>
               </v-flex>
 
-              <v-flex>
+              <v-flex sm3>
                 <v-text-field
                   v-model="appointmentObj.coordinate1.minutes"
                   :rules="[rules.rightAscMinutes]"
@@ -154,7 +158,7 @@
                 ></v-text-field>
               </v-flex>
 
-              <v-flex>
+              <v-flex sm3>
                 <v-text-field
                   v-model="appointmentObj.coordinate1.seconds"
                   :rules="[rules.rightAscSeconds]"
@@ -169,7 +173,7 @@
                 ></v-text-field>
               </v-flex>
 
-              <v-flex>
+              <v-flex sm3>
                 <v-text-field
                   v-model="appointmentObj.coordinate1.declination"
                   :rules="[rules.numRequired]"
@@ -186,7 +190,7 @@
 
               <v-spacer></v-spacer>
 
-              <v-flex>
+              <v-flex sm3>
                 <v-text-field
                   v-model="appointmentObj.coordinate2.hours"
                   :rules="[rules.rightAscHours]"
@@ -202,7 +206,7 @@
                 ></v-text-field>
               </v-flex>
 
-              <v-flex>
+              <v-flex sm3>
                 <v-text-field
                   v-model="appointmentObj.coordinate2.minutes"
                   :rules="[rules.rightAscMinutes]"
@@ -218,7 +222,7 @@
                 ></v-text-field>
               </v-flex>
 
-              <v-flex>
+              <v-flex sm3>
                 <v-text-field
                   v-model="appointmentObj.coordinate2.seconds"
                   :rules="[rules.rightAscSeconds]"
@@ -233,7 +237,7 @@
                 ></v-text-field>
               </v-flex>
 
-              <v-flex>
+              <v-flex sm3>
                 <v-text-field
                   v-model="appointmentObj.coordinate2.declination"
                   :rules="[rules.numRequired]"
@@ -247,7 +251,7 @@
                   required
                 ></v-text-field>
               </v-flex>
-            </v-flex>
+            </v-layout>
             <v-flex v-if="$store.state.isResearcher | $store.state.isAdmin" xs12>
               <v-checkbox v-model="appointmentObj.privacy.value" color="green" label="Private"></v-checkbox>
             </v-flex>

@@ -90,7 +90,26 @@
                         onkeypress='return event.charCode >= 48 && event.charCode <= 57'
                             Only allow numbers to be inputted into the form (0 through 9)
                     -->
-                    <v-flex xs12 sm4 v-if="type === 'Point'">
+                    <v-flex xs12 sm6>
+                        <v-select
+                        v-model="telescopeName"
+                        :items="telescopes"
+                        color="blue darken-2"
+                        label="Telescope"
+                        required
+                        ></v-select>
+                    </v-flex>
+                    
+                    <v-flex xs12 sm6>
+                        <v-select
+                        v-model="type"
+                        :items="types"
+                        color="blue darken-2"
+                        label="Appointment Type"
+                        required
+                        ></v-select>
+                    </v-flex>
+                    <v-flex xs12 sm3 v-if="type === 'Point'">
                         <v-text-field
                         v-model="form.rightAscension.hours"
                         :rules="[rules.rightAscHours]"
@@ -108,7 +127,7 @@
                      <!--
                         Same as Right Ascension Hours, except checks for minutes error handling
                     -->
-                    <v-flex xs12 sm4 v-if="type === 'Point'">
+                    <v-flex xs12 sm3 v-if="type === 'Point'">
                         <v-text-field
                         v-model="form.rightAscension.minutes"
                         :rules="[rules.rightAscMinutes]"
@@ -126,7 +145,7 @@
                      <!--
                         Same as Right Ascension Hours, except checks for seconds error handling
                     -->
-                    <v-flex xs12 sm4 v-if="type === 'Point'">
+                    <v-flex xs12 sm3 v-if="type === 'Point'">
                         <v-text-field
                         v-model="form.rightAscension.seconds"
                         :rules="[rules.rightAscSeconds]"
@@ -145,7 +164,7 @@
                         onkeypress='return event.charCode == 45 || (event.charCode >= 48 && event.charCode <= 57)'
                             Only allow numerical inputs and - (minus) as input can be negative
                      -->
-                    <v-flex xs12 sm6 v-if="type === 'Point'">
+                    <v-flex xs12 sm3 v-if="type === 'Point'">
                         <v-text-field
                         v-model="form.declination.value"
                         :rules="[rules.numRequired]"
@@ -180,7 +199,7 @@
                             Prevents an ugly popup from showing when the user hasn't entered in any text.
                         }
                     -->
-                    <v-flex xs12 sm4 v-if="type === 'Celestial Body'">
+                    <v-flex xs12 sm6 v-if="type === 'Celestial Body'">
                         <v-autocomplete
                         v-model="selectedBody"
                         label="Celestial Body"
@@ -372,25 +391,6 @@
                         Simple drop down select menu to choose which telescope you want to schedule your appointment for
                         Added to form to make sure user knows which telescope they are scheduling for
                     -->
-                    <v-flex xs12 sm6>
-                        <v-select
-                        v-model="telescopeName"
-                        :items="telescopes"
-                        color="blue darken-2"
-                        label="Telescope"
-                        required
-                        ></v-select>
-                    </v-flex>
-                    
-                    <v-flex xs12 sm6>
-                        <v-select
-                        v-model="type"
-                        :items="types"
-                        color="blue darken-2"
-                        label="Appointment Type"
-                        required
-                        ></v-select>
-                    </v-flex>
                     </v-layout>
                 </v-container>
                 <v-card-actions>
