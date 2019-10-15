@@ -106,7 +106,8 @@ import WeatherStation from "../components/admin/WeatherStation.vue"
         AdminUserApproval,
         Loading,
         AdminAppointmentApproval,
-        CelestialBodies
+        CelestialBodies,
+        WeatherStation
     },
     mounted() {
       this.authenticate()
