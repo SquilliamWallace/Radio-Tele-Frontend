@@ -30,6 +30,10 @@
           Celestial Body Management
           <v-icon>public</v-icon>
         </v-tab>
+        <v-tab>
+          Weather Station Data
+          <v-icon>public</v-icon>
+        </v-tab>
         
         <v-tab-item>
           <admin-log></admin-log>
@@ -49,6 +53,10 @@
 
         <v-tab-item>
           <celestial-bodies></celestial-bodies>
+        </v-tab-item>
+
+        <v-tab-item>
+          <weather-station></weather-station>
         </v-tab-item>
       </v-tabs>
 
