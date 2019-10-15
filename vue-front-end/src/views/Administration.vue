@@ -73,7 +73,8 @@ import CurrentUserValidation from '../utils/CurrentUserValidation';
 import AdminUserApproval from '../components/admin/AdminUserApproval.vue';
 import AdminAppointmentApproval from '../components/admin/AdminAppointmentApproval.vue';
 import CelestialBodies from '../components/admin/CelestialBodies.vue';
-import Loading from "../components/utility/Loading"
+import Loading from "../components/utility/Loading";
+import WeatherStation from "../components/admin/WeatherStation.vue"
  export default {
     title: "Radio Telescope 1.1.0",
     name: 'admin',
