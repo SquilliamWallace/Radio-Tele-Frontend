@@ -58,6 +58,7 @@ import ApiDriver from '../../ApiDriver';
 import HttpResponse from '../../utils/HttpResponse';
 import CurrentUserValidation from  '../../utils/CurrentUserValidation';
 import Loading from "../../components/utility/Loading"
+import RfDataGraph from '../../components/visualization/RfDataGraph';
 
 export default {
     name: 'WeatherStation',
@@ -94,6 +95,15 @@ export default {
     },
     components: {
         Loading,
+        RfDataGraph
+    },
+    computed: {
+        graphStyles() {
+            return {
+                height: '600px',
+                position: 'relative'
+            }
+        }
     }
 };
 
