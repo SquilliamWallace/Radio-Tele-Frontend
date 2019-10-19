@@ -32,7 +32,7 @@
         </v-tab>
         <v-tab>
           Weather Station Data
-          <v-icon>public</v-icon>
+          <v-icon>opacity</v-icon>
         </v-tab>
         
         <v-tab-item>
