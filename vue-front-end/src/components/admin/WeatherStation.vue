@@ -42,7 +42,12 @@
         </v-flex>
     </v-layout>
 
-
+    <v-dialog hide-overlay transition="dialog-bottom-transition" v-model="graphToggle">
+            <v-btn color="primary darken-1" slot="activator">View Data Graph</v-btn>
+            <div class="graph-style">
+                <rf-data-graph v-model="graphData" :styles="graphStyles"></rf-data-graph>
+            </div>
+        </v-dialog>
           
     </v-card>
 </div>
@@ -72,7 +77,12 @@ export default {
                 'Wind Speed',
                 'Rain Gauge'
             ],
-            selectedDataSet: ''
+            selectedDataSet: '',
+            graphToggle: false,
+            graphData: {
+                labels: [],
+                datasets: []
+            }
 
         }
     },
