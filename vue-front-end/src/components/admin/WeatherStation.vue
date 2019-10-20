@@ -3,6 +3,7 @@
     <loading v-if="$store.state.isLoading"></loading>
     <v-card v-if="!$store.state.isLoading" width = "100%">
 
+    <!-- This is the table for the current data -->
     <v-data-table
         v-if="!$store.state.isLoading"
         hide-actions
@@ -46,8 +47,8 @@
     <v-data-table
         v-if="!$store.state.isLoading"
         hide-actions
-        :headers="dataHeaders"
-        :items="getItemSet"
+        :headers="dbHeaders"
+        :items="dbData"
         :pagination.sync="pagination"
         select-all
         class="elevation-1"
@@ -65,8 +66,18 @@
             @click="updateForm(props.item.name, props.item.id, props.item.declination, props.item.hours, props.item.minutes, props.item.seconds)"
             >
             <!-- <td class="text-xs-left">{{ props.item.id }}</td> -->
-            <td class="text-xs-center">{{ props.item.text }}</td>
-            <td class="text-xs-center">{{ props.item.val }}</td>
+            <td class="text-xs-center">{{ props.item.timeStamp }}</td>
+            <td class="text-xs-center">{{ props.item.windSpeed }}</td>
+            <td class="text-xs-center">{{ props.item.windDirection }}</td>
+            <td class="text-xs-center">{{ props.item.tempF }}</td>
+            <td class="text-xs-center">{{ props.item.rainRate }}</td>
+            <td class="text-xs-center">{{ props.item.rainTotal }}</td>
+            <td class="text-xs-center">{{ props.item.rainDay }}</td>
+            <td class="text-xs-center">{{ props.item.pressure }}</td>
+            <td class="text-xs-center">{{ props.item.dewPoint }}</td>
+            <td class="text-xs-center">{{ props.item.windChill }}</td>
+            <td class="text-xs-center">{{ props.item.heatIndex }}</td>
+
             </tr>
         </template>
     </v-data-table>
@@ -135,6 +146,34 @@ export default {
                 { id: 2, text: '1.6 in', val: "10-19-2019 10:13 AM"},
                 { id: 3, text: '0.5 in', val: "10-19-2019 8:09 AM"}
             ],
+            dbHeaders: [
+                { text: 'Time Stamp', align: 'left', sortable: false, value: 'timeStamp'},
+                { text: 'Wind Speed', sortable: false, value: 'windSpeed' },
+                { text: 'Wind Direction', sortable: false, value: 'windDirection' },
+                { text: 'Temperature (°F)', sortable: false, value: 'tempF' },
+                { text: 'Rain Rate', sortable: false, value: 'rainRate' },
+                { text: 'Total Rain', sortable: false, value: 'rainTotal' },
+                { text: 'Rain for Day', sortable: false, value: 'rainDay' },
+                { text: 'Barometric Pressure', sortable: false, value: 'pressure' },
+                { text: 'Dew Point', sortable: false, value: 'dewPoint' },
+                { text: 'Wind Chill', sortable: false, value: 'windChill' },
+                { text: 'Heat Index', sortable: false, value: 'heatIndex' }
+            ],
+            dbData: [
+                {   timeStamp: "10-20-2019 5:00 PM", windSpeed: "13", windDirection: "NW", tempF: "76", 
+                    rainRate: "2.0", rainTotal: "2.0", rainDay: "2.0", pressure: "1.0" ,
+                    dewPoint: "72", windChill: "68", heatIndex: "91"},
+                {   timeStamp: "10-19-2019 10:30 AM", windSpeed: "16", windDirection: "NE", tempF: "78", 
+                    rainRate: "0.5", rainTotal: "0.9", rainDay: "1.1", pressure: "1.0" ,
+                    dewPoint: "61", windChill: "64", heatIndex: "97"},
+                {   timeStamp: "10-18-2019 5:00 PM", windSpeed: "11", windDirection: "S", tempF: "81", 
+                    rainRate: "1.2", rainTotal: "1.5", rainDay: "2.0", pressure: "1.0" ,
+                    dewPoint: "59", windChill: "66", heatIndex: "101"},
+                {   timeStamp: "10-18-2019 10:31 AM", windSpeed: "24", windDirection: "E", tempF: "75", 
+                    rainRate: "2.9", rainTotal: "3.0", rainDay: "3.0", pressure: "1.0" ,
+                    dewPoint: "62", windChill: "44", heatIndex: "98"}
+                    
+            ]
 
         }
     },
