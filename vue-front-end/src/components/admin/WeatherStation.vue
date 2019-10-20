@@ -33,7 +33,6 @@
     <!-- This data table is for specific weather data -->
     <v-data-table
         v-if="!$store.state.isLoading"
-        hide-actions
         :headers="dbHeaders"
         :items="dbData"
         :pagination.sync="pagination"
@@ -103,6 +102,8 @@ import HttpResponse from '../../utils/HttpResponse';
 import CurrentUserValidation from  '../../utils/CurrentUserValidation';
 import Loading from "../../components/utility/Loading"
 import RfDataGraph from '../../components/visualization/RfDataGraph';
+import moment from 'moment';
+import Chart from 'chart.js';
 
 export default {
     name: 'WeatherStation',
@@ -180,29 +181,49 @@ export default {
                 { text: 'Heat Index', sortable: false, value: 'heatIndex' }
             ],
             dbData: [
-                {   timeStamp: "10-20-2019 5:00 PM", windSpeed: "13", windDirection: "NW", tempF: "76", 
+                {   id: 1, timeStamp: "10-20-2019 5:00:00 PM", windSpeed: "13", windDirection: "NW", tempF: "76", 
                     rainRate: "2.0", rainTotal: "2.0", rainDay: "3.0", pressure: "1.0" ,
                     dewPoint: "72", windChill: "68", heatIndex: "91"},
-                {   timeStamp: "10-19-2019 10:30 AM", windSpeed: "16", windDirection: "NE", tempF: "78", 
+                {   id: 2, timeStamp: "10-19-2019 10:30:00 AM", windSpeed: "16", windDirection: "NE", tempF: "78", 
                     rainRate: "0.5", rainTotal: "0.9", rainDay: "1.1", pressure: "1.0" ,
                     dewPoint: "61", windChill: "64", heatIndex: "97"},
-                {   timeStamp: "10-18-2019 5:00 PM", windSpeed: "11", windDirection: "S", tempF: "81", 
+                {   id: 3, timeStamp: "10-18-2019 5:00:00 PM", windSpeed: "11", windDirection: "S", tempF: "81", 
                     rainRate: "1.2", rainTotal: "1.5", rainDay: "2.0", pressure: "1.0" ,
                     dewPoint: "59", windChill: "66", heatIndex: "101"},
-                {   timeStamp: "10-18-2019 10:31 AM", windSpeed: "24", windDirection: "E", tempF: "75", 
+                {   id: 4, timeStamp: "10-18-2019 10:31:00 AM", windSpeed: "24", windDirection: "E", tempF: "75", 
                     rainRate: "2.9", rainTotal: "3.0", rainDay: "2.0", pressure: "1.0" ,
-                    dewPoint: "62", windChill: "44", heatIndex: "98"}
-                    
-            ]
+                    dewPoint: "62", windChill: "44", heatIndex: "98"} 
+            ],
+            WSData: [],
+            dataIndex: 0,
 
         }
     },
     methods:{
-        
+        populateData(data) { // This method has been modified
+            console.log("Populating data...");
+            console.log(data);
+            // Populate the RF Data array
+            for (var index in data) {
+                let rfData = data[index];
+                rfData.timeCaptured = moment(rfData.timeStamp).format('MM/DD/YYYY hh:mm:ss A')
+                console.log(rfData.timeCaptured);
+                this.WSData.push(rfData)
+                this.graphData.labels.push(rfData.timeStamp)
+                if(this.graphData.datasets.length <= this.dataIndex){
+                    this.graphData.datasets.push({label: 'Appointment #' + rfData.appointmentId, backgroundColor: '#' + Math.floor(Math.random()*16777215).toString(16), fill: false, data: []})
+                    console.log(this.graphData.datasets.length);
+                }
+                this.graphData.datasets[this.dataIndex].data.push({y: rfData.tempF, x: rfData.timeStamp})
+                this.graphData.datasets[this.dataIndex].label = 'Appointment #' + rfData.appointmentId
+            }
+            this.dataIndex +=1;
+        }
     },
     mounted: function(){
         this.selectedDataSet = 'Temperature';   // Temperature is default
         this.selectedTimeScale = 'Past Day';    // 'Past Day' is default
+        this.populateData(this.dbData); 
     },
     components: {
         Loading,
