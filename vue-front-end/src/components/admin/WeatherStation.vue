@@ -205,19 +205,20 @@ export default {
             console.log(data);
             // Populate the RF Data array
             for (var index in data) {
-                let rfData = data[index];
-                rfData.timeCaptured = moment(rfData.timeStamp).format('MM/DD/YYYY hh:mm:ss A')
-                console.log(rfData.timeCaptured);
-                this.WSData.push(rfData)
-                this.graphData.labels.push(rfData.timeStamp)
+                let wsData = data[index];
+                wsData.timeCaptured = moment(wsData.timeStamp).format('MM/DD/YYYY hh:mm:ss A')
+                console.log(wsData.timeCaptured);
+                this.WSData.push(wsData)
+                this.graphData.labels.push(wsData.timeStamp)
                 if(this.graphData.datasets.length <= this.dataIndex){
-                    this.graphData.datasets.push({label: 'ID #: ' + rfData.id, backgroundColor: '#' + Math.floor(Math.random()*16777215).toString(16), fill: false, data: []})
+                    this.graphData.datasets.push({label: 'ID #: ' + wsData.id, backgroundColor: '#' + Math.floor(Math.random()*16777215).toString(16), fill: false, data: []})
                     console.log(this.graphData.datasets.length);
                 }
-                this.graphData.datasets[this.dataIndex].data.push({y: rfData.tempF, x: rfData.timeStamp})
-                this.graphData.datasets[this.dataIndex].label = 'ID #: ' + rfData.id
+                this.graphData.datasets[this.dataIndex].data.push({y: wsData.tempF, x: wsData.timeStamp})
+                this.graphData.datasets[this.dataIndex].label = 'ID #: ' + wsData.id
             }
             this.dataIndex +=1;
+            console.log(this.graphStyles);
         }
     },
     mounted: function(){
