@@ -234,7 +234,8 @@ export default {
         graphStyles() {
             return {
                 height: '600px',
-                position: 'relative'
+                position: 'relative',
+                backgroundColor: '#46464a',
             }
         },
         getItemSet : function(){    // used to determine which data set to load

@@ -24,14 +24,16 @@ export default {
                     display: true,
                     scaleLabel: {
                         display: true,
-                        labelString: 'Time Stamp'
+                        labelString: 'Time Stamp',
+                        fontColor: '#cdcdcd'
                     }
                 }],
                 yAxes: [{
                     display: true,
                     scaleLabel: {
                         display: true,
-                        labelString: 'Temperature'
+                        labelString: 'Temperature',
+                        fontColor: '#cdcdcd'
                     }
                 }]
             }
