@@ -88,7 +88,7 @@
     <v-dialog hide-overlay transition="dialog-bottom-transition" v-model="graphToggle">
             <v-btn color="primary darken-1" slot="activator">View Data Graph</v-btn>
             <div class="graph-style">
-                <rf-data-graph v-model="graphData" :styles="graphStyles"></rf-data-graph>
+                <weather-data-graph v-model="graphData" :styles="graphStyles"></weather-data-graph>
             </div>
         </v-dialog>
           
@@ -101,7 +101,7 @@ import ApiDriver from '../../ApiDriver';
 import HttpResponse from '../../utils/HttpResponse';
 import CurrentUserValidation from  '../../utils/CurrentUserValidation';
 import Loading from "../../components/utility/Loading"
-import RfDataGraph from '../../components/visualization/RfDataGraph';
+import WeatherDataGraph from '../../components/visualization/WeatherGraph';
 import moment from 'moment';
 import Chart from 'chart.js';
 
@@ -211,11 +211,11 @@ export default {
                 this.WSData.push(rfData)
                 this.graphData.labels.push(rfData.timeStamp)
                 if(this.graphData.datasets.length <= this.dataIndex){
-                    this.graphData.datasets.push({label: 'Appointment #' + rfData.appointmentId, backgroundColor: '#' + Math.floor(Math.random()*16777215).toString(16), fill: false, data: []})
+                    this.graphData.datasets.push({label: 'ID #: ' + rfData.id, backgroundColor: '#' + Math.floor(Math.random()*16777215).toString(16), fill: false, data: []})
                     console.log(this.graphData.datasets.length);
                 }
                 this.graphData.datasets[this.dataIndex].data.push({y: rfData.tempF, x: rfData.timeStamp})
-                this.graphData.datasets[this.dataIndex].label = 'Appointment #' + rfData.appointmentId
+                this.graphData.datasets[this.dataIndex].label = 'ID #: ' + rfData.id
             }
             this.dataIndex +=1;
         }
@@ -227,7 +227,7 @@ export default {
     },
     components: {
         Loading,
-        RfDataGraph
+        WeatherDataGraph
     },
     computed: {
         graphStyles() {
