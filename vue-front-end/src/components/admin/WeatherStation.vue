@@ -4,7 +4,7 @@
     <v-card v-if="!$store.state.isLoading" width = "100%">
 
     <!-- This is the table for the current data -->
-    <v-data-table
+    <!-- <v-data-table
         v-if="!$store.state.isLoading"
         hide-actions
         :headers="headers"
@@ -20,28 +20,15 @@
             </th>
             </tr>
         </template>
-        <!--  -->
         <template slot="items" slot-scope="props">
             <tr
             @click="updateForm(props.item.name, props.item.id, props.item.declination, props.item.hours, props.item.minutes, props.item.seconds)"
             >
-            <!-- <td class="text-xs-left">{{ props.item.id }}</td> -->
             <td class="text-xs-center">{{ props.item.text }}</td>
             <td class="text-xs-center">{{ props.item.val }}</td>
             </tr>
         </template>
-    </v-data-table>
-
-    <v-layout justify-center>
-        <v-flex xs12 sm1>
-            <v-select
-                v-model="selectedDataSet"
-                :items="dataSetList"
-                label="Data Set"
-            >
-            </v-select>
-        </v-flex>
-    </v-layout>
+    </v-data-table> -->
 
     <!-- This data table is for specific weather data -->
     <v-data-table
@@ -82,6 +69,17 @@
         </template>
     </v-data-table>
 
+    <v-layout justify-center>
+        <v-flex xs12 sm1>
+            <v-select
+                v-model="selectedDataSet"
+                :items="dataSetList"
+                label="Data Set"
+            >
+            </v-select>
+        </v-flex>
+    </v-layout>
+
     <v-dialog hide-overlay transition="dialog-bottom-transition" v-model="graphToggle">
             <v-btn color="primary darken-1" slot="activator">View Data Graph</v-btn>
             <div class="graph-style">
@@ -115,9 +113,16 @@ export default {
                 { id: 3, text: 'Rain Gauge', val: "2.0 in"}
             ],
             dataSetList: [
-                'Temperature',
                 'Wind Speed',
-                'Rain Gauge'
+                'Wind Direction',
+                'Temperature',
+                'Rain Rate',
+                'Rain Total',
+                'Rain for Day',
+                'Barometric Pressure',
+                'Dew Point',
+                'Wind Chill',
+                'Heat Index'
             ],
             selectedDataSet: '',
             graphToggle: false,
@@ -161,7 +166,7 @@ export default {
             ],
             dbData: [
                 {   timeStamp: "10-20-2019 5:00 PM", windSpeed: "13", windDirection: "NW", tempF: "76", 
-                    rainRate: "2.0", rainTotal: "2.0", rainDay: "2.0", pressure: "1.0" ,
+                    rainRate: "2.0", rainTotal: "2.0", rainDay: "3.0", pressure: "1.0" ,
                     dewPoint: "72", windChill: "68", heatIndex: "91"},
                 {   timeStamp: "10-19-2019 10:30 AM", windSpeed: "16", windDirection: "NE", tempF: "78", 
                     rainRate: "0.5", rainTotal: "0.9", rainDay: "1.1", pressure: "1.0" ,
@@ -170,7 +175,7 @@ export default {
                     rainRate: "1.2", rainTotal: "1.5", rainDay: "2.0", pressure: "1.0" ,
                     dewPoint: "59", windChill: "66", heatIndex: "101"},
                 {   timeStamp: "10-18-2019 10:31 AM", windSpeed: "24", windDirection: "E", tempF: "75", 
-                    rainRate: "2.9", rainTotal: "3.0", rainDay: "3.0", pressure: "1.0" ,
+                    rainRate: "2.9", rainTotal: "3.0", rainDay: "2.0", pressure: "1.0" ,
                     dewPoint: "62", windChill: "44", heatIndex: "98"}
                     
             ]
