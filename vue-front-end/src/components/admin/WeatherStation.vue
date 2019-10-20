@@ -77,6 +77,12 @@
                 label="Data Set"
             >
             </v-select>
+            <v-select
+                v-model="selectedTimeScale"
+                :items="timeScaleList"
+                label="Time Scale"
+            >
+            </v-select>
         </v-flex>
     </v-layout>
 
@@ -124,7 +130,16 @@ export default {
                 'Wind Chill',
                 'Heat Index'
             ],
+            timeScaleList: [
+                'Past Day',
+                'Past Week',
+                'Past Month',
+                'Past 6 Months',
+                'Past Year',
+                'Past 5 Years'
+            ],
             selectedDataSet: '',
+            selectedTimeScale: '',
             graphToggle: false,
             graphData: {
                 labels: [],
@@ -187,6 +202,7 @@ export default {
     },
     mounted: function(){
         this.selectedDataSet = 'Temperature';   // Temperature is default
+        this.selectedTimeScale = 'Past Day';    // 'Past Day' is default
     },
     components: {
         Loading,
