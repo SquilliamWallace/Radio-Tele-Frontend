@@ -235,7 +235,7 @@ export default {
             return {
                 height: '600px',
                 position: 'relative',
-                backgroundColor: '#46464a',
+                backgroundColor: '#ffffff',
             }
         },
         getItemSet : function(){    // used to determine which data set to load

@@ -25,7 +25,7 @@ export default {
                     scaleLabel: {
                         display: true,
                         labelString: 'Time Stamp',
-                        fontColor: '#cdcdcd'
+                        fontColor: '#111111'
                     }
                 }],
                 yAxes: [{
@@ -33,7 +33,7 @@ export default {
                     scaleLabel: {
                         display: true,
                         labelString: 'Temperature',
-                        fontColor: '#cdcdcd'
+                        fontColor: '#111111'
                     }
                 }]
             }
