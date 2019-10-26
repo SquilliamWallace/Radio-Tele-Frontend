@@ -85,6 +85,10 @@
         </v-flex>
     </v-layout>
 
+    <div> 
+        <v-btn color="primary darken-1" @click="populateData()">Load Data Graph</v-btn>
+    </div>
+    
     <v-dialog hide-overlay transition="dialog-bottom-transition" v-model="graphToggle">
             <v-btn color="primary darken-1" slot="activator">View Data Graph</v-btn>
             <div class="graph-style">
@@ -121,7 +125,6 @@ export default {
             ],
             dataSetList: [
                 'Wind Speed',
-                'Wind Direction',
                 'Temperature',
                 'Rain Rate',
                 'Rain Total',
@@ -140,6 +143,7 @@ export default {
                 'Past 5 Years'
             ],
             selectedDataSet: '',
+            dataSetVar: null,
             selectedTimeScale: '',
             graphToggle: false,
             graphData: {
@@ -152,21 +156,6 @@ export default {
                 { text: 'Time Recorded', sortable: false, value: 'val2' }
             ],
             // The following data sets is hardcoded dummy data
-            tempData: [
-                { id: 1, text: '81 °F', val: "10-19-2019 12:23 PM"},
-                { id: 2, text: '74 °F', val: "10-19-2019 10:13 AM"},
-                { id: 3, text: '82 °F', val: "10-19-2019 8:09 AM"}
-            ],
-            windData: [
-                { id: 1, text: '24 mph', val: "10-19-2019 12:23 PM"},
-                { id: 2, text: '0 mph', val: "10-19-2019 10:13 AM"},
-                { id: 3, text: '18 mph', val: "10-19-2019 8:09 AM"}
-            ],
-            rainData: [
-                { id: 1, text: '2.0 in', val: "10-19-2019 12:23 PM"},
-                { id: 2, text: '1.6 in', val: "10-19-2019 10:13 AM"},
-                { id: 3, text: '0.5 in', val: "10-19-2019 8:09 AM"}
-            ],
             dbHeaders: [
                 { text: 'Time Stamp', align: 'left', sortable: false, value: 'timeStamp'},
                 { text: 'Wind Speed', sortable: false, value: 'windSpeed' },
@@ -200,31 +189,81 @@ export default {
         }
     },
     methods:{
-        populateData(data) { // This method has been modified
-            console.log("Populating data...");
+        populateData() { // This method has been modified
+            this.clearGraph();
+            
+            console.log("dataIndex: " + this.dataIndex);
+            var data = this.dbData;
             console.log(data);
             // Populate the RF Data array
             for (var index in data) {
                 let wsData = data[index];
                 wsData.timeCaptured = moment(wsData.timeStamp).format('MM/DD/YYYY hh:mm:ss A')
+                var dataPointVal = this.getDataPoint(wsData);   // method must use 'this.' keyword
+                console.log("Data Point Value: " + dataPointVal);
                 console.log(wsData.timeCaptured);
-                this.WSData.push(wsData)
-                this.graphData.labels.push(wsData.timeStamp)
+                this.WSData.push(wsData); // This is the dataset is gets downloaded
+                this.graphData.labels.push(wsData.timeCaptured);
                 if(this.graphData.datasets.length <= this.dataIndex){
-                    this.graphData.datasets.push({label: 'ID #: ' + wsData.id, backgroundColor: '#' + Math.floor(Math.random()*16777215).toString(16), fill: false, data: []})
-                    console.log(this.graphData.datasets.length);
+                    console.log("datasets length: " + this.graphData.datasets.length);
+                    this.graphData.datasets.push({label: 'ID #: ' + wsData.id, 
+                                                  backgroundColor: '#' + Math.floor(Math.random()*16777215).toString(16), 
+                                                  fill: false, 
+                                                  data: []});
+                    console.log("datasets length: " + this.graphData.datasets.length);
                 }
-                this.graphData.datasets[this.dataIndex].data.push({y: wsData.tempF, x: wsData.timeStamp})
-                this.graphData.datasets[this.dataIndex].label = 'ID #: ' + wsData.id
+                this.graphData.datasets[this.dataIndex].data.push({y: dataPointVal, x: wsData.timeCaptured})
+                this.graphData.datasets[this.dataIndex].label = this.selectedDataSet;
             }
             this.dataIndex +=1;
             console.log(this.graphStyles);
+            console.log("# of data points: " + this.graphData.datasets.length);
+            console.log("# of labels: " + this.graphData.labels.length);
+        },
+        getDataPoint(data) {
+            var selected = this.selectedDataSet;
+            console.log("Selected Data Set: " + selected); // local variable 'selected' should not use 'this.' keyword.
+            switch(selected)
+            {
+                case "Wind Speed":
+                    return data.windSpeed;
+                case "Temperature":
+                    return data.tempF;
+                case "Rain Rate":
+                    return data.rainRate;
+                case "Rain Total":
+                    return data.rainTotal;
+                case "Rain for Day":
+                    return data.rainDay;
+                case "Barometric Pressure":
+                    return data.pressure;
+                case "Dew Point":
+                    return data.dewPoint;
+                case "Wind Chill":
+                    return data.windChill;
+                case "Heat Index":
+                    return data.heatIndex;
+                default:
+                    return data.tempF;
+            }
+        },
+        clearGraph() {
+            console.log("Clearing graph data...");
+            while (this.graphData.datasets.length > 0){
+                this.graphData.datasets.pop();
+            }
+            while (this.graphData.labels.length > 0){
+                this.graphData.labels.pop();
+            }
+            this.dataIndex = 0;
+            console.log("After Clearing... # of data points: " + this.graphData.datasets.length);
+            console.log("After Clearing... # of labels: " + this.graphData.labels.length);
         }
     },
     mounted: function(){
         this.selectedDataSet = 'Temperature';   // Temperature is default
         this.selectedTimeScale = 'Past Day';    // 'Past Day' is default
-        this.populateData(this.dbData); 
+        this.populateData(); 
     },
     components: {
         Loading,
@@ -235,18 +274,7 @@ export default {
             return {
                 height: '600px',
                 position: 'relative',
-                backgroundColor: '#ffffff',
-            }
-        },
-        getItemSet : function(){    // used to determine which data set to load
-            if (this.selectedDataSet == 'Temperature'){
-                return this.tempData;
-            }
-            else if (this.selectedDataSet == 'Wind Speed'){
-                return this.windData;
-            }
-            else if (this.selectedDataSet == 'Rain Gauge'){
-                return this.rainData;
+                backgroundColor: '#ffffff'
             }
         }
     }
