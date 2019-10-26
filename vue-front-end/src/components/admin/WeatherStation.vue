@@ -3,34 +3,8 @@
     <loading v-if="$store.state.isLoading"></loading>
     <v-card v-if="!$store.state.isLoading" width = "100%">
 
-    <!-- This is the table for the current data -->
-    <!-- <v-data-table
-        v-if="!$store.state.isLoading"
-        hide-actions
-        :headers="headers"
-        :items="bodies"
-        :pagination.sync="pagination"
-        select-all
-        class="elevation-1"
-    >
-        <template slot="headers" slot-scope="props">
-            <tr>
-            <th class="text-xs-center" v-for="header in props.headers" :key="header.text">
-                <h2>{{ header.text }}</h2>
-            </th>
-            </tr>
-        </template>
-        <template slot="items" slot-scope="props">
-            <tr
-            @click="updateForm(props.item.name, props.item.id, props.item.declination, props.item.hours, props.item.minutes, props.item.seconds)"
-            >
-            <td class="text-xs-center">{{ props.item.text }}</td>
-            <td class="text-xs-center">{{ props.item.val }}</td>
-            </tr>
-        </template>
-    </v-data-table> -->
-
     <!-- This data table is for specific weather data -->
+    <!-- The top row will contain the current weather data -->
     <v-data-table
         v-if="!$store.state.isLoading"
         :headers="dbHeaders"
