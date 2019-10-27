@@ -87,17 +87,7 @@ export default {
     name: 'WeatherStation',
     data(){
         return {
-            // These headers and data items are for reporting current weather conditions
-            headers: [
-                { text: 'Data Set', align: 'left', sortable: false, value: 'dataName'},
-                { text: 'Current Conditions', sortable: false, value: 'val' }
-            ],
-            bodies: [
-                { id: 1, text: 'Temperature', val: "81 °F"},
-                { id: 2, text: 'Wind Speed', val: "24 mph"},
-                { id: 3, text: 'Rain Gauge', val: "2.0 in"}
-            ],
-            dataSetList: [
+            dataSetList: [              // Items in Data Set dropdown menu
                 'Wind Speed',
                 'Temperature',
                 'Rain Rate',
@@ -108,7 +98,7 @@ export default {
                 'Wind Chill',
                 'Heat Index'
             ],
-            timeScaleList: [
+            timeScaleList: [            // Items in Time Scale dropdown menu
                 'Past Day',
                 'Past Week',
                 'Past Month',
@@ -116,19 +106,14 @@ export default {
                 'Past Year',
                 'Past 5 Years'
             ],
-            selectedDataSet: '',
-            dataSetVar: null,
-            selectedTimeScale: '',
-            graphToggle: false,
-            graphData: {
-                labels: [],
-                datasets: []
+            selectedDataSet: '',        // Dataset that is currtly selected from dropdown menu
+            dataSetVar: null,           // Variable used to load different data elements depending on dataset
+            selectedTimeScale: '',      // Time range that is currently selected from dropdown menu
+            graphToggle: false,         // Boolean set whether to show the graph or not (toggled by button)
+            graphData: {                // The data structure that holds data to be graphed
+                labels: [],             // Strings displayed along x-axis for each data point
+                datasets: []            // data for each x/y coordinate and individual label
             },
-            // Items for second data table
-            dataHeaders: [
-                { text: 'Value', align: 'left', sortable: false, value: 'dataName2'},
-                { text: 'Time Recorded', sortable: false, value: 'val2' }
-            ],
             // The following data sets is hardcoded dummy data
             dbHeaders: [
                 { text: 'Time Stamp', align: 'left', sortable: false, value: 'timeStamp'},
@@ -157,42 +142,33 @@ export default {
                     rainRate: "2.9", rainTotal: "3.0", rainDay: "2.0", pressure: "1.0" ,
                     dewPoint: "62", windChill: "44", heatIndex: "98"} 
             ],
-            WSData: [],
-            dataIndex: 0,
+            WSData: [],     // Data array used for download to CSV
+            dataIndex: 0,   // index used for multiple datasets on single graph
 
         }
     },
     methods:{
-        populateData() { // This method has been modified
-            this.clearGraph();
-            
-            console.log("dataIndex: " + this.dataIndex);
-            var data = this.dbData;
-            console.log(data);
+        populateData() {            // Loads dataset onto graph
+            this.clearGraph();      // clear any loaded data
+            var data = this.dbData; // obtain raw data here
+
             // Populate the RF Data array
             for (var index in data) {
-                let wsData = data[index];
-                wsData.timeCaptured = moment(wsData.timeStamp).format('MM/DD/YYYY hh:mm:ss A')
-                var dataPointVal = this.getDataPoint(wsData);   // method must use 'this.' keyword
-                console.log("Data Point Value: " + dataPointVal);
-                console.log(wsData.timeCaptured);
-                this.WSData.push(wsData); // This is the dataset is gets downloaded
-                this.graphData.labels.push(wsData.timeCaptured);
-                if(this.graphData.datasets.length <= this.dataIndex){
-                    console.log("datasets length: " + this.graphData.datasets.length);
+                let wsData = data[index];                                                       // Get instance of data point
+                wsData.timeCaptured = moment(wsData.timeStamp).format('MM/DD/YYYY hh:mm:ss A')  // The date/time object will need to be extracted
+                var dataPointVal = this.getDataPoint(wsData);                                   // method must use 'this.' keyword
+                this.WSData.push(wsData);                                                       // This is the dataset is gets downloaded (might need later)
+                this.graphData.labels.push(wsData.timeCaptured);                                // Push timestamp label into array
+                if(this.graphData.datasets.length <= this.dataIndex){                           // If datasets array is empty, create one dataset 
                     this.graphData.datasets.push({label: 'ID #: ' + wsData.id, 
                                                   backgroundColor: '#' + Math.floor(Math.random()*16777215).toString(16), 
                                                   fill: false, 
-                                                  data: []});
-                    console.log("datasets length: " + this.graphData.datasets.length);
+                                                  data: []});                                   // This is the array that will hold the coordinates
                 }
-                this.graphData.datasets[this.dataIndex].data.push({y: dataPointVal, x: wsData.timeCaptured})
-                this.graphData.datasets[this.dataIndex].label = this.selectedDataSet;
+                this.graphData.datasets[this.dataIndex].data.push({y: dataPointVal, x: wsData.timeCaptured});   // Push coordinates onto data array
+                this.graphData.datasets[this.dataIndex].label = this.selectedDataSet;                           // Label the dataset with element name
             }
-            this.dataIndex +=1;
-            console.log(this.graphStyles);
-            console.log("# of data points: " + this.graphData.datasets.length);
-            console.log("# of labels: " + this.graphData.labels.length);
+            this.dataIndex +=1; // increment dataIndex (used only for multiple datasets on single graph)
         },
         getDataPoint(data) {
             var selected = this.selectedDataSet;
@@ -221,7 +197,7 @@ export default {
                     return data.tempF;
             }
         },
-        clearGraph() {
+        clearGraph() {  // Removes all datasets and labels currently loaded to the graph
             console.log("Clearing graph data...");
             while (this.graphData.datasets.length > 0){
                 this.graphData.datasets.pop();
@@ -230,12 +206,12 @@ export default {
                 this.graphData.labels.pop();
             }
             this.dataIndex = 0;
-            console.log("After Clearing... # of data points: " + this.graphData.datasets.length);
-            console.log("After Clearing... # of labels: " + this.graphData.labels.length);
+            console.log("After Clearing... # of data points: " + this.graphData.datasets.length);   // Should be zero
+            console.log("After Clearing... # of labels: " + this.graphData.labels.length);          // Should be zero
         }
     },
     mounted: function(){
-        this.selectedDataSet = 'Temperature';   // Temperature is default
+        this.selectedDataSet = 'Temperature';   // 'Temperature' is default
         this.selectedTimeScale = 'Past Day';    // 'Past Day' is default
         this.populateData(); 
     },
