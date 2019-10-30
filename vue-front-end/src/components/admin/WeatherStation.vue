@@ -156,10 +156,9 @@ export default {
             for (var index in data) {
                 let wsData = data[index];                                                       // Get instance of data point
                 wsData.timeCaptured = moment(wsData.timeStamp).format('MM/DD/YYYY hh:mm:ss A')  // The date/time object will need to be extracted
-                console.log(moment(wsData.timeCaptured).date());
-                console.log("Is Valid: " + this.isValidTimeStamp(wsData.timeCaptured));
-                if (this.isValidTimeStamp(wsData.timeCaptured)){
-
+                // console.log(moment(wsData.timeCaptured).date());
+                // console.log("Is Valid: " + this.isValidTimeStamp(wsData.timeCaptured));
+                if (this.isValidTimeStamp(wsData.timeCaptured)){                                    // Only execute this code block for valid time stamps
                     var dataPointVal = this.getDataPoint(wsData);                                   // method must use 'this.' keyword
                     this.WSData.push(wsData);                                                       // This is the dataset is gets downloaded (might need later)
                     this.graphData.labels.push(wsData.timeCaptured);                                // Push timestamp label into array
@@ -177,7 +176,7 @@ export default {
         },
         getDataPoint(data) {
             var selected = this.selectedDataSet;
-            console.log("Selected Data Set: " + selected); // local variable 'selected' should not use 'this.' keyword.
+            // console.log("Selected Data Set: " + selected); // local variable 'selected' should not use 'this.' keyword.
             switch(selected)
             {
                 case "Wind Speed":
@@ -204,7 +203,7 @@ export default {
         },
         getDayCount(){
             var selected = this.selectedTimeScale;
-            console.log("Selected Time Scale: " + selected);
+            // console.log("Selected Time Scale: " + selected);
             switch(selected){
                 case "Past Day":
                     return 1;
@@ -227,7 +226,7 @@ export default {
             var currentDate = moment();
             var numDays = this.getDayCount();
             var boundaryDate = moment().subtract(numDays, 'days');
-            console.log("target Date: " + targetDate.toString());
+            // console.log("target Date: " + targetDate.toString());
             if (moment(targetDate).isBetween(boundaryDate, currentDate, null, [])){
                 return true;
             }
