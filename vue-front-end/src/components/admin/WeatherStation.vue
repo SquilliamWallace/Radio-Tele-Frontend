@@ -129,16 +129,16 @@ export default {
                 { text: 'Heat Index', sortable: false, value: 'heatIndex' }
             ],
             dbData: [
-                {   id: 1, timeStamp: "10-20-2019 5:00:00 PM", windSpeed: "13", windDirection: "NW", tempF: "76", 
+                {   id: 1, timeStamp: "10-30-2019 01:00:00 PM", windSpeed: "13", windDirection: "NW", tempF: "76", 
                     rainRate: "2.0", rainTotal: "2.0", rainDay: "3.0", pressure: "1.0" ,
                     dewPoint: "72", windChill: "68", heatIndex: "91"},
-                {   id: 2, timeStamp: "10-19-2019 10:30:00 AM", windSpeed: "16", windDirection: "NE", tempF: "78", 
+                {   id: 2, timeStamp: "10-26-2019 10:30:00 AM", windSpeed: "16", windDirection: "NE", tempF: "78", 
                     rainRate: "0.5", rainTotal: "0.9", rainDay: "1.1", pressure: "1.0" ,
                     dewPoint: "61", windChill: "64", heatIndex: "97"},
-                {   id: 3, timeStamp: "10-18-2019 5:00:00 PM", windSpeed: "11", windDirection: "S", tempF: "81", 
+                {   id: 3, timeStamp: "10-12-2019 05:00:00 PM", windSpeed: "11", windDirection: "S", tempF: "81", 
                     rainRate: "1.2", rainTotal: "1.5", rainDay: "2.0", pressure: "1.0" ,
                     dewPoint: "59", windChill: "66", heatIndex: "101"},
-                {   id: 4, timeStamp: "10-18-2019 10:31:00 AM", windSpeed: "24", windDirection: "E", tempF: "75", 
+                {   id: 4, timeStamp: "09-18-2019 10:31:00 AM", windSpeed: "24", windDirection: "E", tempF: "75", 
                     rainRate: "2.9", rainTotal: "3.0", rainDay: "2.0", pressure: "1.0" ,
                     dewPoint: "62", windChill: "44", heatIndex: "98"} 
             ],
@@ -156,17 +156,22 @@ export default {
             for (var index in data) {
                 let wsData = data[index];                                                       // Get instance of data point
                 wsData.timeCaptured = moment(wsData.timeStamp).format('MM/DD/YYYY hh:mm:ss A')  // The date/time object will need to be extracted
-                var dataPointVal = this.getDataPoint(wsData);                                   // method must use 'this.' keyword
-                this.WSData.push(wsData);                                                       // This is the dataset is gets downloaded (might need later)
-                this.graphData.labels.push(wsData.timeCaptured);                                // Push timestamp label into array
-                if(this.graphData.datasets.length <= this.dataIndex){                           // If datasets array is empty, create one dataset 
-                    this.graphData.datasets.push({label: 'ID #: ' + wsData.id, 
-                                                  backgroundColor: '#' + Math.floor(Math.random()*16777215).toString(16), 
-                                                  fill: false, 
-                                                  data: []});                                   // This is the array that will hold the coordinates
+                console.log(moment(wsData.timeCaptured).date());
+                console.log("Is Valid: " + this.isValidTimeStamp(wsData.timeCaptured));
+                if (this.isValidTimeStamp(wsData.timeCaptured)){
+
+                    var dataPointVal = this.getDataPoint(wsData);                                   // method must use 'this.' keyword
+                    this.WSData.push(wsData);                                                       // This is the dataset is gets downloaded (might need later)
+                    this.graphData.labels.push(wsData.timeCaptured);                                // Push timestamp label into array
+                    if(this.graphData.datasets.length <= this.dataIndex){                           // If datasets array is empty, create one dataset 
+                        this.graphData.datasets.push({label: 'ID #: ' + wsData.id, 
+                                                    backgroundColor: '#' + Math.floor(Math.random()*16777215).toString(16), 
+                                                    fill: false, 
+                                                    data: []});                                   // This is the array that will hold the coordinates
+                    }
+                    this.graphData.datasets[this.dataIndex].data.push({y: dataPointVal, x: wsData.timeCaptured});   // Push coordinates onto data array
+                    this.graphData.datasets[this.dataIndex].label = this.selectedDataSet;                           // Label the dataset with element name
                 }
-                this.graphData.datasets[this.dataIndex].data.push({y: dataPointVal, x: wsData.timeCaptured});   // Push coordinates onto data array
-                this.graphData.datasets[this.dataIndex].label = this.selectedDataSet;                           // Label the dataset with element name
             }
             this.dataIndex +=1; // increment dataIndex (used only for multiple datasets on single graph)
         },
@@ -195,6 +200,39 @@ export default {
                     return data.heatIndex;
                 default:
                     return data.tempF;
+            }
+        },
+        getDayCount(){
+            var selected = this.selectedTimeScale;
+            console.log("Selected Time Scale: " + selected);
+            switch(selected){
+                case "Past Day":
+                    return 1;
+                case "Past Week":
+                    return 7;
+                case "Past Month":
+                    return 30;
+                case "Past 6 Months":
+                    return 180;
+                case "Past Year":
+                    return 365;
+                case "Past 5 Years":
+                    return 1825;
+                default:
+                    return 1;
+            }
+        },
+        isValidTimeStamp(timeStampVal){
+            var targetDate = moment(timeStampVal).format('MM/DD/YYYY hh:mm:ss A');
+            var currentDate = moment();
+            var numDays = this.getDayCount();
+            var boundaryDate = moment().subtract(numDays, 'days');
+            console.log("target Date: " + targetDate.toString());
+            if (moment(targetDate).isBetween(boundaryDate, currentDate, null, [])){
+                return true;
+            }
+            else{
+                return false;
             }
         },
         clearGraph() {  // Removes all datasets and labels currently loaded to the graph
