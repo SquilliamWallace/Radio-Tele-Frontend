@@ -154,23 +154,24 @@ export default {
 
             // Populate the RF Data array
             for (var index in data) {
-                let wsData = data[index]; 
-                // console.log("Time Stamp: " + wsData.timeStamp.toString());                                                      // Get instance of data point
-                wsData.timeCaptured = moment(wsData.timeStamp).format(); // The date/time object will need to be extracted
+                let wsData = data[index];                                                           // Get instance of data point
+                // console.log("Time Stamp: " + wsData.timeStamp.toString());                                                      
+                wsData.timeCaptured = moment(wsData.timeStamp).format();                            // The date/time object to be used for comparison
+                wsData.timeDisplay = moment(wsData.timeStamp).format('MM/DD/YYYY hh:mm:ss A');      // The human readable date/time to be visually displayed
                 // console.log("Formatted Time Stamp: " + wsData.timeCaptured.toString());
                 // console.log(moment(wsData.timeCaptured).date());
                 // console.log("Is Valid: " + this.isValidTimeStamp(wsData.timeCaptured));
                 if (this.isValidTimeStamp(wsData.timeCaptured)){                                    // Only execute this code block for valid time stamps
                     var dataPointVal = this.getDataPoint(wsData);                                   // method must use 'this.' keyword
                     this.WSData.push(wsData);                                                       // This is the dataset is gets downloaded (might need later)
-                    this.graphData.labels.push(wsData.timeCaptured);                                // Push timestamp label into array
+                    this.graphData.labels.push(wsData.timeDisplay);                                // Push timestamp label into array
                     if(this.graphData.datasets.length <= this.dataIndex){                           // If datasets array is empty, create one dataset 
                         this.graphData.datasets.push({label: 'ID #: ' + wsData.id, 
                                                     backgroundColor: '#' + Math.floor(Math.random()*16777215).toString(16), 
                                                     fill: false, 
                                                     data: []});                                   // This is the array that will hold the coordinates
                     }
-                    this.graphData.datasets[this.dataIndex].data.push({y: dataPointVal, x: wsData.timeCaptured});   // Push coordinates onto data array
+                    this.graphData.datasets[this.dataIndex].data.push({y: dataPointVal, x: wsData.timeDisplay});   // Push coordinates onto data array
                     this.graphData.datasets[this.dataIndex].label = this.selectedDataSet;                           // Label the dataset with element name
                 }
             }
