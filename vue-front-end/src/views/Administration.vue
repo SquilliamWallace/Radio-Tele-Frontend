@@ -32,7 +32,7 @@
         </v-tab>
         <v-tab>
           Sensor Data
-          <v-icon>public</v-icon>
+          <v-icon>rss_feed</v-icon>
         </v-tab>
         
         <v-tab-item>
