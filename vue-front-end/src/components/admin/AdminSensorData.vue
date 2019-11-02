@@ -1,0 +1,40 @@
+<template>
+<div>
+    <loading v-if="$store.state.isLoading"></loading>
+    <v-card v-if="!$store.state.isLoading" width = "100%">
+          <!-- Insert code here -->
+          <h1>Sensor Data</h1>
+    </v-card>
+</div>
+</template>
+<script>
+import router from '../../router';
+import ApiDriver from '../../ApiDriver';
+import HttpResponse from '../../utils/HttpResponse';
+import CurrentUserValidation from  '../../utils/CurrentUserValidation';
+import Loading from "../../components/utility/Loading"
+import moment from 'moment';    // Is this page going to be working with dates. 
+export default {
+    name: 'Sensor Data',
+    data(){
+        return {
+            // insert data
+        }
+    },
+    methods:{
+        
+    },
+    mounted: function(){
+
+    },
+    components: {
+        Loading
+    },
+    computed: {
+        
+    }
+};
+</script>
+<style scoped>
+    
+</style>
