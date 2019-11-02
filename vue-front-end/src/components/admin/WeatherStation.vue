@@ -251,9 +251,9 @@ export default {
         }
     },
     mounted: function(){
-        this.selectedDataSet = 'Temperature';   // 'Temperature' is default
-        this.selectedTimeScale = 'Past Day';    // 'Past Day' is default
-        this.populateData(); 
+        this.selectedDataSet = 'Temperature';       // 'Temperature' is default
+        this.selectedTimeScale = 'Past Week';       // 'Past Week' is default
+        this.populateData();                        // Populating without any valid data points results in dead graph
     },
     components: {
         Loading,
@@ -264,7 +264,27 @@ export default {
             return {
                 height: '600px',
                 position: 'relative',
-                backgroundColor: '#ffffff'
+                backgroundColor: '#ffffff',
+                responsive: true,                           // options have been moved here to set the y-axis label
+                maintainAspectRatio: false,
+                scales: {
+                    xAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Time Stamp',
+                            fontColor: '#111111'
+                        }
+                    }],
+                    yAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            // labelString: this.selectedDataSet,  // This only renders on mounted with valid data points
+                            fontColor: '#111111'
+                        }
+                    }]
+                }
             }
         }
     }

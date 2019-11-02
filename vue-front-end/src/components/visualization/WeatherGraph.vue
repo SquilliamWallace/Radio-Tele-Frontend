@@ -16,32 +16,32 @@ export default {
                 }
             ]
       },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                xAxes: [{
-                    display: true,
-                    scaleLabel: {
-                        display: true,
-                        labelString: 'Time Stamp',
-                        fontColor: '#111111'
-                    }
-                }],
-                yAxes: [{
-                    display: true,
-                    scaleLabel: {
-                        display: true,
-                        labelString: 'Temperature',
-                        fontColor: '#111111'
-                    }
-                }]
-            }
-        }
+        // options: {
+        //     responsive: true,
+        //     maintainAspectRatio: false,
+        //     scales: {
+        //         xAxes: [{
+        //             display: true,
+        //             scaleLabel: {
+        //                 display: true,
+        //                 labelString: 'Time Stamp',
+        //                 fontColor: '#111111'
+        //             }
+        //         }],
+        //         yAxes: [{
+        //             display: true,
+        //             scaleLabel: {
+        //                 display: true,
+        //                 labelString: 'Total Rain',
+        //                 fontColor: '#111111'
+        //             }
+        //         }]
+        //     }
+        // }
     }
   },
   mounted () {
-    this.renderChart(this.value, this.options)
+    this.renderChart(this.value, this.styles)
   }
 }
 </script>
