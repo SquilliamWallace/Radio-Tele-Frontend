@@ -8,14 +8,36 @@
 <v-container grid text-xs-center>
     <v-layout row>
         <v-flex md4>
-                <v-card dark >
-                    <v-card-text class="text--primary">Text Here</v-card-text>
+                <v-card dark >                 
+                        <div class="sensor-name">Overall</div>
                 </v-card>
         </v-flex>
 
         <v-flex md4>
-                <v-card dark color="green">
-                    <v-card-text class="px-5">OK</v-card-text>
+                <v-card dark color="red">
+                    <div class="sensor-status">Error</div>
+                </v-card>
+        </v-flex>
+
+        <v-flex md>
+            <v-card-actions class="justify-start">
+                <div>
+                    <v-switch class="ma-0" inset label="Override" background-color="transparent" color="blue darken-5"></v-switch>
+                </div>
+            </v-card-actions>
+        </v-flex>
+    </v-layout>
+    
+    <v-layout row>
+        <v-flex md4>
+                <v-card dark >
+                        <div class="sensor-name">Gate</div>
+                </v-card>
+        </v-flex>
+
+        <v-flex md4>
+                <v-card dark color="yellow">
+                    <div class="sensor-status">Warning</div>
                 </v-card>
         </v-flex>
 
@@ -31,13 +53,35 @@
     <v-layout row>
         <v-flex md4>
                 <v-card dark >
-                    <v-card-text>Text Here</v-card-text>
+                        <div class="sensor-name">Proximity</div>
                 </v-card>
         </v-flex>
 
         <v-flex md4>
                 <v-card dark color="green">
-                    <v-card-text class="px-5">OK</v-card-text>
+                    <div class="sensor-status">OK</div>
+                </v-card>
+        </v-flex>
+
+        <v-flex md>
+            <v-card-actions class="justify-start">
+                <div>
+                    <v-switch class="ma-0" inset label="Override" background-color="transparent" color="blue darken-5"></v-switch>
+                </div>
+            </v-card-actions>
+        </v-flex>
+    </v-layout>
+
+    <v-layout row>
+        <v-flex md4>
+                <v-card dark >
+                        <div class="sensor-name">Azimuth Motor</div>
+                </v-card>
+        </v-flex>
+
+        <v-flex md4>
+                <v-card dark color="red">
+                    <div class="sensor-status">Error</div>
                 </v-card>
         </v-flex>
 
@@ -84,5 +128,18 @@ export default {
 };
 </script>
 <style scoped>
-    
+.sensor-name {
+    text-align: center;
+    color: white; 
+    font-size: 35px;
+    /* text-decoration: underline; */
+    text-decoration-color: white;
+}
+.sensor-status {
+    text-align: center;
+    color: black; 
+    font-size: 35px;
+    /* text-decoration: underline; */
+    text-decoration-color: white;
+}
 </style>
