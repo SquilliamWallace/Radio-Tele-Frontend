@@ -162,6 +162,14 @@ export default {
             overallStatColor: "green",
             overallStatText: "OK",
 
+            sensors: [
+                { id: 1, name: 'Gate', status: 0, statusColor: '', statusText: '' },
+                { id: 1, name: 'Proximity', status: 0, statusColor: '', statusText: '' },
+                { id: 1, name: 'Azimuth Motor', status: 0, statusColor: '', statusText: '' },
+                { id: 1, name: 'Elevation Motor', status: 0, statusColor: '', statusText: '' },
+                { id: 1, name: 'Weather Station', status: 0, statusColor: '', statusText: '' }
+            ],
+
             // status values
             gateStatus: 0,
             proximityStatus: 0,
@@ -212,11 +220,17 @@ export default {
             this.overallStatColor = this.getStatusColor(overall);
             this.overallStatText = this.getStatusText(overall);
         },
-        setStatus(){
-
-        },
         setStatuses() {
-
+            for(var dbIndex of this.dbData) {                                          // iterate over all sensors brought in fromd database
+                for(var localIndex of this.sensors){                                   // iterate over all local sensor variables
+                    if (dbIndex.name == localIndex.name){                              // We have found the matching sensor
+                        localIndex.status = dbIndex.value;                             // set that status value
+                        localIndex.statusColor = this.getStatusColor(dbIndex.value);   // set the status color using status value
+                        localIndex.statusText = this.getStatusText(dbIndex.value);     // set the status text using status value
+                        console.log(localIndex.name + ", " + localIndex.status + ", " + localIndex.statusColor + ", " + localIndex.statusText);
+                    }
+                }
+            }
         },
         getStatusColor(val) {
             switch(val)
@@ -246,6 +260,7 @@ export default {
         }
     },
     mounted: function(){
+        this.setStatuses();
         this.setOverallStatus();
     },
     components: {
