@@ -4,29 +4,32 @@
     <v-card v-if="!$store.state.isLoading" width = "100%">
           <!-- Insert code here -->
           <h1>Sensor Data</h1>
+<v-container fluid>
 
-<v-container grid text-xs-center>
-    <v-layout row>
-        <v-flex md4>
-                <v-card dark >                 
+<v-layout row>
+        <!-- <v-flex >
+                <v-card>                 
                         <div class="sensor-name">Overall</div>
                 </v-card>
-        </v-flex>
+        </v-flex> -->
 
-        <v-flex md4>
-                <v-card dark color="red">
-                    <div class="sensor-status">Error</div>
+        <v-flex >
+                <v-card :color="overallStatColor">
+                    <div class="sensor-status">{{ overallStatText }}</div>
                 </v-card>
         </v-flex>
 
-        <v-flex md>
+        <!-- <v-flex md>
             <v-card-actions class="justify-start">
                 <div>
                     <v-switch class="ma-0" inset label="Override" background-color="transparent" color="blue darken-5"></v-switch>
                 </div>
             </v-card-actions>
-        </v-flex>
+        </v-flex> -->
     </v-layout>
+</v-container>
+
+<v-container grid text-xs-center>
     
     <v-layout row>
         <v-flex md4>
@@ -155,6 +158,9 @@ export default {
     data(){
         return {
             // Overall data
+            overallStatus: 0,
+            overallStatColor: "green",
+            overallStatText: "OK",
 
             // status values
             gateStatus: 0,
@@ -182,15 +188,65 @@ export default {
                 {   id: 2, name: "Proximity", dataType: "tinyint", description: "Resembles status of proximity sensor", value: 1 },
                 {   id: 3, name: "Azimuth Motor", dataType: "tinyint", description: "Resembles status of azimuth motor", value: 2 },
                 {   id: 4, name: "Elevation Motor", dataType: "tinyint", description: "Resembles status of elevation motor", value: 0 },
-                {   id: 5, name: "Weather Station", dataType: "tinyint", description: "Resembles status of weather station", value: 1 }
+                {   id: 5, name: "Weather Station", dataType: "tinyint", description: "Resembles status of weather station", value: 2 }
             ]
         }
     },
     methods:{
-        
+        getOverallStatus(){
+            this.overallStatus = 0;             // if all are OK, this remains unchanged
+            for (var index of this.dbData) {
+                if (index.value == 2){
+                    this.overallStatus = 2;
+                    return this.overallStatus;                     // if ERROR found, immediately return
+                }
+                else if(index.value == 1){
+                    this.overallStatus = 1;
+                }
+            }
+            return this.overallStatus;
+        },
+        setOverallStatus(){
+            var overall = this.getOverallStatus();
+            // console.log("overall index: " + overall);
+            this.overallStatColor = this.getStatusColor(overall);
+            this.overallStatText = this.getStatusText(overall);
+        },
+        setStatus(){
+
+        },
+        setStatuses() {
+
+        },
+        getStatusColor(val) {
+            switch(val)
+            {
+                case 0:
+                    return "green";
+                case 1:
+                    return "yellow";
+                case 2:
+                    return "red";
+                default:
+                    return "white";          // empty string will result in default grey color
+            }
+        },
+        getStatusText(val) {
+            switch(val)
+            {
+                case 0:
+                    return "OK";
+                case 1:
+                    return "WARNING";
+                case 2:
+                    return "ERROR";
+                default:
+                    return "UNKNOWN";
+            }
+        }
     },
     mounted: function(){
-
+        this.setOverallStatus();
     },
     components: {
         Loading
