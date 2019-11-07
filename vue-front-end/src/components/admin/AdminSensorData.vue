@@ -4,170 +4,41 @@
     <v-card v-if="!$store.state.isLoading" width = "100%">
           <!-- Insert code here -->
           <h1>Sensor Data</h1>
-<v-container fluid>
-
-<v-layout row>
-        <!-- <v-flex >
-                <v-card>                 
-                        <div class="sensor-name">Overall</div>
-                </v-card>
-        </v-flex> -->
-
-        <v-flex >
-                <v-card :color="overallStatColor">
-                    <div class="sensor-status">{{ overallStatText }}</div>
-                </v-card>
-        </v-flex>
-
-        <!-- <v-flex md>
-            <v-card-actions class="justify-start">
-                <div>
-                    <v-switch class="ma-0" inset label="Override" background-color="transparent" color="blue darken-5"></v-switch>
-                </div>
-            </v-card-actions>
-        </v-flex> -->
-    </v-layout>
-</v-container>
-
-<v-container grid text-xs-center>
-    <div v-for="sensor in sensors" :key="sensor.name">
+    <v-container fluid>
         <v-layout row>
-            <v-flex md4>
-                    <v-card dark >
-                            <div class="sensor-name">{{ sensor.name }}</div>
+            <v-flex >
+                    <v-card :color="overallStatColor">
+                        <div class="sensor-status">{{ overallStatText }}</div>
                     </v-card>
-            </v-flex>
-
-            <v-flex md4>
-                    <v-card dark :color="sensor.statusColor">
-                        <div class="sensor-status">{{ sensor.statusText }}</div>
-                    </v-card>
-            </v-flex>
-
-            <v-flex md>
-                <v-card-actions class="justify-start">
-                    <div>
-                        <v-switch class="ma-0" inset label="Override" background-color="transparent" color="blue darken-5" v-model="sensor.override" @change="resetStatuses()"></v-switch>
-                    </div>
-                </v-card-actions>
             </v-flex>
         </v-layout>
-    </div>
-</v-container>
+    </v-container>
 
-<!-- <v-container grid text-xs-center>
-    
-    <v-layout row>
-        <v-flex md4>
-                <v-card dark >
-                        <div class="sensor-name">Gate</div>
-                </v-card>
-        </v-flex>
+    <v-container grid text-xs-center>
+        <div v-for="sensor in sensors" :key="sensor.name">
+            <v-layout row>
+                <v-flex md4>
+                        <v-card dark >
+                                <div class="sensor-name">{{ sensor.name }}</div>
+                        </v-card>
+                </v-flex>
 
-        <v-flex md4>
-                <v-card dark :color="gateStatColor">
-                    <div class="sensor-status">{{ gateStatText }}</div>
-                </v-card>
-        </v-flex>
+                <v-flex md4>
+                        <v-card dark :color="sensor.statusColor">
+                            <div class="sensor-status">{{ sensor.statusText }}</div>
+                        </v-card>
+                </v-flex>
 
-        <v-flex md>
-            <v-card-actions class="justify-start">
-                <div>
-                    <v-switch class="ma-0" inset label="Override" background-color="transparent" color="blue darken-5"></v-switch>
-                </div>
-            </v-card-actions>
-        </v-flex>
-    </v-layout>
-
-    <v-layout row>
-        <v-flex md4>
-                <v-card dark >
-                        <div class="sensor-name">Proximity</div>
-                </v-card>
-        </v-flex>
-
-        <v-flex md4>
-                <v-card dark :color="proximityStatColor">
-                    <div class="sensor-status">{{ proximityStatText }}</div>
-                </v-card>
-        </v-flex>
-
-        <v-flex md>
-            <v-card-actions class="justify-start">
-                <div>
-                    <v-switch class="ma-0" inset label="Override" background-color="transparent" color="blue darken-5"></v-switch>
-                </div>
-            </v-card-actions>
-        </v-flex>
-    </v-layout>
-
-    <v-layout row>
-        <v-flex md4>
-                <v-card dark >
-                        <div class="sensor-name">Azimuth Motor</div>
-                </v-card>
-        </v-flex>
-
-        <v-flex md4>
-                <v-card dark :color="azimuthStatColor">
-                    <div class="sensor-status">{{ azimuthStatText }}</div>
-                </v-card>
-        </v-flex>
-
-        <v-flex md>
-            <v-card-actions class="justify-start">
-                <div>
-                    <v-switch class="ma-0" inset label="Override" background-color="transparent" color="blue darken-5"></v-switch>
-                </div>
-            </v-card-actions>
-        </v-flex>
-    </v-layout>
-
-    <v-layout row>
-        <v-flex md4>
-                <v-card dark >
-                        <div class="sensor-name">Elevation Motor</div>
-                </v-card>
-        </v-flex>
-
-        <v-flex md4>
-                <v-card dark :color="elevationStatColor">
-                    <div class="sensor-status">{{ elevationStatText }}</div>
-                </v-card>
-        </v-flex>
-
-        <v-flex md>
-            <v-card-actions class="justify-start">
-                <div>
-                    <v-switch class="ma-0" inset label="Override" background-color="transparent" color="blue darken-5"></v-switch>
-                </div>
-            </v-card-actions>
-        </v-flex>
-    </v-layout>
-
-    <v-layout row>
-        <v-flex md4>
-                <v-card dark >
-                        <div class="sensor-name">Weather Station</div>
-                </v-card>
-        </v-flex>
-
-        <v-flex md4>
-                <v-card dark :color="weatherStatColor">
-                    <div class="sensor-status">{{ weatherStatText }}</div>
-                </v-card>
-        </v-flex>
-
-        <v-flex md>
-            <v-card-actions class="justify-start">
-                <div>
-                    <v-switch class="ma-0" inset label="Override" background-color="transparent" color="blue darken-5"></v-switch>
-                </div>
-            </v-card-actions>
-        </v-flex>
-    </v-layout>
-
-</v-container> -->
+                <v-flex md>
+                    <v-card-actions class="justify-start">
+                        <div>
+                            <v-switch class="ma-0" inset label="Override" background-color="transparent" color="blue darken-5" v-model="sensor.override" @change="resetStatuses()"></v-switch>
+                        </div>
+                    </v-card-actions>
+                </v-flex>
+            </v-layout>
+        </div>
+    </v-container>
 </v-card>
 
 </div>
