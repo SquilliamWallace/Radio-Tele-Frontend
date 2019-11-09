@@ -31,7 +31,7 @@
           <v-icon>public</v-icon>
         </v-tab>
         <v-tab>
-          Sensor Data
+          Sensors
           <v-icon>rss_feed</v-icon>
         </v-tab>
         

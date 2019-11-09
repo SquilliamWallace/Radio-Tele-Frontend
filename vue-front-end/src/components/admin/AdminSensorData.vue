@@ -2,8 +2,6 @@
 <div>
     <loading v-if="$store.state.isLoading"></loading>
     <v-card v-if="!$store.state.isLoading" width = "100%">
-          <!-- Insert code here -->
-          <h1>Sensor Data</h1>
     <v-container fluid>
         <v-layout row>
             <v-flex >
