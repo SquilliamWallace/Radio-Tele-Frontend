@@ -31,7 +31,7 @@
           <v-icon>public</v-icon>
         </v-tab>
         <v-tab>
-          Weather Station Data
+          Weather Station
           <v-icon>opacity</v-icon>
         </v-tab>
         
