@@ -42,13 +42,16 @@
     </v-data-table>
 
     <v-layout justify-center>
-        <v-flex xs12 sm1>
+        <v-flex xs12 sm2>
             <v-select
                 v-model="selectedDataSet"
                 :items="dataSetList"
                 label="Data Set"
             >
             </v-select>
+        </v-flex>
+        <v-flex xs12 sm1></v-flex>
+        <v-flex xs12 sm2>
             <v-select
                 v-model="selectedTimeScale"
                 :items="timeScaleList"
