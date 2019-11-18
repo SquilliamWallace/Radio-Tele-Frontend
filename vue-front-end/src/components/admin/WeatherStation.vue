@@ -177,7 +177,9 @@ export default {
         populateData() {            // Loads dataset onto graph
             this.clearGraph();      // clear any loaded data
             var data = this.dbData; // obtain raw data here
-
+            if (moment(data[0].timeStamp).diff(moment(data[1].timeStamp)) > 0){     // Check if data timestamps are descending
+                data.reverse();                                                     // If descending, then reverse them
+            }
             // Populate the RF Data array
             for (var index in data) {
                 let wsData = data[index];                                                           // Get instance of data point
