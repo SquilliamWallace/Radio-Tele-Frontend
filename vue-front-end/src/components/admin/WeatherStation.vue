@@ -131,7 +131,7 @@ export default {
                 { text: 'Heat Index', sortable: false, value: 'heatIndex' }
             ],
             dbData: [
-                {   id: 1, timeStamp: "2019-11-11 13:00:00", windSpeed: "13", windDirection: "NW", tempF: "76", 
+                {   id: 1, timeStamp: "2019-11-13 13:00:00", windSpeed: "13", windDirection: "NW", tempF: "76", 
                     rainRate: "2.0", rainTotal: "2.0", rainDay: "3.0", pressure: "1.0" ,
                     dewPoint: "72", windChill: "68", heatIndex: "91"},
                 {   id: 2, timeStamp: "2019-11-10 10:30:00", windSpeed: "16", windDirection: "NE", tempF: "78", 
@@ -177,9 +177,6 @@ export default {
         populateData() {            // Loads dataset onto graph
             this.clearGraph();      // clear any loaded data
             var data = this.dbData; // obtain raw data here
-            if (moment(data[0].timeStamp).diff(moment(data[1].timeStamp)) > 0){     // Check if data timestamps are descending
-                data.reverse();                                                     // If descending, then reverse them
-            }
             // Populate the RF Data array
             for (var index in data) {
                 let wsData = data[index];                                                           // Get instance of data point
@@ -203,6 +200,8 @@ export default {
                     this.graphData.datasets[this.dataIndex].label = this.selectedDataSet;                           // Label the dataset with element name
                 }
             }
+            this.graphData.datasets[this.dataIndex].data.reverse();     // Reverse the order of the datapoints to that they have Left-to-Right time direction
+            this.graphData.labels.reverse();                            // Reverse the order of the labels to match the datapoints on the graph
             this.dataIndex +=1; // increment dataIndex (used only for multiple datasets on single graph)
         },
         getDataPoint(data) {
