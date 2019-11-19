@@ -66,11 +66,9 @@
     </div>
     
     <v-dialog hide-overlay transition="dialog-bottom-transition" v-model="graphToggle">
-            <v-btn color="primary darken-1" slot="activator">View Data Graph</v-btn>
-            <div class="graph-style">
-                <weather-data-graph v-model="graphData" :styles="graphStyles"></weather-data-graph>
-            </div>
-        </v-dialog>
+        <v-btn color="primary darken-1" slot="activator">View Data Graph</v-btn>
+        <line-chart :chart-data="graphData" :styles="graphStyles"></line-chart>
+    </v-dialog>
           
     </v-card>
 </div>
@@ -80,10 +78,10 @@ import router from '../../router';
 import ApiDriver from '../../ApiDriver';
 import HttpResponse from '../../utils/HttpResponse';
 import CurrentUserValidation from  '../../utils/CurrentUserValidation';
-import Loading from "../../components/utility/Loading"
-import WeatherDataGraph from '../../components/visualization/WeatherGraph';
+import Loading from "../../components/utility/Loading";
 import moment from 'moment';
 import Chart from 'chart.js';
+import LineChart from '../../components/visualization/WeatherGraph.js';
 
 export default {
     name: 'WeatherStation',
@@ -284,7 +282,7 @@ export default {
     },
     components: {
         Loading,
-        WeatherDataGraph
+        LineChart
     },
     computed: {
         graphStyles() {
