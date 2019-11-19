@@ -8,10 +8,5 @@ export default {
   // props: ['styles'],
   mounted () {
     this.renderChart(this.chartData, this.styles)
-  },
-  watch: {
-    chartData () {
-      this.$data._chart.update()
-    }
   }
 }
