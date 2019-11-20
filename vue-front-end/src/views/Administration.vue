@@ -30,6 +30,10 @@
           Celestial Body Management
           <v-icon>public</v-icon>
         </v-tab>
+        <v-tab>
+          Security Footage
+          <v-icon>public</v-icon>
+        </v-tab>
         
         <v-tab-item>
           <admin-log></admin-log>
@@ -50,6 +54,10 @@
         <v-tab-item>
           <celestial-bodies></celestial-bodies>
         </v-tab-item>
+
+        <v-tab-item>
+          <admin-security-footage></admin-security-footage>
+        </v-tab-item>
       </v-tabs>
 
   </div>
@@ -65,6 +73,7 @@ import CurrentUserValidation from '../utils/CurrentUserValidation';
 import AdminUserApproval from '../components/admin/AdminUserApproval.vue';
 import AdminAppointmentApproval from '../components/admin/AdminAppointmentApproval.vue';
 import CelestialBodies from '../components/admin/CelestialBodies.vue';
+import AdminSecurityFootage from '../components/admin/AdminSecurityFootage.vue';
 import Loading from "../components/utility/Loading"
  export default {
     title: "Radio Telescope 1.1.0",
@@ -97,7 +106,8 @@ import Loading from "../components/utility/Loading"
         AdminUserApproval,
         Loading,
         AdminAppointmentApproval,
-        CelestialBodies
+        CelestialBodies,
+        AdminSecurityFootage
     },
     mounted() {
       this.authenticate()
