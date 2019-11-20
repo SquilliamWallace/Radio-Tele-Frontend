@@ -32,7 +32,7 @@
         </v-tab>
         <v-tab>
           Security Footage
-          <v-icon>public</v-icon>
+          <v-icon>local_movies</v-icon>
         </v-tab>
         
         <v-tab-item>
