@@ -54,12 +54,36 @@
                 </v-flex>
                 <v-flex md4>
                     <v-card dark color="#878787" height="50px">
-                        <v-btn color="black" >View Thumbnails</v-btn>
+                        <v-dialog hide-overlay transition="dialog-bottom-transition" v-model="thumbnailToggle">
+                            <v-btn color="black" slot="activator">View Thumbnails</v-btn>
+                            <v-card dark color="#FFFFFF" height="600px">
+                                <v-card-text>
+                                    <div class="security-footage-text">
+                                        Thumbnails from 2019-11-20 13:20
+                                    </div>
+                                    <v-img 
+                                    src="https://camo.githubusercontent.com/2cecaa8ef676731e38222c695e48377037817c92/68747470733a2f2f662e636c6f75642e6769746875622e636f6d2f6173736574732f323732353631312f313436303736372f36346330393061652d343436642d313165332d396237662d3534643432333132383631662e706e67"
+                                    height="400px"
+                                    contain="true"
+                                    ></v-img>
+                                </v-card-text>
+                            </v-card>
+                        </v-dialog>
                     </v-card>
                 </v-flex>
                 <v-flex md4>
                     <v-card dark color="#878787" height="50px">
-                        <v-btn color="black" >Stream Footage</v-btn>
+                        <v-dialog hide-overlay transition="dialog-bottom-transition" v-model="streamToggle">
+                            <v-btn color="black" slot="activator">Stream Footage</v-btn>
+                            <v-card dark color="#FFFFFF" height="600px">
+                                <v-card-text>
+                                    <div class="security-footage-text">
+                                        Footage from 2019-11-20 13:20
+                                    </div>
+                                    <v-card color="#000000" height="500px"></v-card>
+                                </v-card-text>
+                            </v-card>
+                        </v-dialog>
                     </v-card>
                 </v-flex>
             </v-layout>
@@ -106,7 +130,8 @@ export default {
     name: 'SecurityFootage',
     data(){
         return {
-            
+            thumbnailToggle: false,
+            streamToggle: false
         }
     },
     methods:{
@@ -126,7 +151,7 @@ export default {
 <style scoped>
 .security-footage-text {
     text-align: center;
-    color: white; 
-    text-decoration-color: white;
+    color: black; 
+    text-decoration-color: black;
 }
 </style>
