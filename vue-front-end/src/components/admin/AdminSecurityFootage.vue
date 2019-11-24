@@ -6,6 +6,7 @@
 
         <v-container grid text-xs-center fluid>
             <!-- Headers -->
+            <!-- Still trying to create generic solution for headers (hard coded for now) -->
             <v-layout row align-center>
                 <v-flex md4>
                     <v-card dark color="#555555" height="50px" >
@@ -39,7 +40,7 @@
             <!-- List starts here... -->
             <div v-for="video in videos" :key="video.primeKey">
                 <v-layout row align-center>
-                    
+                    <!-- Generic Solution: This block of code gets put into a row for each video file -->
                     <v-flex md4>
                         <v-card dark color="#666666" height="50px" >
                             <v-card-text>
@@ -109,16 +110,12 @@ export default {
         return {
             thumbnailToggle: false,
             streamToggle: false,
-            headers: [
-                'Time Stamp',
-                'Video Length',
-                'Thumbnails',
-                'Footage'
-            ],
             videos: [
                 { primeKey: 1, thumbnailPath: 'C:', videoPath: 'C:', videoLength: '00:01:06', createdTimeStamp: '2019-11-20 13:20', 
                   updatedTimeStamp: '2019-11-20 13:21', thumbnailToggle: false, streamToggle: false },
                 { primeKey: 2, thumbnailPath: 'D:', videoPath: 'D:', videoLength: '00:00:43', createdTimeStamp: '2019-11-19 09:54', 
+                  updatedTimeStamp: '2019-11-19 09:55', thumbnailToggle: false, streamToggle: false },
+                { primeKey: 3, thumbnailPath: 'D:', videoPath: 'D:', videoLength: '00:02:00', createdTimeStamp: '2019-11-18 07:00', 
                   updatedTimeStamp: '2019-11-19 09:55', thumbnailToggle: false, streamToggle: false },
             ]
         }
