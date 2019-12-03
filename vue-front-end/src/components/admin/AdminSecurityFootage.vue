@@ -38,13 +38,13 @@
                 </v-flex>
             </v-layout>
             <!-- List starts here... -->
-            <div v-for="video in videos" :key="video.primeKey">
+            <div v-for="video in dbVideos" :key="video.id">
                 <v-layout row align-center>
                     <!-- Generic Solution: This block of code gets put into a row for each video file -->
                     <v-flex md4>
                         <v-card dark color="#666666" height="50px" >
                             <v-card-text>
-                                {{ video.createdTimeStamp }}
+                                {{ video.recordCreatedTimestamp }}
                             </v-card-text>
                         </v-card>
                     </v-flex>
@@ -62,10 +62,10 @@
                                 <v-card dark color="#FFFFFF" height="600px">
                                     <v-card-text>
                                         <div class="security-footage-text">
-                                            Thumbnails from {{video.createdTimeStamp}}
+                                            Thumbnails from {{video.recordCreatedTimestamp}}
                                         </div>
                                         <v-img 
-                                        src="https://camo.githubusercontent.com/2cecaa8ef676731e38222c695e48377037817c92/68747470733a2f2f662e636c6f75642e6769746875622e636f6d2f6173736574732f323732353631312f313436303736372f36346330393061652d343436642d313165332d396237662d3534643432333132383631662e706e67"
+                                        :src="video.thumbnailPath"
                                         height="400px"
                                         
                                         ></v-img>
@@ -81,7 +81,7 @@
                                 <v-card dark color="#FFFFFF" height="600px">
                                     <v-card-text>
                                         <div class="security-footage-text">
-                                            Footage from {{video.createdTimeStamp}}
+                                            Footage from {{video.recordCreatedTimestamp}}
                                         </div>
                                         <v-card color="#000000" height="500px"></v-card>
                                     </v-card-text>
