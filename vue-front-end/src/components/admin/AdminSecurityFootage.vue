@@ -67,7 +67,7 @@
                                         <v-img 
                                         src="https://camo.githubusercontent.com/2cecaa8ef676731e38222c695e48377037817c92/68747470733a2f2f662e636c6f75642e6769746875622e636f6d2f6173736574732f323732353631312f313436303736372f36346330393061652d343436642d313165332d396237662d3534643432333132383631662e706e67"
                                         height="400px"
-                                        contain="true"
+                                        
                                         ></v-img>
                                     </v-card-text>
                                 </v-card>
@@ -117,14 +117,65 @@ export default {
                   updatedTimeStamp: '2019-11-19 09:55', thumbnailToggle: false, streamToggle: false },
                 { primeKey: 3, thumbnailPath: 'D:', videoPath: 'D:', videoLength: '00:02:00', createdTimeStamp: '2019-11-18 07:00', 
                   updatedTimeStamp: '2019-11-19 09:55', thumbnailToggle: false, streamToggle: false },
-            ]
+            ],
+            totalVideos: 0,
+            dbVideos: []
         }
     },
     methods:{
-        
+        getVideos(){
+            this.$store.commit("loading", true);
+            let form = {
+                // lowerDate: moment().subtract(1000, 'days').toISOString(),
+                // upperDate: moment().toISOString()
+                lowerDate: new Date("12-03-2017").toUTCString(),
+                upperDate: new Date(Date.now()).toUTCString()
+            }
+            console.log("lowerDate: " + form.lowerDate);
+            console.log("upperDate: " + form.upperDate);
+            console.log("Form Object: " + JSON.stringify(form));
+            // var sample = new Date("12-12-12").toUTCString()
+            // console.log("Sample: " + sample);
+            ApiDriver.VideoFiles.viewVideoFiles(form.lowerDate, form.upperDate).then((response) => {
+                HttpResponse.then(response, (data) => {
+                    this.populatData(data.data)
+                    // this.totalVideos = data.data.totalElements;
+                    // console.log("totalVideos: " + this.totalVideos);
+                    this.$store.commit("loading", false);
+                }, (status, errors) => {
+                    if (parseInt(status) === 403) {
+                        this.$swal({
+                            title: '<span style="color:#f0ead6">Error!<span>',
+                            html: '<span style="color:#f0ead6">Access Denied<span>',
+                            type: 'error',
+                            background: '#302f2f'
+                        });
+                        CurrentUserValidation.validateCurrentUser(this.$store);
+                    }
+                    this.$store.commit("loading", false);
+                })
+            }).catch((error) => {
+                this.$swal({
+                            title: '<span style="color:#f0ead6">Error!<span>',
+                            html: '<span style="color:#f0ead6">An error occurred when loading the logs<span>',
+                            type: 'error',
+                            background: '#302f2f'
+                        });
+                this.$store.commit("loading", false);
+            });
+        },
+        populatData(data){
+            // console.log("Data from backend: " + JSON.stringify(data[0]));
+            for (var index in data){
+                // console.log("Data component: " + index.toString());
+                let vidFile = data[index];
+                console.log(JSON.stringify(vidFile));
+                this.dbVideos.push(vidFile);
+            }
+        }
     },
     mounted: function(){
-        
+        this.getVideos();
     },
     components: {
         Loading
