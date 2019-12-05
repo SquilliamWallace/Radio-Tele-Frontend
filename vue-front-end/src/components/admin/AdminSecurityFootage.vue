@@ -110,7 +110,7 @@ export default {
         return {
             thumbnailToggle: false,
             streamToggle: false,
-            videos: [
+            videos: [   // Dummy data
                 { primeKey: 1, thumbnailPath: 'C:', videoPath: 'C:', videoLength: '00:01:06', createdTimeStamp: '2019-11-20 13:20', 
                   updatedTimeStamp: '2019-11-20 13:21', thumbnailToggle: false, streamToggle: false },
                 { primeKey: 2, thumbnailPath: 'D:', videoPath: 'D:', videoLength: '00:00:43', createdTimeStamp: '2019-11-19 09:54', 
@@ -125,22 +125,14 @@ export default {
     methods:{
         getVideos(){
             this.$store.commit("loading", true);
-            let form = {
-                // lowerDate: moment().subtract(1000, 'days').toISOString(),
-                // upperDate: moment().toISOString()
-                lowerDate: new Date("12-03-2017").toUTCString(),
-                upperDate: new Date(Date.now()).toUTCString()
-            }
-            console.log("lowerDate: " + form.lowerDate);
-            console.log("upperDate: " + form.upperDate);
-            console.log("Form Object: " + JSON.stringify(form));
-            // var sample = new Date("12-12-12").toUTCString()
-            // console.log("Sample: " + sample);
-            ApiDriver.VideoFiles.viewVideoFiles(form.lowerDate, form.upperDate).then((response) => {
+            var lowerDate = new Date("12-03-2017").toUTCString();   // Set very old date to retieve all video files.
+            var upperDate = new Date(Date.now()).toUTCString();     // Set current date to get newest video files.
+            // console.log("lowerDate: " + lowerDate);              // Logging for debugging purposes
+            // console.log("upperDate: " + upperDate);              // Logging for debugging purposes
+            /* This API call is based off of the one used for retrieving logs. */
+            ApiDriver.VideoFiles.viewVideoFiles(lowerDate, upperDate).then((response) => {            // Make API call to back end
                 HttpResponse.then(response, (data) => {
-                    this.populatData(data.data)
-                    // this.totalVideos = data.data.totalElements;
-                    // console.log("totalVideos: " + this.totalVideos);
+                    this.populatData(data.data)                                                       // Take returned data and display
                     this.$store.commit("loading", false);
                 }, (status, errors) => {
                     if (parseInt(status) === 403) {
@@ -165,17 +157,16 @@ export default {
             });
         },
         populatData(data){
-            // console.log("Data from backend: " + JSON.stringify(data[0]));
             for (var index in data){
-                // console.log("Data component: " + index.toString());
                 let vidFile = data[index];
-                console.log(JSON.stringify(vidFile));
-                this.dbVideos.push(vidFile);
+                vidFile.recordCreatedTimestamp = moment(vidFile.recordCreatedTimestamp).format('MM-DD-YYYY HH:MM');     // Convert timestamp format
+                // console.log(JSON.stringify(vidFile));                                                                // Logging for debug Purposes
+                this.dbVideos.push(vidFile);                                                                            // push video file onto array
             }
         }
     },
     mounted: function(){
-        this.getVideos();
+        this.getVideos();   // Load video files on render
     },
     components: {
         Loading
