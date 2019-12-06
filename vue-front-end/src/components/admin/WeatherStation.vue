@@ -114,7 +114,6 @@ export default {
                 'Past 5 Years'
             ],
             selectedDataSet: '',        // Dataset that is currtly selected from dropdown menu
-            dataSetVar: null,           // Variable used to load different data elements depending on dataset
             selectedTimeScale: '',      // Time range that is currently selected from dropdown menu
             graphToggle: false,         // Boolean set whether to show the graph or not (toggled by button)
             graphData: {                // The data structure that holds data to be graphed
@@ -303,7 +302,7 @@ export default {
                         display: true,
                         scaleLabel: {
                             display: true,
-                            // labelString: this.selectedDataSet,  // This only renders on mounted with valid data points
+                            labelString: this.selectedDataSet,  // This only renders on mounted with valid data points
                             fontColor: '#111111'
                         }
                     }]
