@@ -93,13 +93,16 @@ export default {
         return {
             dataSetList: [              // Items in Data Set dropdown menu
                 'Wind Speed',
-                'Temperature',
+                'Outside Temperature (°F)',
+                'Inside Temperature (°F)',
                 'Rain Rate',
                 'Rain Total',
                 'Rain for Day',
+                'Rain for Month',
                 'Barometric Pressure',
                 'Dew Point',
                 'Wind Chill',
+                'Humidity',
                 'Heat Index'
             ],
             timeScaleList: [            // Items in Time Scale dropdown menu
@@ -258,20 +261,26 @@ export default {
             {
                 case "Wind Speed":
                     return data.windSpeed;
-                case "Temperature":
+                case "Outside Temperature":
                     return data.outsideTemperatureDegF;
+                case "Inside Temperature":
+                    return data.insideTemperatureDegF;
                 case "Rain Rate":
                     return data.rainRate;
                 case "Rain Total":
                     return data.rainTotal;
                 case "Rain for Day":
                     return data.rainDay;
+                case "Rain for Month":
+                    return data.rainMonth;
                 case "Barometric Pressure":
                     return data.barometricPressure;
                 case "Dew Point":
                     return data.dewPoint;
                 case "Wind Chill":
                     return data.windChill;
+                case "Humidity":
+                    return data.humidity;
                 case "Heat Index":
                     return data.heatIndex;
                 default:
