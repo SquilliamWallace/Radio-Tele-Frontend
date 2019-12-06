@@ -28,13 +28,17 @@
             <td class="text-xs-center">{{ props.item.insertTimestamp }}</td>
             <td class="text-xs-center">{{ props.item.windSpeed }}</td>
             <td class="text-xs-center">{{ props.item.windDirectionDeg }}</td>
+            <td class="text-xs-center">{{ props.item.windDirectionStr }}</td>
             <td class="text-xs-center">{{ props.item.outsideTemperatureDegF }}</td>
+            <td class="text-xs-center">{{ props.item.insideTemperatureDegF }}</td>
             <td class="text-xs-center">{{ props.item.rainRate }}</td>
             <td class="text-xs-center">{{ props.item.rainTotal }}</td>
             <td class="text-xs-center">{{ props.item.rainDay }}</td>
+            <td class="text-xs-center">{{ props.item.rainMonth }}</td>
             <td class="text-xs-center">{{ props.item.barometricPressure }}</td>
             <td class="text-xs-center">{{ props.item.dewPoint }}</td>
             <td class="text-xs-center">{{ props.item.windChill }}</td>
+            <td class="text-xs-center">{{ props.item.humidity }}</td>
             <td class="text-xs-center">{{ props.item.heatIndex }}</td>
 
             </tr>
@@ -118,14 +122,18 @@ export default {
             dbHeaders: [
                 { text: 'Time Stamp', align: 'left', sortable: false, value: 'timeStamp'},
                 { text: 'Wind Speed', sortable: false, value: 'windSpeed' },
-                { text: 'Wind Direction', sortable: false, value: 'windDirection' },
-                { text: 'Temperature (°F)', sortable: false, value: 'tempF' },
+                { text: 'Wind Direction (°)', sortable: false, value: 'windDirection' },
+                { text: 'Wind Direction', sortable: false, value: 'windDirectionStr' },
+                { text: 'Outside Temperature (°F)', sortable: false, value: 'outTempF' },
+                { text: 'Inside Temperature (°F)', sortable: false, value: 'inTempF' },
                 { text: 'Rain Rate', sortable: false, value: 'rainRate' },
                 { text: 'Total Rain', sortable: false, value: 'rainTotal' },
                 { text: 'Rain for Day', sortable: false, value: 'rainDay' },
+                { text: 'Rain for Month', sortable: false, value: 'rainMonth' },
                 { text: 'Barometric Pressure', sortable: false, value: 'pressure' },
                 { text: 'Dew Point', sortable: false, value: 'dewPoint' },
                 { text: 'Wind Chill', sortable: false, value: 'windChill' },
+                { text: 'Humidity', sortable: false, value: 'humidity' },
                 { text: 'Heat Index', sortable: false, value: 'heatIndex' }
             ],
             dbData: [
