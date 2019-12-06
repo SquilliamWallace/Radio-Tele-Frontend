@@ -176,8 +176,8 @@ export default {
             // Set the store's loading boolean to true
             this.$store.commit("loading", true);
 
-            var lowerDate = new Date("12-03-2017").toUTCString();   // Set very old date to retieve all video files.
             var upperDate = new Date(Date.now()).toUTCString();     // Set current date to get newest video files.
+            var lowerDate = this.getLowerBoundaryDate(upperDate);
             console.log("LowerDate: " + lowerDate + ", UpperDate: " + upperDate);
 
             // Make the API call
@@ -290,18 +290,8 @@ export default {
                     return 1;
             }
         },
-        isValidTimeStamp(timeStampVal){
-            var targetDate = moment(timeStampVal).format('MM/DD/YYYY hh:mm:ss A');
-            var currentDate = moment();
-            var numDays = this.getDayCount();
-            var boundaryDate = moment().subtract(numDays, 'days');
-            // console.log("target Date: " + targetDate.toString());
-            if (moment(targetDate).isBetween(boundaryDate, currentDate, null, [])){
-                return true;
-            }
-            else{
-                return false;
-            }
+        getLowerBoundaryDate(currentDate){
+            return new Date(moment(currentDate).subtract(this.getDayCount(), 'days')).toUTCString();
         },
         clearGraph() {  // Removes all datasets and labels currently loaded to the graph
             console.log("Clearing graph data...");
@@ -311,9 +301,13 @@ export default {
             while (this.graphData.labels.length > 0){
                 this.graphData.labels.pop();
             }
+            while (this.dbData.length > 0){
+                this.dbData.pop();
+            }
             this.dataIndex = 0;
             console.log("After Clearing... # of data points: " + this.graphData.datasets.length);   // Should be zero
             console.log("After Clearing... # of labels: " + this.graphData.labels.length);          // Should be zero
+            console.log("After Clearing... # of data points: " + this.dbData.length);
         }
     },
     mounted: function(){
