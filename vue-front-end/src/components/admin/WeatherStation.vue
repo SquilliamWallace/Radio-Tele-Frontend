@@ -212,6 +212,7 @@ export default {
             // var data = dbData; // obtain raw data here
             console.log("dbData: " + this.dbData);
             // Populate the RF Data array
+            dbData.reverse();
             for (var index in dbData) {
                 let wsData = dbData[index];                                                           // Get instance of data point
                 console.log("data: " + JSON.stringify(dbData[index]));
