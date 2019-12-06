@@ -206,9 +206,9 @@ export default {
             {
                 case "Wind Speed":
                     return data.windSpeed;
-                case "Outside Temperature":
+                case "Outside Temperature (°F)":
                     return data.outsideTemperatureDegF;
-                case "Inside Temperature":
+                case "Inside Temperature (°F)":
                     return data.insideTemperatureDegF;
                 case "Rain Rate":
                     return data.rainRate;
