@@ -25,14 +25,14 @@
             @click="updateForm(props.item.name, props.item.id, props.item.declination, props.item.hours, props.item.minutes, props.item.seconds)"
             >
             <!-- <td class="text-xs-left">{{ props.item.id }}</td> -->
-            <td class="text-xs-center">{{ props.item.timeStamp }}</td>
+            <td class="text-xs-center">{{ props.item.insertTimestamp }}</td>
             <td class="text-xs-center">{{ props.item.windSpeed }}</td>
-            <td class="text-xs-center">{{ props.item.windDirection }}</td>
-            <td class="text-xs-center">{{ props.item.tempF }}</td>
+            <td class="text-xs-center">{{ props.item.windDirectionDeg }}</td>
+            <td class="text-xs-center">{{ props.item.outsideTemperatureDegF }}</td>
             <td class="text-xs-center">{{ props.item.rainRate }}</td>
             <td class="text-xs-center">{{ props.item.rainTotal }}</td>
             <td class="text-xs-center">{{ props.item.rainDay }}</td>
-            <td class="text-xs-center">{{ props.item.pressure }}</td>
+            <td class="text-xs-center">{{ props.item.barometricPressure }}</td>
             <td class="text-xs-center">{{ props.item.dewPoint }}</td>
             <td class="text-xs-center">{{ props.item.windChill }}</td>
             <td class="text-xs-center">{{ props.item.heatIndex }}</td>
@@ -62,7 +62,7 @@
     </v-layout>
 
     <div> 
-        <v-btn color="primary darken-1" @click="populateData()">Load Data Graph</v-btn>
+        <v-btn color="primary darken-1" @click="retrieveData()">Load Data Graph</v-btn>
     </div>
     
     <v-dialog hide-overlay transition="dialog-bottom-transition" v-model="graphToggle">
@@ -129,42 +129,42 @@ export default {
                 { text: 'Heat Index', sortable: false, value: 'heatIndex' }
             ],
             dbData: [
-                {   id: 1, timeStamp: "2019-11-13 13:00:00", windSpeed: "13", windDirection: "NW", tempF: "76", 
-                    rainRate: "2.0", rainTotal: "2.0", rainDay: "3.0", pressure: "1.0" ,
-                    dewPoint: "72", windChill: "68", heatIndex: "91"},
-                {   id: 2, timeStamp: "2019-11-10 10:30:00", windSpeed: "16", windDirection: "NE", tempF: "78", 
-                    rainRate: "0.5", rainTotal: "0.9", rainDay: "1.1", pressure: "1.0" ,
-                    dewPoint: "61", windChill: "64", heatIndex: "97"},
-                {   id: 3, timeStamp: "2019-11-01 17:00:00", windSpeed: "11", windDirection: "S", tempF: "81", 
-                    rainRate: "1.2", rainTotal: "1.5", rainDay: "2.0", pressure: "1.0" ,
-                    dewPoint: "59", windChill: "66", heatIndex: "101"},
-                {   id: 4, timeStamp: "2019-10-10 10:31:00", windSpeed: "24", windDirection: "E", tempF: "75", 
-                    rainRate: "2.9", rainTotal: "3.0", rainDay: "2.0", pressure: "1.0" ,
-                    dewPoint: "62", windChill: "44", heatIndex: "98"},
-                {   id: 1, timeStamp: "2019-10-11 13:00:00", windSpeed: "13", windDirection: "NW", tempF: "76", 
-                    rainRate: "2.0", rainTotal: "2.0", rainDay: "3.0", pressure: "1.0" ,
-                    dewPoint: "72", windChill: "68", heatIndex: "91"},
-                {   id: 2, timeStamp: "2019-10-10 10:30:00", windSpeed: "16", windDirection: "NE", tempF: "78", 
-                    rainRate: "0.5", rainTotal: "0.9", rainDay: "1.1", pressure: "1.0" ,
-                    dewPoint: "61", windChill: "64", heatIndex: "97"},
-                {   id: 3, timeStamp: "2019-10-01 17:00:00", windSpeed: "11", windDirection: "S", tempF: "81", 
-                    rainRate: "1.2", rainTotal: "1.5", rainDay: "2.0", pressure: "1.0" ,
-                    dewPoint: "59", windChill: "66", heatIndex: "101"},
-                {   id: 4, timeStamp: "2019-09-10 10:31:00", windSpeed: "24", windDirection: "E", tempF: "75", 
-                    rainRate: "2.9", rainTotal: "3.0", rainDay: "2.0", pressure: "1.0" ,
-                    dewPoint: "62", windChill: "44", heatIndex: "98"},
-                {   id: 1, timeStamp: "2019-09-09 13:00:00", windSpeed: "13", windDirection: "NW", tempF: "76", 
-                    rainRate: "2.0", rainTotal: "2.0", rainDay: "3.0", pressure: "1.0" ,
-                    dewPoint: "72", windChill: "68", heatIndex: "91"},
-                {   id: 2, timeStamp: "2019-09-08 10:30:00", windSpeed: "16", windDirection: "NE", tempF: "78", 
-                    rainRate: "0.5", rainTotal: "0.9", rainDay: "1.1", pressure: "1.0" ,
-                    dewPoint: "61", windChill: "64", heatIndex: "97"},
-                {   id: 3, timeStamp: "2019-09-01 17:00:00", windSpeed: "11", windDirection: "S", tempF: "81", 
-                    rainRate: "1.2", rainTotal: "1.5", rainDay: "2.0", pressure: "1.0" ,
-                    dewPoint: "59", windChill: "66", heatIndex: "101"},
-                {   id: 4, timeStamp: "2019-08-10 10:31:00", windSpeed: "24", windDirection: "E", tempF: "75", 
-                    rainRate: "2.9", rainTotal: "3.0", rainDay: "2.0", pressure: "1.0" ,
-                    dewPoint: "62", windChill: "44", heatIndex: "98"}
+                // {   id: 1, timeStamp: "2019-11-13 13:00:00", windSpeed: "13", windDirection: "NW", tempF: "76", 
+                //     rainRate: "2.0", rainTotal: "2.0", rainDay: "3.0", pressure: "1.0" ,
+                //     dewPoint: "72", windChill: "68", heatIndex: "91"},
+                // {   id: 2, timeStamp: "2019-11-10 10:30:00", windSpeed: "16", windDirection: "NE", tempF: "78", 
+                //     rainRate: "0.5", rainTotal: "0.9", rainDay: "1.1", pressure: "1.0" ,
+                //     dewPoint: "61", windChill: "64", heatIndex: "97"},
+                // {   id: 3, timeStamp: "2019-11-01 17:00:00", windSpeed: "11", windDirection: "S", tempF: "81", 
+                //     rainRate: "1.2", rainTotal: "1.5", rainDay: "2.0", pressure: "1.0" ,
+                //     dewPoint: "59", windChill: "66", heatIndex: "101"},
+                // {   id: 4, timeStamp: "2019-10-10 10:31:00", windSpeed: "24", windDirection: "E", tempF: "75", 
+                //     rainRate: "2.9", rainTotal: "3.0", rainDay: "2.0", pressure: "1.0" ,
+                //     dewPoint: "62", windChill: "44", heatIndex: "98"},
+                // {   id: 1, timeStamp: "2019-10-11 13:00:00", windSpeed: "13", windDirection: "NW", tempF: "76", 
+                //     rainRate: "2.0", rainTotal: "2.0", rainDay: "3.0", pressure: "1.0" ,
+                //     dewPoint: "72", windChill: "68", heatIndex: "91"},
+                // {   id: 2, timeStamp: "2019-10-10 10:30:00", windSpeed: "16", windDirection: "NE", tempF: "78", 
+                //     rainRate: "0.5", rainTotal: "0.9", rainDay: "1.1", pressure: "1.0" ,
+                //     dewPoint: "61", windChill: "64", heatIndex: "97"},
+                // {   id: 3, timeStamp: "2019-10-01 17:00:00", windSpeed: "11", windDirection: "S", tempF: "81", 
+                //     rainRate: "1.2", rainTotal: "1.5", rainDay: "2.0", pressure: "1.0" ,
+                //     dewPoint: "59", windChill: "66", heatIndex: "101"},
+                // {   id: 4, timeStamp: "2019-09-10 10:31:00", windSpeed: "24", windDirection: "E", tempF: "75", 
+                //     rainRate: "2.9", rainTotal: "3.0", rainDay: "2.0", pressure: "1.0" ,
+                //     dewPoint: "62", windChill: "44", heatIndex: "98"},
+                // {   id: 1, timeStamp: "2019-09-09 13:00:00", windSpeed: "13", windDirection: "NW", tempF: "76", 
+                //     rainRate: "2.0", rainTotal: "2.0", rainDay: "3.0", pressure: "1.0" ,
+                //     dewPoint: "72", windChill: "68", heatIndex: "91"},
+                // {   id: 2, timeStamp: "2019-09-08 10:30:00", windSpeed: "16", windDirection: "NE", tempF: "78", 
+                //     rainRate: "0.5", rainTotal: "0.9", rainDay: "1.1", pressure: "1.0" ,
+                //     dewPoint: "61", windChill: "64", heatIndex: "97"},
+                // {   id: 3, timeStamp: "2019-09-01 17:00:00", windSpeed: "11", windDirection: "S", tempF: "81", 
+                //     rainRate: "1.2", rainTotal: "1.5", rainDay: "2.0", pressure: "1.0" ,
+                //     dewPoint: "59", windChill: "66", heatIndex: "101"},
+                // {   id: 4, timeStamp: "2019-08-10 10:31:00", windSpeed: "24", windDirection: "E", tempF: "75", 
+                //     rainRate: "2.9", rainTotal: "3.0", rainDay: "2.0", pressure: "1.0" ,
+                //     dewPoint: "62", windChill: "44", heatIndex: "98"}
             ],
             WSData: [],     // Data array used for download to CSV
             dataIndex: 0,   // index used for multiple datasets on single graph
@@ -172,22 +172,62 @@ export default {
         }
     },
     methods:{
-        populateData() {            // Loads dataset onto graph
+        retrieveData() {
+            // Set the store's loading boolean to true
+            this.$store.commit("loading", true);
+
+            var lowerDate = new Date("12-03-2017").toUTCString();   // Set very old date to retieve all video files.
+            var upperDate = new Date(Date.now()).toUTCString();     // Set current date to get newest video files.
+            console.log("LowerDate: " + lowerDate + ", UpperDate: " + upperDate);
+
+            // Make the API call
+            ApiDriver.WeatherData.listWeatherDataBetweenDates(lowerDate, upperDate).then((response) => {
+                // Handle the server response
+                HttpResponse.then(response, (data) => {
+                    // Populate the data and set the store's boolean back to false
+                    console.log("Returned Data: " + data.data);
+                    this.populateData(data.data);
+                    this.$store.commit("loading", false)
+                }, (status, errors) => {
+                    // Access Denied
+                    if (parseInt(status) === 403) {
+                        // Call the generic access denied handler
+                        HttpResponse.accessDenied(this);
+                    } 
+                    // Not Found
+                    else if (parseInt(status) === 404) {
+                        // Call the generic invalid resource id handler
+                        HttpResponse.notFound(this, errors);
+                    }
+                })
+            })
+            // }).catch(errors => {
+            //     // Handle an erroneous API Call
+            //     let message = "An error occurred when loading the RF data for this observation"
+            //     HttpResponse.generalError(this, message, true)
+            // })
+        },
+        populateData(dbData) {            // Loads dataset onto graph
             this.clearGraph();      // clear any loaded data
-            var data = this.dbData; // obtain raw data here
+            // var data = dbData; // obtain raw data here
+            console.log("dbData: " + this.dbData);
             // Populate the RF Data array
-            for (var index in data) {
-                let wsData = data[index];                                                           // Get instance of data point
+            for (var index in dbData) {
+                let wsData = dbData[index];                                                           // Get instance of data point
+                console.log("data: " + JSON.stringify(dbData[index]));
+                wsData.insertTimestamp = moment(wsData.insertTimestamp).format('MM/DD/YYYY hh:mm:ss A');
+
+                this.dbData.push(wsData);                                                           // Push data onto table
                 // console.log("Time Stamp: " + wsData.timeStamp.toString());                                                      
-                wsData.timeCaptured = moment(wsData.timeStamp).format();                            // The date/time object to be used for comparison
-                wsData.timeDisplay = moment(wsData.timeStamp).format('MM/DD/YYYY hh:mm:ss A');      // The human readable date/time to be visually displayed
+                // wsData.timeCaptured = moment(wsData.timeStamp).format();                            // The date/time object to be used for comparison
+                // wsData.timeDisplay = moment(wsData.timeStamp).format('MM/DD/YYYY hh:mm:ss A');      // The human readable date/time to be visually displayed
                 // console.log("Formatted Time Stamp: " + wsData.timeCaptured.toString());
                 // console.log(moment(wsData.timeCaptured).date());
                 // console.log("Is Valid: " + this.isValidTimeStamp(wsData.timeCaptured));
-                if (this.isValidTimeStamp(wsData.timeCaptured)){                                    // Only execute this code block for valid time stamps
+                // if (this.isValidTimeStamp(wsData.timeCaptured)){                                    // Only execute this code block for valid time stamps
                     var dataPointVal = this.getDataPoint(wsData);                                   // method must use 'this.' keyword
                     this.WSData.push(wsData);                                                       // This is the dataset is gets downloaded (might need later)
-                    this.graphData.labels.push(wsData.timeDisplay);                                // Push timestamp label into array
+                    this.graphData.labels.push(wsData.insertTimestamp);                                // Push timestamp label into array
                     if(this.graphData.datasets.length <= this.dataIndex){                           // If datasets array is empty, create one dataset 
                         this.graphData.datasets.push({label: 'ID #: ' + wsData.id, 
                                                     backgroundColor: '#' + Math.floor(Math.random()*16777215).toString(16), 
@@ -196,7 +236,7 @@ export default {
                     }
                     this.graphData.datasets[this.dataIndex].data.push({y: dataPointVal, x: wsData.timeDisplay});   // Push coordinates onto data array
                     this.graphData.datasets[this.dataIndex].label = this.selectedDataSet;                           // Label the dataset with element name
-                }
+                // }
             }
             this.graphData.datasets[this.dataIndex].data.reverse();     // Reverse the order of the datapoints to that they have Left-to-Right time direction
             this.graphData.labels.reverse();                            // Reverse the order of the labels to match the datapoints on the graph
@@ -210,7 +250,7 @@ export default {
                 case "Wind Speed":
                     return data.windSpeed;
                 case "Temperature":
-                    return data.tempF;
+                    return data.outsideTemperatureDegF;
                 case "Rain Rate":
                     return data.rainRate;
                 case "Rain Total":
@@ -218,7 +258,7 @@ export default {
                 case "Rain for Day":
                     return data.rainDay;
                 case "Barometric Pressure":
-                    return data.pressure;
+                    return data.barometricPressure;
                 case "Dew Point":
                     return data.dewPoint;
                 case "Wind Chill":
@@ -226,7 +266,7 @@ export default {
                 case "Heat Index":
                     return data.heatIndex;
                 default:
-                    return data.tempF;
+                    return data.outsideTemperatureDegF;
             }
         },
         getDayCount(){
@@ -278,7 +318,7 @@ export default {
     mounted: function(){
         this.selectedDataSet = 'Temperature';       // 'Temperature' is default
         this.selectedTimeScale = 'Past Week';       // 'Past Week' is default
-        this.populateData();                        // Populating without any valid data points results in dead graph
+        this.retrieveData();                        // Populating without any valid data points results in dead graph
     },
     components: {
         Loading,
