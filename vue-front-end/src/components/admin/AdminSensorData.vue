@@ -114,7 +114,7 @@ export default {
                     }
                     else if(dbData[index] == 1){
                         this.overallStatus = 1;
-                        console.log("Status 1 found: " + index);
+                        // console.log("Status 1 found: " + index);     // Logging for debugging purposes
                     }
                 }
                 
@@ -129,10 +129,10 @@ export default {
         },
         setStatuses(dbData) {
             for(var dbIndex in dbData) {                                              // iterate over all sensors brought in fromd database
-                console.log("dbData: " + dbIndex + ", " + dbData[dbIndex]);
+                // console.log("dbData: " + dbIndex + ", " + dbData[dbIndex]);              // Logging for debugging purposes
                 for(var localIndex of this.sensors){                                       // iterate over all local sensor variables
                     if (dbIndex == localIndex.name){   
-                        console.log("Found: " + dbIndex);                               // We have found the matching sensor
+                        // console.log("Found: " + dbIndex);                               // We have found the matching sensor
                         localIndex.status = dbData[dbIndex];                                 // set the status value
                         localIndex.override = dbIndex.override;                              // set the override
                         if (this.isOverride(dbIndex.override)){
@@ -156,7 +156,7 @@ export default {
                 // Handle the server response
                 HttpResponse.then(response, (data) => {
                     // Populate the data and set the store's boolean back to false
-                    console.log("Data Returned: " + JSON.stringify(data.data));
+                    // console.log("Data Returned: " + JSON.stringify(data.data));  // Logging for debugging purposes
                     this.setStatuses(data.data);
                     this.$store.commit("loading", false)
                 }, (status, errors) => {
@@ -174,6 +174,7 @@ export default {
             })
         },
         resetStatuses() {
+            // This part is going to have to be redone when overrides are implemented
             for(var dbIndex of this.dbData) {                                              // iterate over all sensors brought in fromd database
                 for(var localIndex of this.sensors){                                       // iterate over all local sensor variables
                     if (dbIndex.name == localIndex.name){                                  // We have found the matching sensor
