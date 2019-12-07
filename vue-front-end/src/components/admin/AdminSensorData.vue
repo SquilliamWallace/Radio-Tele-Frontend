@@ -57,12 +57,20 @@ export default {
             overallStatColor: "green",
             overallStatText: "OK",
 
+            sensorList: [
+                'gate',
+                'proximity',
+                'azimuthMotor',
+                'elevationMotor',
+                'weatherStation'
+            ],
+
             sensors: [
-                { id: 1, name: 'Gate', status: 0, statusColor: '', statusText: '', override: 0 },
-                { id: 1, name: 'Proximity', status: 0, statusColor: '', statusText: '', override: 0 },
-                { id: 1, name: 'Azimuth Motor', status: 0, statusColor: '', statusText: '', override: 0 },
-                { id: 1, name: 'Elevation Motor', status: 0, statusColor: '', statusText: '', override: 0 },
-                { id: 1, name: 'Weather Station', status: 0, statusColor: '', statusText: '', override: 0 }
+                { id: 1, name: 'gate', status: 0, statusColor: '', statusText: '', override: 0 },
+                { id: 1, name: 'proximity', status: 0, statusColor: '', statusText: '', override: 0 },
+                { id: 1, name: 'azimuthMotor', status: 0, statusColor: '', statusText: '', override: 0 },
+                { id: 1, name: 'elevationMotor', status: 0, statusColor: '', statusText: '', override: 0 },
+                { id: 1, name: 'weatherStation', status: 0, statusColor: '', statusText: '', override: 0 }
             ],
 
             // status values
@@ -87,57 +95,83 @@ export default {
 
             // imported data
             dbData: [
-                {   id: 1, name: "Gate", dataType: "tinyint", description: "Resembles status of gate sensor", value: 0, override: 0 },
-                {   id: 2, name: "Proximity", dataType: "tinyint", description: "Resembles status of proximity sensor", value: 1, override: 0 },
-                {   id: 3, name: "Azimuth Motor", dataType: "tinyint", description: "Resembles status of azimuth motor", value: 2, override: 0 },
-                {   id: 4, name: "Elevation Motor", dataType: "tinyint", description: "Resembles status of elevation motor", value: 0, override: 0 },
-                {   id: 5, name: "Weather Station", dataType: "tinyint", description: "Resembles status of weather station", value: 2, override: 0 }
+                // {   id: 1, name: "Gate", dataType: "tinyint", description: "Resembles status of gate sensor", value: 0, override: 0 },
+                // {   id: 2, name: "Proximity", dataType: "tinyint", description: "Resembles status of proximity sensor", value: 1, override: 0 },
+                // {   id: 3, name: "Azimuth Motor", dataType: "tinyint", description: "Resembles status of azimuth motor", value: 2, override: 0 },
+                // {   id: 4, name: "Elevation Motor", dataType: "tinyint", description: "Resembles status of elevation motor", value: 0, override: 0 },
+                // {   id: 5, name: "Weather Station", dataType: "tinyint", description: "Resembles status of weather station", value: 2, override: 0 }
             ]
         }
     },
     methods:{
-        getOverallStatus(){
+        getOverallStatus(dbData){
             this.overallStatus = 0;             // if all are OK, this remains unchanged
-            for (var index of this.dbData) {
-                if (!this.isOverride(index.override)){                 // Ignore if overriden
-                    if (index.value == 2){
+            for (var index in dbData) {
+                if (this.sensorList.includes(index) && !this.isOverride(index.override)){   // Ignore if overriden or not sensor
+                    if (dbData[index] == 2){
                         this.overallStatus = 2;
                         return this.overallStatus;                     // if ERROR found, immediately return
                     }
-                    else if(index.value == 1){
+                    else if(dbData[index] == 1){
                         this.overallStatus = 1;
+                        console.log("Status 1 found: " + index);
                     }
                 }
                 
             }
             return this.overallStatus;
         },
-        setOverallStatus(){
-            var overall = this.getOverallStatus();
+        setOverallStatus(dbData){
+            var overall = this.getOverallStatus(dbData);
             // console.log("overall index: " + overall);
             this.overallStatColor = this.getStatusColor(overall);
             this.overallStatText = this.getStatusText(overall);
         },
-        setStatuses() {
-            for(var dbIndex of this.dbData) {                                              // iterate over all sensors brought in fromd database
+        setStatuses(dbData) {
+            for(var dbIndex in dbData) {                                              // iterate over all sensors brought in fromd database
+                console.log("dbData: " + dbIndex + ", " + dbData[dbIndex]);
                 for(var localIndex of this.sensors){                                       // iterate over all local sensor variables
-                    if (dbIndex.name == localIndex.name){                                  // We have found the matching sensor
-                        localIndex.status = dbIndex.value;                                 // set the status value
+                    if (dbIndex == localIndex.name){   
+                        console.log("Found: " + dbIndex);                               // We have found the matching sensor
+                        localIndex.status = dbData[dbIndex];                                 // set the status value
                         localIndex.override = dbIndex.override;                              // set the override
                         if (this.isOverride(dbIndex.override)){
                             localIndex.statusColor = "orange";                             // set the status color to orange for override
                             localIndex.statusText = "OVERRIDE";                            // set the status text to OVERRIDE
                         }
                         else{
-                            localIndex.statusColor = this.getStatusColor(dbIndex.value);   // set the status color using status value
-                            localIndex.statusText = this.getStatusText(dbIndex.value);     // set the status text using status value
+                            localIndex.statusColor = this.getStatusColor(dbData[dbIndex]);   // set the status color using status value
+                            localIndex.statusText = this.getStatusText(dbData[dbIndex]);     // set the status text using status value
                         }
                         
-                        console.log(localIndex.name + ", " + localIndex.status + ", " + localIndex.statusColor + ", " + localIndex.statusText);
+                        // console.log(localIndex.name + ", " + localIndex.status + ", " + localIndex.statusColor + ", " + localIndex.statusText);
                     }
                 }
             }
-            this.setOverallStatus();
+            this.setOverallStatus(dbData);
+        },
+        retrieveStatuses() {
+            // Make the API call
+            ApiDriver.SensorStatus.getMostRecent().then((response) => {
+                // Handle the server response
+                HttpResponse.then(response, (data) => {
+                    // Populate the data and set the store's boolean back to false
+                    console.log("Data Returned: " + JSON.stringify(data.data));
+                    this.setStatuses(data.data);
+                    this.$store.commit("loading", false)
+                }, (status, errors) => {
+                    // Access Denied
+                    if (parseInt(status) === 403) {
+                        // Call the generic access denied handler
+                        HttpResponse.accessDenied(this);
+                    } 
+                    // Not Found
+                    else if (parseInt(status) === 404) {
+                        // Call the generic invalid resource id handler
+                        HttpResponse.notFound(this, errors);
+                    }
+                })
+            })
         },
         resetStatuses() {
             for(var dbIndex of this.dbData) {                                              // iterate over all sensors brought in fromd database
@@ -148,7 +182,7 @@ export default {
                     }
                 }
             }
-            this.setStatuses();                                                                 // Update the front-end
+            this.retrieveStatuses();                                                                 // Update the front-end
         },
         isOverride(val){
             if (val == 1){ return true; }
@@ -182,7 +216,7 @@ export default {
         }
     },
     mounted: function(){
-        this.setStatuses();
+        this.retrieveStatuses();
     },
     components: {
         Loading

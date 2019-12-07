@@ -151,6 +151,12 @@ export default {
         return axios.get(baseUrl + "authAdmin", Headers.retrieveHeaders());
       }
     },
+    SensorStatus: {
+      namespace: baseUrl + "sensor-status",
+      getMostRecent: function() {
+        return axios.get(this.namespace + "/" + "getMostRecent", Headers.retrieveHeaders())
+      }
+    },
 
     login: function(data) {
       return axios.post("http://api.ycpradiotelescope.com:8080/login?email=" + data.username.value + "&password=" + data.password.value, JSON.stringify(data))
