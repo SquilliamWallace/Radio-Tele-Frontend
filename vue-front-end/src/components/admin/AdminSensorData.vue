@@ -17,7 +17,7 @@
             <v-layout row>
                 <v-flex md4>
                         <v-card dark >
-                                <div class="sensor-name">{{ sensor.name }}</div>
+                                <div class="sensor-name">{{ sensor.displayName }}</div>
                         </v-card>
                 </v-flex>
 
@@ -66,11 +66,11 @@ export default {
             ],
 
             sensors: [
-                { id: 1, name: 'gate', status: 0, statusColor: '', statusText: '', override: 0 },
-                { id: 1, name: 'proximity', status: 0, statusColor: '', statusText: '', override: 0 },
-                { id: 1, name: 'azimuthMotor', status: 0, statusColor: '', statusText: '', override: 0 },
-                { id: 1, name: 'elevationMotor', status: 0, statusColor: '', statusText: '', override: 0 },
-                { id: 1, name: 'weatherStation', status: 0, statusColor: '', statusText: '', override: 0 }
+                { id: 1, displayName: 'Gate', name: 'gate', status: 0, statusColor: '', statusText: '', override: 0 },
+                { id: 1, displayName: 'Proximity', name: 'proximity', status: 0, statusColor: '', statusText: '', override: 0 },
+                { id: 1, displayName: 'Azimuth Motor', name: 'azimuthMotor', status: 0, statusColor: '', statusText: '', override: 0 },
+                { id: 1, displayName: 'Elevation Motor', name: 'elevationMotor', status: 0, statusColor: '', statusText: '', override: 0 },
+                { id: 1, displayName: 'Weather Station', name: 'weatherStation', status: 0, statusColor: '', statusText: '', override: 0 }
             ],
 
             // status values
