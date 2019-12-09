@@ -58,14 +58,15 @@
         <v-tab-item>
           <celestial-bodies></celestial-bodies>
         </v-tab-item>
+
+        <v-tab-item>
+          <weather-station></weather-station>
+        </v-tab-item>
         
         <v-tab-item>
           <admin-sensor-data></admin-sensor-data>
         </v-tab-item>
 
-        <v-tab-item>
-          <weather-station></weather-station>
-        </v-tab-item>
       </v-tabs>
 
   </div>
