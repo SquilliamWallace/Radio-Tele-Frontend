@@ -154,10 +154,13 @@ export default {
     SensorStatus: {
       namespace: baseUrl + "sensor-status",
       getMostRecent: function() {
-        return axios.get(this.namespace + "/" + "getMostRecent", Headers.retrieveHeaders())
-      }
+        return axios.get(this.namespace + "/" + "getMostRecent", Headers.retrieveHeaders()
     },
-
+    WeatherData: {
+      namespace: baseUrl + "weather-data",
+      listWeatherDataBetweenDates: function(lowerDate, upperDate) {
+        return axios.get(this.namespace + "/" + "listBetweenCreatedDates?lowerDate=" + lowerDate + "&upperDate=" + upperDate, Headers.retrieveHeaders())
+    },
     login: function(data) {
       return axios.post("http://api.ycpradiotelescope.com:8080/login?email=" + data.username.value + "&password=" + data.password.value, JSON.stringify(data))
     },
