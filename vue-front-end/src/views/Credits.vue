@@ -69,28 +69,34 @@ export default {
                     liked: "learning new technologies and working on a large project"
                 },
                 {
-                    name: "Rathana Pim",
-                    major: "Computer Science",
-                    work: "Alpha Centauri",
-                    liked: "Alpha Centauri"
-                },
-                {
-                    name: "Zack Henry",
-                    major: "Computer Science",
-                    work: "Alpha Centauri",
-                    liked: "Alpha Centauri"
+                    name: "Felix Diaz",
+                    major: "Computer Engineering",
+                    work: "Liked working on the virtual reality telescope and planetarium, as well as creating the automated movement in C#",
+                    liked: "Creating technology that can introduce people to the joys of radio astronomy and making Kerry's dreams come true"
                 },
                 {
                     name: "Joseph Hopkins",
-                    major: "Lifting Weights",
-                    work: "Alpha Centauri",
-                    liked: "Alpha Centauri"
+                    major: "Computer Science",
+                    work: "Liked developing the UI/UX of the application",
+                    liked: "Being immersed in new and interesting technologies"
                 },
                 {
                     name: "Jason Porter",
                     major: "Computer Science",
-                    work: "Alpha Centauri",
-                    liked: "Alpha Centauri"
+                    work: "Liked developing a C# application that connects the internet to the hardware",
+                    liked: "Implementing his team's work in iterative development cycles"
+                },
+                {
+                    name: "Rathana Pim",
+                    major: "Computer Science",
+                    work: "Liked learning Kotlin and improving copying and pasting skills",
+                    liked: "Working with great people and in multiple teams"
+                },
+                {
+                    name: "Zack Henry",
+                    major: "Computer Science",
+                    work: "Liked implementing multiple appointment types on the front-end",
+                    liked: "Getting to know and work with some really cool people"
                 },
                 {
                     name: "Jacob Majeski",
@@ -100,9 +106,9 @@ export default {
                 },
                 {
                     name: "Ezra Moore",
-                    major: "Computer Science",
-                    work: "Alpha Centauri",
-                    liked: "Alpha Centauri"
+                    major: "Computer Science/The Spice™",
+                    work: "Liked working with the Hololens and HTC Vive",
+                    liked: "Making the telescope fly..."
                 },
                 {
                     name: "Chris Garrety",

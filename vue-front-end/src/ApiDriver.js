@@ -82,8 +82,8 @@ export default {
       view: function (appointmentId) {
         return axios.get(this.namespace + "/" + appointmentId + "/retrieve", Headers.retrieveHeaders())
       },
-      create: function (data) {
-        return axios.post(this.namespace + "/schedule", data, Headers.retrieveHeaders())
+      create: function (data, type) {
+        return axios.post(this.namespace + "/schedule/" + type, data, Headers.retrieveHeaders())
       },
       request: function (data) {
         return axios.post(this.namespace + "/request", data, Headers.retrieveHeaders())
@@ -103,8 +103,9 @@ export default {
       data: function(appointmentId) {
         return axios.get(this.namespace + "/" + appointmentId + "/rf-data", Headers.retrieveHeaders())
       },
-      update: function(appointmentId, data) {
-        return axios.put(baseUrl + "appointments/" + appointmentId, data, Headers.retrieveHeaders())
+      update: function(appointmentId, data, type) {
+        console.log("Appt Id: " + appointmentId + " data: " + data + " type: " + type)
+        return axios.put(baseUrl + "appointments/" + appointmentId + "/" + type, data, Headers.retrieveHeaders())
       },
       cancel: function(appointmentId) {
         return axios.put(baseUrl + "appointments/" + appointmentId + "/cancel", {}, Headers.retrieveHeaders())
@@ -150,7 +151,18 @@ export default {
         return axios.get(baseUrl + "authAdmin", Headers.retrieveHeaders());
       }
     },
-
+    SensorStatus: {
+      namespace: baseUrl + "sensor-status",
+      getMostRecent: function() {
+        return axios.get(this.namespace + "/" + "getMostRecent", Headers.retrieveHeaders())
+      }
+    },
+    WeatherData: {
+      namespace: baseUrl + "weather-data",
+      listWeatherDataBetweenDates: function(lowerDate, upperDate) {
+        return axios.get(this.namespace + "/" + "listBetweenCreatedDates?lowerDate=" + lowerDate + "&upperDate=" + upperDate, Headers.retrieveHeaders())
+      }
+    },
     login: function(data) {
       return axios.post("https://prod-api.ycpradiotelescope.com/login?email=" + data.username.value + "&password=" + data.password.value, JSON.stringify(data))
     },
