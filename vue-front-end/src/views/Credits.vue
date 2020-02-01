@@ -27,16 +27,16 @@ export default {
         return {
             devInfo: [
                 {
-                    name: "Travis Jones",
-                    major: "Computer Engineering",
-                    work: "Liked working on the control room software",
-                    liked: "the interdisciplinary coordination"
+                    name: "Alyssa McDevitt",
+                    major: "_",
+                    work: "_",
+                    liked: "_"
                 },
                 {
-                    name: "Nick Vandemark",
-                    major: "Computer Engineering/Computer Science",
-                    work: "Liked integrating the control room software with all the hardware",
-                    liked: "working with a bunch of smart people"
+                    name: "Chris Garrety",
+                    major: "Computer Science",
+                    work: "Alpha Centauri",
+                    liked: "Alpha Centauri"
                 },
                 {
                     name: "Cody Spath",
@@ -45,16 +45,16 @@ export default {
                     liked: "learning about and incorporating new technologies"
                 },
                 {
-                    name: "Garrett Ruths",
+                    name: "Dakota Hilbert",
                     major: "Computer Science",
-                    work: "Liked learning in the unity engine, despite the headaches it caused",
-                    liked: "being able to work in a large scale team environment"
+                    work: "Web Front End Development",
+                    liked: "Learning Vue.js, Node.js and working on a large team."
                 },
                 {
-                    name: "Derek McClellan",
-                    major: "Computer Science",
-                    work: "Liked learning Vue.js and the instant gratification that comes with web development",
-                    liked: "leading a team of talented people to work towards deployment and integration"
+                    name: "Darin Gordon",
+                    major: "_",
+                    work: "_",
+                    liked: "_"
                 },
                 {
                     name: "David Henry",
@@ -63,46 +63,22 @@ export default {
                     liked: "being able to work on a great project with amazing people"
                 },
                 {
-                    name: "Logan Ferree",
+                    name: "Derek McClellan",
                     major: "Computer Science",
-                    work: "Liked learning about Kotlin for the back-end software, and being able to break 75% of the unit tests",
-                    liked: "learning new technologies and working on a large project"
+                    work: "Liked learning Vue.js and the instant gratification that comes with web development",
+                    liked: "leading a team of talented people to work towards deployment and integration"
                 },
                 {
-                    name: "Felix Diaz",
-                    major: "Computer Engineering",
-                    work: "Liked working on the virtual reality telescope and planetarium, as well as creating the automated movement in C#",
-                    liked: "Creating technology that can introduce people to the joys of radio astronomy and making Kerry's dreams come true"
+                    name: "Devin Retzlaff",
+                    major: "Computer Science",
+                    work: "The user interface",
+                    liked: "Working on a project in which I had a lot of helpful previous work experience"
                 },
                 {
-                    name: "Joseph Hopkins",
+                    name: "Ed Nardo",
                     major: "Computer Science",
-                    work: "Liked developing the UI/UX of the application",
-                    liked: "Being immersed in new and interesting technologies"
-                },
-                {
-                    name: "Jason Porter",
-                    major: "Computer Science",
-                    work: "Liked developing a C# application that connects the internet to the hardware",
-                    liked: "Implementing his team's work in iterative development cycles"
-                },
-                {
-                    name: "Rathana Pim",
-                    major: "Computer Science",
-                    work: "Liked learning Kotlin and improving copying and pasting skills",
-                    liked: "Working with great people and in multiple teams"
-                },
-                {
-                    name: "Zack Henry",
-                    major: "Computer Science",
-                    work: "Liked implementing multiple appointment types on the front-end",
-                    liked: "Getting to know and work with some really cool people"
-                },
-                {
-                    name: "Jacob Majeski",
-                    major: "Computer Science",
-                    work: "Alpha Centauri",
-                    liked: "Alpha Centauri"
+                    work: "The mobile application",
+                    liked: "_"
                 },
                 {
                     name: "Ezra Moore",
@@ -111,11 +87,173 @@ export default {
                     liked: "Making the telescope fly..."
                 },
                 {
-                    name: "Chris Garrety",
+                    name: "Felix Diaz",
+                    major: "Computer Engineering",
+                    work: "Liked working on the virtual reality telescope and planetarium, as well as creating the automated movement in C#",
+                    liked: "Creating technology that can introduce people to the joys of radio astronomy and making Kerry's dreams come true"
+                },
+                {
+                    name: "Garrett Ruths",
+                    major: "Computer Science",
+                    work: "Liked learning in the unity engine, despite the headaches it caused",
+                    liked: "being able to work in a large scale team environment"
+                },
+                {
+                    name: "Greg Plachno",
+                    major: "Computer Science",
+                    work: "Simulation",
+                    liked: "nModBus4"
+                },
+                {
+                    name: "Jacob Majeski",
                     major: "Computer Science",
                     work: "Alpha Centauri",
                     liked: "Alpha Centauri"
-                }
+                },
+                {
+                    name: "Jacob Minor",
+                    major: "_",
+                    work: "_",
+                    liked: "_"
+                },
+                {
+                    name: "Jason Constantine",
+                    major: "Computer Science",
+                    work: "The mobile application",
+                    liked: "Learning a new language and learning about API's"
+                },
+                {
+                    name: "Jason Pierpont",
+                    major: "_",
+                    work: "_",
+                    liked: "_"
+                },
+                {
+                    name: "Jason Porter",
+                    major: "Computer Science",
+                    work: "Liked developing a C# application that connects the internet to the hardware",
+                    liked: "Implementing his team's work in iterative development cycles"
+                },
+                {
+                    name: "Jessie Furey",
+                    major: "_",
+                    work: "_",
+                    liked: "_"
+                },
+                {
+                    name: "Joel Horne",
+                    major: "Computer Science",
+                    work: "The backend application",
+                    liked: "Being thrown into a project I knew nothing about written in a language I didn't know running in an almost esoteric framework and climbing my way out."
+                },
+                {
+                    name: "Jon Myer",
+                    major: "_",
+                    work: "_",
+                    liked: "_"
+                },
+                {
+                    name: "Joseph Hopkins",
+                    major: "Computer Science",
+                    work: "Liked developing the UI/UX of the application",
+                    liked: "Being immersed in new and interesting technologies"
+                },
+                {
+                    name: "Joseph Landau",
+                    major: "Computer Science",
+                    work: "The backend application and infrastructure",
+                    liked: "Working with the other developers and setting up the control room server"
+                },
+                {
+                    name: "Joshua Sowa",
+                    major: "_",
+                    work: "_",
+                    liked: "_"
+                },
+                {
+                    name: "Karl Andrand",
+                    major: "_",
+                    work: "_",
+                    liked: "_"
+                },
+                {
+                    name: "Kate Kennelly",
+                    major: "_",
+                    work: "_",
+                    liked: "_"
+                },
+                {
+                    name: "Kyle Eidson",
+                    major: "Computer Science",
+                    work: "Control room application",
+                    liked: "Integrating the project with a multitude of other systems and seeing them all interact"
+                },
+                {
+                    name: "Logan Ferree",
+                    major: "Computer Science",
+                    work: "Liked learning about Kotlin for the back-end software, and being able to break 75% of the unit tests",
+                    liked: "learning new technologies and working on a large project"
+                },
+                {
+                    name: "Marcos Rivera",
+                    major: "_",
+                    work: "_",
+                    liked: "_"
+                },
+                {
+                    name: "Marie Kiley",
+                    major: "Computer Science",
+                    work: "Web front end development, focusing on extending appointment functionality",
+                    liked: "Being part of something big, working with a large team, and succeeding at difficult objectives"
+                },
+                {
+                    name: "Nick Vandemark",
+                    major: "Computer Engineering/Computer Science",
+                    work: "Liked integrating the control room software with all the hardware",
+                    liked: "working with a bunch of smart people"
+                },
+                {
+                    name: "Nolan Hamilton",
+                    major: "Computer Science",
+                    work: "Web front end development, focusing on administrator pages",
+                    liked: "Learning Vue.js, Node.js, and back end API integration"
+                },
+                {
+                    name: "Rathana Pim",
+                    major: "Computer Science",
+                    work: "Liked learning Kotlin and improving copying and pasting skills",
+                    liked: "Working with great people and in multiple teams"
+                },
+                {
+                    name: "Richard Hopkins",
+                    major: "_",
+                    work: "_",
+                    liked: "_"
+                },
+                {
+                    name: "Thomas Albert",
+                    major: "_",
+                    work: "_",
+                    liked: "_"
+                },
+                {
+                    name: "Travis Jones",
+                    major: "Computer Engineering",
+                    work: "Liked working on the control room software",
+                    liked: "the interdisciplinary coordination"
+                },
+                {
+                    name: "William Taylor",
+                    major: "_",
+                    work: "_",
+                    liked: "_"
+                },
+                {
+                    name: "Zack Henry",
+                    major: "Computer Science",
+                    work: "Liked implementing multiple appointment types on the front-end",
+                    liked: "Getting to know and work with some really cool people"
+                },
             ]
         }
     },
