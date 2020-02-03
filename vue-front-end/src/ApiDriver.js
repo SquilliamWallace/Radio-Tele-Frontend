@@ -1,7 +1,7 @@
 const axios = require('axios');
 import Headers from './utils/Headers';
 
-let baseUrl = "https://prod-api.ycpradiotelescope.com/api/";
+let baseUrl = "http://api.ycpradiotelescope.com:8080/api/";
 export default {
     //API endpoints go here
     CelestialBodies: {
