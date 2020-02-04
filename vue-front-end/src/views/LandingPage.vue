@@ -12,7 +12,7 @@
   
           <v-card-title primary-title>
             <div style="padding: 25px;">
-              <div class="headline">Welcome to the York County Astronomical Society Radio Telescope! LANDING PAGE</div>
+              <div class="headline">Welcome to the York County Astronomical Society Radio Telescope! LANDING PAGE!</div>
               <v-card-text class="grey--text">The York County Astronomical Society, Inc, is a non-profit organization dedicated to the advancement of the science of astronomy.
 
               The York County Astronomical Society was started in 1989, and currently has about 30 members in 4 counties in Pennsylvania.
@@ -39,7 +39,8 @@
 </template>
 
 <script>
-import NavigationBar from "../components/utility/NavigationBar.vue";
+//import NavigationBar from "../components/utility/NavigationBar.vue";
+import LandingPageNavigationBar from "../components/utility/LandingPageNavigationBar.vue";
 import ApiDriver from "../ApiDriver";
 import router from '../router';
 import HttpResponse from '../utils/HttpResponse';
@@ -53,7 +54,8 @@ export default {
     };
   },
   components: {
-    NavigationBar
+    //NavigationBar
+    LandingPageNavigationBar
   },
   methods: {
       handleLoggedIn() {
@@ -92,7 +94,7 @@ export default {
   mounted() {
     // Handle the log in when the DOM is loaded
     this.handleLoggedIn();
-    this.$store.commit("updateInfo", {page: "Home", info: "Welcome to the York County Astronomical Society\n Radio Telescope application!"})
+    this.$store.commit("updateInfo", {page: "LandingPage", info: "Welcome to the York County Astronomical Society\n Radio Telescope application! LANDING PAGE"})
   }
 };
 </script>

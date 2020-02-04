@@ -70,7 +70,7 @@ const router = new Router({
     {
       path: '/landingPage',
       name: 'LandingPage',
-      component: Home
+      component: LandingPage
     },
     {
       path: '/appointments/:appointmentId/rf-data',
