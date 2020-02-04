@@ -39,8 +39,7 @@
 </template>
 
 <script>
-//import NavigationBar from "../components/utility/NavigationBar.vue";
-import LandingPageNavigationBar from "../components/utility/LandingPageNavigationBar.vue";
+import NavigationBar from "../components/utility/NavigationBar.vue";
 import ApiDriver from "../ApiDriver";
 import router from '../router';
 import HttpResponse from '../utils/HttpResponse';
@@ -54,8 +53,7 @@ export default {
     };
   },
   components: {
-    //NavigationBar
-    LandingPageNavigationBar
+    NavigationBar
   },
   methods: {
       handleLoggedIn() {
