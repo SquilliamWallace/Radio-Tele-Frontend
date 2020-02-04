@@ -9,6 +9,7 @@ import ViewProfile from './views/Profile/ViewProfile'
 import EditProfile from './views/Profile/EditProfile'
 import Admin from './views/Administration'
 import Home from './views/Home'
+import LandingPage from './views/LandingPage'
 import RFData from './views/Appointment/RFData'
 import ResetPassword from './views/User/ResetPassword'
 import UnderConstruction from './views/UnderConstruction'
@@ -64,6 +65,11 @@ const router = new Router({
     {
       path: '/home',
       name: 'home',
+      component: Home
+    },
+    {
+      path: '/landingPage',
+      name: 'LandingPage',
       component: Home
     },
     {
