@@ -46,7 +46,7 @@
                   :rules="[rules.rightAscMinutes]"
                   color="blue darken-2"
                   :error="appointmentObj.rightAscension.hasError"
-                  label="Right Ascension Minutes"
+                  label="Right Ascension Minutes" 
                   type="number"
                   mask="##"
                   required
@@ -56,6 +56,7 @@
               <!--
                 Same as Right Ascension Hours, except checks for seconds error handling
               -->
+              <!-- remove right asc seconds
               <v-flex sm3>
                 <v-text-field
                   v-model="appointmentObj.rightAscension.seconds"
@@ -68,6 +69,7 @@
                   required
                 ></v-text-field>
               </v-flex>
+              -->
               <v-flex sm3>
                 <v-text-field
                   v-model="appointmentObj.declination.value"
@@ -157,7 +159,7 @@
                   required
                 ></v-text-field>
               </v-flex>
-
+              <!-- remove right asc seconds
               <v-flex sm3>
                 <v-text-field
                   v-model="appointmentObj.coordinate1.seconds"
@@ -172,7 +174,7 @@
                   required
                 ></v-text-field>
               </v-flex>
-
+              -->
               <v-flex sm3>
                 <v-text-field
                   v-model="appointmentObj.coordinate1.declination"
@@ -221,7 +223,7 @@
                   required
                 ></v-text-field>
               </v-flex>
-
+              <!-- remove right asc seconds
               <v-flex sm3>
                 <v-text-field
                   v-model="appointmentObj.coordinate2.seconds"
@@ -236,7 +238,7 @@
                   required
                 ></v-text-field>
               </v-flex>
-
+              -->
               <v-flex sm3>
                 <v-text-field
                   v-model="appointmentObj.coordinate2.declination"
@@ -288,7 +290,7 @@ export default {
         rightAscension: {
           hours: null,
           minutes: null,
-          seconds: null,
+          // seconds: null,
           hasError: false
         }
       },
@@ -349,7 +351,7 @@ export default {
           isPublic: !this.appointmentObj.privacy.value,
           hours: this.appointmentObj.rightAscension.hours,
           minutes: this.appointmentObj.rightAscension.minutes,
-          seconds: this.appointmentObj.rightAscension.seconds,
+          // seconds: this.appointmentObj.rightAscension.seconds,
           declination: this.appointmentObj.declination.value
         });
       } else if (this.appointmentObj.type === "Celestial Body") {
@@ -498,7 +500,7 @@ export default {
             return(
                 this.appointmentObj.rightAscension.hours &&
                 this.appointmentObj.rightAscension.minutes &&
-                this.appointmentObj.rightAscension.seconds &&
+                // this.appointmentObj.rightAscension.seconds &&
                 this.appointmentObj.declination.value &&
                 this.appointmentObj.start.value &&
                 this.appointmentObj.end.value 
@@ -513,12 +515,12 @@ export default {
             return(
                 this.appointmentObj.coordinate1.hours &&
                 this.appointmentObj.coordinate1.minutes &&
-                this.appointmentObj.coordinate1.seconds &&
+                // this.appointmentObj.coordinate1.seconds &&
                 this.appointmentObj.coordinate1.declination &&
 
                 this.appointmentObj.coordinate2.hours &&
                 this.appointmentObj.coordinate2.minutes &&
-                this.appointmentObj.coordinate2.seconds &&
+                // this.appointmentObj.coordinate2.seconds &&
                 this.appointmentObj.coordinate2.declination &&
 
                 this.appointmentObj.start.value &&
