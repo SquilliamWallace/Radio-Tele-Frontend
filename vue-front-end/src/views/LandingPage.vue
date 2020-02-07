@@ -1,11 +1,7 @@
 <template>
-<div id="parallax-wrap">
-    <v-parallax style = "height:80%;" src="https://images.pexels.com/photos/110854/pexels-photo-110854.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260">
-    <v-spacer></v-spacer>
-    
-    <v-img src="https://media.istockphoto.com/photos/telescope-picture-id512605413?k=6&m=512605413&s=612x612&w=0&h=3qyaXj4JJOAY1hjNszpp5SCQFY3SUldFzervpQWz0gQ=" height="100px">
-    
-    </v-img>
+<div>
+    <v-img style = "height:100%;" src="https://images.pexels.com/photos/110854/pexels-photo-110854.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260">
+        <v-img style="padding: 25px; height:1000px" src="https://media.istockphoto.com/photos/telescope-picture-id512605413?k=6&m=512605413&s=612x612&w=0&h=3qyaXj4JJOAY1hjNszpp5SCQFY3SUldFzervpQWz0gQ="></v-img>
         <v-layout align-center>
             <v-card>
             <v-card-title primary-title>
@@ -56,6 +52,7 @@
                 convallis convallis tellus. Quisque egestas diam in arcu cursus. Molestie at elementum eu facilisis sed odio morbi. Consequat id porta nibh venenatis cras sed.
 
                 </v-card-text>
+                <v-img style="height:500px;" src="https://videos.usatoday.net/Brightcove2/29906170001/2016/08/29906170001_5081508298001_5081500203001-vs.jpg?pubId=29906170001"></v-img>
                 <v-flex>
                     <v-btn large block color="deep-purple" @click="submit">LOGIN</v-btn>
                 </v-flex>
@@ -63,7 +60,7 @@
             </v-card-title>
             </v-card>
         </v-layout>
-    </v-parallax>
+    </v-img>
 </div>
 </template>
 
