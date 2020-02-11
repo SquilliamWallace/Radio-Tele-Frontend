@@ -566,7 +566,8 @@ export default {
                 azimuth: this.form.azimuth.value,
                 elevation: this.form.elevation.value,
                 coordinates: this.coordinates,
-                priority: 'PRIMARY'
+                priority: 'PRIMARY',
+                type: this.type
             };
                         
             // Call appropriate API CALL and send form in json format
@@ -609,6 +610,7 @@ export default {
                    formObj.telescope = this.telescopeName
                    //Sends the information of the form to the requestAppointment function on Scheduler Page.
                    this.$emit('request-appointment', formObj)
+                   console.log(JSON.stringify(formObj));
                    this.resetForm()
                 } else {
                     HttpResponse.generalError(this, message, false)

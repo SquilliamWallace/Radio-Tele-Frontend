@@ -43,13 +43,14 @@ export default {
                 endTime: new Date(this.Appointment.endTime).toUTCString(),
                 telescopeId: this.Appointment.telescopeId,
                 isPublic: this.Appointment.isPublic,
+                priority: this.Appointment.priority,
                 hours: this.Appointment.hours,
                 minutes: this.Appointment.minutes,
                 seconds: this.Appointment.seconds,
                 declination: this.Appointment.declination
             };
 
-            ApiDriver.Appointment.request(JSON.stringify(requestAppointment)).then((response) => {
+            ApiDriver.Appointment.request(JSON.stringify(requestAppointment), this.mapApptType()).then((response) => {
                 HttpResponse.then(response, (data) => {
                         this.$emit('input');
                     }, (status, errors) => {
@@ -72,6 +73,21 @@ export default {
         },
         toggleModal() {
             this.$emit('input');
+        },
+        mapApptType() {
+            switch(this.Appointment.type){
+                case "Point":
+                    return "coordinate";
+                case "Celestial Body":
+                    return "celestial-body";
+                case "Drift Scan":
+                    return "drift-scan";
+                case "Raster Scan":
+                    return "raster-scan";
+                default:
+                    return "coordinate";
+            }
+
         }
     }
 }
