@@ -19,7 +19,7 @@
                         <v-card dark >
                                 <!-- <div class="sensor-name">{{ sensor.displayName }}</div> -->
                                 <v-btn block class="sensor-button" height=100 @click="sensor.thresholdToggle = true">{{ sensor.displayName }}</v-btn>
-                                <v-dialog hide-overlay width="600px" transition="dialog-bottom-transition" v-model="sensor.thresholdToggle">
+                                <v-dialog hide-overlay width="600px" v-model="sensor.thresholdToggle">
                                     <!-- <v-btn outlined color="primary darken-2" slot="activator">{{sensor.displayName}}</v-btn> -->
                                     <v-card dark>
                                         <v-card-subtitle>
