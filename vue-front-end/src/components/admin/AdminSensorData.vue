@@ -18,11 +18,13 @@
                 <v-flex md4>
                         <v-card dark >
                                 <!-- <div class="sensor-name">{{ sensor.displayName }}</div> -->
-                                <v-dialog hide-overlay width="500px" transition="dialog-bottom-transition" v-model="sensor.thresholdToggle">
+                                <v-dialog hide-overlay width="600px" transition="dialog-bottom-transition" v-model="sensor.thresholdToggle">
                                     <v-btn color="primary darken-2" slot="activator">{{sensor.displayName}}</v-btn>
                                     <v-card dark>
+                                        <v-card-subtitle>
+                                            <h1>Thresholds for {{ sensor.displayName }} Sensor</h1>
+                                        </v-card-subtitle>
                                         <v-card-text>
-                                            Thresholds for {{ sensor.displayName }}
                                             <form>
                                                 <v-text-field label="Warning Threshold"></v-text-field>
                                                 <v-text-field label="Critical Threshold"></v-text-field>
