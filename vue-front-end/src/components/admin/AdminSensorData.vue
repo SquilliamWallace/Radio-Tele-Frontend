@@ -20,13 +20,13 @@
                                 <!-- <div class="sensor-name">{{ sensor.displayName }}</div> -->
                                 <v-dialog hide-overlay width="500px" transition="dialog-bottom-transition" v-model="sensor.thresholdToggle">
                                     <v-btn color="primary darken-2" slot="activator">{{sensor.displayName}}</v-btn>
-                                    <v-card dark height="600px">
+                                    <v-card dark>
                                         <v-card-text>
                                             Thresholds for {{ sensor.displayName }}
                                             <form>
                                                 <v-text-field label="Warning Threshold"></v-text-field>
-
                                                 <v-text-field label="Critical Threshold"></v-text-field>
+                                                <v-btn color="primary darken-2" class="mr-4">Submit</v-btn>
                                             </form>
                                         </v-card-text>
                                     </v-card> 
