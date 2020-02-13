@@ -18,8 +18,9 @@
                 <v-flex md4>
                         <v-card dark >
                                 <!-- <div class="sensor-name">{{ sensor.displayName }}</div> -->
+                                <v-btn block class="sensor-button" height=100 @click="sensor.thresholdToggle = true">{{ sensor.displayName }}</v-btn>
                                 <v-dialog hide-overlay width="600px" transition="dialog-bottom-transition" v-model="sensor.thresholdToggle">
-                                    <v-btn color="primary darken-2" slot="activator">{{sensor.displayName}}</v-btn>
+                                    <!-- <v-btn outlined color="primary darken-2" slot="activator">{{sensor.displayName}}</v-btn> -->
                                     <v-card dark>
                                         <v-card-subtitle>
                                             <h1>Thresholds for {{ sensor.displayName }} Sensor</h1>
@@ -256,5 +257,14 @@ export default {
     font-size: 35px;
     /* text-decoration: underline; */
     text-decoration-color: white;
+}
+.sensor-button {
+    text-align: center;
+    /* display: block; */
+    font-size: 35px;
+    width: 100%;
+    height: 100%;
+    background-size: 100%;
+    background-color: "primary";
 }
 </style>
