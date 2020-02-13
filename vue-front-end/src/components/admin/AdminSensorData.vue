@@ -17,7 +17,20 @@
             <v-layout row>
                 <v-flex md4>
                         <v-card dark >
-                                <div class="sensor-name">{{ sensor.displayName }}</div>
+                                <!-- <div class="sensor-name">{{ sensor.displayName }}</div> -->
+                                <v-dialog hide-overlay transition="dialog-bottom-transition" v-model="sensor.thresholdToggle">
+                                    <v-btn color="primary darken-2" slot="activator">{{sensor.displayName}}</v-btn>
+                                    <v-card dark height="600px">
+                                        <v-card-text>
+                                            Thresholds for {{ sensor.displayName }}
+                                            <form>
+                                                <v-text-field label="Warning Threshold"></v-text-field>
+
+                                                <v-text-field label="Critical Threshold"></v-text-field>
+                                            </form>
+                                        </v-card-text>
+                                    </v-card> 
+                                </v-dialog>
                         </v-card>
                 </v-flex>
 
@@ -66,11 +79,11 @@ export default {
             ],
 
             sensors: [
-                { id: 1, displayName: 'Gate', name: 'gate', status: 0, statusColor: '', statusText: '', override: 0 },
-                { id: 1, displayName: 'Proximity', name: 'proximity', status: 0, statusColor: '', statusText: '', override: 0 },
-                { id: 1, displayName: 'Azimuth Motor', name: 'azimuthMotor', status: 0, statusColor: '', statusText: '', override: 0 },
-                { id: 1, displayName: 'Elevation Motor', name: 'elevationMotor', status: 0, statusColor: '', statusText: '', override: 0 },
-                { id: 1, displayName: 'Weather Station', name: 'weatherStation', status: 0, statusColor: '', statusText: '', override: 0 }
+                { id: 1, displayName: 'Gate', name: 'gate', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false },
+                { id: 1, displayName: 'Proximity', name: 'proximity', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false },
+                { id: 1, displayName: 'Azimuth Motor', name: 'azimuthMotor', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false },
+                { id: 1, displayName: 'Elevation Motor', name: 'elevationMotor', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false },
+                { id: 1, displayName: 'Weather Station', name: 'weatherStation', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false }
             ],
 
             // status values
@@ -128,7 +141,7 @@ export default {
             this.overallStatText = this.getStatusText(overall);
         },
         setStatuses(dbData) {
-            for(var dbIndex in dbData) {                                              // iterate over all sensors brought in fromd database
+            for(var dbIndex in dbData) {                                              // iterate over all sensors brought in from database
                 // console.log("dbData: " + dbIndex + ", " + dbData[dbIndex]);              // Logging for debugging purposes
                 for(var localIndex of this.sensors){                                       // iterate over all local sensor variables
                     if (dbIndex == localIndex.name){   
