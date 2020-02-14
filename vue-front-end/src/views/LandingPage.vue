@@ -52,12 +52,66 @@
                 convallis convallis tellus. Quisque egestas diam in arcu cursus. Molestie at elementum eu facilisis sed odio morbi. Consequat id porta nibh venenatis cras sed.
 
                 </v-card-text>
-                <v-img style="height:500px;" src="https://images.pexels.com/photos/110854/pexels-photo-110854.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" contain="true"></v-img>
-                <v-img style="height:500px;" src="https://images.pexels.com/photos/110854/pexels-photo-110854.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" contain="true"></v-img>
+
                 <v-flex>
                     <v-btn large block color="deep-purple" @click="submit">LOGIN</v-btn>
                 </v-flex>
-                </div>
+
+              <v-container grid text-xs-center>
+                <v-layout row>
+                    <v-flex>
+                      <v-card dark class="ma-1 pa-2">
+                          <v-img height="500px" src="https://images.pexels.com/photos/110854/pexels-photo-110854.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" contain="true"></v-img>
+                      </v-card>
+                    </v-flex>
+                    <v-flex>
+                      <v-card dark class="ma-1 pa-2">
+                          <v-img height="500px" src="https://images.pexels.com/photos/110854/pexels-photo-110854.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" contain="true"></v-img>
+                      </v-card>
+                    </v-flex>  
+                    <v-flex>
+                      <v-card dark class="ma-1 pa-2">
+                          <v-img height="500px" src="https://images.pexels.com/photos/110854/pexels-photo-110854.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" contain="true"></v-img>
+                      </v-card>
+                    </v-flex>   
+                </v-layout>
+                <v-layout row>
+                    <v-flex>
+                      <v-card dark class="ma-1 pa-2">
+                          <v-img height="500px" src="https://images.pexels.com/photos/110854/pexels-photo-110854.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" contain="true"></v-img>\
+                      </v-card>
+                    </v-flex>
+                    <v-flex>
+                      <v-card dark class="ma-1 pa-2">
+                          <v-img height="500px" src="https://images.pexels.com/photos/110854/pexels-photo-110854.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" contain="true"></v-img>
+                      </v-card>
+                    </v-flex>  
+                    <v-flex>
+                      <v-card dark class="ma-1 pa-2">
+                          <v-img height="500px" src="https://media.istockphoto.com/photos/telescope-picture-id512605413?k=6&m=512605413&s=612x612&w=0&h=3qyaXj4JJOAY1hjNszpp5SCQFY3SUldFzervpQWz0gQ=" contain="true"></v-img>
+                      </v-card>
+                    </v-flex>   
+                </v-layout>
+                <v-layout row>
+                    <v-flex>
+                      <v-card dark class="ma-1 pa-2">
+                          <v-img height="500px" src="https://images.pexels.com/photos/110854/pexels-photo-110854.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" contain="true"></v-img>\
+                      </v-card>
+                    </v-flex>
+                    <v-flex>
+                      <v-card dark class="ma-1 pa-2">
+                          <v-img height="500px" src="https://images.pexels.com/photos/110854/pexels-photo-110854.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" contain="true"></v-img>
+                      </v-card>
+                    </v-flex>  
+                    <v-flex>
+                      <v-card dark class="ma-1 pa-2">
+                          <v-img height="500px" src="https://media.istockphoto.com/photos/telescope-picture-id512605413?k=6&m=512605413&s=612x612&w=0&h=3qyaXj4JJOAY1hjNszpp5SCQFY3SUldFzervpQWz0gQ=" contain="true"></v-img>
+                      </v-card>
+                    </v-flex>   
+                </v-layout>
+              </v-container>
+
+              </div>
             </v-card-title>
             </v-card>
         </v-layout>
