@@ -29,7 +29,7 @@
                                             <form>
                                                 <v-text-field label="Warning Threshold"></v-text-field>
                                                 <v-text-field label="Critical Threshold"></v-text-field>
-                                                <v-btn color="primary darken-2" class="mr-4">Submit</v-btn>
+                                                <v-btn color="primary darken-2" class="mr-4" @click="submitThreshold(sensor.id)">Submit</v-btn>
                                             </form>
                                         </v-card-text>
                                     </v-card> 
@@ -83,10 +83,10 @@ export default {
 
             sensors: [
                 { id: 1, displayName: 'Gate', name: 'gate', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false },
-                { id: 1, displayName: 'Proximity', name: 'proximity', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false },
-                { id: 1, displayName: 'Azimuth Motor', name: 'azimuthMotor', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false },
-                { id: 1, displayName: 'Elevation Motor', name: 'elevationMotor', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false },
-                { id: 1, displayName: 'Weather Station', name: 'weatherStation', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false }
+                { id: 2, displayName: 'Proximity', name: 'proximity', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false },
+                { id: 3, displayName: 'Azimuth Motor', name: 'azimuthMotor', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false },
+                { id: 4, displayName: 'Elevation Motor', name: 'elevationMotor', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false },
+                { id: 5, displayName: 'Weather Station', name: 'weatherStation', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false }
             ],
 
             // status values
@@ -230,6 +230,10 @@ export default {
                 default:
                     return "UNKNOWN";
             }
+        },
+        submitThreshold(id){
+            console.log("Threshold ID: " + id);
+            // Save the thresholds values for Threshold ID
         }
     },
     mounted: function(){
