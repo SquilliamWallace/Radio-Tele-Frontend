@@ -14,7 +14,7 @@
             <v-card>
             <v-card-title primary-title>
                 <div style="padding: 25px;">
-                <div class="headline">Welcome to the York County Astronomical Society Radio Telescope! LANDING PAGE!</div>
+                <div class="headline">Welcome to the York County Astronomical Society Radio Telescope!</div>
                 <v-card-text class="grey--text">The York County Astronomical Society, Inc, is a non-profit organization dedicated to the advancement of the science of astronomy.
 
                 The York County Astronomical Society was started in 1989, and currently has about 30 members in 4 counties in Pennsylvania.
@@ -34,6 +34,7 @@
                 and a 4” Astro-Physics Refractor Telescope
                 </v-card-text>
                 <v-card-text class="grey--text">
+                  <!--  
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Rutrum tellus pellentesque eu tincidunt. Habitant morbi tristique senectus et 
                 netus et malesuada. Arcu vitae elementum curabitur vitae. Turpis tincidunt id aliquet risus. Facilisis mauris sit amet massa vitae tortor condimentum lacinia quis. Id neque aliquam vestibulum morbi 
                 blandit cursus risus. Maecenas ultricies mi eget mauris pharetra et ultrices. Placerat orci nulla pellentesque dignissim. Donec pretium vulputate sapien nec sagittis aliquam malesuada bibendum arcu.
@@ -57,7 +58,7 @@
 
                 Sed faucibus turpis in eu mi. Dolor sit amet consectetur adipiscing elit duis tristique sollicitudin. Dignissim suspendisse in est ante in nibh mauris. Tristique risus nec feugiat in fermentum posuere 
                 urna. Non arcu risus quis varius quam quisque id. Nam at lectus urna duis. Nulla malesuada pellentesque elit eget gravida cum sociis. Nisi porta lorem mollis aliquam ut porttitor. Nam at lectus urna duis 
-                convallis convallis tellus. Quisque egestas diam in arcu cursus. Molestie at elementum eu facilisis sed odio morbi. Consequat id porta nibh venenatis cras sed.
+                convallis convallis tellus. Quisque egestas diam in arcu cursus. Molestie at elementum eu facilisis sed odio morbi. Consequat id porta nibh venenatis cras sed. -->
                 </v-card-text>
 
                 <v-flex>
@@ -66,7 +67,7 @@
 
                 <v-card>
                   <div style="padding: 25px;">
-                    <div class="headline">Here are some pictures of various aspects of the radio telescope. </div>
+                    <div class="headline">Here are some pictures of various aspects of the radio telescope </div>
                   </div>
                 </v-card>
                 
