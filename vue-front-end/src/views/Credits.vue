@@ -28,9 +28,9 @@ export default {
             devInfo: [
                 {
                     name: "Alyssa McDevitt",
-                    major: "_",
-                    work: "_",
-                    liked: "_"
+                    major: "Computer Science",
+                    work: "The mobile application",
+                    liked: "Working with AWS, learning the quirks of React Native, learning more about astronomy"
                 },
                 {
                     name: "Chris Garrety",
