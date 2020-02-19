@@ -352,7 +352,11 @@ export default {
                             
                             // If you are the owner of the event display "Your Observation" as title and make background color Green
                             if (element.userId == this.$store.state.currentUserId) {
-                                title = "Your Observation";
+                                if(element.priority == "Secondary") {
+                                    title = "Your Secondary Observation";
+                                } else {
+                                    title = "Your Observation";
+                                }
                                 backgroundColor = "green";
                             }
                             // If the appointment is secondary, set it to purple! 
