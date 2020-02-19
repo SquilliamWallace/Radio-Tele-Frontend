@@ -27,9 +27,17 @@
                                         </v-card-subtitle>
                                         <v-card-text>
                                             <v-form>
-                                                <v-text-field label="Warning Threshold" v-model="sensor.warningThreshold"></v-text-field>
-                                                <v-text-field label="Critical Threshold" v-model="sensor.criticalThreshold"></v-text-field>
-                                                <v-btn color="primary darken-2" class="mr-4" @click="submitThreshold(sensor.id)">Submit</v-btn>
+                                                <div v-if="sensor.warningThreshold != null">
+                                                    <v-text-field label="Warning Threshold" v-model="sensor.warningThreshold"></v-text-field>
+                                                </div>
+                                                <div v-if="sensor.criticalThreshold != null">
+                                                    <v-text-field label="Critical Threshold" v-model="sensor.criticalThreshold"></v-text-field>
+                                                    <v-btn color="primary darken-2" class="mr-4" @click="submitThreshold(sensor.id)">Submit</v-btn>
+                                                </div>
+                                                <div v-else>
+                                                    <v-card-text>No thresholds for this sensor</v-card-text>
+                                                </div>
+                                                
                                             </v-form>
                                         </v-card-text>
                                     </v-card> 
