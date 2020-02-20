@@ -256,6 +256,53 @@
               <v-checkbox v-model="appointmentObj.privacy.value" color="green" label="Private"></v-checkbox>
             </v-flex>
           </v-layout>
+          <!-- <h2>SpectraCyber Configuration Settings</h2> -->
+          <v-card-title class="title">SpectraCyber Configuration Settings</v-card-title>
+          <v-layout wrap>
+              <!-- This is the SpectraCyber Configuration -->
+              <v-flex>
+                <v-text-field
+                onkeypress="return event.charCode == 45 || (event.charCode >= 48 && event.charCode <= 57)"
+                label="Mode"
+                type="number"
+                ></v-text-field>
+              </v-flex>
+              <v-flex>
+                <v-text-field
+                onkeypress="return event.charCode == 45 || (event.charCode >= 48 && event.charCode <= 57)"
+                label="Integration Time"
+                type="number"
+                ></v-text-field>
+              </v-flex>
+              <v-flex>
+                <v-text-field
+                onkeypress="return event.charCode == 45 || (event.charCode >= 48 && event.charCode <= 57)"
+                label="Offset Voltage"
+                type="number"
+                ></v-text-field>
+              </v-flex>
+              <v-flex>
+                <v-text-field
+                onkeypress="return event.charCode == 45 || (event.charCode >= 48 && event.charCode <= 57)"
+                label="IF Gain"
+                type="number"
+                ></v-text-field>
+              </v-flex>
+              <v-flex>
+                <v-text-field
+                onkeypress="return event.charCode == 45 || (event.charCode >= 48 && event.charCode <= 57)"
+                label="DC Gain"
+                type="number"
+                ></v-text-field>
+              </v-flex>
+              <v-flex>
+                <v-text-field
+                onkeypress="return event.charCode == 45 || (event.charCode >= 48 && event.charCode <= 57)"
+                label="Bandwidth"
+                type="number"
+                ></v-text-field>
+              </v-flex>
+            </v-layout>
         </v-container>
         <v-card-actions>
           <v-btn flat @click="$emit('input')">Cancel</v-btn>
@@ -323,6 +370,7 @@ export default {
   },
   props: {
     appointmentObj: {},
+    spectraCyberObj: {},
     value: false
   },
   methods: {

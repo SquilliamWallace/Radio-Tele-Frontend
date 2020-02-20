@@ -102,6 +102,14 @@
                 </v-list-tile-content>
             </v-list-tile>
             <v-divider></v-divider>
+            <v-list-tile>
+                <v-list-tile-content class="white--text">
+                    <v-list-tile-title>SpectraCyber Configuration:
+                    </v-list-tile-title>
+                    <v-list-tile-sub-title class = "pl-3">Mode: Integration Time: Offset Voltage: IF Gain: DC Gain: Badwidth: </v-list-tile-sub-title>
+                </v-list-tile-content>
+            </v-list-tile>
+            <v-divider></v-divider>
             <v-list-tile >
                 <v-list-tile-content class="white--text">
                     <v-list-tile-title>Created by:</v-list-tile-title>
