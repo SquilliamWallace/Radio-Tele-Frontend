@@ -145,7 +145,7 @@
             </div>
         </v-flex>
         </v-layout>
-        <edit-appointment :appointmentObj="appointment" v-model="edit" @edited="edited"></edit-appointment>
+        <edit-appointment :appointmentObj="appointment" :spectraCyberObj="spectraCyber" v-model="edit" @edited="edited"></edit-appointment>
         <share-appointment v-model="share"></share-appointment>
         <unshare-appointment v-model="unshare"></unshare-appointment>
         <cancel-appointment v-model="cancel"> </cancel-appointment>

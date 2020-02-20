@@ -262,6 +262,7 @@
               <!-- This is the SpectraCyber Configuration -->
               <v-flex>
                 <v-text-field
+                v-model="spectraCyberObj.mode.value"
                 onkeypress="return event.charCode == 45 || (event.charCode >= 48 && event.charCode <= 57)"
                 label="Mode"
                 type="number"
@@ -269,6 +270,7 @@
               </v-flex>
               <v-flex>
                 <v-text-field
+                v-model="spectraCyberObj.integrationTime.value"
                 onkeypress="return event.charCode == 45 || (event.charCode >= 48 && event.charCode <= 57)"
                 label="Integration Time"
                 type="number"
@@ -276,6 +278,7 @@
               </v-flex>
               <v-flex>
                 <v-text-field
+                v-model="spectraCyberObj.offsetVoltage.value"
                 onkeypress="return event.charCode == 45 || (event.charCode >= 48 && event.charCode <= 57)"
                 label="Offset Voltage"
                 type="number"
@@ -283,6 +286,7 @@
               </v-flex>
               <v-flex>
                 <v-text-field
+                v-model="spectraCyberObj.ifGain.value"
                 onkeypress="return event.charCode == 45 || (event.charCode >= 48 && event.charCode <= 57)"
                 label="IF Gain"
                 type="number"
@@ -290,6 +294,7 @@
               </v-flex>
               <v-flex>
                 <v-text-field
+                v-model="spectraCyberObj.dcGain.value"
                 onkeypress="return event.charCode == 45 || (event.charCode >= 48 && event.charCode <= 57)"
                 label="DC Gain"
                 type="number"
@@ -297,6 +302,7 @@
               </v-flex>
               <v-flex>
                 <v-text-field
+                v-model="spectraCyberObj.bandwidth.value"
                 onkeypress="return event.charCode == 45 || (event.charCode >= 48 && event.charCode <= 57)"
                 label="Bandwidth"
                 type="number"
