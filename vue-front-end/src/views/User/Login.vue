@@ -20,6 +20,7 @@
                           :error="data.username.hasError"
                           :error-messages="data.username.errorMessage"
                           label="Email"
+                          ref="email"
                           required
                           outline
                           browser-autocomplete
@@ -201,10 +202,14 @@ export default {
       CustomErrorHandler.clearError(this.data.username);
       CustomErrorHandler.clearError(this.data.password);
       CustomErrorHandler.clearError(this.data.reqPassEmail);
+    },
+    setFocus() {
+      this.$refs.email.focus()
     }
   },
   mounted: function() {
     checkBrowser(this);
+    this.setFocus();
   }
 };
 </script>
