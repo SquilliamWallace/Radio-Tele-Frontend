@@ -271,24 +271,27 @@
               <v-flex>
                 <v-text-field
                 v-model="spectraCyberObj.integrationTime.value"
+                :rules="[rules.integrationTime]"
                 onkeypress="return event.charCode == 45 || (event.charCode >= 48 && event.charCode <= 57)"
-                label="Integration Time"
+                label="Integration Time (time/step)"
                 type="number"
                 ></v-text-field>
               </v-flex>
               <v-flex>
                 <v-text-field
                 v-model="spectraCyberObj.offsetVoltage.value"
-                onkeypress="return event.charCode == 45 || (event.charCode >= 48 && event.charCode <= 57)"
-                label="Offset Voltage"
+                :rules="[rules.offsetVoltage]"
+                onkeypress="return event.charCode == 45 || event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57)"
+                label="Offset Voltage (Volts)"
                 type="number"
                 ></v-text-field>
               </v-flex>
               <v-flex>
                 <v-text-field
                 v-model="spectraCyberObj.ifGain.value"
-                onkeypress="return event.charCode == 45 || (event.charCode >= 48 && event.charCode <= 57)"
-                label="IF Gain"
+                :rules="[rules.ifGain]"
+                onkeypress="return event.charCode == 45 || event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57)"
+                label="IF Gain (DB)"
                 type="number"
                 ></v-text-field>
               </v-flex>
@@ -303,8 +306,9 @@
               <v-flex>
                 <v-text-field
                 v-model="spectraCyberObj.bandwidth.value"
+                :rules="[rules.bandwidth]"
                 onkeypress="return event.charCode == 45 || (event.charCode >= 48 && event.charCode <= 57)"
-                label="Bandwidth"
+                label="Bandwidth (KHZ)"
                 type="number"
                 ></v-text-field>
               </v-flex>
@@ -364,7 +368,19 @@ export default {
           "Must be between 0 and 360",
         elevation: val =>
           (val && val.toString().length > 0 && val >= 0 && val <= 90) ||
-          "Must be between 0 and 90"
+          "Must be between 0 and 90",
+        integrationTime: val =>
+          (val && val.toString().length > 0 && val >= 0) ||
+          "Must be greater or equal to zero",
+        offsetVoltage: val =>
+          (val && val.toString().length > 0 && val >= 0.0 && val <= 4.095) ||
+          "Must be between 0 and 4.095",
+        ifGain: val =>
+          (val && val.toString().length > 0 && val >= 10.00 && val <= 25.75) ||
+          "Must be between 10 and 25.75",
+        bandwidth: val =>
+          (val && val.toString().length > 0 && val >= 0) ||
+          "Must be greater than zero"
       },
       // Variables to keep track of chosen Celestial Body
       bodies: [],
