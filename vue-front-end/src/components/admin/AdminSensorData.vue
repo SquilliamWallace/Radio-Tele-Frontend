@@ -17,7 +17,31 @@
             <v-layout row>
                 <v-flex md4>
                         <v-card dark >
-                                <div class="sensor-name">{{ sensor.displayName }}</div>
+                                <!-- <div class="sensor-name">{{ sensor.displayName }}</div> -->
+                                <v-btn block class="sensor-button" height=100 @click="sensor.thresholdToggle = true">{{ sensor.displayName }}</v-btn>
+                                <v-dialog hide-overlay width="600px" v-model="sensor.thresholdToggle">
+                                    <!-- <v-btn outlined color="primary darken-2" slot="activator">{{sensor.displayName}}</v-btn> -->
+                                    <v-card dark>
+                                        <v-card-subtitle>
+                                            <h1>Thresholds for {{ sensor.displayName }} Sensor</h1>
+                                        </v-card-subtitle>
+                                        <v-card-text>
+                                            <v-form>
+                                                <div v-if="sensor.warningThreshold != null">
+                                                    <v-text-field label="Warning Threshold" v-model="sensor.warningThreshold"></v-text-field>
+                                                </div>
+                                                <div v-if="sensor.criticalThreshold != null">
+                                                    <v-text-field label="Critical Threshold" v-model="sensor.criticalThreshold"></v-text-field>
+                                                    <v-btn color="primary darken-2" class="mr-4" @click="submitThreshold(sensor.id)">Submit</v-btn>
+                                                </div>
+                                                <div v-else>
+                                                    <v-card-text>No thresholds for this sensor</v-card-text>
+                                                </div>
+                                                
+                                            </v-form>
+                                        </v-card-text>
+                                    </v-card> 
+                                </v-dialog>
                         </v-card>
                 </v-flex>
 
@@ -66,11 +90,11 @@ export default {
             ],
 
             sensors: [
-                { id: 1, displayName: 'Gate', name: 'gate', status: 0, statusColor: '', statusText: '', override: 0 },
-                { id: 1, displayName: 'Proximity', name: 'proximity', status: 0, statusColor: '', statusText: '', override: 0 },
-                { id: 1, displayName: 'Azimuth Motor', name: 'azimuthMotor', status: 0, statusColor: '', statusText: '', override: 0 },
-                { id: 1, displayName: 'Elevation Motor', name: 'elevationMotor', status: 0, statusColor: '', statusText: '', override: 0 },
-                { id: 1, displayName: 'Weather Station', name: 'weatherStation', status: 0, statusColor: '', statusText: '', override: 0 }
+                { id: 1, displayName: 'Gate', name: 'gate', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, warningThreshold: null, criticalThreshold: null },
+                { id: 2, displayName: 'Proximity', name: 'proximity', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, warningThreshold: null, criticalThreshold: null  },
+                { id: 3, displayName: 'Azimuth Motor', name: 'azimuthMotor', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, warningThreshold: 120, criticalThreshold: 150  },
+                { id: 4, displayName: 'Elevation Motor', name: 'elevationMotor', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, warningThreshold: 120, criticalThreshold: 150  },
+                { id: 5, displayName: 'Weather Station', name: 'weatherStation', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, warningThreshold: null, criticalThreshold: null  }
             ],
 
             // status values
@@ -128,7 +152,7 @@ export default {
             this.overallStatText = this.getStatusText(overall);
         },
         setStatuses(dbData) {
-            for(var dbIndex in dbData) {                                              // iterate over all sensors brought in fromd database
+            for(var dbIndex in dbData) {                                              // iterate over all sensors brought in from database
                 // console.log("dbData: " + dbIndex + ", " + dbData[dbIndex]);              // Logging for debugging purposes
                 for(var localIndex of this.sensors){                                       // iterate over all local sensor variables
                     if (dbIndex == localIndex.name){   
@@ -214,6 +238,10 @@ export default {
                 default:
                     return "UNKNOWN";
             }
+        },
+        submitThreshold(id){
+            console.log("Threshold ID: " + id);
+            // Save the thresholds values for Threshold ID
         }
     },
     mounted: function(){
@@ -241,5 +269,14 @@ export default {
     font-size: 35px;
     /* text-decoration: underline; */
     text-decoration-color: white;
+}
+.sensor-button {
+    text-align: center;
+    /* display: block; */
+    font-size: 35px;
+    width: 100%;
+    height: 100%;
+    background-size: 100%;
+    background-color: "primary";
 }
 </style>
