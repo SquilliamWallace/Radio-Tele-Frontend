@@ -115,6 +115,11 @@
             <v-btn v-if="data.status.value === 'Completed'" color="primary" v-bind:href="'/#/appointments/' + data.id.value + '/rf-data'">View Data</v-btn>
         </v-container>
         <v-layout wrap>
+        <v-flex>
+            <div>
+                <v-btn color="primary" @click="back">Back</v-btn>
+            </div>
+        </v-flex>
         <v-flex v-if="($store.state.currentUserId === data.eventUserId.value || $store.state.isAdmin) && !complete && !$store.state.isLoading">
             <div>
                 <v-btn color="primary" @click="editAppointment">Edit</v-btn>
@@ -154,6 +159,7 @@ import EditAppointment from "../../components/appointment/EditAppointment.vue"
 import ShareAppointment from "../../components/appointment/ShareAppointment"
 import UnshareAppointment from "../../components/appointment/UnshareAppointment"
 import Loading from "../../components/utility/Loading"
+import router from '../../router';
 import { throws } from 'assert';
 export default {
     title: "Radio Telescope 1.1.0",
@@ -476,6 +482,9 @@ export default {
         },
         unshareAppointment() {
             this.unshare = true
+        },
+        back() {
+            router.push('/scheduler');
         }
     },
     mounted: function() {

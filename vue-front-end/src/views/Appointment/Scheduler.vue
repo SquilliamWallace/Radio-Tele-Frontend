@@ -264,6 +264,7 @@ export default {
                 id: id,
                 end: new Date(data.endTime),
                 public: data.isPublic,
+                secondary: data.isSecondary,
                 start: new Date(data.startTime),
                 telescopeId: data.telescopeId,
                 userId: data.userId,
