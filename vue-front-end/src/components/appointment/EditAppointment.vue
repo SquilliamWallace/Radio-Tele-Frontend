@@ -25,7 +25,7 @@
             
             <!-- If appointment type is POINT -->
             <v-layout class="ma-2" v-if="appointmentObj.type === 'Point'">
-              <v-flex sm4>
+              <v-flex sm3>
                 <v-text-field
                   v-model="appointmentObj.rightAscension.hours"
                   :rules="[rules.rightAscHours]"
@@ -40,13 +40,13 @@
               <!--
                 Same as Right Ascension Hours, except checks for minutes error handling
               -->
-              <v-flex sm4>
+              <v-flex sm3>
                 <v-text-field
                   v-model="appointmentObj.rightAscension.minutes"
                   :rules="[rules.rightAscMinutes]"
                   color="blue darken-2"
                   :error="appointmentObj.rightAscension.hasError"
-                  label="Right Ascension Minutes" 
+                  label="Right Ascension Minutes"
                   type="number"
                   mask="##"
                   required
@@ -56,7 +56,6 @@
               <!--
                 Same as Right Ascension Hours, except checks for seconds error handling
               -->
-              <!-- remove right asc seconds
               <v-flex sm3>
                 <v-text-field
                   v-model="appointmentObj.rightAscension.seconds"
@@ -69,8 +68,7 @@
                   required
                 ></v-text-field>
               </v-flex>
-              -->
-              <v-flex sm4>
+              <v-flex sm3>
                 <v-text-field
                   v-model="appointmentObj.declination.value"
                   :rules="[rules.numRequired]"
@@ -129,7 +127,7 @@
 
             <!-- If appointment is RASTER SCAN -->
             <v-layout wrap class="ma-2" v-if="appointmentObj.type === 'Raster Scan'">
-              <v-flex sm4>
+              <v-flex sm3>
                 <v-text-field
                   v-model="appointmentObj.coordinate1.hours"
                   :rules="[rules.rightAscHours]"
@@ -144,7 +142,7 @@
                 ></v-text-field>
               </v-flex>
 
-              <v-flex sm4>
+              <v-flex sm3>
                 <v-text-field
                   v-model="appointmentObj.coordinate1.minutes"
                   :rules="[rules.rightAscMinutes]"
@@ -159,7 +157,7 @@
                   required
                 ></v-text-field>
               </v-flex>
-              <!-- remove right asc seconds
+
               <v-flex sm3>
                 <v-text-field
                   v-model="appointmentObj.coordinate1.seconds"
@@ -174,8 +172,8 @@
                   required
                 ></v-text-field>
               </v-flex>
-              -->
-              <v-flex sm4>
+
+              <v-flex sm3>
                 <v-text-field
                   v-model="appointmentObj.coordinate1.declination"
                   :rules="[rules.numRequired]"
@@ -192,7 +190,7 @@
 
               <v-spacer></v-spacer>
 
-              <v-flex sm4>
+              <v-flex sm3>
                 <v-text-field
                   v-model="appointmentObj.coordinate2.hours"
                   :rules="[rules.rightAscHours]"
@@ -208,7 +206,7 @@
                 ></v-text-field>
               </v-flex>
 
-              <v-flex sm4>
+              <v-flex sm3>
                 <v-text-field
                   v-model="appointmentObj.coordinate2.minutes"
                   :rules="[rules.rightAscMinutes]"
@@ -223,7 +221,7 @@
                   required
                 ></v-text-field>
               </v-flex>
-              <!-- remove right asc seconds
+
               <v-flex sm3>
                 <v-text-field
                   v-model="appointmentObj.coordinate2.seconds"
@@ -238,8 +236,8 @@
                   required
                 ></v-text-field>
               </v-flex>
-              -->
-              <v-flex sm4>
+
+              <v-flex sm3>
                 <v-text-field
                   v-model="appointmentObj.coordinate2.declination"
                   :rules="[rules.numRequired]"
@@ -290,7 +288,7 @@ export default {
         rightAscension: {
           hours: null,
           minutes: null,
-          // seconds: null,
+          seconds: null,
           hasError: false
         }
       },
@@ -351,7 +349,7 @@ export default {
           isPublic: !this.appointmentObj.privacy.value,
           hours: this.appointmentObj.rightAscension.hours,
           minutes: this.appointmentObj.rightAscension.minutes,
-          // seconds: this.appointmentObj.rightAscension.seconds,
+          seconds: this.appointmentObj.rightAscension.seconds,
           declination: this.appointmentObj.declination.value
         });
       } else if (this.appointmentObj.type === "Celestial Body") {
@@ -500,7 +498,7 @@ export default {
             return(
                 this.appointmentObj.rightAscension.hours &&
                 this.appointmentObj.rightAscension.minutes &&
-                // this.appointmentObj.rightAscension.seconds &&
+                this.appointmentObj.rightAscension.seconds &&
                 this.appointmentObj.declination.value &&
                 this.appointmentObj.start.value &&
                 this.appointmentObj.end.value 
@@ -515,12 +513,12 @@ export default {
             return(
                 this.appointmentObj.coordinate1.hours &&
                 this.appointmentObj.coordinate1.minutes &&
-                // this.appointmentObj.coordinate1.seconds &&
+                this.appointmentObj.coordinate1.seconds &&
                 this.appointmentObj.coordinate1.declination &&
 
                 this.appointmentObj.coordinate2.hours &&
                 this.appointmentObj.coordinate2.minutes &&
-                // this.appointmentObj.coordinate2.seconds &&
+                this.appointmentObj.coordinate2.seconds &&
                 this.appointmentObj.coordinate2.declination &&
 
                 this.appointmentObj.start.value &&
