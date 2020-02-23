@@ -25,7 +25,7 @@
             
             <!-- If appointment type is POINT -->
             <v-layout class="ma-2" v-if="appointmentObj.type === 'Point'">
-              <v-flex sm3>
+              <v-flex sm4>
                 <v-text-field
                   v-model="appointmentObj.rightAscension.hours"
                   :rules="[rules.rightAscHours]"
@@ -40,13 +40,13 @@
               <!--
                 Same as Right Ascension Hours, except checks for minutes error handling
               -->
-              <v-flex sm3>
+              <v-flex sm4>
                 <v-text-field
                   v-model="appointmentObj.rightAscension.minutes"
                   :rules="[rules.rightAscMinutes]"
                   color="blue darken-2"
                   :error="appointmentObj.rightAscension.hasError"
-                  label="Right Ascension Minutes"
+                  label="Right Ascension Minutes" 
                   type="number"
                   mask="##"
                   required
@@ -56,6 +56,7 @@
               <!--
                 Same as Right Ascension Hours, except checks for seconds error handling
               -->
+              <!-- remove right asc seconds
               <v-flex sm3>
                 <v-text-field
                   v-model="appointmentObj.rightAscension.seconds"
@@ -68,7 +69,8 @@
                   required
                 ></v-text-field>
               </v-flex>
-              <v-flex sm3>
+              -->
+              <v-flex sm4>
                 <v-text-field
                   v-model="appointmentObj.declination.value"
                   :rules="[rules.numRequired]"
@@ -127,7 +129,7 @@
 
             <!-- If appointment is RASTER SCAN -->
             <v-layout wrap class="ma-2" v-if="appointmentObj.type === 'Raster Scan'">
-              <v-flex sm3>
+              <v-flex sm4>
                 <v-text-field
                   v-model="appointmentObj.coordinate1.hours"
                   :rules="[rules.rightAscHours]"
@@ -142,7 +144,7 @@
                 ></v-text-field>
               </v-flex>
 
-              <v-flex sm3>
+              <v-flex sm4>
                 <v-text-field
                   v-model="appointmentObj.coordinate1.minutes"
                   :rules="[rules.rightAscMinutes]"
@@ -157,7 +159,7 @@
                   required
                 ></v-text-field>
               </v-flex>
-
+              <!-- remove right asc seconds
               <v-flex sm3>
                 <v-text-field
                   v-model="appointmentObj.coordinate1.seconds"
@@ -172,8 +174,8 @@
                   required
                 ></v-text-field>
               </v-flex>
-
-              <v-flex sm3>
+              -->
+              <v-flex sm4>
                 <v-text-field
                   v-model="appointmentObj.coordinate1.declination"
                   :rules="[rules.numRequired]"
@@ -190,7 +192,7 @@
 
               <v-spacer></v-spacer>
 
-              <v-flex sm3>
+              <v-flex sm4>
                 <v-text-field
                   v-model="appointmentObj.coordinate2.hours"
                   :rules="[rules.rightAscHours]"
@@ -206,7 +208,7 @@
                 ></v-text-field>
               </v-flex>
 
-              <v-flex sm3>
+              <v-flex sm4>
                 <v-text-field
                   v-model="appointmentObj.coordinate2.minutes"
                   :rules="[rules.rightAscMinutes]"
@@ -221,7 +223,7 @@
                   required
                 ></v-text-field>
               </v-flex>
-
+              <!-- remove right asc seconds
               <v-flex sm3>
                 <v-text-field
                   v-model="appointmentObj.coordinate2.seconds"
@@ -236,8 +238,8 @@
                   required
                 ></v-text-field>
               </v-flex>
-
-              <v-flex sm3>
+              -->
+              <v-flex sm4>
                 <v-text-field
                   v-model="appointmentObj.coordinate2.declination"
                   :rules="[rules.numRequired]"
@@ -254,7 +256,9 @@
             </v-layout>
             <v-flex v-if="$store.state.isResearcher | $store.state.isAdmin" xs12>
               <v-checkbox v-model="appointmentObj.privacy.value" color="green" label="Private"></v-checkbox>
+              <v-checkbox v-model="appointmentObj.priority.value" color="green" label="Secondary"></v-checkbox>
             </v-flex>
+            
           </v-layout>
         </v-container>
         <v-card-actions>
@@ -288,7 +292,7 @@ export default {
         rightAscension: {
           hours: null,
           minutes: null,
-          seconds: null,
+          // seconds: null,
           hasError: false
         }
       },
@@ -335,26 +339,34 @@ export default {
       this.start = this.startDate + " " + this.startTime;
       this.end = this.endDate + " " + this.endTime;
 
+      if(this.appointmentObj.priority.value) {
+        this.appointmentObj.priority.stringValue = "SECONDARY";
+      } else {
+        this.appointmentObj.priority.stringValue = "PRIMARY";
+      }
+      
+
       this.handleTypeConversion();
 
       let data = {};
+      
 
       if (this.appointmentObj.type === "Point") {
         console.log("stringify form...");
         data = JSON.stringify({
-          priority: 'PRIMARY',
+          priority: this.appointmentObj.priority.stringValue,
           startTime: new Date(this.start).toUTCString(),
           endTime: new Date(this.end).toUTCString(),
           telescopeId: this.appointmentObj.telescopeId.value,
           isPublic: !this.appointmentObj.privacy.value,
           hours: this.appointmentObj.rightAscension.hours,
           minutes: this.appointmentObj.rightAscension.minutes,
-          seconds: this.appointmentObj.rightAscension.seconds,
+          // seconds: this.appointmentObj.rightAscension.seconds,
           declination: this.appointmentObj.declination.value
         });
       } else if (this.appointmentObj.type === "Celestial Body") {
         data = JSON.stringify({
-          priority: 'PRIMARY',
+          priority: this.appointmentObj.priority.stringValue,
           startTime: new Date(this.start).toUTCString(),
           endTime: new Date(this.end).toUTCString(),
           telescopeId: this.appointmentObj.telescopeId.value,
@@ -363,7 +375,7 @@ export default {
         });
       } else if (this.appointmentObj.type === "Drift Scan") {
         data = JSON.stringify({
-          priority: 'PRIMARY',
+          priority: this.appointmentObj.priority.stringValue,
           startTime: new Date(this.start).toUTCString(),
           endTime: new Date(this.end).toUTCString(),
           telescopeId: this.appointmentObj.telescopeId.value,
@@ -373,7 +385,7 @@ export default {
         });
       } else if (this.appointmentObj.type === "Raster Scan") {
         data = JSON.stringify({
-          priority: 'PRIMARY',
+          priority: this.appointmentObj.priority.stringValue,
           startTime: new Date(this.start).toUTCString(),
           endTime: new Date(this.end).toUTCString(),
           telescopeId: this.appointmentObj.telescopeId.value,
@@ -498,7 +510,7 @@ export default {
             return(
                 this.appointmentObj.rightAscension.hours &&
                 this.appointmentObj.rightAscension.minutes &&
-                this.appointmentObj.rightAscension.seconds &&
+                // this.appointmentObj.rightAscension.seconds &&
                 this.appointmentObj.declination.value &&
                 this.appointmentObj.start.value &&
                 this.appointmentObj.end.value 
@@ -513,12 +525,12 @@ export default {
             return(
                 this.appointmentObj.coordinate1.hours &&
                 this.appointmentObj.coordinate1.minutes &&
-                this.appointmentObj.coordinate1.seconds &&
+                // this.appointmentObj.coordinate1.seconds &&
                 this.appointmentObj.coordinate1.declination &&
 
                 this.appointmentObj.coordinate2.hours &&
                 this.appointmentObj.coordinate2.minutes &&
-                this.appointmentObj.coordinate2.seconds &&
+                // this.appointmentObj.coordinate2.seconds &&
                 this.appointmentObj.coordinate2.declination &&
 
                 this.appointmentObj.start.value &&

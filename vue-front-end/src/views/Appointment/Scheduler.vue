@@ -264,6 +264,7 @@ export default {
                 id: id,
                 end: new Date(data.endTime),
                 public: data.isPublic,
+                secondary: data.isSecondary,
                 start: new Date(data.startTime),
                 telescopeId: data.telescopeId,
                 userId: data.userId,
@@ -352,10 +353,19 @@ export default {
                             
                             // If you are the owner of the event display "Your Observation" as title and make background color Green
                             if (element.userId == this.$store.state.currentUserId) {
-                                title = "Your Observation";
+                                if(element.priority == "Secondary") {
+                                    title = "Your Secondary Observation";
+                                } else {
+                                    title = "Your Observation";
+                                }
                                 backgroundColor = "green";
                             }
-                            // If you are not the owner, and it is a public event: set background color to defaul and the title to the name of the owner
+                            // If the appointment is secondary, set it to purple! 
+                            else if (element.priority == "Secondary") {
+                                title = "Secondary Observation";
+                                backgroundColor = "purple";
+                            }
+                            // If you are not the owner, and it is a public event: set background color to default and the title to the name of the owner
                             else if (element.public) {
                                 backgroundColor = "";
                                 title = element.userFirstName + " " + element.userLastName;
@@ -371,6 +381,8 @@ export default {
                                     title = "Private Observation"
                                 }
                             }
+
+                            // console.log(element);
                             
                             // Set an eventData object with appropriate fields for calendar
                             var eventData = {
@@ -387,7 +399,12 @@ export default {
                             }
                             
                             // Push the event to this.events to be rendered.
-                            this.events.push(eventData);
+                            if(element.priority == "Secondary" && !this.$store.state.isAdmin) {
+
+                            } else {
+                                this.events.push(eventData);
+                            }
+                            
                         }
                         // Set the $store.loading to false to switch back to displaying content of page.
                         this.$store.commit("loading", false);
