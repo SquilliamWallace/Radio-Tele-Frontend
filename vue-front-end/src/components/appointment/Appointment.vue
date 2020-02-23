@@ -386,8 +386,12 @@
                         v-model="form.isPrivate.value"
                         color="green"
                         label="Private"
-                        >
-                        </v-checkbox>
+                        ></v-checkbox>
+                        <v-checkbox v-if="this.$store.state.isAdmin"
+                        v-model="form.isSecondary.value"
+                        color="green"
+                        label="Secondary"
+                        ></v-checkbox>
                     </v-flex>
                     <!--
                         Simple drop down select menu to choose which telescope you want to schedule your appointment for
@@ -438,6 +442,9 @@ export default {
                 isPrivate: {
                     value: false
                 },
+                isSecondary: {
+                    value: false
+                },
                 rightAscension: {
                     hours: null,
                     minutes: null,
@@ -469,6 +476,7 @@ export default {
                     declination: null
                 }
             },
+            priority: '',
             startDate: '',
             startTime: '',
             endDate: '',
@@ -515,6 +523,8 @@ export default {
         resetForm() {
             this.updatedTime = false;
             this.form.isPrivate.value = false;
+            this.form.isSecondary.value = false;
+            this.priority = '';
             this.form.rightAscension.hours = null;
             this.form.rightAscension.minutes = null;
             // this.form.rightAscension.seconds = null;
@@ -553,6 +563,12 @@ export default {
             // Handles making the selected Appointment Type string compatible with the back-end
             this.handleType();
 
+            if(this.form.isSecondary.value) {
+                this.priority = 'SECONDARY';
+            } else {
+                this.priority = 'PRIMARY';
+            }
+
             // set up form to send to back end with data from form obj
             let form = {
                 userId: this.$store.state.currentUserId,
@@ -568,7 +584,7 @@ export default {
                 azimuth: this.form.azimuth.value,
                 elevation: this.form.elevation.value,
                 coordinates: this.coordinates,
-                priority: 'PRIMARY'
+                priority: this.priority
             };
                         
             // Call appropriate API CALL and send form in json format

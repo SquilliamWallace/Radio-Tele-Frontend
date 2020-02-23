@@ -256,7 +256,9 @@
             </v-layout>
             <v-flex v-if="$store.state.isResearcher | $store.state.isAdmin" xs12>
               <v-checkbox v-model="appointmentObj.privacy.value" color="green" label="Private"></v-checkbox>
+              <v-checkbox v-model="appointmentObj.priority.value" color="green" label="Secondary"></v-checkbox>
             </v-flex>
+            
           </v-layout>
         </v-container>
         <v-card-actions>
@@ -337,14 +339,22 @@ export default {
       this.start = this.startDate + " " + this.startTime;
       this.end = this.endDate + " " + this.endTime;
 
+      if(this.appointmentObj.priority.value) {
+        this.appointmentObj.priority.stringValue = "SECONDARY";
+      } else {
+        this.appointmentObj.priority.stringValue = "PRIMARY";
+      }
+      
+
       this.handleTypeConversion();
 
       let data = {};
+      
 
       if (this.appointmentObj.type === "Point") {
         console.log("stringify form...");
         data = JSON.stringify({
-          priority: 'PRIMARY',
+          priority: this.appointmentObj.priority.stringValue,
           startTime: new Date(this.start).toUTCString(),
           endTime: new Date(this.end).toUTCString(),
           telescopeId: this.appointmentObj.telescopeId.value,
@@ -356,7 +366,7 @@ export default {
         });
       } else if (this.appointmentObj.type === "Celestial Body") {
         data = JSON.stringify({
-          priority: 'PRIMARY',
+          priority: this.appointmentObj.priority.stringValue,
           startTime: new Date(this.start).toUTCString(),
           endTime: new Date(this.end).toUTCString(),
           telescopeId: this.appointmentObj.telescopeId.value,
@@ -365,7 +375,7 @@ export default {
         });
       } else if (this.appointmentObj.type === "Drift Scan") {
         data = JSON.stringify({
-          priority: 'PRIMARY',
+          priority: this.appointmentObj.priority.stringValue,
           startTime: new Date(this.start).toUTCString(),
           endTime: new Date(this.end).toUTCString(),
           telescopeId: this.appointmentObj.telescopeId.value,
@@ -375,7 +385,7 @@ export default {
         });
       } else if (this.appointmentObj.type === "Raster Scan") {
         data = JSON.stringify({
-          priority: 'PRIMARY',
+          priority: this.appointmentObj.priority.stringValue,
           startTime: new Date(this.start).toUTCString(),
           endTime: new Date(this.end).toUTCString(),
           telescopeId: this.appointmentObj.telescopeId.value,
