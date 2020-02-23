@@ -384,14 +384,12 @@
                         v-model="form.isPrivate.value"
                         color="green"
                         label="Private"
-                        >
-                        </v-checkbox>
+                        ></v-checkbox>
                         <v-checkbox v-if="this.$store.state.isAdmin"
                         v-model="form.isSecondary.value"
                         color="green"
                         label="Secondary"
-                        >
-                        </v-checkbox>
+                        ></v-checkbox>
                     </v-flex>
                     <!--
                         Simple drop down select menu to choose which telescope you want to schedule your appointment for

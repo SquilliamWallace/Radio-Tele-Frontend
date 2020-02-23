@@ -190,6 +190,10 @@ export default {
                 isPublic: {
                     value: false
                 },
+                priority: {
+                    value: false,
+                    stringValue: null
+                },
                 startTime: {
                     value: null
                 },
@@ -237,6 +241,11 @@ export default {
                 },
                 privacy: {
                     value: false,
+                    hasError: false
+                },
+                priority: {
+                    value: null,
+                    stringValue: null,
                     hasError: false
                 },
                 start: {
@@ -362,6 +371,8 @@ export default {
             this.data.endTime.value = moment(data.endTime).format('MM-DD-YYYY hh:mm A')
             this.data.telescopeId.value = data.telescopeId
             this.data.isPublic.value = data.public
+            this.data.priority.stringValue = data.priority
+            this.data.priority.value = data.priority == "Secondary"
             this.data.eventUserId.value = data.userId
             this.data.userFirstName.value = data.userFirstName
             this.data.userLastName.value = data.userLastName
@@ -432,6 +443,7 @@ export default {
             // Set the prop values and open up the edit modal
             this.appointment.id.value = this.data.id.value
             this.appointment.privacy.value = !this.data.isPublic.value
+            this.appointment.priority.value = this.data.priority.value
             this.appointment.start.value = this.data.startTime.value
             this.appointment.end.value = this.data.endTime.value
             // I apologize for this, it's gross but i had no other choice, the v-time and date pickers are very particular about the values they can model to
