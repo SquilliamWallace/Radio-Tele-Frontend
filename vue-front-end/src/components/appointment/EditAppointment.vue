@@ -261,12 +261,13 @@
           <v-layout wrap>
               <!-- This is the SpectraCyber Configuration -->
               <v-flex>
-                <v-text-field
+                <v-select
                 v-model="spectraCyberObj.mode.value"
-                onkeypress="return event.charCode == 45 || (event.charCode >= 48 && event.charCode <= 57)"
+                :items="modes"
+                color="blue darken-2"
                 label="Mode"
-                type="number"
-                ></v-text-field>
+                required
+                ></v-select>
               </v-flex>
               <v-flex>
                 <v-text-field
@@ -287,19 +288,19 @@
                 ></v-text-field>
               </v-flex>
               <v-flex>
-                <v-text-field
+                <v-select
                 v-model="spectraCyberObj.ifGain.value"
-                :rules="[rules.ifGain]"
-                onkeypress="return event.charCode == 45 || event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57)"
+                :items="ifGains"
+                color="blue darken-2"
                 label="IF Gain (DB)"
-                type="number"
-                ></v-text-field>
+                required
+                ></v-select>
               </v-flex>
               <v-flex>
                 <v-text-field
                 v-model="spectraCyberObj.dcGain.value"
                 onkeypress="return event.charCode == 45 || (event.charCode >= 48 && event.charCode <= 57)"
-                label="DC Gain"
+                label="DC Gain (DB)"
                 type="number"
                 ></v-text-field>
               </v-flex>
@@ -387,7 +388,20 @@ export default {
       selectedBody: "",
       searchInput: "",
       // Variable to store our pair of coordinates for Drift Scans
-      coordinates: []
+      coordinates: [],
+      modes: [
+          "Spectral",
+          "Continuum",
+          "Unknown"
+      ],
+      ifGains: [
+          1,
+          5,
+          10,
+          20,
+          50,
+          60
+      ],
     };
   },
   props: {

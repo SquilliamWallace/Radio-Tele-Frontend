@@ -106,8 +106,8 @@
                 <v-list-tile-content class="white--text">
                     <v-list-tile-title>SpectraCyber Configuration:
                     </v-list-tile-title>
-                    <v-list-tile-sub-title class = "pl-3">Mode: {{this.spectraCyber.mode.value}}, Integration Time: {{this.spectraCyber.integrationTime.value}}, Offset Voltage: {{this.spectraCyber.offsetVoltage.value}}, 
-                                                        IF Gain: {{this.spectraCyber.ifGain.value}}, DC Gain: {{this.spectraCyber.dcGain.value}}, Badwidth: {{this.spectraCyber.bandwidth.value}}</v-list-tile-sub-title>
+                    <v-list-tile-sub-title class = "pl-3">Mode: {{this.spectraCyber.mode.value}}, Integration Time: {{this.spectraCyber.integrationTime.value}} time/step, Offset Voltage: {{this.spectraCyber.offsetVoltage.value}} Volts, 
+                                                        IF Gain: {{this.spectraCyber.ifGain.value}} DB, DC Gain: {{this.spectraCyber.dcGain.value}} DB, Badwidth: {{this.spectraCyber.bandwidth.value}} KHZ</v-list-tile-sub-title>
                 </v-list-tile-content>
             </v-list-tile>
             <v-divider></v-divider>
@@ -302,9 +302,9 @@ export default {
                     declination: null
                 }
             },
-            spectraCyber: {
+            spectraCyber: { // This is eventually be replace with actual data.
                 mode: {
-                    value: 1,
+                    value: 'Spectral',
                     hasError: false
                 },
                 integrationTime: {
@@ -312,11 +312,11 @@ export default {
                     hasError: false
                 },
                 offsetVoltage: {
-                    value: 100,
+                    value: 1.05,
                     hasError: false
                 },
                 ifGain: {
-                    value: 100,
+                    value: 10,
                     hasError: false
                 },
                 dcGain: {
