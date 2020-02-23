@@ -58,15 +58,18 @@
           </tr>
         </template>
         <template slot="items" slot-scope="props">
-          <tr
+          <!-- old one: <tr
             @click="updateForm(props.item.name, props.item.id, props.item.declination, props.item.hours, props.item.minutes, props.item.seconds)"
+          >-->
+          <tr
+            @click="updateForm(props.item.name, props.item.id, props.item.declination, props.item.hours, props.item.minutes)"
           >
             <td class="text-xs-left">{{ props.item.name }}</td>
             <td class="text-xs-left">{{ props.item.id }}</td>
             <td class="text-xs-left">{{ props.item.declination }}</td>
             <td class="text-xs-left">{{ props.item.hours }}</td>
             <td class="text-xs-left">{{ props.item.minutes }}</td>
-            <td class="text-xs-left">{{ props.item.seconds }}</td>
+            <!--<td class="text-xs-left">{{ props.item.seconds }}</td>-->
           </tr>
         </template>
         <template slot="footer"></template>
@@ -123,7 +126,7 @@ export default {
         name: "",
         hour: "",
         min: "",
-        sec: "",
+        // sec: "",
         dec: "",
         id: ""
       },
@@ -159,7 +162,7 @@ export default {
         { text: "Declination", value: "declination" },
         { text: "Hours", value: "hours" },
         { text: "Minutes", value: "minutes" },
-        { text: "Seconds", value: "seconds" }
+        // { text: "Seconds", value: "seconds" }
       ]
     };
   },
@@ -244,9 +247,11 @@ export default {
         if(!data.content[index].minutes){
           data.content[index].minutes = "-"
         }
+        /*
         if(!data.content[index].seconds){
           data.content[index].seconds = "-"
         }
+        */
         if(!data.content[index].declination){
           data.content[index].declination = "-"
         }
@@ -273,7 +278,8 @@ export default {
         this.getCelestialBodies();
       }
     },
-    updateForm(name, id, dec, hours, min, sec) {
+    // updateForm(name, id, dec, hours, min, sec) {
+    updateForm(name, id, dec, hours, min) {
       this.isUpdate = !this.isUpdate;
       this.updateFormVals.name = name;
       if (dec){
@@ -294,12 +300,14 @@ export default {
       else {
         this.updateFormVals.min = "-"
       }
+      /*
       if (sec){
         this.updateFormVals.sec = sec;  
       }
       else {
         this.updateFormVals.sec = "-"
       }
+      */
       this.updateFormVals.id = id;
     },
     updateBodies: function() {
