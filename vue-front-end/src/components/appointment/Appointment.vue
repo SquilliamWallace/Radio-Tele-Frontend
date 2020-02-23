@@ -109,7 +109,7 @@
                         required
                         ></v-select>
                     </v-flex>
-                    <v-flex xs12 sm4 v-if="type === 'Point'">
+                    <v-flex xs12 sm3 v-if="type === 'Point'">
                         <v-text-field
                         v-model="form.rightAscension.hours"
                         :rules="[rules.rightAscHours]"
@@ -127,7 +127,7 @@
                      <!--
                         Same as Right Ascension Hours, except checks for minutes error handling
                     -->
-                    <v-flex xs12 sm4 v-if="type === 'Point'">
+                    <v-flex xs12 sm3 v-if="type === 'Point'">
                         <v-text-field
                         v-model="form.rightAscension.minutes"
                         :rules="[rules.rightAscMinutes]"
@@ -145,7 +145,6 @@
                      <!--
                         Same as Right Ascension Hours, except checks for seconds error handling
                     -->
-                    <!-- remove right asc seconds
                     <v-flex xs12 sm3 v-if="type === 'Point'">
                         <v-text-field
                         v-model="form.rightAscension.seconds"
@@ -160,13 +159,12 @@
                         required
                         ></v-text-field>
                     </v-flex>
-                    -->
                      <!-- Pretty much same as Right Ascension 
                      
                         onkeypress='return event.charCode == 45 || (event.charCode >= 48 && event.charCode <= 57)'
                             Only allow numerical inputs and - (minus) as input can be negative
                      -->
-                    <v-flex xs12 sm4 v-if="type === 'Point'">
+                    <v-flex xs12 sm3 v-if="type === 'Point'">
                         <v-text-field
                         v-model="form.declination.value"
                         :rules="[rules.numRequired]"
@@ -247,7 +245,7 @@
                         Conditionally display two sets of Coordinate fields
                         (Hours, Minutes, Seconds, Right Ascension, Declination)
                     -->
-                        <v-flex xs12 sm4 row v-if="type === 'Raster Scan'">
+                        <v-flex xs12 sm2 row v-if="type === 'Raster Scan'">
                         <v-text-field
                         v-model="form.firstCoordinate.hours"
                         :rules="[rules.rightAscHours]"
@@ -263,7 +261,7 @@
                         ></v-text-field>
                     </v-flex>
 
-                    <v-flex xs12 sm4 v-if="type === 'Raster Scan'">
+                    <v-flex xs12 sm2 v-if="type === 'Raster Scan'">
                         <v-text-field
                         v-model="form.firstCoordinate.minutes"
                         :rules="[rules.rightAscMinutes]"
@@ -278,7 +276,7 @@
                         required
                         ></v-text-field>
                     </v-flex>
-                     <!-- remove right asc seconds
+                     
                     <v-flex xs12 sm2 v-if="type === 'Raster Scan'">
                         <v-text-field
                         v-model="form.firstCoordinate.seconds"
@@ -293,10 +291,10 @@
                         required
                         ></v-text-field>
                     </v-flex>
-                    -->
+                    
                     
 
-                    <v-flex xs12 sm4 v-if="type === 'Raster Scan'">
+                    <v-flex xs12 sm6 v-if="type === 'Raster Scan'">
                         <v-text-field
                         v-model="form.firstCoordinate.declination"
                         :rules="[rules.numRequired]"
@@ -313,7 +311,7 @@
 
                     <v-spacer></v-spacer>
 
-                    <v-flex xs12 sm4 v-if="type === 'Raster Scan'">
+                    <v-flex xs12 sm2 v-if="type === 'Raster Scan'">
                         <v-text-field
                         v-model="form.secondCoordinate.hours"
                         :rules="[rules.rightAscHours]"
@@ -329,7 +327,7 @@
                         ></v-text-field>
                     </v-flex>
 
-                    <v-flex xs12 sm4 v-if="type === 'Raster Scan'">
+                    <v-flex xs12 sm2 v-if="type === 'Raster Scan'">
                         <v-text-field
                         v-model="form.secondCoordinate.minutes"
                         :rules="[rules.rightAscMinutes]"
@@ -344,7 +342,7 @@
                         required
                         ></v-text-field>
                     </v-flex>
-                     <!-- remove right asc seconds
+                     
                     <v-flex xs12 sm2 v-if="type === 'Raster Scan'">
                         <v-text-field
                         v-model="form.secondCoordinate.seconds"
@@ -359,9 +357,9 @@
                         required
                         ></v-text-field>
                     </v-flex>
-                    -->
+                    
 
-                    <v-flex xs12 sm4 v-if="type === 'Raster Scan'">
+                    <v-flex xs12 sm6 v-if="type === 'Raster Scan'">
                         <v-text-field
                         v-model="form.secondCoordinate.declination"
                         :rules="[rules.numRequired]"
@@ -441,7 +439,7 @@ export default {
                 rightAscension: {
                     hours: null,
                     minutes: null,
-                    // seconds: null,
+                    seconds: null,
                     hasError: false
                 },
                 declination: {
@@ -457,14 +455,14 @@ export default {
                 firstCoordinate: {
                     hours: null,
                     minutes: null,
-                    // seconds: null,
+                    seconds: null,
                     rightAscension: null,
                     declination: null
                 },
                 secondCoordinate: {
                     hours: null,
                     minutes: null,
-                    // seconds: null,
+                    seconds: null,
                     rightAscension: null,
                     declination: null
                 }
@@ -495,7 +493,7 @@ export default {
                 dateRequired: val => (val && val.length > 0) || 'Required field',
                 rightAscHours: val => (val && val.toString().length > 0 && val < 24 && val >= 0) || 'Must be between 0 and 23 hours',
                 rightAscMinutes: val => (val && val.toString().length > 0 && val < 60 && val >= 0) || 'Must be between 0 and 59 minutes',
-                // rightAscSeconds: val => (val && val.toString().length > 0 && val < 60 && val >= 0) || 'Must be between 0 and 59 seconds',
+                rightAscSeconds: val => (val && val.toString().length > 0 && val < 60 && val >= 0) || 'Must be between 0 and 59 seconds',
                 numRequired: val => (val && val.toString().length > 0 && val <=90 && val >= -90) || 'Must be between 90 and -90',
                 azimuth: val => (val && val.toString().length > 0 && val >= 0 && val < 360) || 'Must be between 0 and 360',
                 elevation: val => (val && val.toString().length > 0 && val >= 0 && val <= 90) || 'Must be between 0 and 90'
@@ -517,18 +515,18 @@ export default {
             this.form.isPrivate.value = false;
             this.form.rightAscension.hours = null;
             this.form.rightAscension.minutes = null;
-            // this.form.rightAscension.seconds = null;
+            this.form.rightAscension.seconds = null;
             this.form.declination.value = null;
             this.form.azimuth.value = null;
             this.form.elevation.value = null;
             this.form.firstCoordinate.hours = null;
             this.form.firstCoordinate.minutes = null;
-            // this.form.firstCoordinate.seconds = null;
+            this.form.firstCoordinate.seconds = null;
             this.form.firstCoordinate.rightAscension = null;
             this.form.firstCoordinate.declination = null;
             this.form.secondCoordinate.hours = null;
             this.form.secondCoordinate.minutes = null;
-            // this.form.secondCoordinate.seconds = null;
+            this.form.secondCoordinate.seconds = null;
             this.form.secondCoordinate.rightAscension = null;
             this.form.secondCoordinate.declination = null;
             this.startTime='';
@@ -562,7 +560,7 @@ export default {
                 isPublic: !this.form.isPrivate.value,
                 hours: this.form.rightAscension.hours,
                 minutes: this.form.rightAscension.minutes,
-                // seconds: this.form.rightAscension.seconds,
+                seconds: this.form.rightAscension.seconds,
                 declination: this.form.declination.value,
                 celestialBodyId: this.selectedBody,
                 azimuth: this.form.azimuth.value,
@@ -704,7 +702,7 @@ export default {
                     this.endDate &&
                     this.form.rightAscension.hours,
                     this.form.rightAscension.minutes,
-                    // this.form.rightAscension.seconds,
+                    this.form.rightAscension.seconds,
                     this.form.declination.value
                 )
             }
@@ -735,12 +733,12 @@ export default {
                     this.endDate &&
                     this.form.firstCoordinate.hours,
                     this.form.firstCoordinate.minutes,
-                    // this.form.firstCoordinate.seconds,
+                    this.form.firstCoordinate.seconds,
                     this.form.firstCoordinate.rightAscension,
                     this.form.firstCoordinate.declination,
                     this.form.secondCoordinate.hours,
                     this.form.secondCoordinate.minutes,
-                    // this.form.secondCoordinate.seconds,
+                    this.form.secondCoordinate.seconds,
                     this.form.secondCoordinate.rightAscension,
                     this.form.secondCoordinate.declination
                 )
