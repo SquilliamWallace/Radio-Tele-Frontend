@@ -109,6 +109,15 @@
                 </v-list-tile-content>
             </v-list-tile>
             <v-divider></v-divider>
+            <v-list-tile>
+                <v-list-tile-content class="white--text">
+                    <v-list-tile-title>SpectraCyber Configuration:
+                    </v-list-tile-title>
+                    <v-list-tile-sub-title class = "pl-3">Mode: {{this.spectraCyber.mode.value}}, Integration Time: {{this.spectraCyber.integrationTime.value}} time/step, Offset Voltage: {{this.spectraCyber.offsetVoltage.value}} Volts, 
+                                                        IF Gain: {{this.spectraCyber.ifGain.value}} DB, DC Gain: {{this.spectraCyber.dcGain.value}} DB, Badwidth: {{this.spectraCyber.bandwidth.value}} KHZ</v-list-tile-sub-title>
+                </v-list-tile-content>
+            </v-list-tile>
+            <v-divider></v-divider>
             <v-list-tile >
                 <v-list-tile-content class="white--text">
                     <v-list-tile-title>Created by:</v-list-tile-title>
@@ -148,7 +157,7 @@
             </div>
         </v-flex>
         </v-layout>
-        <edit-appointment :appointmentObj="appointment" v-model="edit" @edited="edited"></edit-appointment>
+        <edit-appointment :appointmentObj="appointment" :spectraCyberObj="spectraCyber" v-model="edit" @edited="edited"></edit-appointment>
         <share-appointment v-model="share"></share-appointment>
         <unshare-appointment v-model="unshare"></unshare-appointment>
         <cancel-appointment v-model="cancel"> </cancel-appointment>
@@ -314,6 +323,32 @@ export default {
                     // seconds: null,
                     declination: null
                 }
+            },
+            spectraCyber: { // This is eventually be replace with actual data.
+                mode: {
+                    value: 'Spectral',
+                    hasError: false
+                },
+                integrationTime: {
+                    value: 100,
+                    hasError: false
+                },
+                offsetVoltage: {
+                    value: 1.05,
+                    hasError: false
+                },
+                ifGain: {
+                    value: 10,
+                    hasError: false
+                },
+                dcGain: {
+                    value: 100,
+                    hasError: false
+                },
+                bandwidth: {
+                    value: 100,
+                    hasError: false
+                },
             },
             cancel: false,
             complete: false,
