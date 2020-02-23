@@ -254,8 +254,68 @@
             </v-layout>
             <v-flex v-if="$store.state.isResearcher | $store.state.isAdmin" xs12>
               <v-checkbox v-model="appointmentObj.privacy.value" color="green" label="Private"></v-checkbox>
+              <v-checkbox v-model="appointmentObj.priority.value" color="green" label="Secondary"></v-checkbox>
             </v-flex>
+            
           </v-layout>
+          <!-- <h2>SpectraCyber Configuration Settings</h2> -->
+          <v-card-title class="title">SpectraCyber Configuration Settings</v-card-title>
+          <v-layout wrap>
+              <!-- This is the SpectraCyber Configuration -->
+              <v-flex>
+                <v-select
+                v-model="spectraCyberObj.mode.value"
+                :items="modes"
+                color="blue darken-2"
+                label="Mode"
+                required
+                ></v-select>
+              </v-flex>
+              <v-flex>
+                <v-text-field
+                v-model="spectraCyberObj.integrationTime.value"
+                :rules="[rules.integrationTime]"
+                onkeypress="return event.charCode == 45 || (event.charCode >= 48 && event.charCode <= 57)"
+                label="Integration Time (time/step)"
+                type="number"
+                ></v-text-field>
+              </v-flex>
+              <v-flex>
+                <v-text-field
+                v-model="spectraCyberObj.offsetVoltage.value"
+                :rules="[rules.offsetVoltage]"
+                onkeypress="return event.charCode == 45 || event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57)"
+                label="Offset Voltage (Volts)"
+                type="number"
+                ></v-text-field>
+              </v-flex>
+              <v-flex>
+                <v-select
+                v-model="spectraCyberObj.ifGain.value"
+                :items="ifGains"
+                color="blue darken-2"
+                label="IF Gain (DB)"
+                required
+                ></v-select>
+              </v-flex>
+              <v-flex>
+                <v-text-field
+                v-model="spectraCyberObj.dcGain.value"
+                onkeypress="return event.charCode == 45 || (event.charCode >= 48 && event.charCode <= 57)"
+                label="DC Gain (DB)"
+                type="number"
+                ></v-text-field>
+              </v-flex>
+              <v-flex>
+                <v-text-field
+                v-model="spectraCyberObj.bandwidth.value"
+                :rules="[rules.bandwidth]"
+                onkeypress="return event.charCode == 45 || (event.charCode >= 48 && event.charCode <= 57)"
+                label="Bandwidth (KHZ)"
+                type="number"
+                ></v-text-field>
+              </v-flex>
+            </v-layout>
         </v-container>
         <v-card-actions>
           <v-btn flat @click="$emit('input')">Cancel</v-btn>
@@ -311,18 +371,44 @@ export default {
           "Must be between 0 and 360",
         elevation: val =>
           (val && val.toString().length > 0 && val >= 0 && val <= 90) ||
-          "Must be between 0 and 90"
+          "Must be between 0 and 90",
+        integrationTime: val =>
+          (val && val.toString().length > 0 && val >= 0) ||
+          "Must be greater or equal to zero",
+        offsetVoltage: val =>
+          (val && val.toString().length > 0 && val >= 0.0 && val <= 4.095) ||
+          "Must be between 0 and 4.095",
+        ifGain: val =>
+          (val && val.toString().length > 0 && val >= 10.00 && val <= 25.75) ||
+          "Must be between 10 and 25.75",
+        bandwidth: val =>
+          (val && val.toString().length > 0 && val >= 0) ||
+          "Must be greater than zero"
       },
       // Variables to keep track of chosen Celestial Body
       bodies: [],
       selectedBody: "",
       searchInput: "",
       // Variable to store our pair of coordinates for Drift Scans
-      coordinates: []
+      coordinates: [],
+      modes: [
+          "Spectral",
+          "Continuum",
+          "Unknown"
+      ],
+      ifGains: [
+          1,
+          5,
+          10,
+          20,
+          50,
+          60
+      ],
     };
   },
   props: {
     appointmentObj: {},
+    spectraCyberObj: {},
     value: false
   },
   methods: {
@@ -335,14 +421,22 @@ export default {
       this.start = this.startDate + " " + this.startTime;
       this.end = this.endDate + " " + this.endTime;
 
+      if(this.appointmentObj.priority.value) {
+        this.appointmentObj.priority.stringValue = "SECONDARY";
+      } else {
+        this.appointmentObj.priority.stringValue = "PRIMARY";
+      }
+      
+
       this.handleTypeConversion();
 
       let data = {};
+      
 
       if (this.appointmentObj.type === "Point") {
         console.log("stringify form...");
         data = JSON.stringify({
-          priority: 'PRIMARY',
+          priority: this.appointmentObj.priority.stringValue,
           startTime: new Date(this.start).toUTCString(),
           endTime: new Date(this.end).toUTCString(),
           telescopeId: this.appointmentObj.telescopeId.value,
@@ -354,7 +448,7 @@ export default {
         });
       } else if (this.appointmentObj.type === "Celestial Body") {
         data = JSON.stringify({
-          priority: 'PRIMARY',
+          priority: this.appointmentObj.priority.stringValue,
           startTime: new Date(this.start).toUTCString(),
           endTime: new Date(this.end).toUTCString(),
           telescopeId: this.appointmentObj.telescopeId.value,
@@ -363,7 +457,7 @@ export default {
         });
       } else if (this.appointmentObj.type === "Drift Scan") {
         data = JSON.stringify({
-          priority: 'PRIMARY',
+          priority: this.appointmentObj.priority.stringValue,
           startTime: new Date(this.start).toUTCString(),
           endTime: new Date(this.end).toUTCString(),
           telescopeId: this.appointmentObj.telescopeId.value,
@@ -373,7 +467,7 @@ export default {
         });
       } else if (this.appointmentObj.type === "Raster Scan") {
         data = JSON.stringify({
-          priority: 'PRIMARY',
+          priority: this.appointmentObj.priority.stringValue,
           startTime: new Date(this.start).toUTCString(),
           endTime: new Date(this.end).toUTCString(),
           telescopeId: this.appointmentObj.telescopeId.value,
