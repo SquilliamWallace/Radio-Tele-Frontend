@@ -340,9 +340,9 @@ export default {
       this.end = this.endDate + " " + this.endTime;
 
       if(this.appointmentObj.priority.value) {
-        this.appointmentObj.priority.stringValue = "Secondary";
+        this.appointmentObj.priority.stringValue = "SECONDARY";
       } else {
-        this.appointmentObj.priority.stringValue = "Primary";
+        this.appointmentObj.priority.stringValue = "PRIMARY";
       }
       
 
