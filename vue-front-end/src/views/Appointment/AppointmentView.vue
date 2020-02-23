@@ -57,8 +57,8 @@
                 <v-list-tile-content class="white--text">
                     <v-list-tile-title>Coordinate 1:</v-list-tile-title>
                     <v-flex>
-                        <v-list-tile-sub-title class="pl-3" v-if="data.declination.value > 0">Right Ascension: {{ this.appointment.coordinate1.hours }} Hours {{ this.appointment.coordinate1.minutes }} Minutes <!-- {{this.appointment.coordinate1.seconds}} Seconds -->, Declination: +{{ this.appointment.coordinate1.declination }}</v-list-tile-sub-title>
-                        <v-list-tile-sub-title class="pl-3" v-if="data.declination.value <= 0">Right Ascension: {{ this.appointment.coordinate1.hours }} Hours {{ this.appointment.coordinate1.minutes }} Minutes <!-- {{this.appointment.coordinate1.seconds}} Seconds -->, Declination: {{ this.appointment.coordinate1.declination }}</v-list-tile-sub-title>
+                        <v-list-tile-sub-title class="pl-3" v-if="data.declination.value > 0">Right Ascension: {{ this.appointment.coordinate1.hours }} Hours {{ this.appointment.coordinate1.minutes }} Minutes<!-- {{this.appointment.coordinate1.seconds}} Seconds -->, Declination: +{{ this.appointment.coordinate1.declination }}</v-list-tile-sub-title>
+                        <v-list-tile-sub-title class="pl-3" v-if="data.declination.value <= 0">Right Ascension: {{ this.appointment.coordinate1.hours }} Hours {{ this.appointment.coordinate1.minutes }} Minutes<!-- {{this.appointment.coordinate1.seconds}} Seconds -->, Declination: {{ this.appointment.coordinate1.declination }}</v-list-tile-sub-title>
                     </v-flex>
                 </v-list-tile-content>
             </v-list-tile>
@@ -67,8 +67,8 @@
                 <v-list-tile-content class="white--text">
                     <v-list-tile-title>Coordinate 2:</v-list-tile-title>
                     <v-flex>
-                        <v-list-tile-sub-title class="pl-3" v-if="data.declination.value > 0">Right Ascension: {{ this.appointment.coordinate2.hours }} Hours {{this.appointment.coordinate2.minutes}} Minutes <!-- {{this.appointment.coordinate2.seconds}} Seconds -->, Declination: +{{ this.appointment.coordinate2.declination }}</v-list-tile-sub-title>
-                        <v-list-tile-sub-title class="pl-3" v-if="data.declination.value <= 0">Right Ascension: {{ this.appointment.coordinate2.hours }} Hours {{this.appointment.coordinate2.minutes}} Minutes <!-- {{this.appointment.coordinate2.seconds}} Seconds -->, Declination: {{ this.appointment.coordinate2.declination }}</v-list-tile-sub-title>
+                        <v-list-tile-sub-title class="pl-3" v-if="data.declination.value > 0">Right Ascension: {{ this.appointment.coordinate2.hours }} Hours {{this.appointment.coordinate2.minutes}} Minutes<!-- {{this.appointment.coordinate2.seconds}} Seconds -->, Declination: +{{ this.appointment.coordinate2.declination }}</v-list-tile-sub-title>
+                        <v-list-tile-sub-title class="pl-3" v-if="data.declination.value <= 0">Right Ascension: {{ this.appointment.coordinate2.hours }} Hours {{this.appointment.coordinate2.minutes}} Minutes<!-- {{this.appointment.coordinate2.seconds}} Seconds -->, Declination: {{ this.appointment.coordinate2.declination }}</v-list-tile-sub-title>
                     </v-flex>
                 </v-list-tile-content>
             </v-list-tile>
@@ -76,8 +76,8 @@
                 <v-list-tile-content class="white--text">
                     <v-list-tile-title>Coordinates:</v-list-tile-title>
                     <v-flex>
-                        <v-list-tile-sub-title class="pl-3" v-if="data.declination.value > 0">Right Ascension: {{ data.rightAscension.hours }} Hours {{data.rightAscension.minutes}} Minutes <!-- {{data.rightAscension.seconds}} Seconds -->, Declination: +{{ data.declination.value }}</v-list-tile-sub-title>
-                        <v-list-tile-sub-title class="pl-3" v-if="data.declination.value <= 0">Right Ascension: {{ data.rightAscension.hours }} Hours {{data.rightAscension.minutes}} Minutes <!-- {{data.rightAscension.seconds}} Seconds -->, Declination: {{ data.declination.value }}</v-list-tile-sub-title>
+                        <v-list-tile-sub-title class="pl-3" v-if="data.declination.value > 0">Right Ascension: {{ data.rightAscension.hours }} Hours {{data.rightAscension.minutes}} Minutes<!-- {{data.rightAscension.seconds}} Seconds -->, Declination: +{{ data.declination.value }}</v-list-tile-sub-title>
+                        <v-list-tile-sub-title class="pl-3" v-if="data.declination.value <= 0">Right Ascension: {{ data.rightAscension.hours }} Hours {{data.rightAscension.minutes}} Minutes<!-- {{data.rightAscension.seconds}} Seconds -->, Declination: {{ data.declination.value }}</v-list-tile-sub-title>
                     </v-flex>
                     <v-flex v-if="this.data.type.value == 'Drift Scan'">
                         <v-list-tile-sub-title class = "pl-3">Elevation: {{ this.appointment.elevation.value }}, Azimuth: {{ this.appointment.azimuth.value }}</v-list-tile-sub-title>

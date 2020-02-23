@@ -109,7 +109,7 @@
                         required
                         ></v-select>
                     </v-flex>
-                    <v-flex xs12 sm3 v-if="type === 'Point'">
+                    <v-flex xs12 sm4 v-if="type === 'Point'">
                         <v-text-field
                         v-model="form.rightAscension.hours"
                         :rules="[rules.rightAscHours]"
@@ -127,7 +127,7 @@
                      <!--
                         Same as Right Ascension Hours, except checks for minutes error handling
                     -->
-                    <v-flex xs12 sm3 v-if="type === 'Point'">
+                    <v-flex xs12 sm4 v-if="type === 'Point'">
                         <v-text-field
                         v-model="form.rightAscension.minutes"
                         :rules="[rules.rightAscMinutes]"
@@ -166,7 +166,7 @@
                         onkeypress='return event.charCode == 45 || (event.charCode >= 48 && event.charCode <= 57)'
                             Only allow numerical inputs and - (minus) as input can be negative
                      -->
-                    <v-flex xs12 sm3 v-if="type === 'Point'">
+                    <v-flex xs12 sm4 v-if="type === 'Point'">
                         <v-text-field
                         v-model="form.declination.value"
                         :rules="[rules.numRequired]"
@@ -247,7 +247,7 @@
                         Conditionally display two sets of Coordinate fields
                         (Hours, Minutes, Seconds, Right Ascension, Declination)
                     -->
-                        <v-flex xs12 sm2 row v-if="type === 'Raster Scan'">
+                        <v-flex xs12 sm4 row v-if="type === 'Raster Scan'">
                         <v-text-field
                         v-model="form.firstCoordinate.hours"
                         :rules="[rules.rightAscHours]"
@@ -263,7 +263,7 @@
                         ></v-text-field>
                     </v-flex>
 
-                    <v-flex xs12 sm2 v-if="type === 'Raster Scan'">
+                    <v-flex xs12 sm4 v-if="type === 'Raster Scan'">
                         <v-text-field
                         v-model="form.firstCoordinate.minutes"
                         :rules="[rules.rightAscMinutes]"
@@ -296,7 +296,7 @@
                     -->
                     
 
-                    <v-flex xs12 sm6 v-if="type === 'Raster Scan'">
+                    <v-flex xs12 sm4 v-if="type === 'Raster Scan'">
                         <v-text-field
                         v-model="form.firstCoordinate.declination"
                         :rules="[rules.numRequired]"
@@ -313,7 +313,7 @@
 
                     <v-spacer></v-spacer>
 
-                    <v-flex xs12 sm2 v-if="type === 'Raster Scan'">
+                    <v-flex xs12 sm4 v-if="type === 'Raster Scan'">
                         <v-text-field
                         v-model="form.secondCoordinate.hours"
                         :rules="[rules.rightAscHours]"
@@ -329,7 +329,7 @@
                         ></v-text-field>
                     </v-flex>
 
-                    <v-flex xs12 sm2 v-if="type === 'Raster Scan'">
+                    <v-flex xs12 sm4 v-if="type === 'Raster Scan'">
                         <v-text-field
                         v-model="form.secondCoordinate.minutes"
                         :rules="[rules.rightAscMinutes]"
@@ -361,7 +361,7 @@
                     </v-flex>
                     -->
 
-                    <v-flex xs12 sm6 v-if="type === 'Raster Scan'">
+                    <v-flex xs12 sm4 v-if="type === 'Raster Scan'">
                         <v-text-field
                         v-model="form.secondCoordinate.declination"
                         :rules="[rules.numRequired]"
