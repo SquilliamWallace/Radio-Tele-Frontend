@@ -27,6 +27,13 @@
             <v-divider></v-divider>
             <v-list-tile>
                 <v-list-tile-content class="white--text">
+                    <v-list-tile-title>Priority:</v-list-tile-title>
+                    <v-list-tile-sub-title class = "pl-3">{{ data.priority.stringValue }}</v-list-tile-sub-title>
+                </v-list-tile-content>
+            </v-list-tile>
+            <v-divider></v-divider>
+            <v-list-tile>
+                <v-list-tile-content class="white--text">
                     <v-list-tile-title >Type:</v-list-tile-title>
                     <v-list-tile-sub-title class = "pl-3">{{ data.type.value }}</v-list-tile-sub-title>
                 </v-list-tile-content>
