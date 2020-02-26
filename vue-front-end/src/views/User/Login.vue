@@ -5,6 +5,7 @@
       src="https://images.pexels.com/photos/110854/pexels-photo-110854.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
     >
       <div style="margin: auto;">
+        <input type="text" v-on:keyup.enter.native="submit"/>
         <v-layout align-center>
           <v-flex xs12>
             <v-card style="opacity:.95" width="500px" height="500px" dark>
