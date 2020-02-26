@@ -292,21 +292,22 @@
                 ></v-text-field>
               </v-flex>
               <v-flex>
-                <v-select
-                v-model="spectraCyberObj.ifGain.value"
-                :items="ifGains"
-                color="blue darken-2"
-                label="IF Gain (DB)"
-                required
-                ></v-select>
-              </v-flex>
-              <v-flex>
                 <v-text-field
-                v-model="spectraCyberObj.dcGain.value"
-                onkeypress="return event.charCode == 45 || (event.charCode >= 48 && event.charCode <= 57)"
-                label="DC Gain (DB)"
+                v-model="spectraCyberObj.ifGain.value"
+                onkeypress="return event.charCode == 45 || event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57)"
+                :rules="[rules.ifGain]"
+                label="IF Gain (DB)"
                 type="number"
                 ></v-text-field>
+              </v-flex>
+              <v-flex>
+                <v-select
+                v-model="spectraCyberObj.dcGain.value"
+                :items="dcGains"
+                color="blue darken-2"
+                label="DC Gain (DB)"
+                required
+                ></v-select>
               </v-flex>
               <v-flex>
                 <v-text-field
@@ -398,7 +399,7 @@ export default {
           "Continuum",
           "Unknown"
       ],
-      ifGains: [
+      dcGains: [
           1,
           5,
           10,

@@ -342,7 +342,7 @@ export default {
                     hasError: false
                 },
                 dcGain: {
-                    value: 100,
+                    value: 10,
                     hasError: false
                 },
                 bandwidth: {
