@@ -5,7 +5,6 @@
       src="https://images.pexels.com/photos/110854/pexels-photo-110854.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
     >
       <div style="margin: auto;">
-        <input type="text" v-on:keyup.enter.native="submit"/>
         <v-layout align-center>
           <v-flex xs12>
             <v-card style="opacity:.95" width="500px" height="500px" dark>
@@ -24,7 +23,8 @@
                           ref="email"
                           required
                           outline
-                          browser-autocomplete
+                          browser-autocomplete    
+                          v-on:keydown.enter.native="submit"
                         ></v-text-field>
                       </v-flex>
                       <v-flex xs12>
@@ -37,10 +37,11 @@
                           type="password"
                           required
                           outline
+                          v-on:keydown.enter.native="submit"  
                         ></v-text-field>
                       </v-flex>
                       <v-flex>
-                        <v-btn large block color="primary" @click="submit">LOGIN</v-btn>
+                        <v-btn large block color="primary" @click="submit" v-on:keydown.enter.native="submit">LOGIN</v-btn>
                       </v-flex>
                       <v-flex class="register-style" xs12>
                         <span color="primary" @click="registerRedirect">Register New Account</span>
