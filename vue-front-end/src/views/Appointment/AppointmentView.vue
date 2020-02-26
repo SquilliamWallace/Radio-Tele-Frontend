@@ -114,7 +114,7 @@
                     <v-list-tile-title>SpectraCyber Configuration:
                     </v-list-tile-title>
                     <v-list-tile-sub-title class = "pl-3">Mode: {{this.spectraCyber.mode.value}}, Integration Time: {{this.spectraCyber.integrationTime.value}} time/step, Offset Voltage: {{this.spectraCyber.offsetVoltage.value}} Volts, 
-                                                        IF Gain: {{this.spectraCyber.ifGain.value}} DB, DC Gain: {{this.spectraCyber.dcGain.value}} DB, Badwidth: {{this.spectraCyber.bandwidth.value}} KHZ</v-list-tile-sub-title>
+                                                        IF Gain: {{this.spectraCyber.ifGain.value}} DB, DC Gain: {{this.spectraCyber.dcGain.value}} DB, Bandwidth: {{this.spectraCyber.bandwidth.value}} KHZ</v-list-tile-sub-title>
                 </v-list-tile-content>
             </v-list-tile>
             <v-divider></v-divider>
