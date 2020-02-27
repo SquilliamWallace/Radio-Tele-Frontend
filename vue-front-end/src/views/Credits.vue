@@ -33,6 +33,12 @@ export default {
                     liked: "Working with AWS, learning the quirks of React Native, learning more about astronomy"
                 },
                 {
+                    name: "Andrew Georgiou",
+                    major: "",
+                    work: "",
+                    liked: ""
+                },
+                {
                     name: "Chris Garrety",
                     major: "Computer Science",
                     work: "Alpha Centauri",
@@ -195,6 +201,12 @@ export default {
                     liked: "learning new technologies and working on a large project"
                 },
                 {
+                    name: "Lucas Gartrell",
+                    major: "",
+                    work: "",
+                    liked: ""
+                },
+                {
                     name: "Marcos Rivera",
                     major: "_",
                     work: "_",
@@ -217,6 +229,24 @@ export default {
                     major: "Computer Science",
                     work: "Web front end development, focusing on administrator pages",
                     liked: "Learning Vue.js, Node.js, and back end API integration"
+                },
+                {
+                    name: "Patrick Nelson",
+                    major: "",
+                    work: "",
+                    liked: ""
+                },
+                {
+                    name: "Philip Nelson",
+                    major: "",
+                    work: "",
+                    liked: ""
+                },
+                {
+                    name: "Quintin Herb",
+                    major: "",
+                    work: "",
+                    liked: ""
                 },
                 {
                     name: "Rathana Pim",
