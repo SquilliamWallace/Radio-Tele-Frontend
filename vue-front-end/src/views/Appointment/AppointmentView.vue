@@ -222,7 +222,7 @@ export default {
                 rightAscension: {
                     hours: null,
                     minutes: null,
-                    seconds: null,
+                    // seconds: null,
                     value: null
                 },
                 declination: {
@@ -291,7 +291,7 @@ export default {
                 rightAscension: {
                     hours: null,
                     minutes: null,
-                    seconds: null,
+                    // seconds: null,
                     value: null,
                     hasError: false
                 },
@@ -314,13 +314,13 @@ export default {
                 coordinate1: {
                     hours: null,
                     minutes: null,
-                    seconds: null,
+                    // seconds: null,
                     declination: null
                 },
                 coordinate2: {
                     hours: null,
                     minutes: null,
-                    seconds: null,
+                    // seconds: null,
                     declination: null
                 }
             },
@@ -401,7 +401,7 @@ export default {
             this.data.endTime.value = appointmentObj.end.value;
             this.data.rightAscension.hours = appointmentObj.rightAscension.hours;
             this.data.rightAscension.minutes = appointmentObj.rightAscension.minutes;
-            this.data.rightAscension.seconds = appointmentObj.rightAscension.seconds;
+            // this.data.rightAscension.seconds = appointmentObj.rightAscension.seconds;
             this.data.declination.value = appointmentObj.declination.value;
             this.data.isPublic.value = !appointmentObj.privacy.value
         },
@@ -432,7 +432,7 @@ export default {
                 this.data.rightAscension.value = data.rightAscension.toFixed(2);
                 this.data.rightAscension.hours = data.hours;
                 this.data.rightAscension.minutes = data.minutes;
-                this.data.rightAscension.seconds = data.seconds;
+                // this.data.rightAscension.seconds = data.seconds;
                 this.data.declination.value = data.declination;
             }
 
@@ -443,13 +443,13 @@ export default {
                     this.data.rightAscension.value = data.rightAscension.toFixed(2);
                     this.data.rightAscension.hours = data.hours;
                     this.data.rightAscension.minutes = data.minutes;
-                    this.data.rightAscension.seconds = data.seconds;
+                    // this.data.rightAscension.seconds = data.seconds;
                     this.data.declination.value = data.declination;
                 }else{
                     this.data.rightAscension.value = '-';
                     this.data.rightAscension.hours = '-';
                     this.data.rightAscension.minutes = '-';
-                    this.data.rightAscension.seconds = '-';
+                    // this.data.rightAscension.seconds = '-';
                     this.data.declination.value = '-';
                     console.log(this.data.rightAscension.hours)
                 }
@@ -466,12 +466,12 @@ export default {
                 //coordinate 1
                 this.appointment.coordinate1.hours = data.coordinates[0].hours
                 this.appointment.coordinate1.minutes = data.coordinates[0].minutes
-                this.appointment.coordinate1.seconds = data.coordinates[0].seconds
+                // this.appointment.coordinate1.seconds = data.coordinates[0].seconds
                 this.appointment.coordinate1.declination = data.coordinates[0].declination
                 //coordinate 2
                 this.appointment.coordinate2.hours = data.coordinates[1].hours
                 this.appointment.coordinate2.minutes = data.coordinates[1].minutes
-                this.appointment.coordinate2.seconds = data.coordinates[1].seconds
+                // this.appointment.coordinate2.seconds = data.coordinates[1].seconds
                 this.appointment.coordinate2.declination = data.coordinates[1].declination
             }
 
@@ -518,7 +518,7 @@ export default {
             this.appointment.telescopeId.value = this.data.telescopeId.value
             this.appointment.rightAscension.hours = this.data.rightAscension.hours
             this.appointment.rightAscension.minutes = this.data.rightAscension.minutes
-            this.appointment.rightAscension.seconds = this.data.rightAscension.seconds
+            // this.appointment.rightAscension.seconds = this.data.rightAscension.seconds
             this.appointment.declination.value = this.data.declination.value
             this.edit = true
         },
