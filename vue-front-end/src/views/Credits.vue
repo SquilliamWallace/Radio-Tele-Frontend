@@ -34,9 +34,9 @@ export default {
                 },
                 {
                     name: "Andrew Georgiou",
-                    major: "",
-                    work: "",
-                    liked: ""
+                    major: "Computer Sciennce",
+                    work: "Control Room",
+                    liked: "Control Room"
                 },
                 {
                     name: "Chris Garrety",
@@ -184,9 +184,9 @@ export default {
                 },
                 {
                     name: "Kate Kennelly",
-                    major: "_",
-                    work: "_",
-                    liked: "_"
+                    major: "Computer Science and Mathematics",
+                    work: "Control Room Application",
+                    liked: "Being able to see each step of the process from end to end and understanding how it all works together"
                 },
                 {
                     name: "Kyle Eidson",
@@ -202,9 +202,9 @@ export default {
                 },
                 {
                     name: "Lucas Gartrell",
-                    major: "",
-                    work: "",
-                    liked: ""
+                    major: "Computer Science",
+                    work: "Back-End",
+                    liked: "Working in a team environment"
                 },
                 {
                     name: "Marcos Rivera",
@@ -232,9 +232,9 @@ export default {
                 },
                 {
                     name: "Patrick Nelson",
-                    major: "",
-                    work: "",
-                    liked: ""
+                    major: "Computer Science",
+                    work: "Control room, main focus on overrides",
+                    liked: "Learning the control room software, troubleshooting, and working with an awesome team"
                 },
                 {
                     name: "Philip Nelson",
@@ -244,9 +244,9 @@ export default {
                 },
                 {
                     name: "Quintin Herb",
-                    major: "",
-                    work: "",
-                    liked: ""
+                    major: "Computer Science",
+                    work: "Back-end, AWS",
+                    liked: "Working with the team and having a great deal of responsibility"
                 },
                 {
                     name: "Rathana Pim",
