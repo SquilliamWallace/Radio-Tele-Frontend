@@ -379,7 +379,7 @@ export default {
           (val && val.toString().length > 0 && val >= 0) ||
           "Must be greater or equal to zero",
         offsetVoltage: val =>
-          (val && val.toString().length > 0 && val >= 0.0 && val <= 4.095) ||
+          (val.toString().length > 0 && val >= 0 && val <= 4.095) ||
           "Must be between 0 and 4.095",
         ifGain: val =>
           (val && val.toString().length > 0 && val >= 10.00 && val <= 25.75) ||
@@ -395,8 +395,8 @@ export default {
       // Variable to store our pair of coordinates for Drift Scans
       coordinates: [],
       modes: [
-          "Spectral",
-          "Continuum"
+          "SPECTRAL",
+          "CONTINUUM"
       ],
       dcGains: [
           1,
