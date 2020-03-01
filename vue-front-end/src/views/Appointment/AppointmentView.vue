@@ -331,6 +331,9 @@ export default {
                 }
             },
             spectraCyber: { // This is eventually be replace with actual data.
+                id: {
+                    value: null
+                },
                 mode: {
                     value: 'Spectral',
                     hasError: false
@@ -540,7 +543,7 @@ export default {
                 HttpResponse.then(response, (data) => {
                     console.log("SpectraCyberConfig: " + JSON.stringify(data))
                     // Populate the data and set the store's boolean back to false
-                    // this.populateData(data.data)
+                    this.populateSpectraCyberConfig(data.data)
                     this.$store.commit("loading", false);
                 }, (status, errors) => {
                     // Access Denied
@@ -560,6 +563,16 @@ export default {
                 let message = "An error occurred when loading this observation";
                 HttpResponse.generalError(this, message, true);
             });
+        },
+        populateSpectraCyberConfig (data) {
+            // Populate the SpectraCyberConfig
+            this.spectraCyber.mode.value = data.mode;
+            this.spectraCyber.integrationTime.value = data.integrationTime;
+            this.spectraCyber.offsetVoltage.value = data.offsetVoltage;
+            this.spectraCyber.bandwidth.value = data.bandwidth;
+            this.spectraCyber.id.value = data.id;
+            this.spectraCyber.ifGain.value = data.ifgain;
+            this.spectraCyber.dcGain.value = data.dcgain;
         },
         cancelAppointment () {
             // Open the modal
