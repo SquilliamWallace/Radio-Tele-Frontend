@@ -396,8 +396,7 @@ export default {
       coordinates: [],
       modes: [
           "Spectral",
-          "Continuum",
-          "Unknown"
+          "Continuum"
       ],
       dcGains: [
           1,
