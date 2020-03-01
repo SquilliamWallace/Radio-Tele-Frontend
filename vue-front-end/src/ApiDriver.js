@@ -133,6 +133,9 @@ export default {
       },
       sharedUsers: function(appointmentId, page, size) {
         return axios.get(this.namespace + "/" + appointmentId + "/viewers?page=" + page + "&size=" + size, Headers.retrieveHeaders())
+      },
+      viewSpectraCyberConfig: function(userId, spectracyberConfigId) {
+        return axios.get(this.namespace + "/" + userId + "/" + spectracyberConfigId + "/spectracyberConfig", Headers.retrieveHeaders())
       }
     },
     Log: {

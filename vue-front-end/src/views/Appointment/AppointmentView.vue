@@ -267,6 +267,9 @@ export default {
                     stringValue: null,
                     hasError: false
                 },
+                spectracyberConfigId: {
+                    value: null
+                },
                 start: {
                     value: null, 
                     hasError: false
@@ -378,6 +381,7 @@ export default {
                     console.log("Response data: " + JSON.stringify(data))
                     // Populate the data and set the store's boolean back to false
                     this.populateData(data.data)
+                    this.getSpectraCyberConfig();
                     this.$store.commit("loading", false);
                 }, (status, errors) => {
                     // Access Denied
@@ -525,6 +529,37 @@ export default {
             // this.appointment.rightAscension.seconds = this.data.rightAscension.seconds
             this.appointment.declination.value = this.data.declination.value
             this.edit = true
+        },
+        getSpectraCyberConfig () {
+            // Set the store's loading boolean to true
+            this.$store.commit("loading", true);
+
+            // Make the API call
+            ApiDriver.Appointment.viewSpectraCyberConfig(this.$store.state.currentUserId, this.data.spectracyberConfigId.value).then((response) => {
+                // Handle the server response
+                HttpResponse.then(response, (data) => {
+                    console.log("SpectraCyberConfig: " + JSON.stringify(data))
+                    // Populate the data and set the store's boolean back to false
+                    // this.populateData(data.data)
+                    this.$store.commit("loading", false);
+                }, (status, errors) => {
+                    // Access Denied
+                    if (parseInt(status) === 403) {
+                        // Call the generic access denied handler
+                        HttpResponse.accessDenied(this);
+                    } 
+                    // Invalid Resource Id
+                    else if (parseInt(status) === 404) {
+                        // Call the generic not found handler
+                        HttpResponse.notFound(this, errors);
+                    }
+                })
+            }).catch((error) => {
+                // Handle an erroneous API call
+                console.log(error)
+                let message = "An error occurred when loading this observation";
+                HttpResponse.generalError(this, message, true);
+            });
         },
         cancelAppointment () {
             // Open the modal
