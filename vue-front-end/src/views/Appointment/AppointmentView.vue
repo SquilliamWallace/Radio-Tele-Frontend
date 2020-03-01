@@ -210,6 +210,9 @@ export default {
                     value: false,
                     stringValue: null
                 },
+                spectracyberConfigId: {
+                    value: null
+                },
                 startTime: {
                     value: null
                 },
@@ -420,6 +423,7 @@ export default {
             this.data.userLastName.value = data.userLastName
             this.data.status.value = data.status
             this.data.type.value = data.type;
+            this.data.spectracyberConfigId.value = data.spectracyberConfigId;
             this.telescopeName = this.telescopes[this.data.telescopeId.value - 1]
             this.rawEndTime = data.endTime
             this.complete = moment(this.rawEndTime).isBefore(moment(), 'second')
