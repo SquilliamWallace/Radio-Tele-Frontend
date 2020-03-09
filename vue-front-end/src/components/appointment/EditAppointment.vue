@@ -507,6 +507,37 @@ export default {
           }
         );
       });
+
+      let configData = JSON.stringify({
+        id: this.appointmentObj.id.value,
+        mode: this.spectraCyberObj.mode.value,
+        integrationTime: this.spectraCyberObj.integrationTime.value,
+        offsetVoltage: this.spectraCyberObj.offsetVoltage.value,
+        IFGain: this.spectraCyberObj.ifGain.value,
+        DCGain: this.spectraCyberObj.dcGain.value,
+        bandwidth: this.spectraCyberObj.bandwidth.value
+      });
+      //console.log("SpectraCyberConfig update: " + configData);
+
+      // update the SpectraCyber Configuration Settings
+      ApiDriver.Appointment.updateSpectraCyberConfig(this.$store.state.currentUserId, configData).then(response => {
+        HttpResponse.then(
+          response,
+          configData => {
+            this.$emit("edited", this.spectraCyberObj);
+            this.$emit("input");
+          },
+          (status, errors) => {
+            if (parseInt(status) === 403) {
+              HttpResponse.accessDenied(this);
+            } else if (parseInt(status) === 404) {
+              HttpResponse.notFound(this, errors);
+            } else {
+              this.handleErrors(errors);
+            }
+          }
+        );
+      });
     },
     handleErrors(errors) {
       for (var field in errors) {

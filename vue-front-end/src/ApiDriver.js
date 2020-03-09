@@ -136,6 +136,9 @@ export default {
       },
       viewSpectraCyberConfig: function(userId, spectracyberConfigId) {
         return axios.get(this.namespace + "/" + userId + "/" + spectracyberConfigId + "/spectracyberConfig", Headers.retrieveHeaders())
+      },
+      updateSpectraCyberConfig: function(userId, data) {
+        return axios.put(baseUrl + "appointments/" + userId + "/spectracyberConfig", data, Headers.retrieveHeaders())
       }
     },
     Log: {
