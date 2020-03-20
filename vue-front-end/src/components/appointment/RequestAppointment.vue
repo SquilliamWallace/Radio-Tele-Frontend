@@ -49,7 +49,8 @@ export default {
                 // seconds: this.Appointment.seconds,
                 declination: this.Appointment.declination,
                 azimuth: this.Appointment.azimuth,
-                elevation: this.Appointment.elevation
+                elevation: this.Appointment.elevation,
+                celestialBodyId: this.Appointment.celestialBodyId
             };
 
             ApiDriver.Appointment.request(JSON.stringify(requestAppointment), this.mapApptType()).then((response) => {
