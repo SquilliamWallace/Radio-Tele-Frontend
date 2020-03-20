@@ -27,6 +27,13 @@
             <v-divider></v-divider>
             <v-list-tile>
                 <v-list-tile-content class="white--text">
+                    <v-list-tile-title>Priority:</v-list-tile-title>
+                    <v-list-tile-sub-title class = "pl-3">{{ data.priority.stringValue }}</v-list-tile-sub-title>
+                </v-list-tile-content>
+            </v-list-tile>
+            <v-divider></v-divider>
+            <v-list-tile>
+                <v-list-tile-content class="white--text">
                     <v-list-tile-title >Type:</v-list-tile-title>
                     <v-list-tile-sub-title class = "pl-3">{{ data.type.value }}</v-list-tile-sub-title>
                 </v-list-tile-content>
@@ -57,8 +64,8 @@
                 <v-list-tile-content class="white--text">
                     <v-list-tile-title>Coordinate 1:</v-list-tile-title>
                     <v-flex>
-                        <v-list-tile-sub-title class="pl-3" v-if="data.declination.value > 0">Right Ascension: {{ this.appointment.coordinate1.hours }} Hours {{ this.appointment.coordinate1.minutes }} Minutes {{this.appointment.coordinate1.seconds}} Seconds, Declination: +{{ this.appointment.coordinate1.declination }}</v-list-tile-sub-title>
-                        <v-list-tile-sub-title class="pl-3" v-if="data.declination.value <= 0">Right Ascension: {{ this.appointment.coordinate1.hours }} Hours {{ this.appointment.coordinate1.minutes }} Minutes {{this.appointment.coordinate1.seconds}} Seconds, Declination: {{ this.appointment.coordinate1.declination }}</v-list-tile-sub-title>
+                        <v-list-tile-sub-title class="pl-3" v-if="data.declination.value > 0">Right Ascension: {{ this.appointment.coordinate1.hours }} Hours {{ this.appointment.coordinate1.minutes }} Minutes<!-- {{this.appointment.coordinate1.seconds}} Seconds -->, Declination: +{{ this.appointment.coordinate1.declination }}</v-list-tile-sub-title>
+                        <v-list-tile-sub-title class="pl-3" v-if="data.declination.value <= 0">Right Ascension: {{ this.appointment.coordinate1.hours }} Hours {{ this.appointment.coordinate1.minutes }} Minutes<!-- {{this.appointment.coordinate1.seconds}} Seconds -->, Declination: {{ this.appointment.coordinate1.declination }}</v-list-tile-sub-title>
                     </v-flex>
                 </v-list-tile-content>
             </v-list-tile>
@@ -67,8 +74,8 @@
                 <v-list-tile-content class="white--text">
                     <v-list-tile-title>Coordinate 2:</v-list-tile-title>
                     <v-flex>
-                        <v-list-tile-sub-title class="pl-3" v-if="data.declination.value > 0">Right Ascension: {{ this.appointment.coordinate2.hours }} Hours {{this.appointment.coordinate2.minutes}} Minutes {{this.appointment.coordinate2.seconds}} Seconds, Declination: +{{ this.appointment.coordinate2.declination }}</v-list-tile-sub-title>
-                        <v-list-tile-sub-title class="pl-3" v-if="data.declination.value <= 0">Right Ascension: {{ this.appointment.coordinate2.hours }} Hours {{this.appointment.coordinate2.minutes}} Minutes {{this.appointment.coordinate2.seconds}} Seconds, Declination: {{ this.appointment.coordinate2.declination }}</v-list-tile-sub-title>
+                        <v-list-tile-sub-title class="pl-3" v-if="data.declination.value > 0">Right Ascension: {{ this.appointment.coordinate2.hours }} Hours {{this.appointment.coordinate2.minutes}} Minutes<!-- {{this.appointment.coordinate2.seconds}} Seconds -->, Declination: +{{ this.appointment.coordinate2.declination }}</v-list-tile-sub-title>
+                        <v-list-tile-sub-title class="pl-3" v-if="data.declination.value <= 0">Right Ascension: {{ this.appointment.coordinate2.hours }} Hours {{this.appointment.coordinate2.minutes}} Minutes<!-- {{this.appointment.coordinate2.seconds}} Seconds -->, Declination: {{ this.appointment.coordinate2.declination }}</v-list-tile-sub-title>
                     </v-flex>
                 </v-list-tile-content>
             </v-list-tile>
@@ -76,8 +83,8 @@
                 <v-list-tile-content class="white--text">
                     <v-list-tile-title>Coordinates:</v-list-tile-title>
                     <v-flex>
-                        <v-list-tile-sub-title class="pl-3" v-if="data.declination.value > 0">Right Ascension: {{ data.rightAscension.hours }} Hours {{data.rightAscension.minutes}} Minutes {{data.rightAscension.seconds}} Seconds, Declination: +{{ data.declination.value }}</v-list-tile-sub-title>
-                        <v-list-tile-sub-title class="pl-3" v-if="data.declination.value <= 0">Right Ascension: {{ data.rightAscension.hours }} Hours {{data.rightAscension.minutes}} Minutes {{data.rightAscension.seconds}} Seconds, Declination: {{ data.declination.value }}</v-list-tile-sub-title>
+                        <v-list-tile-sub-title class="pl-3" v-if="data.declination.value > 0">Right Ascension: {{ data.rightAscension.hours }} Hours {{data.rightAscension.minutes}} Minutes<!-- {{data.rightAscension.seconds}} Seconds -->, Declination: +{{ data.declination.value }}</v-list-tile-sub-title>
+                        <v-list-tile-sub-title class="pl-3" v-if="data.declination.value <= 0">Right Ascension: {{ data.rightAscension.hours }} Hours {{data.rightAscension.minutes}} Minutes<!-- {{data.rightAscension.seconds}} Seconds -->, Declination: {{ data.declination.value }}</v-list-tile-sub-title>
                     </v-flex>
                     <v-flex v-if="this.data.type.value == 'Drift Scan'">
                         <v-list-tile-sub-title class = "pl-3">Elevation: {{ this.appointment.elevation.value }}, Azimuth: {{ this.appointment.azimuth.value }}</v-list-tile-sub-title>
@@ -102,6 +109,15 @@
                 </v-list-tile-content>
             </v-list-tile>
             <v-divider></v-divider>
+            <v-list-tile>
+                <v-list-tile-content class="white--text">
+                    <v-list-tile-title>SpectraCyber Configuration:
+                    </v-list-tile-title>
+                    <v-list-tile-sub-title class = "pl-3">Mode: {{this.spectraCyber.mode.value}}, Integration Time: {{this.spectraCyber.integrationTime.value}} time/step, Offset Voltage: {{this.spectraCyber.offsetVoltage.value}} Volts, 
+                                                        IF Gain: {{this.spectraCyber.ifGain.value}} DB, DC Gain: {{this.spectraCyber.dcGain.value}} DB, Badwidth: {{this.spectraCyber.bandwidth.value}} KHZ</v-list-tile-sub-title>
+                </v-list-tile-content>
+            </v-list-tile>
+            <v-divider></v-divider>
             <v-list-tile >
                 <v-list-tile-content class="white--text">
                     <v-list-tile-title>Created by:</v-list-tile-title>
@@ -115,6 +131,11 @@
             <v-btn v-if="data.status.value === 'Completed'" color="primary" v-bind:href="'/#/appointments/' + data.id.value + '/rf-data'">View Data</v-btn>
         </v-container>
         <v-layout wrap>
+        <v-flex>
+            <div>
+                <v-btn color="primary" @click="back">Back</v-btn>
+            </div>
+        </v-flex>
         <v-flex v-if="($store.state.currentUserId === data.eventUserId.value || $store.state.isAdmin) && !complete && !$store.state.isLoading">
             <div>
                 <v-btn color="primary" @click="editAppointment">Edit</v-btn>
@@ -136,7 +157,7 @@
             </div>
         </v-flex>
         </v-layout>
-        <edit-appointment :appointmentObj="appointment" v-model="edit" @edited="edited"></edit-appointment>
+        <edit-appointment :appointmentObj="appointment" :spectraCyberObj="spectraCyber" v-model="edit" @edited="edited"></edit-appointment>
         <share-appointment v-model="share"></share-appointment>
         <unshare-appointment v-model="unshare"></unshare-appointment>
         <cancel-appointment v-model="cancel"> </cancel-appointment>
@@ -154,6 +175,7 @@ import EditAppointment from "../../components/appointment/EditAppointment.vue"
 import ShareAppointment from "../../components/appointment/ShareAppointment"
 import UnshareAppointment from "../../components/appointment/UnshareAppointment"
 import Loading from "../../components/utility/Loading"
+import router from '../../router';
 import { throws } from 'assert';
 export default {
     title: "Radio Telescope 1.1.0",
@@ -184,6 +206,10 @@ export default {
                 isPublic: {
                     value: false
                 },
+                priority: {
+                    value: false,
+                    stringValue: null
+                },
                 startTime: {
                     value: null
                 },
@@ -196,7 +222,7 @@ export default {
                 rightAscension: {
                     hours: null,
                     minutes: null,
-                    seconds: null,
+                    // seconds: null,
                     value: null
                 },
                 declination: {
@@ -233,6 +259,11 @@ export default {
                     value: false,
                     hasError: false
                 },
+                priority: {
+                    value: null,
+                    stringValue: null,
+                    hasError: false
+                },
                 start: {
                     value: null, 
                     hasError: false
@@ -260,7 +291,7 @@ export default {
                 rightAscension: {
                     hours: null,
                     minutes: null,
-                    seconds: null,
+                    // seconds: null,
                     value: null,
                     hasError: false
                 },
@@ -283,15 +314,41 @@ export default {
                 coordinate1: {
                     hours: null,
                     minutes: null,
-                    seconds: null,
+                    // seconds: null,
                     declination: null
                 },
                 coordinate2: {
                     hours: null,
                     minutes: null,
-                    seconds: null,
+                    // seconds: null,
                     declination: null
                 }
+            },
+            spectraCyber: { // This is eventually be replace with actual data.
+                mode: {
+                    value: 'Spectral',
+                    hasError: false
+                },
+                integrationTime: {
+                    value: 100,
+                    hasError: false
+                },
+                offsetVoltage: {
+                    value: 1.05,
+                    hasError: false
+                },
+                ifGain: {
+                    value: 10,
+                    hasError: false
+                },
+                dcGain: {
+                    value: 100,
+                    hasError: false
+                },
+                bandwidth: {
+                    value: 100,
+                    hasError: false
+                },
             },
             cancel: false,
             complete: false,
@@ -344,7 +401,7 @@ export default {
             this.data.endTime.value = appointmentObj.end.value;
             this.data.rightAscension.hours = appointmentObj.rightAscension.hours;
             this.data.rightAscension.minutes = appointmentObj.rightAscension.minutes;
-            this.data.rightAscension.seconds = appointmentObj.rightAscension.seconds;
+            // this.data.rightAscension.seconds = appointmentObj.rightAscension.seconds;
             this.data.declination.value = appointmentObj.declination.value;
             this.data.isPublic.value = !appointmentObj.privacy.value
         },
@@ -356,6 +413,8 @@ export default {
             this.data.endTime.value = moment(data.endTime).format('MM-DD-YYYY hh:mm A')
             this.data.telescopeId.value = data.telescopeId
             this.data.isPublic.value = data.public
+            this.data.priority.stringValue = data.priority
+            this.data.priority.value = data.priority == "Secondary"
             this.data.eventUserId.value = data.userId
             this.data.userFirstName.value = data.userFirstName
             this.data.userLastName.value = data.userLastName
@@ -373,7 +432,7 @@ export default {
                 this.data.rightAscension.value = data.rightAscension.toFixed(2);
                 this.data.rightAscension.hours = data.hours;
                 this.data.rightAscension.minutes = data.minutes;
-                this.data.rightAscension.seconds = data.seconds;
+                // this.data.rightAscension.seconds = data.seconds;
                 this.data.declination.value = data.declination;
             }
 
@@ -384,13 +443,13 @@ export default {
                     this.data.rightAscension.value = data.rightAscension.toFixed(2);
                     this.data.rightAscension.hours = data.hours;
                     this.data.rightAscension.minutes = data.minutes;
-                    this.data.rightAscension.seconds = data.seconds;
+                    // this.data.rightAscension.seconds = data.seconds;
                     this.data.declination.value = data.declination;
                 }else{
                     this.data.rightAscension.value = '-';
                     this.data.rightAscension.hours = '-';
                     this.data.rightAscension.minutes = '-';
-                    this.data.rightAscension.seconds = '-';
+                    // this.data.rightAscension.seconds = '-';
                     this.data.declination.value = '-';
                     console.log(this.data.rightAscension.hours)
                 }
@@ -407,12 +466,12 @@ export default {
                 //coordinate 1
                 this.appointment.coordinate1.hours = data.coordinates[0].hours
                 this.appointment.coordinate1.minutes = data.coordinates[0].minutes
-                this.appointment.coordinate1.seconds = data.coordinates[0].seconds
+                // this.appointment.coordinate1.seconds = data.coordinates[0].seconds
                 this.appointment.coordinate1.declination = data.coordinates[0].declination
                 //coordinate 2
                 this.appointment.coordinate2.hours = data.coordinates[1].hours
                 this.appointment.coordinate2.minutes = data.coordinates[1].minutes
-                this.appointment.coordinate2.seconds = data.coordinates[1].seconds
+                // this.appointment.coordinate2.seconds = data.coordinates[1].seconds
                 this.appointment.coordinate2.declination = data.coordinates[1].declination
             }
 
@@ -426,6 +485,7 @@ export default {
             // Set the prop values and open up the edit modal
             this.appointment.id.value = this.data.id.value
             this.appointment.privacy.value = !this.data.isPublic.value
+            this.appointment.priority = this.data.priority
             this.appointment.start.value = this.data.startTime.value
             this.appointment.end.value = this.data.endTime.value
             // I apologize for this, it's gross but i had no other choice, the v-time and date pickers are very particular about the values they can model to
@@ -458,7 +518,7 @@ export default {
             this.appointment.telescopeId.value = this.data.telescopeId.value
             this.appointment.rightAscension.hours = this.data.rightAscension.hours
             this.appointment.rightAscension.minutes = this.data.rightAscension.minutes
-            this.appointment.rightAscension.seconds = this.data.rightAscension.seconds
+            // this.appointment.rightAscension.seconds = this.data.rightAscension.seconds
             this.appointment.declination.value = this.data.declination.value
             this.edit = true
         },
@@ -476,6 +536,9 @@ export default {
         },
         unshareAppointment() {
             this.unshare = true
+        },
+        back() {
+            router.push('/scheduler');
         }
     },
     mounted: function() {

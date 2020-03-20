@@ -13,7 +13,7 @@
             <v-card-text>Start Time: {{ Appointment.startTime }}</v-card-text>
             <v-card-text>End Time: {{ Appointment.endTime }}</v-card-text>
             <v-card-text>Private Event: {{ !Appointment.isPublic }}</v-card-text>
-            <v-card-text>Right Ascension: {{ Appointment.hours }}:{{ Appointment.minutes }}:{{ Appointment.seconds }}  Declination: {{ Appointment.declination }}</v-card-text>
+            <v-card-text>Right Ascension: {{ Appointment.hours }}:{{ Appointment.minutes }}<!--:{{ Appointment.seconds }}-->  Declination: {{ Appointment.declination }}</v-card-text>
             <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="green darken-1" @click="request">Request</v-btn>
@@ -46,7 +46,7 @@ export default {
                 priority: this.Appointment.priority,
                 hours: this.Appointment.hours,
                 minutes: this.Appointment.minutes,
-                seconds: this.Appointment.seconds,
+                // seconds: this.Appointment.seconds,
                 declination: this.Appointment.declination,
                 azimuth: this.Appointment.azimuth,
                 elevation: this.Appointment.elevation
