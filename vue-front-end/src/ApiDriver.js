@@ -159,7 +159,7 @@ export default {
     },
     Thresholds: {
       namespace: baseUrl + "thresholds",
-      retrieveAll: function() {
+      retrieveThresholds: function() {
         return axios.get(this.namespace + "/" + "retrieve", Headers.retrieveHeaders())
       },
       retrieve: function (sensorName) {

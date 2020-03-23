@@ -89,8 +89,8 @@ export default {
             sensors: [
                 { id: 1, displayName: 'Gate', name: 'gate', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, warningThreshold: null },
                 { id: 2, displayName: 'Proximity', name: 'proximity', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, warningThreshold: null },
-                { id: 3, displayName: 'Azimuth Motor', name: 'azimuthMotor', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, warningThreshold: 120 },
-                { id: 4, displayName: 'Elevation Motor', name: 'elevationMotor', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, warningThreshold: 120 },
+                { id: 3, displayName: 'Azimuth Motor', name: 'azimuthMotor', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, warningThreshold: 100 },
+                { id: 4, displayName: 'Elevation Motor', name: 'elevationMotor', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, warningThreshold: 150 },
                 { id: 5, displayName: 'Weather Station', name: 'weatherStation', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, warningThreshold: null }
             ],
 
@@ -236,6 +236,81 @@ export default {
                     return "UNKNOWN";
             }
         },
+        getThresholds(){
+            // Set the store's loading boolean to true
+            this.$store.commit("loading", true);
+
+            // Make the API call
+            ApiDriver.Thresholds.retrieveThresholds().then((response) => {  
+                // Handle the server response         
+                HttpResponse.then(response, (data) => {
+                    // Populate the data and set the store's boolean back to false
+                    this.populatData(data.data)                                                      
+                    this.$store.commit("loading", false);
+                }, (status, errors) => {
+                    // Access Denied
+                    if (parseInt(status) === 403) {
+                        // Call the generic access denied handler
+                        HttpResponse.accessDenied(this);
+                    } 
+                    // Invalid Resource Id
+                    else if (parseInt(status) === 404) {
+                        // Call the generic not found handler
+                        HttpResponse.notFound(this, errors);
+                    }
+                })
+            }).catch((error) => {
+                // Handle an erroneous API call
+                console.log(error)
+                let message = "An error occurred when loading this observation";
+                HttpResponse.generalError(this, message, true);
+            });
+        },
+        populatData(data){
+            sensor[2].warningThreshold = data[1];
+            sensor[3].warningThreshold = data[2];
+        },
+        getThresholdByName (thresholdName) {
+            // Set the store's loading boolean to true
+            this.$store.commit("loading", true);
+
+            // Make the API call
+            ApiDriver.Thresholds.getThresholdByName(thresholdName).then((response) => {
+                // Handle the server response
+                HttpResponse.then(response, (data) => {
+                    console.log("Response data: " + JSON.stringify(data))
+                    // Populate the data and set the store's boolean back to false
+                    this.populateData(data.data)
+                    this.$store.commit("loading", false);
+                }, (status, errors) => {
+                    // Access Denied
+                    if (parseInt(status) === 403) {
+                        // Call the generic access denied handler
+                        HttpResponse.accessDenied(this);
+                    } 
+                    // Invalid Resource Id
+                    else if (parseInt(status) === 404) {
+                        // Call the generic not found handler
+                        HttpResponse.notFound(this, errors);
+                    }
+                })
+            }).catch((error) => {
+                // Handle an erroneous API call
+                console.log(error)
+                let message = "An error occurred when loading this observation";
+                HttpResponse.generalError(this, message, true);
+            });
+        },
+        populateData(data){
+            //if updating threshold for azimuth motor
+            if (thresholdName == sensorList[3]) {
+                sensors[3].warningThreshold = data;         
+            }
+            //if updating threshold for elevation motor
+            else if (thresholdName == sensorList[4]) {
+                sensors[4].warningThreshold = data;  
+            }
+        },
         submitThreshold(id){
             console.log("Threshold ID: " + id);
             // Save the thresholds values for Threshold ID
@@ -243,6 +318,7 @@ export default {
     },
     mounted: function(){
         this.retrieveStatuses();
+        this.retrieveThresholds();
     },
     components: {
         Loading
