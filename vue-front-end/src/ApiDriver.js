@@ -157,6 +157,18 @@ export default {
         return axios.get(this.namespace + "/" + "getMostRecent", Headers.retrieveHeaders())
       }
     },
+    Thresholds: {
+      namespace: baseUrl + "thresholds",
+      retrieveAll: function() {
+        return axios.get(this.namespace + "/" + "retrieve", Headers.retrieveHeaders())
+      },
+      retrieve: function (sensorName) {
+        return axios.get(this.namespace + "/" + sensorName + "/retrieve", Headers.retrieveHeaders())
+      },
+      updateThresholdByName: function(sensorName, maximum) {
+        return axios.post(this.namespace + "/" + sensorName + "/" + maximum, Headers.retrieveHeaders())
+      }
+    },
     WeatherData: {
       namespace: baseUrl + "weather-data",
       listWeatherDataBetweenDates: function(lowerDate, upperDate) {

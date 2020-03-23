@@ -29,9 +29,6 @@
                                             <v-form>
                                                 <div v-if="sensor.warningThreshold != null">
                                                     <v-text-field label="Warning Threshold" v-model="sensor.warningThreshold"></v-text-field>
-                                                </div>
-                                                <div v-if="sensor.criticalThreshold != null">
-                                                    <v-text-field label="Critical Threshold" v-model="sensor.criticalThreshold"></v-text-field>
                                                     <v-btn color="primary darken-2" class="mr-4" @click="submitThreshold(sensor.id)">Submit</v-btn>
                                                 </div>
                                                 <div v-else>
@@ -90,11 +87,11 @@ export default {
             ],
 
             sensors: [
-                { id: 1, displayName: 'Gate', name: 'gate', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, warningThreshold: null, criticalThreshold: null },
-                { id: 2, displayName: 'Proximity', name: 'proximity', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, warningThreshold: null, criticalThreshold: null  },
-                { id: 3, displayName: 'Azimuth Motor', name: 'azimuthMotor', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, warningThreshold: 120, criticalThreshold: 150  },
-                { id: 4, displayName: 'Elevation Motor', name: 'elevationMotor', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, warningThreshold: 120, criticalThreshold: 150  },
-                { id: 5, displayName: 'Weather Station', name: 'weatherStation', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, warningThreshold: null, criticalThreshold: null  }
+                { id: 1, displayName: 'Gate', name: 'gate', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, warningThreshold: null },
+                { id: 2, displayName: 'Proximity', name: 'proximity', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, warningThreshold: null },
+                { id: 3, displayName: 'Azimuth Motor', name: 'azimuthMotor', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, warningThreshold: 120 },
+                { id: 4, displayName: 'Elevation Motor', name: 'elevationMotor', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, warningThreshold: 120 },
+                { id: 5, displayName: 'Weather Station', name: 'weatherStation', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, warningThreshold: null }
             ],
 
             // status values
