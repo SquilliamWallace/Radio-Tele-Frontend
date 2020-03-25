@@ -37,6 +37,7 @@ export default {
     methods: {
         // Method called if they want to request an admin to review there appointmetn and approve or deny it, if user is over alloted time
         request() {
+            // console.log("RequestAppointment.vue: " + JSON.stringify(this.Appointment));
             let requestAppointment = {
                 userId: this.$store.state.currentUserId,
                 startTime: new Date(this.Appointment.startTime).toUTCString(),
@@ -50,7 +51,8 @@ export default {
                 declination: this.Appointment.declination,
                 azimuth: this.Appointment.azimuth,
                 elevation: this.Appointment.elevation,
-                celestialBodyId: this.Appointment.celestialBodyId
+                celestialBodyId: this.Appointment.celestialBodyId,
+                coordinates: this.Appointment.coordinates
             };
 
             ApiDriver.Appointment.request(JSON.stringify(requestAppointment), this.mapApptType()).then((response) => {

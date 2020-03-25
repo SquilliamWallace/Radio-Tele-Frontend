@@ -632,7 +632,11 @@ export default {
                    formObj.telescope = this.telescopeName
                    //Sends the information of the form to the requestAppointment function on Scheduler Page.
                    this.$emit('request-appointment', formObj)
-                   console.log(JSON.stringify(formObj));
+                   // Extra second is needed to transfer coordinates for Raster Scans
+                   if (formObj.type == "Raster Scan"){
+                       sleep(1000); 
+                   }
+                   // console.log("Appointment.vue: " + JSON.stringify(formObj));
                    this.resetForm()
                 } else {
                     HttpResponse.generalError(this, message, false)
