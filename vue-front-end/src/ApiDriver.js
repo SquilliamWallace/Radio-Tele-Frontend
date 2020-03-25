@@ -85,8 +85,8 @@ export default {
       create: function (data, type) {
         return axios.post(this.namespace + "/schedule/" + type, data, Headers.retrieveHeaders())
       },
-      request: function (data) {
-        return axios.post(this.namespace + "/request", data, Headers.retrieveHeaders())
+      request: function (data, type) {
+        return axios.post(this.namespace + "/request/" + type, data, Headers.retrieveHeaders())
       },
       unapprovedRequest: function (pageNumber, pageSize) {
         return axios.get(this.namespace + "/listRequested?page=" + pageNumber + "&size=" + pageSize, Headers.retrieveHeaders())
