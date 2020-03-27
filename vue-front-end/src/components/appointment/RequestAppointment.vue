@@ -13,16 +13,23 @@
             <v-card-text>Start Time: {{ Appointment.startTime }}</v-card-text>
             <v-card-text>End Time: {{ Appointment.endTime }}</v-card-text>
             <v-card-text>Private Event: {{ !Appointment.isPublic }}</v-card-text>
-            <v-card-text v-if="Appointment.type === 'Point'">Right Ascension: {{ Appointment.hours }}:{{ Appointment.minutes }}<!--:{{ Appointment.seconds }}-->  Declination: {{ Appointment.declination }}</v-card-text>
-            <v-card-text v-if="Appointment.type === 'Celestial Body'">Celestial Body: {{ Appointment.celestialBodyName }}</v-card-text>
+            <v-card-text v-if="Appointment.type === 'Point'">
+                Coordinates: <br/>
+                Hours: {{ Appointment.hours }}, Minutes: {{ Appointment.minutes }}, Declination: {{ Appointment.declination }}
+            </v-card-text>
+            <v-card-text v-if="Appointment.type === 'Celestial Body'">
+                Celestial Body: {{ Appointment.celestialBodyName }}
+            </v-card-text>
             <v-card-text v-if="Appointment.type === 'Drift Scan'">
-                Azimuth: {{ Appointment.azimuth }} 
-                <br/>
-                Elevation: {{ Appointment.elevation }}</v-card-text>
+                Azimuth: {{ Appointment.azimuth }} <br/>
+                Elevation: {{ Appointment.elevation }}
+            </v-card-text>
             <v-card-text v-if="Appointment.type === 'Raster Scan'">
-                First Coordinate: {{ Appointment.coordinates[0].hours }}:{{ Appointment.coordinates[0].minutes }}:{{ Appointment.coordinates[0].declination }} 
+                First Coordinate: <br/>
+                Hours: {{ Appointment.coordinates[0].hours }}, Minutes: {{ Appointment.coordinates[0].minutes }}, Declination: {{ Appointment.coordinates[0].declination }} <br/>
                 <br/>
-                Second Coordinate: {{ Appointment.coordinates[1].hours }}:{{ Appointment.coordinates[1].minutes }}:{{ Appointment.coordinates[1].declination }}
+                Second Coordinate: <br/>
+                Hours: {{ Appointment.coordinates[1].hours }}, Minutes: {{ Appointment.coordinates[1].minutes }}, Declination: {{ Appointment.coordinates[1].declination }}
             </v-card-text>
             <v-card-actions>
                 <v-spacer></v-spacer>
