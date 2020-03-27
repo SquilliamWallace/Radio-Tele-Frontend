@@ -87,11 +87,11 @@ export default {
             ],
 
             sensors: [
-                { id: 1, displayName: 'Gate', name: 'gate', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, warningThreshold: null },
-                { id: 2, displayName: 'Proximity', name: 'proximity', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, warningThreshold: null },
-                { id: 3, displayName: 'Azimuth Motor', name: 'azimuthMotor', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, warningThreshold: 100 },
-                { id: 4, displayName: 'Elevation Motor', name: 'elevationMotor', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, warningThreshold: 150 },
-                { id: 5, displayName: 'Weather Station', name: 'weatherStation', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, warningThreshold: null }
+                { id: 1, displayName: 'Gate', name: 'gate', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, tempThreshold: null, vibrationThreshold: null, currentThreshold: null },
+                { id: 2, displayName: 'Proximity', name: 'proximity', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, tempThreshold: null, vibrationThreshold: null, currentThreshold: null },
+                { id: 3, displayName: 'Azimuth Motor', name: 'azimuthMotor', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, tempThreshold: 81, vibrationThreshold: 2, currentThreshold: 7 },
+                { id: 4, displayName: 'Elevation Motor', name: 'elevationMotor', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, tempThreshold: 81, vibrationThreshold: 2, currentThreshold: 7 },
+                { id: 5, displayName: 'Weather Station', name: 'weatherStation', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, tempThreshold: null, vibrationThreshold: null, currentThreshold: null }
             ],
 
             // status values
@@ -304,11 +304,11 @@ export default {
         populateData(data){
             //if updating threshold for azimuth motor
             if (thresholdName == sensorList[3]) {
-                sensors[3].warningThreshold = data;         
+                sensors[3].tempThreshold = data;         
             }
             //if updating threshold for elevation motor
             else if (thresholdName == sensorList[4]) {
-                sensors[4].warningThreshold = data;  
+                sensors[4].tempThreshold = data;  
             }
         },
         submitThreshold(id){
