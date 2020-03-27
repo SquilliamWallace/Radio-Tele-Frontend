@@ -13,7 +13,17 @@
             <v-card-text>Start Time: {{ Appointment.startTime }}</v-card-text>
             <v-card-text>End Time: {{ Appointment.endTime }}</v-card-text>
             <v-card-text>Private Event: {{ !Appointment.isPublic }}</v-card-text>
-            <v-card-text>Right Ascension: {{ Appointment.hours }}:{{ Appointment.minutes }}<!--:{{ Appointment.seconds }}-->  Declination: {{ Appointment.declination }}</v-card-text>
+            <v-card-text v-if="Appointment.type === 'Point'">Right Ascension: {{ Appointment.hours }}:{{ Appointment.minutes }}<!--:{{ Appointment.seconds }}-->  Declination: {{ Appointment.declination }}</v-card-text>
+            <v-card-text v-if="Appointment.type === 'Celestial Body'">Celestial Body Id: {{ Appointment.celestialBodyId }}</v-card-text>
+            <v-card-text v-if="Appointment.type === 'Drift Scan'">
+                Azimuth: {{ Appointment.azimuth }} 
+                <br/>
+                Elevation: {{ Appointment.elevation }}</v-card-text>
+            <v-card-text v-if="Appointment.type === 'Raster Scan'">
+                First Coordinate: {{ Appointment.coordinates[0].hours }}:{{ Appointment.coordinates[0].minutes }}:{{ Appointment.coordinates[0].declination }} 
+                <br/>
+                Second Coordinate: {{ Appointment.coordinates[1].hours }}:{{ Appointment.coordinates[1].minutes }}:{{ Appointment.coordinates[1].declination }}
+            </v-card-text>
             <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="green darken-1" @click="request">Request</v-btn>
