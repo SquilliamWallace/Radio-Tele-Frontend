@@ -27,8 +27,14 @@
                                         </v-card-subtitle>
                                         <v-card-text>
                                             <v-form>
-                                                <div v-if="sensor.warningThreshold != null">
-                                                    <v-text-field label="Warning Threshold" v-model="sensor.warningThreshold"></v-text-field>
+                                                <div v-if="sensor.tempThreshold != null">
+                                                    <v-text-field label="Temp Threshold" v-model="sensor.tempThreshold"></v-text-field>
+                                                </div>
+                                                <div v-if="sensor.vibrationThreshold != null">
+                                                    <v-text-field label="Vibration Threshold" v-model="sensor.vibrationThreshold"></v-text-field>
+                                                </div>
+                                                <div v-if="sensor.currentThreshold != null">
+                                                    <v-text-field label="Current Threshold" v-model="sensor.currentThreshold"></v-text-field>
                                                     <v-btn color="primary darken-2" class="mr-4" @click="submitThreshold(sensor.id)">Submit</v-btn>
                                                 </div>
                                                 <div v-else>
@@ -267,8 +273,8 @@ export default {
             });
         },
         populatData(data){
-            sensor[2].warningThreshold = data[1];
-            sensor[3].warningThreshold = data[2];
+            sensor[2].tempThreshold = data[1];
+            sensor[3].tempThreshold = data[2];
         },
         getThresholdByName (thresholdName) {
             // Set the store's loading boolean to true
