@@ -630,6 +630,7 @@ export default {
                    formObj.startTime = this.start
                    formObj.endTime = this.end
                    formObj.telescope = this.telescopeName
+                   formObj.celestialBodyName = this.searchInput
                    //Sends the information of the form to the requestAppointment function on Scheduler Page.
                    this.$emit('request-appointment', formObj)
                    // Extra second is needed to transfer coordinates for Raster Scans
