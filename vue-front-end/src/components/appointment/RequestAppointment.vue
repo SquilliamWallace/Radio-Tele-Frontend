@@ -14,7 +14,7 @@
             <v-card-text>End Time: {{ Appointment.endTime }}</v-card-text>
             <v-card-text>Private Event: {{ !Appointment.isPublic }}</v-card-text>
             <v-card-text v-if="Appointment.type === 'Point'">Right Ascension: {{ Appointment.hours }}:{{ Appointment.minutes }}<!--:{{ Appointment.seconds }}-->  Declination: {{ Appointment.declination }}</v-card-text>
-            <v-card-text v-if="Appointment.type === 'Celestial Body'">Celestial Body Id: {{ Appointment.celestialBodyId }}</v-card-text>
+            <v-card-text v-if="Appointment.type === 'Celestial Body'">Celestial Body: {{ Appointment.celestialBodyName }}</v-card-text>
             <v-card-text v-if="Appointment.type === 'Drift Scan'">
                 Azimuth: {{ Appointment.azimuth }} 
                 <br/>
