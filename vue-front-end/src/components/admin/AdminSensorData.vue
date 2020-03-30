@@ -280,13 +280,13 @@ export default {
             }
         },
         setSensorThresholds() {
-            getThresholds();
-            sensors[3].tempThreshold = thresholds[2];
-            sensors[4].tempThreshold = thresholds[3];
-            sensors[3].vibrationThreshold = thresholds[4];
-            sensors[4].vibrationThreshold = thresholds[5];
-            sensors[3].currentThreshold = thresholds[6];
-            sensors[4].currentThreshold = thresholds[7];
+            this.getThresholds();
+            sensors[3].tempThreshold = thresholds[2].maximum;
+            sensors[4].tempThreshold = thresholds[3].maximum;
+            sensors[3].vibrationThreshold = thresholds[4].maximum;
+            sensors[4].vibrationThreshold = thresholds[5].maximum;
+            sensors[3].currentThreshold = thresholds[6].maximum;
+            sensors[4].currentThreshold = thresholds[7].maximum;
         },
         // getThresholdByName (thresholdName) {
         //     // Set the store's loading boolean to true
@@ -335,7 +335,7 @@ export default {
         }
     },
     mounted: function(){
-        this.retrieveStatuses();
+        //this.retrieveStatuses();
         this.setSensorThresholds();
     },
     components: {
