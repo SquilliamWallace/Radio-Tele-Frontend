@@ -588,7 +588,8 @@ export default {
                 azimuth: this.form.azimuth.value,
                 elevation: this.form.elevation.value,
                 coordinates: this.coordinates,
-                priority: this.priority
+                priority: this.priority,
+                type: this.type
             };
                         
             // Call appropriate API CALL and send form in json format
@@ -629,8 +630,14 @@ export default {
                    formObj.startTime = this.start
                    formObj.endTime = this.end
                    formObj.telescope = this.telescopeName
+                   formObj.celestialBodyName = this.searchInput
                    //Sends the information of the form to the requestAppointment function on Scheduler Page.
                    this.$emit('request-appointment', formObj)
+                   // Extra second is needed to transfer coordinates for Raster Scans
+                   if (formObj.type == "Raster Scan"){
+                       sleep(1000); 
+                   }
+                   // console.log("Appointment.vue: " + JSON.stringify(formObj));
                    this.resetForm()
                 } else {
                     HttpResponse.generalError(this, message, false)

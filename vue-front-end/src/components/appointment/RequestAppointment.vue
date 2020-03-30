@@ -13,7 +13,24 @@
             <v-card-text>Start Time: {{ Appointment.startTime }}</v-card-text>
             <v-card-text>End Time: {{ Appointment.endTime }}</v-card-text>
             <v-card-text>Private Event: {{ !Appointment.isPublic }}</v-card-text>
-            <v-card-text>Right Ascension: {{ Appointment.hours }}:{{ Appointment.minutes }}<!--:{{ Appointment.seconds }}-->  Declination: {{ Appointment.declination }}</v-card-text>
+            <v-card-text v-if="Appointment.type === 'Point'">
+                Coordinates: <br/>
+                Hours: {{ Appointment.hours }}, Minutes: {{ Appointment.minutes }}, Declination: {{ Appointment.declination }}
+            </v-card-text>
+            <v-card-text v-if="Appointment.type === 'Celestial Body'">
+                Celestial Body: {{ Appointment.celestialBodyName }}
+            </v-card-text>
+            <v-card-text v-if="Appointment.type === 'Drift Scan'">
+                Azimuth: {{ Appointment.azimuth }} <br/>
+                Elevation: {{ Appointment.elevation }}
+            </v-card-text>
+            <v-card-text v-if="Appointment.type === 'Raster Scan'">
+                First Coordinate: <br/>
+                Hours: {{ Appointment.coordinates[0].hours }}, Minutes: {{ Appointment.coordinates[0].minutes }}, Declination: {{ Appointment.coordinates[0].declination }} <br/>
+                <br/>
+                Second Coordinate: <br/>
+                Hours: {{ Appointment.coordinates[1].hours }}, Minutes: {{ Appointment.coordinates[1].minutes }}, Declination: {{ Appointment.coordinates[1].declination }}
+            </v-card-text>
             <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="green darken-1" @click="request">Request</v-btn>
@@ -37,19 +54,25 @@ export default {
     methods: {
         // Method called if they want to request an admin to review there appointmetn and approve or deny it, if user is over alloted time
         request() {
+            // console.log("RequestAppointment.vue: " + JSON.stringify(this.Appointment));
             let requestAppointment = {
                 userId: this.$store.state.currentUserId,
                 startTime: new Date(this.Appointment.startTime).toUTCString(),
                 endTime: new Date(this.Appointment.endTime).toUTCString(),
                 telescopeId: this.Appointment.telescopeId,
                 isPublic: this.Appointment.isPublic,
+                priority: this.Appointment.priority,
                 hours: this.Appointment.hours,
                 minutes: this.Appointment.minutes,
                 // seconds: this.Appointment.seconds,
-                declination: this.Appointment.declination
+                declination: this.Appointment.declination,
+                azimuth: this.Appointment.azimuth,
+                elevation: this.Appointment.elevation,
+                celestialBodyId: this.Appointment.celestialBodyId,
+                coordinates: this.Appointment.coordinates
             };
 
-            ApiDriver.Appointment.request(JSON.stringify(requestAppointment)).then((response) => {
+            ApiDriver.Appointment.request(JSON.stringify(requestAppointment), this.mapApptType()).then((response) => {
                 HttpResponse.then(response, (data) => {
                         this.$emit('input');
                     }, (status, errors) => {
@@ -72,6 +95,21 @@ export default {
         },
         toggleModal() {
             this.$emit('input');
+        },
+        mapApptType() {
+            switch(this.Appointment.type){
+                case "Point":
+                    return "coordinate";
+                case "Celestial Body":
+                    return "celestial-body";
+                case "Drift Scan":
+                    return "drift-scan";
+                case "Raster Scan":
+                    return "raster-scan";
+                default:
+                    return "coordinate";
+            }
+
         }
     }
 }
