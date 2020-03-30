@@ -584,8 +584,8 @@ export default {
                     console.log(this.bodies);
                 }
                 else if(this.type == "Raster Scan") {
-                    targetRA = (this.form.firstCoordinate.hours * 15.0 + this.form.firstCoordinate.minutes * 0.25);
-                    targetDec = this.form.firstCoordinate.declination;
+                    tempTargetRA = (this.form.firstCoordinate.hours * 15.0 + this.form.firstCoordinate.minutes * 0.25);
+                    tempTargetDec = this.form.firstCoordinate.declination;
                 }
 
                 let data0 = {
@@ -622,6 +622,7 @@ export default {
                     latitude:  40.024409,
                     altitude: 395 // TODO: make longitude, latitude, and altitude dependant on the selected telescope.
                 };
+                // console.log(JSON.stringify(data1));
                 var call1 = ApiDriver.Astronomical.horisonCheck(data1);
                 call1
                     .then(response => {
@@ -632,7 +633,55 @@ export default {
                     })
                     .catch(error => {console.log(error);});
 
-                // this.notVisible = startVisible && endVisible;
+                if(this.type == "Raster Scan") {
+                    tempTargetRA = (this.form.secondCoordinate.hours * 15.0 + this.form.secondCoordinate.minutes * 0.25);
+                    tempTargetDec = this.form.secondCoordinate.declination;
+                    let data0 = {
+                        year:   this.startDate.substring(0, 4), 
+                        month:  this.startDate.substring(5, 7), 
+                        day:    this.startDate.substring(8, 10), 
+                        hour:   this.startTime.substring(0, 2),
+                        minute: this.startTime.substring(3, 5),
+                        targetRA:   tempTargetRA, 
+                        targetDec:  tempTargetDec,
+                        longitude: -76.704564,
+                        latitude:  40.024409,
+                        altitude: 395 // TODO: make longitude, latitude, and altitude dependant on the selected telescope.
+                    };
+                    var call0 = ApiDriver.Astronomical.horisonCheck(data0);
+                    call0
+                        .then(response => {
+                            startVisible = response.data.visible;
+                            console.log(response.data);
+                            if(!response.data.visible)
+                                this.notVisible = true;
+                        })
+                        .catch(error => {console.log(error);});
+
+                    let data1 = {
+                        year:   this.endDate.substring(0, 4), 
+                        month:  this.endDate.substring(5, 7), 
+                        day:    this.endDate.substring(8, 10), 
+                        hour:   this.endTime.substring(0, 2),
+                        minute: this.endTime.substring(3, 5),
+                        targetRA:   tempTargetRA, 
+                        targetDec:  tempTargetDec,
+                        longitude: -76.704564,
+                        latitude:  40.024409,
+                        altitude: 395 // TODO: make longitude, latitude, and altitude dependant on the selected telescope.
+                    };
+                    // console.log(JSON.stringify(data1));
+                    var call1 = ApiDriver.Astronomical.horisonCheck(data1);
+                    call1
+                        .then(response => {
+                            startVisible = response.data.visible;
+                            console.log(response.data);
+                            if(!response.data.visible)
+                                this.notVisible = true;
+                        })
+                        .catch(error => {console.log(error);});
+                }
+
             } else {
                 this.notVisible = this.form.elevation > 0.0;
             }
