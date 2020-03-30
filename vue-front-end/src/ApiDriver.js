@@ -169,6 +169,23 @@ export default {
         return axios.get(this.namespace + "/" + "listBetweenCreatedDates?lowerDate=" + lowerDate + "&upperDate=" + upperDate, Headers.retrieveHeaders())
       }
     },
+    Astronomical: {
+      namespace: "http://rtastronomicalapi-dev.us-east-2.elasticbeanstalk.com/",
+      horisonCheck(data){
+        return axious.get(namespace + "HorizonCheck/" + 
+        "?year="+data.year+
+        "&month="+data.month+
+        "&day="+data.day+
+        "&hour="+data.hour+
+        "&minute="+data.minute+
+        "&targetRA="+data.targetRA+
+        "&targetDec="+data.targetDec+
+        "&longitude="+data.longitude+
+        "&latitude="+data.latitude+
+        "&altitude="+data.altitude, 
+      data, Headers.retrieveHeaders());
+      }
+    },
     login: function(data) {
       return axios.post("http://api.ycpradiotelescope.com:8080/login?email=" + data.username.value + "&password=" + data.password.value, JSON.stringify(data))
     },

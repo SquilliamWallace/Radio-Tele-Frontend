@@ -485,6 +485,7 @@ export default {
             startTime: '',
             endDate: '',
             endTime: '',
+            notVisible: false,
 
             // Variables to keep track of chosen Appointment type
             type: 'Point',
@@ -566,6 +567,75 @@ export default {
 
             // Handles making the selected Appointment Type string compatible with the back-end
             this.handleType();
+
+            // Validate that the target is visible at the beginning and end of the appointment
+            var startVisible = true;
+            var endVisible = true;
+            if(this.type != "Drift Scan") {
+                var tempTargetRA = 0;
+                var tempTargetDec = 0;
+                if(this.type == "Point") {
+                    tempTargetRA = (this.form.rightAscension.hours * 15.0 + this.form.rightAscension.minutes * 0.25);
+                    tempTargetDec = this.form.declination.value;
+                }
+                else if(this.type == "Celestial Body") {
+                    tempTargetRA = (this.bodies[0].hours * 15.0 + this.bodies[0].minutes * 0.25);
+                    tempTargetDec = this.bodies[0].declination;
+                    console.log(this.bodies);
+                }
+                else if(this.type == "Raster Scan") {
+                    targetRA = (this.form.firstCoordinate.hours * 15.0 + this.form.firstCoordinate.minutes * 0.25);
+                    targetDec = this.form.firstCoordinate.declination;
+                }
+
+                let data0 = {
+                    year:   this.startDate.substring(0, 4), 
+                    month:  this.startDate.substring(5, 7), 
+                    day:    this.startDate.substring(8, 10), 
+                    hour:   this.startTime.substring(0, 2),
+                    minute: this.startTime.substring(3, 5),
+                    targetRA:   tempTargetRA, 
+                    targetDec:  tempTargetDec,
+                    longitude: -76.704564,
+                    latitude:  40.024409,
+                    altitude: 395 // TODO: make longitude, latitude, and altitude dependant on the selected telescope.
+                };
+                var call0 = ApiDriver.Astronomical.horisonCheck(data0);
+                call0
+                    .then(response => {
+                        startVisible = response.data.visible;
+                        console.log(response.data);
+                        if(!response.data.visible)
+                            this.notVisible = true;
+                    })
+                    .catch(error => {console.log(error);});
+
+                let data1 = {
+                    year:   this.endDate.substring(0, 4), 
+                    month:  this.endDate.substring(5, 7), 
+                    day:    this.endDate.substring(8, 10), 
+                    hour:   this.endTime.substring(0, 2),
+                    minute: this.endTime.substring(3, 5),
+                    targetRA:   tempTargetRA, 
+                    targetDec:  tempTargetDec,
+                    longitude: -76.704564,
+                    latitude:  40.024409,
+                    altitude: 395 // TODO: make longitude, latitude, and altitude dependant on the selected telescope.
+                };
+                var call1 = ApiDriver.Astronomical.horisonCheck(data1);
+                call1
+                    .then(response => {
+                        startVisible = response.data.visible;
+                        console.log(response.data);
+                        if(!response.data.visible)
+                            this.notVisible = true;
+                    })
+                    .catch(error => {console.log(error);});
+
+                // this.notVisible = startVisible && endVisible;
+            } else {
+                this.notVisible = this.form.elevation > 0.0;
+            }
 
             if(this.form.isSecondary.value) {
                 this.priority = 'SECONDARY';
