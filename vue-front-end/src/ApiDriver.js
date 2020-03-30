@@ -171,8 +171,8 @@ export default {
     },
     Astronomical: {
       namespace: "http://rtastronomicalapi-dev.us-east-2.elasticbeanstalk.com/",
-      horisonCheck(data){
-        return axious.get(namespace + "HorizonCheck/" + 
+      horisonCheck: function(data){
+        return axios.get("http://rtastronomicalapi-dev.us-east-2.elasticbeanstalk.com/HorizonCheck/" + 
         "?year="+data.year+
         "&month="+data.month+
         "&day="+data.day+
