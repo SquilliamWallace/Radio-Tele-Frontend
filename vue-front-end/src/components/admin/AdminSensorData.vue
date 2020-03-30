@@ -40,7 +40,6 @@
                                                 <div v-else>
                                                     <v-card-text>No thresholds for this sensor</v-card-text>
                                                 </div>
-                                                
                                             </v-form>
                                         </v-card-text>
                                     </v-card> 
@@ -83,6 +82,8 @@ export default {
             overallStatus: 0,
             overallStatColor: "green",
             overallStatText: "OK",
+
+             thresholds: [],
 
             sensorList: [
                 'gate',
@@ -251,7 +252,7 @@ export default {
                 // Handle the server response         
                 HttpResponse.then(response, (data) => {
                     // Populate the data and set the store's boolean back to false
-                    this.populatData(data.data)                                                      
+                    this.populatData(data.data)                                            
                     this.$store.commit("loading", false);
                 }, (status, errors) => {
                     // Access Denied
@@ -273,50 +274,61 @@ export default {
             });
         },
         populatData(data){
-            sensor[2].tempThreshold = data[1];
-            sensor[3].tempThreshold = data[2];
+            for (var index in data.content) {
+                let threshold = data.content[index];
+                this.thresholds.push(threshold);
+            }
         },
-        getThresholdByName (thresholdName) {
-            // Set the store's loading boolean to true
-            this.$store.commit("loading", true);
+        setSensorThresholds() {
+            getThresholds();
+            sensors[3].tempThreshold = thresholds[2];
+            sensors[4].tempThreshold = thresholds[3];
+            sensors[3].vibrationThreshold = thresholds[4];
+            sensors[4].vibrationThreshold = thresholds[5];
+            sensors[3].currentThreshold = thresholds[6];
+            sensors[4].currentThreshold = thresholds[7];
+        },
+        // getThresholdByName (thresholdName) {
+        //     // Set the store's loading boolean to true
+        //     this.$store.commit("loading", true);
 
-            // Make the API call
-            ApiDriver.Thresholds.getThresholdByName(thresholdName).then((response) => {
-                // Handle the server response
-                HttpResponse.then(response, (data) => {
-                    console.log("Response data: " + JSON.stringify(data))
-                    // Populate the data and set the store's boolean back to false
-                    this.populateData(data.data)
-                    this.$store.commit("loading", false);
-                }, (status, errors) => {
-                    // Access Denied
-                    if (parseInt(status) === 403) {
-                        // Call the generic access denied handler
-                        HttpResponse.accessDenied(this);
-                    } 
-                    // Invalid Resource Id
-                    else if (parseInt(status) === 404) {
-                        // Call the generic not found handler
-                        HttpResponse.notFound(this, errors);
-                    }
-                })
-            }).catch((error) => {
-                // Handle an erroneous API call
-                console.log(error)
-                let message = "An error occurred when loading this observation";
-                HttpResponse.generalError(this, message, true);
-            });
-        },
-        populateData(data){
-            //if updating threshold for azimuth motor
-            if (thresholdName == sensorList[3]) {
-                sensors[3].tempThreshold = data;         
-            }
-            //if updating threshold for elevation motor
-            else if (thresholdName == sensorList[4]) {
-                sensors[4].tempThreshold = data;  
-            }
-        },
+        //     // Make the API call
+        //     ApiDriver.Thresholds.getThresholdByName(thresholdName).then((response) => {
+        //         // Handle the server response
+        //         HttpResponse.then(response, (data) => {
+        //             console.log("Response data: " + JSON.stringify(data))
+        //             // Populate the data and set the store's boolean back to false
+        //             this.populateData(data.data)
+        //             this.$store.commit("loading", false);
+        //         }, (status, errors) => {
+        //             // Access Denied
+        //             if (parseInt(status) === 403) {
+        //                 // Call the generic access denied handler
+        //                 HttpResponse.accessDenied(this);
+        //             } 
+        //             // Invalid Resource Id
+        //             else if (parseInt(status) === 404) {
+        //                 // Call the generic not found handler
+        //                 HttpResponse.notFound(this, errors);
+        //             }
+        //         })
+        //     }).catch((error) => {
+        //         // Handle an erroneous API call
+        //         console.log(error)
+        //         let message = "An error occurred when loading this observation";
+        //         HttpResponse.generalError(this, message, true);
+        //     });
+        // },
+        // populateData(data){
+        //     //if updating threshold for azimuth motor
+        //     if (thresholdName == sensorList[3]) {
+        //         sensors[3].tempThreshold = data;         
+        //     }
+        //     //if updating threshold for elevation motor
+        //     else if (thresholdName == sensorList[4]) {
+        //         sensors[4].tempThreshold = data;  
+        //     }
+        // },
         submitThreshold(id){
             console.log("Threshold ID: " + id);
             // Save the thresholds values for Threshold ID
@@ -324,7 +336,7 @@ export default {
     },
     mounted: function(){
         this.retrieveStatuses();
-        this.retrieveThresholds();
+        this.setSensorThresholds();
     },
     components: {
         Loading
