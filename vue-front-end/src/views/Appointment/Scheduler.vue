@@ -234,7 +234,7 @@ export default {
             // Properly format the time and date before we pass it to the create-modal
             this.event.startTime = moment(Obj.start).format('HH:mm');
             this.event.startDate = moment(Obj.start).format('YYYY-MM-DD')
-            this.event.endTime = moment(Obj.end).format('HH:mm');
+            this.event.endTime = moment(Obj.end).subtract(1, 'minute').format('HH:mm'); // Subtract 1 minute to avoid overlapping
             this.event.endDate = moment(Obj.end).format('YYYY-MM-DD')
 
             // Set openCreateModal to true so that Appointment.vue component displays

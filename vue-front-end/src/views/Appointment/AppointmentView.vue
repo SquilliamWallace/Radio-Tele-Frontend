@@ -114,7 +114,7 @@
                     <v-list-tile-title>SpectraCyber Configuration:
                     </v-list-tile-title>
                     <v-list-tile-sub-title class = "pl-3">Mode: {{this.spectraCyber.mode.value}}, Integration Time: {{this.spectraCyber.integrationTime.value}} time/step, Offset Voltage: {{this.spectraCyber.offsetVoltage.value}} Volts, 
-                                                        IF Gain: {{this.spectraCyber.ifGain.value}} DB, DC Gain: {{this.spectraCyber.dcGain.value}} DB, Badwidth: {{this.spectraCyber.bandwidth.value}} KHZ</v-list-tile-sub-title>
+                                                        IF Gain: {{this.spectraCyber.ifGain.value}} DB, DC Gain: {{this.spectraCyber.dcGain.value}} DB, Bandwidth: {{this.spectraCyber.bandwidth.value}} KHZ</v-list-tile-sub-title>
                 </v-list-tile-content>
             </v-list-tile>
             <v-divider></v-divider>
@@ -210,6 +210,9 @@ export default {
                     value: false,
                     stringValue: null
                 },
+                spectracyberConfigId: {
+                    value: null
+                },
                 startTime: {
                     value: null
                 },
@@ -263,6 +266,9 @@ export default {
                     value: null,
                     stringValue: null,
                     hasError: false
+                },
+                spectracyberConfigId: {
+                    value: null
                 },
                 start: {
                     value: null, 
@@ -325,6 +331,9 @@ export default {
                 }
             },
             spectraCyber: { // This is eventually be replace with actual data.
+                id: {
+                    value: null
+                },
                 mode: {
                     value: 'Spectral',
                     hasError: false
@@ -342,7 +351,7 @@ export default {
                     hasError: false
                 },
                 dcGain: {
-                    value: 100,
+                    value: 10,
                     hasError: false
                 },
                 bandwidth: {
@@ -375,6 +384,7 @@ export default {
                     console.log("Response data: " + JSON.stringify(data))
                     // Populate the data and set the store's boolean back to false
                     this.populateData(data.data)
+                    this.getSpectraCyberConfig();
                     this.$store.commit("loading", false);
                 }, (status, errors) => {
                     // Access Denied
@@ -420,6 +430,7 @@ export default {
             this.data.userLastName.value = data.userLastName
             this.data.status.value = data.status
             this.data.type.value = data.type;
+            this.data.spectracyberConfigId.value = data.spectracyberConfigId;
             this.telescopeName = this.telescopes[this.data.telescopeId.value - 1]
             this.rawEndTime = data.endTime
             this.complete = moment(this.rawEndTime).isBefore(moment(), 'second')
@@ -521,6 +532,47 @@ export default {
             // this.appointment.rightAscension.seconds = this.data.rightAscension.seconds
             this.appointment.declination.value = this.data.declination.value
             this.edit = true
+        },
+        getSpectraCyberConfig () {
+            // Set the store's loading boolean to true
+            this.$store.commit("loading", true);
+
+            // Make the API call
+            ApiDriver.Appointment.viewSpectraCyberConfig(this.$store.state.currentUserId, this.data.spectracyberConfigId.value).then((response) => {
+                // Handle the server response
+                HttpResponse.then(response, (data) => {
+                    console.log("SpectraCyberConfig: " + JSON.stringify(data))
+                    // Populate the data and set the store's boolean back to false
+                    this.populateSpectraCyberConfig(data.data)
+                    this.$store.commit("loading", false);
+                }, (status, errors) => {
+                    // Access Denied
+                    if (parseInt(status) === 403) {
+                        // Call the generic access denied handler
+                        HttpResponse.accessDenied(this);
+                    } 
+                    // Invalid Resource Id
+                    else if (parseInt(status) === 404) {
+                        // Call the generic not found handler
+                        HttpResponse.notFound(this, errors);
+                    }
+                })
+            }).catch((error) => {
+                // Handle an erroneous API call
+                console.log(error)
+                let message = "An error occurred when loading this observation";
+                HttpResponse.generalError(this, message, true);
+            });
+        },
+        populateSpectraCyberConfig (data) {
+            // Populate the SpectraCyberConfig
+            this.spectraCyber.mode.value = data.mode;
+            this.spectraCyber.integrationTime.value = data.integrationTime;
+            this.spectraCyber.offsetVoltage.value = data.offsetVoltage;
+            this.spectraCyber.bandwidth.value = data.bandwidth;
+            this.spectraCyber.id.value = data.id;
+            this.spectraCyber.ifGain.value = data.ifgain;
+            this.spectraCyber.dcGain.value = data.dcgain;
         },
         cancelAppointment () {
             // Open the modal

@@ -296,21 +296,22 @@
                 ></v-text-field>
               </v-flex>
               <v-flex>
-                <v-select
-                v-model="spectraCyberObj.ifGain.value"
-                :items="ifGains"
-                color="blue darken-2"
-                label="IF Gain (DB)"
-                required
-                ></v-select>
-              </v-flex>
-              <v-flex>
                 <v-text-field
-                v-model="spectraCyberObj.dcGain.value"
-                onkeypress="return event.charCode == 45 || (event.charCode >= 48 && event.charCode <= 57)"
-                label="DC Gain (DB)"
+                v-model="spectraCyberObj.ifGain.value"
+                onkeypress="return event.charCode == 45 || event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57)"
+                :rules="[rules.ifGain]"
+                label="IF Gain (DB)"
                 type="number"
                 ></v-text-field>
+              </v-flex>
+              <v-flex>
+                <v-select
+                v-model="spectraCyberObj.dcGain.value"
+                :items="dcGains"
+                color="blue darken-2"
+                label="DC Gain (DB)"
+                required
+                ></v-select>
               </v-flex>
               <v-flex>
                 <v-text-field
@@ -382,7 +383,7 @@ export default {
           (val && val.toString().length > 0 && val >= 0) ||
           "Must be greater or equal to zero",
         offsetVoltage: val =>
-          (val && val.toString().length > 0 && val >= 0.0 && val <= 4.095) ||
+          (val.toString().length > 0 && val >= 0 && val <= 4.095) ||
           "Must be between 0 and 4.095",
         ifGain: val =>
           (val && val.toString().length > 0 && val >= 10.00 && val <= 25.75) ||
@@ -398,11 +399,10 @@ export default {
       // Variable to store our pair of coordinates for Drift Scans
       coordinates: [],
       modes: [
-          "Spectral",
-          "Continuum",
-          "Unknown"
+          "SPECTRAL",
+          "CONTINUUM"
       ],
-      ifGains: [
+      dcGains: [
           1,
           5,
           10,
@@ -498,6 +498,37 @@ export default {
           response,
           data => {
             this.$emit("edited", this.appointmentObj);
+            this.$emit("input");
+          },
+          (status, errors) => {
+            if (parseInt(status) === 403) {
+              HttpResponse.accessDenied(this);
+            } else if (parseInt(status) === 404) {
+              HttpResponse.notFound(this, errors);
+            } else {
+              this.handleErrors(errors);
+            }
+          }
+        );
+      });
+
+      let configData = JSON.stringify({
+        id: this.appointmentObj.id.value,
+        mode: this.spectraCyberObj.mode.value,
+        integrationTime: this.spectraCyberObj.integrationTime.value,
+        offsetVoltage: this.spectraCyberObj.offsetVoltage.value,
+        IFGain: this.spectraCyberObj.ifGain.value,
+        DCGain: this.spectraCyberObj.dcGain.value,
+        bandwidth: this.spectraCyberObj.bandwidth.value
+      });
+      //console.log("SpectraCyberConfig update: " + configData);
+
+      // update the SpectraCyber Configuration Settings
+      ApiDriver.Appointment.updateSpectraCyberConfig(this.$store.state.currentUserId, configData).then(response => {
+        HttpResponse.then(
+          response,
+          configData => {
+            this.$emit("edited", this.spectraCyberObj);
             this.$emit("input");
           },
           (status, errors) => {
