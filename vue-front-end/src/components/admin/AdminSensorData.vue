@@ -18,7 +18,7 @@
                 <v-flex md4>
                         <v-card dark >
                                 <!-- <div class="sensor-name">{{ sensor.displayName }}</div> -->
-                                <v-btn block class="sensor-button" height=100 @click="sensor.thresholdToggle = true">{{ sensor.displayName }}</v-btn>
+                                <v-btn block class="sensor-button" height=100 @click="sensor.thresholdToggle = true; getThresholds();">{{ sensor.displayName }}</v-btn>
                                 <v-dialog hide-overlay width="600px" v-model="sensor.thresholdToggle">
                                     <!-- <v-btn outlined color="primary darken-2" slot="activator">{{sensor.displayName}}</v-btn> -->
                                     <v-card dark>
@@ -251,7 +251,7 @@ export default {
                 HttpResponse.then(response, (data) => {
                     // Populate the data and set the store's boolean back to false
                     console.log("Thresholds returned: " + JSON.stringify(data.data));
-                    this.populatData(data.data)    
+                    this.populateData(data.data)    
                     console.log("Thresholds after populate: " + JSON.stringify(this.thresholds));                                        
                     this.$store.commit("loading", false);
                 }, (status, errors) => {
@@ -273,7 +273,7 @@ export default {
                 HttpResponse.generalError(this, message, true);
             });
         },
-        populatData(data){
+        populateData(data){
             console.log("Entered populatData()...");
             for (var index in data) {
                 console.log("Data: " + JSON.stringify(data[index]));
