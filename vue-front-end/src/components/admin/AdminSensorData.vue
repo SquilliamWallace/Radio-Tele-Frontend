@@ -281,18 +281,36 @@ export default {
                     if (data[index].sensorName.includes("TEMP")){
                         // Set the Temperature thresholds for the Azimuth Motor
                         this.sensors[2].tempThreshold = data[index].maximum;
-                        console.log("Successfully set azimuth motor temp threshold!")
+                        console.log("Successfully retrieved azimuth motor temp threshold!")
+                    }
+                    else if (data[index].sensorName.includes("VIBRATION")){
+                        // Set the Temperature thresholds for the Azimuth Motor
+                        this.sensors[2].vibrationThreshold = data[index].maximum;
+                        console.log("Successfully retrieved azimuth motor vibration threshold!")
+                    }
+                    else if (data[index].sensorName.includes("CURRENT")){
+                        // Set the Temperature thresholds for the Azimuth Motor
+                        this.sensors[2].currentThreshold = data[index].maximum;
+                        console.log("Successfully retrieved azimuth motor current threshold!")
                     }
                 }
                 if (data[index].sensorName.includes("ELEV_MOTOR")){
                     if (data[index].sensorName.includes("TEMP")){
                         // Set the Temperature thresholds for the Elevation Motor
                         this.sensors[3].tempThreshold = data[index].maximum;
-                        console.log("Successfully set elevation motor temp threshold")
+                        console.log("Successfully retrieved elevation motor temp threshold")
                     }
+                    else if (data[index].sensorName.includes("VIBRATION")){
+                        // Set the Temperature thresholds for the Elevation Motor
+                        this.sensors[3].vibrationThreshold = data[index].maximum;
+                        console.log("Successfully retrieved elevation motor vibration threshold!")
+                    }
+                    else if (data[index].sensorName.includes("CURRENT")){
+                        // Set the Temperature thresholds for the Elevation Motor
+                        this.sensors[3].currentThreshold = data[index].maximum;
+                        console.log("Successfully retrieved elevation motor current threshold!")
+                    }   
                 }
-                // let threshold = data.content[index];
-                // this.thresholds.push(threshold);
             }
         },
         // getThresholdByName (thresholdName) {
