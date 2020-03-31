@@ -570,64 +570,10 @@ export default {
             // Handles making the selected Appointment Type string compatible with the back-end
             this.handleType();
 
-            if(this.checkVisible() == true) {
-                HttpResponse.generalError(this, "The appointment is not possible due to the target's position, which will be below the horizon during a portion of this appointment.", false);
-            } else {
-                // set up form to send to back end with data from form obj
-                if(this.form.isSecondary.value) {
-                    this.priority = 'SECONDARY';
-                } else {
-                    this.priority = 'PRIMARY';
-                }
-                let form = {
-                    userId: this.$store.state.currentUserId,
-                    startTime: new Date(this.start).toUTCString(),
-                    endTime: new Date(this.end).toUTCString(),
-                    telescopeId: this.telescopes.indexOf(this.telescopeName) + 1,
-                    isPublic: !this.form.isPrivate.value,
-                    hours: this.form.rightAscension.hours,
-                    minutes: this.form.rightAscension.minutes,
-                    // seconds: this.form.rightAscension.seconds,
-                    declination: this.form.declination.value,
-                    celestialBodyId: this.selectedBody,
-                    azimuth: this.form.azimuth.value,
-                    elevation: this.form.elevation.value,
-                    coordinates: this.coordinates,
-                    priority: this.priority,
-                    type: this.type
-                };
-                            
-                // Call appropriate API CALL and send form in json format
-                ApiDriver.Appointment.create(JSON.stringify(form), this.selectedType).then((response) => {
-                    HttpResponse.then(response, (data) => {
-                        // If returns SUCCESS
-                        this.snackbar = true;
-                        
-                        // Reset form before closing Modal as user can schedule multiple Appointments without leaving Scheduler Page
-                        this.resetForm()
-                            
-                        // Call the created-event method on Scheduler.vue page so it knows whether to display the newly created event or not without doing a backend call again
-                        this.$emit('created-event', form, data.data);
-                        this.$emit('close-modal');
-                        }, (status, errors) => {
-                            if (parseInt(status) === 403) {
-                                HttpResponse.accessDenied(this)
-                            } else {
-                                this.handleErrors(errors, form);
-                            }
-                        });
-                });
-                this.startTime=''
-                this.startDate=''
-                this.endDate=''
-                this.endTime=''
-            }
-        },
-        checkVisible() {
-            // Validate that the target is visible at the beginning and end of the appointment
             var startVisible = true
             var endVisible = true
             if(this.type != "Drift Scan") {
+                console.log("Hit 1");
                 var tempTargetRA = 0
                 var tempTargetDec = 0
                 if(this.type == "Point") {
@@ -643,6 +589,7 @@ export default {
                     tempTargetRA = (this.form.firstCoordinate.hours * 15.0 + this.form.firstCoordinate.minutes * 0.25);
                     tempTargetDec = this.form.firstCoordinate.declination;
                 }
+                console.log("Hit 2");
 
                 let data0 = {
                     year:   this.startDate.substring(0, 4), 
@@ -655,18 +602,7 @@ export default {
                     longitude: -76.704564,
                     latitude:  40.024409,
                     altitude: 395 // TODO: make longitude, latitude, and altitude dependant on the selected telescope.
-                }
-                var call0 = ApiDriver.Astronomical.horizonCheck(data0)
-                call0
-                    .then(response => {
-                        startVisible = response.data.visible;
-                        console.log(response.data);
-                        if(response.data.visible == false)
-                            this.notVisible = true;
-                        console.log(this.notVisible);
-                    })
-                    .catch(error => {console.log(error);})
-
+                };
                 let data1 = {
                     year:   this.endDate.substring(0, 4), 
                     month:  this.endDate.substring(5, 7), 
@@ -678,73 +614,141 @@ export default {
                     longitude: -76.704564,
                     latitude:  40.024409,
                     altitude: 395 // TODO: make longitude, latitude, and altitude dependant on the selected telescope.
-                }
-                // console.log(JSON.stringify(data1));
-                var call1 = ApiDriver.Astronomical.horizonCheck(data1)
-                call1
-                    .then(response => {
+                };
+                var tempTargetRA2 = (this.form.secondCoordinate.hours * 15.0 + this.form.secondCoordinate.minutes * 0.25);
+                var tempTargetDec2 = this.form.secondCoordinate.declination;
+                let data2 = {
+                    year:   this.startDate.substring(0, 4), 
+                    month:  this.startDate.substring(5, 7), 
+                    day:    this.startDate.substring(8, 10), 
+                    hour:   this.startTime.substring(0, 2),
+                    minute: this.startTime.substring(3, 5),
+                    targetRA:   tempTargetRA2, 
+                    targetDec:  tempTargetDec2,
+                    longitude: -76.704564,
+                    latitude:  40.024409,
+                    altitude: 395 // TODO: make longitude, latitude, and altitude dependant on the selected telescope.
+                };
+                let data3 = {
+                    year:   this.endDate.substring(0, 4), 
+                    month:  this.endDate.substring(5, 7), 
+                    day:    this.endDate.substring(8, 10), 
+                    hour:   this.endTime.substring(0, 2),
+                    minute: this.endTime.substring(3, 5),
+                    targetRA:   tempTargetRA2, 
+                    targetDec:  tempTargetDec2,
+                    longitude: -76.704564,
+                    latitude:  40.024409,
+                    altitude: 395 // TODO: make longitude, latitude, and altitude dependant on the selected telescope.
+                };
+                var call0 = ApiDriver.Astronomical.horizonCheck(data0);
+                call0.then(response => {
+                    startVisible = response.data.visible;
+                    console.log(response.data);
+                    if(response.data.visible == false)
+                        this.notVisible = true;
+                    console.log(this.notVisible);})
+                    var call1 = ApiDriver.Astronomical.horizonCheck(data1);
+                    call1.then(response => {
                         startVisible = response.data.visible;
                         console.log(response.data);
                         if(response.data.visible == false)
                             this.notVisible = true;
                         console.log(this.notVisible);
-                    })
-                    .catch(error => {console.log(error);})
-
-                if(this.type == "Raster Scan") {
-                    tempTargetRA = (this.form.secondCoordinate.hours * 15.0 + this.form.secondCoordinate.minutes * 0.25);
-                    tempTargetDec = this.form.secondCoordinate.declination;
-                    let data0 = {
-                        year:   this.startDate.substring(0, 4), 
-                        month:  this.startDate.substring(5, 7), 
-                        day:    this.startDate.substring(8, 10), 
-                        hour:   this.startTime.substring(0, 2),
-                        minute: this.startTime.substring(3, 5),
-                        targetRA:   tempTargetRA, 
-                        targetDec:  tempTargetDec,
-                        longitude: -76.704564,
-                        latitude:  40.024409,
-                        altitude: 395 // TODO: make longitude, latitude, and altitude dependant on the selected telescope.
-                    }
-                    var call0 = ApiDriver.Astronomical.horizonCheck(data0);
-                    call0
-                        .then(response => {
-                            startVisible = response.data.visible;
-                            console.log(response.data);
-                            if(response.data.visible == false)
-                                this.notVisible = true;
-                        })
-                        .catch(error => {console.log(error);});
-
-                    let data1 = {
-                        year:   this.endDate.substring(0, 4), 
-                        month:  this.endDate.substring(5, 7), 
-                        day:    this.endDate.substring(8, 10), 
-                        hour:   this.endTime.substring(0, 2),
-                        minute: this.endTime.substring(3, 5),
-                        targetRA:   tempTargetRA, 
-                        targetDec:  tempTargetDec,
-                        longitude: -76.704564,
-                        latitude:  40.024409,
-                        altitude: 395 // TODO: make longitude, latitude, and altitude dependant on the selected telescope.
-                    }
-                    // console.log(JSON.stringify(data1));
-                    var call1 = ApiDriver.Astronomical.horizonCheck(data1)
-                    call1
-                        .then(response => {
-                            startVisible = response.data.visible;
-                            console.log(response.data);
-                            if(response.data.visible == false)
-                                this.notVisible = true;
-                        })
-                        .catch(error => {console.log(error);})
-                }
+                        if(this.type == "Raster Scan") {
+                            var call2 = ApiDriver.Astronomical.horizonCheck(data2);
+                            call2.then(response => {
+                                startVisible = response.data.visible;
+                                console.log(response.data);
+                                if(response.data.visible == false)
+                                    this.notVisible = true;
+                                var call3 = ApiDriver.Astronomical.horizonCheck(data3)
+                                call3.then(response => {
+                                    endVisible = response.data.visible;
+                                    console.log(response.data);
+                                    if(response.data.visible == false)
+                                        this.notVisible = true;
+                                    if(this.notVisible == true) {
+                                        this.handleNotVisible();
+                                    } else {
+                                        this.makeSubmission();
+                                    }
+                                })
+                                .catch(error => {console.log(error);});
+                            })
+                            .catch(error => {console.log(error);})
+                        } else {
+                            if(this.notVisible == true) {
+                                this.handleNotVisible();
+                            } else {
+                                this.makeSubmission();
+                            }
+                        }
+                }).catch(error => {console.log(error);})
+                .catch(error => {console.log(error);})
             } else {
                 this.notVisible = this.form.elevation < 0.0
+                if(this.notVisible == true) {
+                    this.handleNotVisible();
+                } else {
+                    this.makeSubmission();
+                }
             }
-            console.log("notVisible = " + this.notVisible);
-            console.log(!startVisible && !endVisible);
-            return !startVisible && !endVisible;
+            console.log("Hit 3");
+        },
+        makeSubmission() {
+            // set up form to send to back end with data from form obj
+            if(this.form.isSecondary.value) {
+                this.priority = 'SECONDARY';
+            } else {
+                this.priority = 'PRIMARY';
+            }
+            let form = {
+                userId: this.$store.state.currentUserId,
+                startTime: new Date(this.start).toUTCString(),
+                endTime: new Date(this.end).toUTCString(),
+                telescopeId: this.telescopes.indexOf(this.telescopeName) + 1,
+                isPublic: !this.form.isPrivate.value,
+                hours: this.form.rightAscension.hours,
+                minutes: this.form.rightAscension.minutes,
+                // seconds: this.form.rightAscension.seconds,
+                declination: this.form.declination.value,
+                celestialBodyId: this.selectedBody,
+                azimuth: this.form.azimuth.value,
+                elevation: this.form.elevation.value,
+                coordinates: this.coordinates,
+                priority: this.priority,
+                type: this.type
+            };
+                        
+            // Call appropriate API CALL and send form in json format
+            ApiDriver.Appointment.create(JSON.stringify(form), this.selectedType).then((response) => {
+                HttpResponse.then(response, (data) => {
+                    // If returns SUCCESS
+                    this.snackbar = true;
+                    
+                    // Reset form before closing Modal as user can schedule multiple Appointments without leaving Scheduler Page
+                    this.resetForm()
+                        
+                    // Call the created-event method on Scheduler.vue page so it knows whether to display the newly created event or not without doing a backend call again
+                    this.$emit('created-event', form, data.data);
+                    this.$emit('close-modal');
+                    }, (status, errors) => {
+                        if (parseInt(status) === 403) {
+                            HttpResponse.accessDenied(this)
+                        } else {
+                            this.handleErrors(errors, form);
+                        }
+                    });
+            });
+            this.startTime=''
+            this.startDate=''
+            this.endDate=''
+            this.endTime=''
+        },
+        handleNotVisible() {
+            HttpResponse.generalError(this, "The appointment is not possible due to the target's position, which will be below the horizon during a portion of this appointment.", false);
+            this.resetForm();
         },
         handleErrors(errors, formObj) {
             for (var field in errors) {
