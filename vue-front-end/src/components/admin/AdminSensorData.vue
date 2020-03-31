@@ -83,7 +83,7 @@ export default {
             overallStatColor: "green",
             overallStatText: "OK",
 
-             thresholds: [],
+            thresholds: [],
 
             sensorList: [
                 'gate',
