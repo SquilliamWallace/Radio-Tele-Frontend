@@ -83,8 +83,6 @@ export default {
             overallStatColor: "green",
             overallStatText: "OK",
 
-            thresholds: [],
-
             sensorList: [
                 'gate',
                 'proximity',
@@ -94,11 +92,11 @@ export default {
             ],
 
             sensors: [
-                { id: 1, displayName: 'Gate', name: 'gate', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, tempThreshold: null, vibrationThreshold: null, currentThreshold: null },
-                { id: 2, displayName: 'Proximity', name: 'proximity', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, tempThreshold: null, vibrationThreshold: null, currentThreshold: null },
-                { id: 3, displayName: 'Azimuth Motor', name: 'azimuthMotor', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, tempThreshold: 81, vibrationThreshold: 2, currentThreshold: 7 },
-                { id: 4, displayName: 'Elevation Motor', name: 'elevationMotor', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, tempThreshold: 81, vibrationThreshold: 2, currentThreshold: 7 },
-                { id: 5, displayName: 'Weather Station', name: 'weatherStation', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, tempThreshold: null, vibrationThreshold: null, currentThreshold: null }
+                { id: 1, refName: 'NO_REF', displayName: 'Gate', name: 'gate', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, tempThreshold: null, vibrationThreshold: null, currentThreshold: null },
+                { id: 2, refName: 'NO_REF', displayName: 'Proximity', name: 'proximity', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, tempThreshold: null, vibrationThreshold: null, currentThreshold: null },
+                { id: 3, refName: 'AZ_MOTOR', displayName: 'Azimuth Motor', name: 'azimuthMotor', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, tempThreshold: 81, vibrationThreshold: 2, currentThreshold: 7 },
+                { id: 4, refName: 'ELEV_MOTOR', displayName: 'Elevation Motor', name: 'elevationMotor', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, tempThreshold: 81, vibrationThreshold: 2, currentThreshold: 7 },
+                { id: 5, refName: 'NO_REF', displayName: 'Weather Station', name: 'weatherStation', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, tempThreshold: null, vibrationThreshold: null, currentThreshold: null }
             ],
 
             // status values
@@ -252,7 +250,9 @@ export default {
                 // Handle the server response         
                 HttpResponse.then(response, (data) => {
                     // Populate the data and set the store's boolean back to false
-                    this.populatData(data.data)                                            
+                    console.log("Thresholds returned: " + JSON.stringify(data.data));
+                    this.populatData(data.data)    
+                    console.log("Thresholds after populate: " + JSON.stringify(this.thresholds));                                        
                     this.$store.commit("loading", false);
                 }, (status, errors) => {
                     // Access Denied
@@ -274,19 +274,26 @@ export default {
             });
         },
         populatData(data){
-            for (var index in data.content) {
-                let threshold = data.content[index];
-                this.thresholds.push(threshold);
+            console.log("Entered populatData()...");
+            for (var index in data) {
+                console.log("Data: " + JSON.stringify(data[index]));
+                if (data[index].sensorName.includes("AZ_MOTOR")){
+                    if (data[index].sensorName.includes("TEMP")){
+                        // Set the Temperature thresholds for the Azimuth Motor
+                        this.sensors[2].tempThreshold = data[index].maximum;
+                        console.log("Successfully set azimuth motor temp threshold!")
+                    }
+                }
+                if (data[index].sensorName.includes("ELEV_MOTOR")){
+                    if (data[index].sensorName.includes("TEMP")){
+                        // Set the Temperature thresholds for the Elevation Motor
+                        this.sensors[3].tempThreshold = data[index].maximum;
+                        console.log("Successfully set elevation motor temp threshold")
+                    }
+                }
+                // let threshold = data.content[index];
+                // this.thresholds.push(threshold);
             }
-        },
-        setSensorThresholds() {
-            this.getThresholds();
-            sensors[3].tempThreshold = thresholds[2].maximum;
-            sensors[4].tempThreshold = thresholds[3].maximum;
-            sensors[3].vibrationThreshold = thresholds[4].maximum;
-            sensors[4].vibrationThreshold = thresholds[5].maximum;
-            sensors[3].currentThreshold = thresholds[6].maximum;
-            sensors[4].currentThreshold = thresholds[7].maximum;
         },
         // getThresholdByName (thresholdName) {
         //     // Set the store's loading boolean to true
@@ -335,8 +342,8 @@ export default {
         }
     },
     mounted: function(){
-        //this.retrieveStatuses();
-        this.setSensorThresholds();
+        this.retrieveStatuses();
+        this.getThresholds();
     },
     components: {
         Loading
