@@ -29,15 +29,15 @@
                                             <v-form>
                                                 <div v-if="sensor.tempThreshold != null">
                                                     <v-text-field label="Temp Threshold" v-model="sensor.tempThreshold"></v-text-field>
-                                                    <v-btn color="primary darken-2" class="mr-4" @click="submitTempThreshold(sensor.id)">Submit Temp Threshold</v-btn>
+                                                    <v-btn color="primary darken-2" class="mr-4" @click="submitThreshold(sensor.id, 1)">Submit Temp Threshold</v-btn>
                                                 </div>
                                                 <div v-if="sensor.vibrationThreshold != null">
                                                     <v-text-field label="Vibration Threshold" v-model="sensor.vibrationThreshold"></v-text-field>
-                                                    <v-btn color="primary darken-2" class="mr-4" @click="submitVibrationThreshold(sensor.id)">Submit Vibration Threshold</v-btn>
+                                                    <v-btn color="primary darken-2" class="mr-4" @click="submitThreshold(sensor.id, 2)">Submit Vibration Threshold</v-btn>
                                                 </div>
                                                 <div v-if="sensor.currentThreshold != null">
                                                     <v-text-field label="Current Threshold" v-model="sensor.currentThreshold"></v-text-field>
-                                                    <v-btn color="primary darken-2" class="mr-4" @click="submitCurrentThreshold(sensor.id)">Submit Current Threshold</v-btn>
+                                                    <v-btn color="primary darken-2" class="mr-4" @click="submitThreshold(sensor.id, 3)">Submit Current Threshold</v-btn>
                                                 </div>
                                                 <div v-else>
                                                     <v-card-text>No thresholds for this sensor</v-card-text>
@@ -320,7 +320,7 @@ export default {
             HttpResponse.then(response, (data) => {
                     this.$swal({
                     title: '<span style="color:#f0ead6">Threshold Set<span>',
-                    html: '<span style="color:#f0ead6">The named threshold has been updated with the new maximum <span>',
+                    html: '<span style="color:#f0ead6">The threshold has been updated with the new maximum <span>',
                     type: 'success',
                     background: '#302f2f'
                 });
@@ -339,42 +339,38 @@ export default {
             })
         })
         },
-        submitTempThreshold(id){
+        submitThreshold(id, thresholdNumber){
             console.log("Threshold ID: " + id);
             // Save the thresholds values for Threshold ID
             if (id == 3) {
-                this.setThreshold("AZ_MOTOR_TEMP", this.sensors[id - 1].tempThreshold);
-                console.log("Successfully set azimuth motor temp threshold!")
+                if (thresholdNumber == 1) {
+                    this.setThreshold("AZ_MOTOR_TEMP", this.sensors[id - 1].tempThreshold);
+                    console.log("Successfully set azimuth motor temp threshold!")
+                }
+                else if (thresholdNumber == 2) {
+                    this.setThreshold("AZ_MOTOR_VIBRATION", this.sensors[id - 1].vibrationThreshold);
+                    console.log("Successfully set azimuth motor vibration threshold!")
+                }
+                else if (thresholdNumber == 3) {
+                    this.setThreshold("AZ_MOTOR_CURRENT", this.sensors[id - 1].currentThreshold);
+                    console.log("Successfully set azimuth motor current threshold!")
+                }
             }
             else if (id == 4) {
-                this.setThreshold("ELEV_MOTOR_TEMP", this.sensors[id - 1].tempThreshold);
-                console.log("Successfully set elevation motor temp threshold!")
+                if (thresholdNumber == 1) {
+                    this.setThreshold("ELEV_MOTOR_TEMP", this.sensors[id - 1].tempThreshold);
+                    console.log("Successfully set elevation motor temp threshold!")
+                }
+                else if (thresholdNumber == 2) {
+                    this.setThreshold("ELEV_MOTOR_VIBRATION", this.sensors[id - 1].vibrationThreshold);
+                    console.log("Successfully set elevation motor vibration threshold!")
+                }
+                else if (thresholdNumber == 3) {
+                    this.setThreshold("ELEV_MOTOR_CURRENT", this.sensors[id - 1].currentThreshold);
+                    console.log("Successfully set elevation motor current threshold!")
+                }
             }
         },
-        submitVibrationThreshold(id){
-            console.log("Threshold ID: " + id);
-            // Save the thresholds values for Threshold ID
-            if (id == 3) {
-                this.setThreshold("AZ_MOTOR_VIBRATION", this.sensors[id - 1].vibrationThreshold);
-                console.log("Successfully set azimuth motor vibration threshold!")
-            }
-            else if (id == 4) {
-                this.setThreshold("ELEV_MOTOR_VIBRATION", this.sensors[id - 1].vibrationThreshold);
-                console.log("Successfully set elevation motor vibration threshold!")
-            }
-        },
-        submitCurrentThreshold(id){
-            console.log("Threshold ID: " + id);
-            // Save the thresholds values for Threshold ID
-            if (id == 3) {
-                this.setThreshold("AZ_MOTOR_CURRENT", this.sensors[id - 1].currentThreshold);
-                console.log("Successfully set azimuth motor current threshold!")
-            }
-            else if (id == 4) {
-                this.setThreshold("ELEV_MOTOR_CURRENT", this.sensors[id - 1].currentThreshold);
-                console.log("Successfully set elevation motor current threshold!")
-            }
-        }
     },
     mounted: function(){
         this.retrieveStatuses();
