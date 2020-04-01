@@ -375,47 +375,6 @@ export default {
                 console.log("Successfully set elevation motor current threshold!")
             }
         }
-        // getThresholdByName (thresholdName) {
-        //     // Set the store's loading boolean to true
-        //     this.$store.commit("loading", true);
-
-        //     // Make the API call
-        //     ApiDriver.Thresholds.getThresholdByName(thresholdName).then((response) => {
-        //         // Handle the server response
-        //         HttpResponse.then(response, (data) => {
-        //             console.log("Response data: " + JSON.stringify(data))
-        //             // Populate the data and set the store's boolean back to false
-        //             this.populateData(data.data)
-        //             this.$store.commit("loading", false);
-        //         }, (status, errors) => {
-        //             // Access Denied
-        //             if (parseInt(status) === 403) {
-        //                 // Call the generic access denied handler
-        //                 HttpResponse.accessDenied(this);
-        //             } 
-        //             // Invalid Resource Id
-        //             else if (parseInt(status) === 404) {
-        //                 // Call the generic not found handler
-        //                 HttpResponse.notFound(this, errors);
-        //             }
-        //         })
-        //     }).catch((error) => {
-        //         // Handle an erroneous API call
-        //         console.log(error)
-        //         let message = "An error occurred when loading this observation";
-        //         HttpResponse.generalError(this, message, true);
-        //     });
-        // },
-        // populateData(data){
-        //     //if updating threshold for azimuth motor
-        //     if (thresholdName == sensorList[3]) {
-        //         sensors[3].tempThreshold = data;         
-        //     }
-        //     //if updating threshold for elevation motor
-        //     else if (thresholdName == sensorList[4]) {
-        //         sensors[4].tempThreshold = data;  
-        //     }
-        // },
     },
     mounted: function(){
         this.retrieveStatuses();
