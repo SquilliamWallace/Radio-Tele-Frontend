@@ -27,17 +27,23 @@
                                         </v-card-subtitle>
                                         <v-card-text>
                                             <v-form>
-                                                <div v-if="sensor.tempThreshold != null">
-                                                    <v-text-field label="Temp Threshold" v-model="sensor.tempThreshold"></v-text-field>
-                                                    <v-btn color="primary darken-2" class="mr-4" @click="submitThreshold(sensor.id, 1)">Submit Temp Threshold</v-btn>
-                                                </div>
-                                                <div v-if="sensor.vibrationThreshold != null">
-                                                    <v-text-field label="Vibration Threshold" v-model="sensor.vibrationThreshold"></v-text-field>
-                                                    <v-btn color="primary darken-2" class="mr-4" @click="submitThreshold(sensor.id, 2)">Submit Vibration Threshold</v-btn>
-                                                </div>
-                                                <div v-if="sensor.currentThreshold != null">
-                                                    <v-text-field label="Current Threshold" v-model="sensor.currentThreshold"></v-text-field>
-                                                    <v-btn color="primary darken-2" class="mr-4" @click="submitThreshold(sensor.id, 3)">Submit Current Threshold</v-btn>
+                                                <div v-if="sensor.windThreshold != null || sensor.tempThreshold != null || sensor.vibrationThreshold != null || sensor.currentThreshold != null">
+                                                    <div v-if="sensor.windThreshold != null">
+                                                        <v-text-field label="Wind Threshold" v-model="sensor.windThreshold"></v-text-field>
+                                                        <v-btn color="primary darken-2" class="mr-4" @click="submitThreshold(sensor.id, 0)">Submit Wind Threshold</v-btn>
+                                                    </div>
+                                                    <div v-if="sensor.tempThreshold != null">
+                                                        <v-text-field label="Temp Threshold" v-model="sensor.tempThreshold"></v-text-field>
+                                                        <v-btn color="primary darken-2" class="mr-4" @click="submitThreshold(sensor.id, 1)">Submit Temp Threshold</v-btn>
+                                                    </div>
+                                                    <div v-if="sensor.vibrationThreshold != null">
+                                                        <v-text-field label="Vibration Threshold" v-model="sensor.vibrationThreshold"></v-text-field>
+                                                        <v-btn color="primary darken-2" class="mr-4" @click="submitThreshold(sensor.id, 2)">Submit Vibration Threshold</v-btn>
+                                                    </div>
+                                                    <div v-if="sensor.currentThreshold != null">
+                                                        <v-text-field label="Current Threshold" v-model="sensor.currentThreshold"></v-text-field>
+                                                        <v-btn color="primary darken-2" class="mr-4" @click="submitThreshold(sensor.id, 3)">Submit Current Threshold</v-btn>
+                                                    </div>
                                                 </div>
                                                 <div v-else>
                                                     <v-card-text>No thresholds for this sensor</v-card-text>
@@ -94,11 +100,11 @@ export default {
             ],
 
             sensors: [
-                { id: 1, refName: 'NO_REF', displayName: 'Gate', name: 'gate', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, tempThreshold: null, vibrationThreshold: null, currentThreshold: null },
-                { id: 2, refName: 'NO_REF', displayName: 'Proximity', name: 'proximity', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, tempThreshold: null, vibrationThreshold: null, currentThreshold: null },
-                { id: 3, refName: 'AZ_MOTOR', displayName: 'Azimuth Motor', name: 'azimuthMotor', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, tempThreshold: 81, vibrationThreshold: 2, currentThreshold: 7 },
-                { id: 4, refName: 'ELEV_MOTOR', displayName: 'Elevation Motor', name: 'elevationMotor', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, tempThreshold: 81, vibrationThreshold: 2, currentThreshold: 7 },
-                { id: 5, refName: 'NO_REF', displayName: 'Weather Station', name: 'weatherStation', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, tempThreshold: null, vibrationThreshold: null, currentThreshold: null }
+                { id: 1, refName: 'NO_REF', displayName: 'Gate', name: 'gate', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, windThreshold: null, tempThreshold: null, vibrationThreshold: null, currentThreshold: null },
+                { id: 2, refName: 'NO_REF', displayName: 'Proximity', name: 'proximity', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, windThreshold: null, tempThreshold: null, vibrationThreshold: null, currentThreshold: null },
+                { id: 3, refName: 'AZ_MOTOR', displayName: 'Azimuth Motor', name: 'azimuthMotor', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, windThreshold: null, tempThreshold: 81, vibrationThreshold: 2, currentThreshold: 7 },
+                { id: 4, refName: 'ELEV_MOTOR', displayName: 'Elevation Motor', name: 'elevationMotor', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, windThreshold: null, tempThreshold: 81, vibrationThreshold: 2, currentThreshold: 7 },
+                { id: 5, refName: 'NO_REF', displayName: 'Weather Station', name: 'weatherStation', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, windThreshold: 80, tempThreshold: null, vibrationThreshold: null, currentThreshold: null }
             ],
 
             // status values
@@ -313,6 +319,11 @@ export default {
                         console.log("Successfully retrieved elevation motor current threshold!")
                     }   
                 }
+                if (data[index].sensorName.includes("WIND")){
+                    // Set the Wind Threshold
+                        this.sensors[4].windThreshold = data[index].maximum;
+                        console.log("Successfully retrieved wind threshold!")
+                }
             }
         },
         setThreshold(thresholdName, thresholdValue) {
@@ -368,6 +379,12 @@ export default {
                 else if (thresholdNumber == 3) {
                     this.setThreshold("ELEV_MOTOR_CURRENT", this.sensors[id - 1].currentThreshold);
                     console.log("Successfully set elevation motor current threshold!")
+                }
+            }
+            else if (id == 5) {
+                if (thresholdNumber == 0) {
+                    this.setThreshold("WIND", this.sensors[id - 1].windThreshold);
+                    console.log("Successfully set wind threshold!")
                 }
             }
         },
