@@ -33,8 +33,8 @@
                                                         <v-btn color="primary darken-2" class="mr-4" @click="submitThreshold(sensor.id, 0)">Submit Wind Threshold</v-btn>
                                                     </div>
                                                     <div v-if="sensor.tempThreshold != null">
-                                                        <v-text-field label="Temp Threshold" v-model="sensor.tempThreshold"></v-text-field>
-                                                        <v-btn color="primary darken-2" class="mr-4" @click="submitThreshold(sensor.id, 1)">Submit Temp Threshold</v-btn>
+                                                        <v-text-field label="Temperature Threshold" v-model="sensor.tempThreshold"></v-text-field>
+                                                        <v-btn color="primary darken-2" class="mr-4" @click="submitThreshold(sensor.id, 1)">Submit Temperature Threshold</v-btn>
                                                     </div>
                                                     <div v-if="sensor.vibrationThreshold != null">
                                                         <v-text-field label="Vibration Threshold" v-model="sensor.vibrationThreshold"></v-text-field>
@@ -289,7 +289,7 @@ export default {
                     if (data[index].sensorName.includes("TEMP")){
                         // Set the Temperature thresholds for the Azimuth Motor
                         this.sensors[2].tempThreshold = data[index].maximum;
-                        console.log("Successfully retrieved azimuth motor temp threshold!")
+                        console.log("Successfully retrieved azimuth motor temperature threshold!")
                     }
                     else if (data[index].sensorName.includes("VIBRATION")){
                         // Set the Temperature thresholds for the Azimuth Motor
@@ -306,7 +306,7 @@ export default {
                     if (data[index].sensorName.includes("TEMP")){
                         // Set the Temperature thresholds for the Elevation Motor
                         this.sensors[3].tempThreshold = data[index].maximum;
-                        console.log("Successfully retrieved elevation motor temp threshold")
+                        console.log("Successfully retrieved elevation motor temperature threshold")
                     }
                     else if (data[index].sensorName.includes("VIBRATION")){
                         // Set the Temperature thresholds for the Elevation Motor
@@ -356,7 +356,7 @@ export default {
             if (id == 3) {
                 if (thresholdNumber == 1) {
                     this.setThreshold("AZ_MOTOR_TEMP", this.sensors[id - 1].tempThreshold);
-                    console.log("Successfully set azimuth motor temp threshold!")
+                    console.log("Successfully set azimuth motor temperature threshold!")
                 }
                 else if (thresholdNumber == 2) {
                     this.setThreshold("AZ_MOTOR_VIBRATION", this.sensors[id - 1].vibrationThreshold);
@@ -370,7 +370,7 @@ export default {
             else if (id == 4) {
                 if (thresholdNumber == 1) {
                     this.setThreshold("ELEV_MOTOR_TEMP", this.sensors[id - 1].tempThreshold);
-                    console.log("Successfully set elevation motor temp threshold!")
+                    console.log("Successfully set elevation motor temperature threshold!")
                 }
                 else if (thresholdNumber == 2) {
                     this.setThreshold("ELEV_MOTOR_VIBRATION", this.sensors[id - 1].vibrationThreshold);
