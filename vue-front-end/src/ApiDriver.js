@@ -166,7 +166,7 @@ export default {
         return axios.get(this.namespace + "/" + sensorName + "/retrieve", Headers.retrieveHeaders())
       },
       updateThresholdByName: function(sensorName, maximum) {
-        return axios.post(this.namespace + "/" + sensorName + "/" + maximum, Headers.retrieveHeaders())
+        return axios.post(this.namespace + "/" + sensorName + "/" + maximum, {}, Headers.retrieveHeaders())
       }
     },
     WeatherData: {
