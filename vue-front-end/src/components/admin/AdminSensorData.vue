@@ -29,13 +29,15 @@
                                             <v-form>
                                                 <div v-if="sensor.tempThreshold != null">
                                                     <v-text-field label="Temp Threshold" v-model="sensor.tempThreshold"></v-text-field>
+                                                    <v-btn color="primary darken-2" class="mr-4" @click="submitTempThreshold(sensor.id)">Submit Temp Threshold</v-btn>
                                                 </div>
                                                 <div v-if="sensor.vibrationThreshold != null">
                                                     <v-text-field label="Vibration Threshold" v-model="sensor.vibrationThreshold"></v-text-field>
+                                                    <v-btn color="primary darken-2" class="mr-4" @click="submitVibrationThreshold(sensor.id)">Submit Vibration Threshold</v-btn>
                                                 </div>
                                                 <div v-if="sensor.currentThreshold != null">
                                                     <v-text-field label="Current Threshold" v-model="sensor.currentThreshold"></v-text-field>
-                                                    <v-btn color="primary darken-2" class="mr-4" @click="submitThreshold(sensor.id)">Submit</v-btn>
+                                                    <v-btn color="primary darken-2" class="mr-4" @click="submitCurrentThreshold(sensor.id)">Submit Current Threshold</v-btn>
                                                 </div>
                                                 <div v-else>
                                                     <v-card-text>No thresholds for this sensor</v-card-text>
@@ -313,6 +315,66 @@ export default {
                 }
             }
         },
+        setThreshold(thresholdName, thresholdValue) {
+            ApiDriver.Thresholds.updateThresholdByName(thresholdName, thresholdValue).then((response) =>{
+            HttpResponse.then(response, (data) => {
+                    this.$swal({
+                    title: '<span style="color:#f0ead6">Threshold Set<span>',
+                    html: '<span style="color:#f0ead6">The named threshold has been updated with the new maximum <span>',
+                    type: 'success',
+                    background: '#302f2f'
+                });
+                this.$emit('input');
+            }, (status, errors) => {
+                if(parseInt(status)==403){
+                    HttpResponse.accessDenied(this)
+                } else if(parseInt(status)==404){
+                    HttpResponse.notFound(this, errors)
+                } else {
+                    for(var field in errors) {
+                        let message = errors[field][0]
+                    }
+                    HttpResponse.generalError(this, message, false)
+                }
+            })
+        })
+        },
+        submitTempThreshold(id){
+            console.log("Threshold ID: " + id);
+            // Save the thresholds values for Threshold ID
+            if (id == 3) {
+                this.setThreshold("AZ_MOTOR_TEMP", this.sensors[id].tempThreshold);
+                console.log("Successfully set azimuth motor temp threshold!")
+            }
+            else if (id == 4) {
+                this.setThreshold("ELEV_MOTOR_TEMP", this.sensors[id].tempThreshold);
+                console.log("Successfully set elevation motor temp threshold!")
+            }
+        },
+        submitVibrationThreshold(id){
+            console.log("Threshold ID: " + id);
+            // Save the thresholds values for Threshold ID
+            if (id == 3) {
+                this.setThreshold("AZ_MOTOR_VIBRATION", this.sensors[id].vibrationThreshold);
+                console.log("Successfully set azimuth motor vibration threshold!")
+            }
+            else if (id == 4) {
+                this.setThreshold("ELEV_MOTOR_VIBRATION", this.sensors[id].vibrationThreshold);
+                console.log("Successfully set elevation motor vibration threshold!")
+            }
+        },
+        submitCurrentThreshold(id){
+            console.log("Threshold ID: " + id);
+            // Save the thresholds values for Threshold ID
+            if (id == 3) {
+                this.setThreshold("AZ_MOTOR_CURRENT", this.sensors[id].currentThreshold);
+                console.log("Successfully set azimuth motor current threshold!")
+            }
+            else if (id == 4) {
+                this.setThreshold("ELEV_MOTOR_CURRENT", this.sensors[id].currentThreshold);
+                console.log("Successfully set elevation motor current threshold!")
+            }
+        }
         // getThresholdByName (thresholdName) {
         //     // Set the store's loading boolean to true
         //     this.$store.commit("loading", true);
@@ -354,10 +416,6 @@ export default {
         //         sensors[4].tempThreshold = data;  
         //     }
         // },
-        submitThreshold(id){
-            console.log("Threshold ID: " + id);
-            // Save the thresholds values for Threshold ID
-        }
     },
     mounted: function(){
         this.retrieveStatuses();
