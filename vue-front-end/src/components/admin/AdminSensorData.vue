@@ -343,11 +343,11 @@ export default {
             console.log("Threshold ID: " + id);
             // Save the thresholds values for Threshold ID
             if (id == 3) {
-                this.setThreshold("AZ_MOTOR_TEMP", this.sensors[id].tempThreshold);
+                this.setThreshold("AZ_MOTOR_TEMP", this.sensors[id - 1].tempThreshold);
                 console.log("Successfully set azimuth motor temp threshold!")
             }
             else if (id == 4) {
-                this.setThreshold("ELEV_MOTOR_TEMP", this.sensors[id].tempThreshold);
+                this.setThreshold("ELEV_MOTOR_TEMP", this.sensors[id - 1].tempThreshold);
                 console.log("Successfully set elevation motor temp threshold!")
             }
         },
@@ -355,11 +355,11 @@ export default {
             console.log("Threshold ID: " + id);
             // Save the thresholds values for Threshold ID
             if (id == 3) {
-                this.setThreshold("AZ_MOTOR_VIBRATION", this.sensors[id].vibrationThreshold);
+                this.setThreshold("AZ_MOTOR_VIBRATION", this.sensors[id - 1].vibrationThreshold);
                 console.log("Successfully set azimuth motor vibration threshold!")
             }
             else if (id == 4) {
-                this.setThreshold("ELEV_MOTOR_VIBRATION", this.sensors[id].vibrationThreshold);
+                this.setThreshold("ELEV_MOTOR_VIBRATION", this.sensors[id - 1].vibrationThreshold);
                 console.log("Successfully set elevation motor vibration threshold!")
             }
         },
@@ -367,11 +367,11 @@ export default {
             console.log("Threshold ID: " + id);
             // Save the thresholds values for Threshold ID
             if (id == 3) {
-                this.setThreshold("AZ_MOTOR_CURRENT", this.sensors[id].currentThreshold);
+                this.setThreshold("AZ_MOTOR_CURRENT", this.sensors[id - 1].currentThreshold);
                 console.log("Successfully set azimuth motor current threshold!")
             }
             else if (id == 4) {
-                this.setThreshold("ELEV_MOTOR_CURRENT", this.sensors[id].currentThreshold);
+                this.setThreshold("ELEV_MOTOR_CURRENT", this.sensors[id - 1].currentThreshold);
                 console.log("Successfully set elevation motor current threshold!")
             }
         }
