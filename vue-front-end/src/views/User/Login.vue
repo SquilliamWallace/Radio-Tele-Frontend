@@ -41,7 +41,7 @@
                         ></v-text-field>
                       </v-flex>
                       <v-flex>
-                        <v-btn large block color="primary" @click="submit" v-on:keydown.enter.native="submit">LOGIN</v-btn>
+                        <v-btn large block color="deep-purple" @click="submit">LOGIN</v-btn>
                       </v-flex>
                       <v-flex class="register-style" xs12>
                         <span color="primary" @click="registerRedirect">Register New Account</span>

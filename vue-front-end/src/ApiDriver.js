@@ -1,7 +1,7 @@
 const axios = require('axios');
 import Headers from './utils/Headers';
-
 let baseUrl = "http://api.ycpradiotelescope.com:8080/api/";
+
 export default {
     //API endpoints go here
     CelestialBodies: {
@@ -85,8 +85,8 @@ export default {
       create: function (data, type) {
         return axios.post(this.namespace + "/schedule/" + type, data, Headers.retrieveHeaders())
       },
-      request: function (data) {
-        return axios.post(this.namespace + "/request", data, Headers.retrieveHeaders())
+      request: function (data, type) {
+        return axios.post(this.namespace + "/request/" + type, data, Headers.retrieveHeaders())
       },
       unapprovedRequest: function (pageNumber, pageSize) {
         return axios.get(this.namespace + "/listRequested?page=" + pageNumber + "&size=" + pageSize, Headers.retrieveHeaders())
@@ -133,6 +133,12 @@ export default {
       },
       sharedUsers: function(appointmentId, page, size) {
         return axios.get(this.namespace + "/" + appointmentId + "/viewers?page=" + page + "&size=" + size, Headers.retrieveHeaders())
+      },
+      viewSpectraCyberConfig: function(userId, spectracyberConfigId) {
+        return axios.get(this.namespace + "/" + userId + "/" + spectracyberConfigId + "/spectracyberConfig", Headers.retrieveHeaders())
+      },
+      updateSpectraCyberConfig: function(userId, data) {
+        return axios.put(baseUrl + "appointments/" + userId + "/spectracyberConfig", data, Headers.retrieveHeaders())
       }
     },
     Log: {
