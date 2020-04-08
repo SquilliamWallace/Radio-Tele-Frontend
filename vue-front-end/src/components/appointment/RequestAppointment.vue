@@ -1,12 +1,12 @@
 <!-- 
     This is a simple textual modal that displays all of the information of the appointment that was trying to be scheduled
-    but the user was already at max alloted time. It takes the appointment object as a prop and displays all the information
+    but the user was already at max allotted time. It takes the appointment object as a prop and displays all the information
     then asks if the user would like to request the appointment for admin overide approval, or simply cancel it
  -->
 <template>
     <v-dialog width="50%" :value="value" dark @input="$emit('input')" persistent>
         <v-card>
-            <v-card-title class="headline justify-center">Your Observation puts you over your alloted time.</v-card-title>
+            <v-card-title class="headline justify-center">Your Observation puts you over your allotted time.</v-card-title>
             <v-card-text>You cannot have more than 50 hours of observation scheduled at one time. You can request this observation to be approved, or you can cancel this request.</v-card-text>
             <v-spacer></v-spacer>
             <v-card-text>Telescope: {{ Appointment.telescope }}</v-card-text>
@@ -52,7 +52,7 @@ export default {
         value: false
     },
     methods: {
-        // Method called if they want to request an admin to review there appointmetn and approve or deny it, if user is over alloted time
+        // Method called if they want to request an admin to review there appointmetn and approve or deny it, if user is over allotted time
         request() {
             // console.log("RequestAppointment.vue: " + JSON.stringify(this.Appointment));
             let requestAppointment = {
