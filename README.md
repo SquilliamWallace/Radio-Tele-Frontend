@@ -34,7 +34,7 @@ This makes a local repostory in the current directory.
 
 ### Run the app
 1. In the terminal, make sure you are in the **vue-front-end** directory and then type the following commands to install, build, and run the web application locally.  
-   `npm run install`  
+   `npm install`  
    `npm run build`  
    `npm run dev`  
    **Note**: If it fails to compile or run, try `npm run serve` instead.
