@@ -31,6 +31,14 @@
           <v-icon>public</v-icon>
         </v-tab>
         <v-tab>
+          Weather Station
+          <v-icon>opacity</v-icon>
+        </v-tab>
+        <v-tab>
+          Sensors
+          <v-icon>rss_feed</v-icon>
+        </v-tab>
+        <v-tab>
           Security Footage
           <v-icon>local_movies</v-icon>
         </v-tab>
@@ -56,8 +64,17 @@
         </v-tab-item>
 
         <v-tab-item>
+          <weather-station></weather-station>
+        </v-tab-item>
+        
+        <v-tab-item>
+          <admin-sensor-data></admin-sensor-data>
+        </v-tab-item>
+
+        <v-tab-item>
           <admin-security-footage></admin-security-footage>
         </v-tab-item>
+
       </v-tabs>
 
   </div>
@@ -74,7 +91,9 @@ import AdminUserApproval from '../components/admin/AdminUserApproval.vue';
 import AdminAppointmentApproval from '../components/admin/AdminAppointmentApproval.vue';
 import CelestialBodies from '../components/admin/CelestialBodies.vue';
 import AdminSecurityFootage from '../components/admin/AdminSecurityFootage.vue';
-import Loading from "../components/utility/Loading"
+import AdminSensorData from '../components/admin/AdminSensorData.vue';
+import WeatherStation from "../components/admin/WeatherStation.vue";
+import Loading from "../components/utility/Loading";
  export default {
     title: "Radio Telescope 1.1.0",
     name: 'admin',
@@ -107,7 +126,9 @@ import Loading from "../components/utility/Loading"
         Loading,
         AdminAppointmentApproval,
         CelestialBodies,
-        AdminSecurityFootage
+        AdminSecurityFootage,
+        AdminSensorData,
+        WeatherStation
     },
     mounted() {
       this.authenticate()
