@@ -407,6 +407,13 @@
                     <!-- Cancel resets form and closes Modal -->
                     <v-btn flat @click="resetForm">Cancel</v-btn>
                     <v-spacer></v-spacer>
+                    
+                    <!-- Allow users to call the visualization API --> 
+                    <v-btn flat 
+                    :disabled="!formIsValid"
+                    @click="visualize">Visualize</v-btn>
+                    <v-spacer></v-spacer>
+
                     <!-- Submit sends the form to backend to be verified -->
                     <v-btn
                     :disabled="!formIsValid"
@@ -416,6 +423,8 @@
                     >Schedule</v-btn>
                 </v-card-actions>
                 </v-form>
+                <img id="image0" class="image-style" v-bind:src="imgSrc0" v-if="showImage==true">
+                <img id="image1" class="image-style" v-bind:src="imgSrc1" v-if="showImage==true">
             </v-card>
     </v-dialog>
 </template>
@@ -486,6 +495,9 @@ export default {
             endDate: '',
             endTime: '',
             notVisible: false,
+            showImage: false,
+            imgSrc0: '',
+            imgSrc1: '',
 
             // Variables to keep track of chosen Appointment type
             type: 'Point',
@@ -553,6 +565,9 @@ export default {
             this.selectedType = null;
             this.selectedBody = null;
             this.notVisible = false;
+            this.imgSrc0 = '';
+            this.imgSrc1 = '';
+            this.showImage = false;
             this.clearErrors();
             this.$emit('close-modal');
         },
@@ -750,6 +765,58 @@ export default {
             HttpResponse.generalError(this, "The appointment is not possible due to the target's position, which will be below the horizon during a portion of this appointment.", false);
             this.resetForm();
         },
+        visualize() {
+            var tempTargetRA = 0
+            var tempTargetDec = 0
+            if(this.type == "Point") {
+                tempTargetRA = (this.form.rightAscension.hours * 15.0 + this.form.rightAscension.minutes * 0.25);
+                tempTargetDec = this.form.declination.value;
+            }
+            else if(this.type == "Celestial Body") {
+                tempTargetRA = (this.bodies[0].hours * 15.0 + this.bodies[0].minutes * 0.25);
+                tempTargetDec = this.bodies[0].declination;
+                console.log(this.bodies);
+            }
+            else if(this.type == "Raster Scan") {
+                tempTargetRA = (this.form.firstCoordinate.hours * 15.0 + this.form.firstCoordinate.minutes * 0.25);
+                tempTargetDec = this.form.firstCoordinate.declination;
+            }
+
+            let data0 = {
+                year:   this.startDate.substring(0, 4), 
+                month:  this.startDate.substring(5, 7), 
+                day:    this.startDate.substring(8, 10), 
+                hour:   this.startTime.substring(0, 2),
+                minute: this.startTime.substring(3, 5),
+                targetRA:   tempTargetRA, 
+                targetDec:  tempTargetDec,
+                longitude: -76.704564,
+                latitude:  40.024409,
+                altitude: 395 // TODO: make longitude, latitude, and altitude dependant on the selected telescope.
+            };
+            let data1 = {
+                year:   this.endDate.substring(0, 4), 
+                month:  this.endDate.substring(5, 7), 
+                day:    this.endDate.substring(8, 10), 
+                hour:   this.endTime.substring(0, 2),
+                minute: this.endTime.substring(3, 5),
+                targetRA:   tempTargetRA, 
+                targetDec:  tempTargetDec,
+                longitude: -76.704564,
+                latitude:  40.024409,
+                altitude: 395 // TODO: make longitude, latitude, and altitude dependant on the selected telescope.
+            };
+            var call = ApiDriver.Astronomical.skyview(data0);
+            call.then(response => {
+                console.log(response);
+                this.imgSrc0 = 'data:image/bmp;base64,' + response.data.bytes;
+                var call = ApiDriver.Astronomical.skyview(data1);
+                call.then(response => {
+                    this.imgSrc1 = 'data:image/bmp;base64,' + response.data.bytes;
+                }).catch(error => {console.log(error);}); 
+                this.showImage = true;
+            }).catch(error => {console.log(error);}); 
+        }, 
         handleErrors(errors, formObj) {
             for (var field in errors) {
                 let message = errors[field][0];

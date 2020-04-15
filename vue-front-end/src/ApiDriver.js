@@ -184,6 +184,21 @@ export default {
         "&latitude="+data.latitude+
         "&altitude="+data.altitude, 
       data, Headers.retrieveHeaders());
+      }, 
+      skyview: function(data) {
+        return axios.get("http://rtastronomicalapi-dev.us-east-2.elasticbeanstalk.com/SkyView/" + 
+        // return axios.get("https://localhost:5001/SkyView/" + 
+        "?year="+data.year+
+        "&month="+data.month+
+        "&day="+data.day+
+        "&hour="+data.hour+
+        "&minute="+data.minute+
+        "&targetRA="+data.targetRA+
+        "&targetDec="+data.targetDec+
+        "&longitude="+data.longitude+
+        "&latitude="+data.latitude+
+        "&altitude="+data.altitude, 
+        data, Headers.retrieveHeaders());
       }
     },
     login: function(data) {
