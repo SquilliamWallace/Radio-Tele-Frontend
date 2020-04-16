@@ -163,6 +163,15 @@ export default {
         return axios.get(this.namespace + "/" + "getMostRecent", Headers.retrieveHeaders())
       }
     },
+    SensorOverrides: {
+      namespace: baseUrl + "sensor-overrides",
+      retrieveOverrides: function() {
+        return axios.get(this.namespace + "/" + "retrieve", Headers.retrieveHeaders())
+      },
+      updateOverride: function(sensorName, overridden) {
+        return axios.post(this.namespace + "/" + sensorName + "/" + overridden, {}, Headers.retrieveHeaders())
+      }
+    },
     Thresholds: {
       namespace: baseUrl + "thresholds",
       retrieveThresholds: function() {
