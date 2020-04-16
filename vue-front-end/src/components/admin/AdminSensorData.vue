@@ -64,7 +64,7 @@
                 <v-flex md>
                     <v-card-actions class="justify-start">
                         <div>
-                            <v-switch class="ma-0" inset label="Override" background-color="transparent" color="blue darken-5" v-model="sensor.override" @change="resetStatuses()"></v-switch>
+                            <v-switch class="ma-0" inset label="Override" background-color="transparent" color="blue darken-5" v-model="sensor.override" @change="resetStatus(sensor)"></v-switch>
                         </div>
                     </v-card-actions>
                 </v-flex>
@@ -207,16 +207,23 @@ export default {
                 })
             })
         },
-        resetStatuses() {
-            // This part is going to have to be redone when overrides are implemented
-            for(var dbIndex of this.dbData) {                                              // iterate over all sensors brought in fromd database
-                for(var localIndex of this.sensors){                                       // iterate over all local sensor variables
-                    if (dbIndex.name == localIndex.name){                                  // We have found the matching sensor
-                        dbIndex.override = localIndex.override ;                           // Copy the local override value back into the database
-                        /* Here is where we would send an HTTP request to the back end updating the new override value */
-                    }
-                }
+        resetStatus(sensor) {
+            if (sensor.name == 'gate') {
+                updateOverride("GATE", true);
             }
+            else if (sensor.name == 'proximity') {
+                updateOverride("PROXIMITY", true);
+            }
+            else if (sensor.name == 'azimuthMotor') {
+                updateOverride("AZIMUTH_MOTOR", true);
+            }
+            else if (sensor.name == 'elevationMotor') {
+                updateOverride("ELEVATION_MOTOR", true);
+            }
+            else if (sensor.name == 'weatherStation') {
+                updateOverride("WEATHER_STATION", true);
+            }
+            
             this.retrieveStatuses();                                                                 // Update the front-end
         },
         isOverride(val){
