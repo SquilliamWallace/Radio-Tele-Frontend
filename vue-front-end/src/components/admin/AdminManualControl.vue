@@ -295,18 +295,20 @@ export default {
       if(val == 0) {
           // COORDS
           if(this.mode === "Right Ascension and Declination") {
-
+            if(this.rightAscHours >= 0 && this.rightAscHours < 24 && this.rightAscMinutes >= 0 && this.rightAscMinutes < 60 && this.declination >= -90 && this.declination <= 90) {
+              console.log("Valid Right Asc and Declination Jog Move input");
+            }
           } else if(this.mode === "Azimuth and Elevation") {
-            
+            if(this.azimuth >= 0 && this.azimuth < 360 && this.elevation >= 0 && this.elevation <= 90) {
+              console.log("Valid Azimuth and Elavation Jog Move input");
+            }            
           }
       } else if(val == 1) {
           // SCRIPTS
           if(this.selectedScript != null){
-            console.log("Script Submit!");
+            console.log("Script Submit! submitting... " + this.selectedScript);
           }
       }
-
-      // client.close();
     }
   },
   components: {

@@ -38,6 +38,10 @@
           Sensors
           <v-icon>rss_feed</v-icon>
         </v-tab>
+        <v-tab>
+          Manual Control
+          <v-icon>input</v-icon>
+        </v-tab>
         
         <v-tab-item>
           <admin-log></admin-log>
@@ -66,6 +70,10 @@
         <v-tab-item>
           <admin-sensor-data></admin-sensor-data>
         </v-tab-item>
+        
+        <v-tab-item>
+          <admin-manual-control></admin-manual-control>
+        </v-tab-item>
 
       </v-tabs>
 
@@ -83,7 +91,8 @@ import AdminUserApproval from '../components/admin/AdminUserApproval.vue';
 import AdminAppointmentApproval from '../components/admin/AdminAppointmentApproval.vue';
 import CelestialBodies from '../components/admin/CelestialBodies.vue';
 import AdminSensorData from '../components/admin/AdminSensorData.vue';
-import WeatherStation from "../components/admin/WeatherStation.vue"
+import WeatherStation from "../components/admin/WeatherStation.vue";
+import AdminManualControl from "../components/admin/AdminManualControl.vue";
 import Loading from "../components/utility/Loading";
  export default {
     title: "Radio Telescope 1.1.0",
@@ -118,7 +127,8 @@ import Loading from "../components/utility/Loading";
         AdminAppointmentApproval,
         CelestialBodies,
         AdminSensorData,
-        WeatherStation
+        WeatherStation,
+        AdminManualControl
     },
     mounted() {
       this.authenticate()
