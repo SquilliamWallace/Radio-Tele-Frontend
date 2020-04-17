@@ -208,7 +208,7 @@ export default {
         },
         retrieveOverrides() {
             // Make the API call
-            ApiDriver.SensorStatus.retrieve().then((response) => {
+            ApiDriver.SensorOverrides.retrieveOverrides().then((response) => {
                 // Handle the server response
                 HttpResponse.then(response, (data) => {
                     // Populate the data and set the store's boolean back to false
