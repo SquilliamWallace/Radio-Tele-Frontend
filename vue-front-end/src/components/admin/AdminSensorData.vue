@@ -209,22 +209,158 @@ export default {
         },
         resetStatus(sensor) {
             if (sensor.name == 'gate') {
-                updateOverride("GATE", true);
+                ApiDriver.SensorOverrides.updateOverride("GATE", true).then((response) =>{
+                    HttpResponse.then(response, (data) => {
+                            this.$swal({
+                            title: '<span style="color:#f0ead6">Gate Sensor Overridden<span>',
+                            html: '<span style="color:#f0ead6">The gate sensor has been overridden <span>',
+                            type: 'success',
+                            background: '#302f2f'
+                        });
+                        this.$emit('input');
+                    }, (status, errors) => {
+                        if(parseInt(status)==403){
+                            HttpResponse.accessDenied(this)
+                        } else if(parseInt(status)==404){
+                            HttpResponse.notFound(this, errors)
+                        } else {
+                            for(var field in errors) {
+                                let message = errors[field][0]
+                            }
+                            HttpResponse.generalError(this, message, false)
+                        }
+                    })
+                }).catch((error) => {
+                // Handle an erroneous API call
+                    console.log(error)
+                    let message = "An error occurred when loading this observation";
+                    HttpResponse.generalError(this, message, true);
+                });
+                console.log("Successfully overrode gate sensor!")
             }
             else if (sensor.name == 'proximity') {
-                updateOverride("PROXIMITY", true);
+                ApiDriver.SensorOverrides.updateOverride("PROXIMITY", true).then((response) =>{
+                    HttpResponse.then(response, (data) => {
+                            this.$swal({
+                            title: '<span style="color:#f0ead6">Proximity Sensor Overridden<span>',
+                            html: '<span style="color:#f0ead6">The proximity sensor has been overridden <span>',
+                            type: 'success',
+                            background: '#302f2f'
+                        });
+                        this.$emit('input');
+                    }, (status, errors) => {
+                        if(parseInt(status)==403){
+                            HttpResponse.accessDenied(this)
+                        } else if(parseInt(status)==404){
+                            HttpResponse.notFound(this, errors)
+                        } else {
+                            for(var field in errors) {
+                                let message = errors[field][0]
+                            }
+                            HttpResponse.generalError(this, message, false)
+                        }
+                    })
+                }).catch((error) => {
+                // Handle an erroneous API call
+                    console.log(error)
+                    let message = "An error occurred when loading this observation";
+                    HttpResponse.generalError(this, message, true);
+                });
+                console.log("Successfully overrode proximity sensor!")
             }
             else if (sensor.name == 'azimuthMotor') {
-                updateOverride("AZIMUTH_MOTOR", true);
+                ApiDriver.SensorOverrides.updateOverride("AZIMUTH_MOTOR", true).then((response) =>{
+                    HttpResponse.then(response, (data) => {
+                            this.$swal({
+                            title: '<span style="color:#f0ead6">Azimuth Motor Sensor Overridden<span>',
+                            html: '<span style="color:#f0ead6">The azimuth motor sensor has been overridden <span>',
+                            type: 'success',
+                            background: '#302f2f'
+                        });
+                        this.$emit('input');
+                    }, (status, errors) => {
+                        if(parseInt(status)==403){
+                            HttpResponse.accessDenied(this)
+                        } else if(parseInt(status)==404){
+                            HttpResponse.notFound(this, errors)
+                        } else {
+                            for(var field in errors) {
+                                let message = errors[field][0]
+                            }
+                            HttpResponse.generalError(this, message, false)
+                        }
+                    })
+                }).catch((error) => {
+                // Handle an erroneous API call
+                    console.log(error)
+                    let message = "An error occurred when loading this observation";
+                    HttpResponse.generalError(this, message, true);
+                });
+                console.log("Successfully overrode azimuth motor sensor!")
             }
             else if (sensor.name == 'elevationMotor') {
-                updateOverride("ELEVATION_MOTOR", true);
+                ApiDriver.SensorOverrides.updateOverride("ELEVATION_MOTOR", true).then((response) =>{
+                    HttpResponse.then(response, (data) => {
+                            this.$swal({
+                            title: '<span style="color:#f0ead6">Elevation Motor Sensor Overridden<span>',
+                            html: '<span style="color:#f0ead6">The elevation motor sensor has been overridden <span>',
+                            type: 'success',
+                            background: '#302f2f'
+                        });
+                        this.$emit('input');
+                    }, (status, errors) => {
+                        if(parseInt(status)==403){
+                            HttpResponse.accessDenied(this)
+                        } else if(parseInt(status)==404){
+                            HttpResponse.notFound(this, errors)
+                        } else {
+                            for(var field in errors) {
+                                let message = errors[field][0]
+                            }
+                            HttpResponse.generalError(this, message, false)
+                        }
+                    })
+                }).catch((error) => {
+                // Handle an erroneous API call
+                    console.log(error)
+                    let message = "An error occurred when loading this observation";
+                    HttpResponse.generalError(this, message, true);
+                });
+                console.log("Successfully overrode elevation motor sensor!")
             }
             else if (sensor.name == 'weatherStation') {
-                updateOverride("WEATHER_STATION", true);
+                ApiDriver.SensorOverrides.updateOverride("WEATHER_STATION", true).then((response) =>{
+                    HttpResponse.then(response, (data) => {
+                            this.$swal({
+                            title: '<span style="color:#f0ead6">Weather Station Sensor Overridden<span>',
+                            html: '<span style="color:#f0ead6">The weather station sensor has been overridden <span>',
+                            type: 'success',
+                            background: '#302f2f'
+                        });
+                        this.$emit('input');
+                    }, (status, errors) => {
+                        if(parseInt(status)==403){
+                            HttpResponse.accessDenied(this)
+                        } else if(parseInt(status)==404){
+                            HttpResponse.notFound(this, errors)
+                        } else {
+                            for(var field in errors) {
+                                let message = errors[field][0]
+                            }
+                            HttpResponse.generalError(this, message, false)
+                        }
+                    })
+                }).catch((error) => {
+                // Handle an erroneous API call
+                    console.log(error)
+                    let message = "An error occurred when loading this observation";
+                    HttpResponse.generalError(this, message, true);
+                });
+                console.log("Successfully overrode weather station sensor!")
             }
             
             this.retrieveStatuses();                                                                 // Update the front-end
+            console.log("Successfully retrieved new statuses for sensors!")
         },
         isOverride(val){
             if (val == 1){ return true; }
