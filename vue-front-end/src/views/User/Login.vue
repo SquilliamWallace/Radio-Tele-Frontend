@@ -20,9 +20,11 @@
                           :error="data.username.hasError"
                           :error-messages="data.username.errorMessage"
                           label="Email"
+                          ref="email"
                           required
                           outline
-                          browser-autocomplete
+                          browser-autocomplete    
+                          v-on:keydown.enter.native="submit"
                         ></v-text-field>
                       </v-flex>
                       <v-flex xs12>
@@ -35,6 +37,7 @@
                           type="password"
                           required
                           outline
+                          v-on:keydown.enter.native="submit"  
                         ></v-text-field>
                       </v-flex>
                       <v-flex>
@@ -201,10 +204,14 @@ export default {
       CustomErrorHandler.clearError(this.data.username);
       CustomErrorHandler.clearError(this.data.password);
       CustomErrorHandler.clearError(this.data.reqPassEmail);
+    },
+    setFocus() {
+      this.$refs.email.focus()
     }
   },
   mounted: function() {
     checkBrowser(this);
+    this.setFocus();
   }
 };
 </script>
