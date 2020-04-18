@@ -94,7 +94,6 @@
             <v-btn flat @click="submit(0)">Send Command</v-btn>
             <v-btn flat @click="submit(1)">Send Script</v-btn>
             <v-btn flat @click="clearForm">Clear Form</v-btn>
-            <v-btn flat @click="clearForm">Back</v-btn>
           </v-card-actions>
             <!-- Dropdown to select update mode -->
                 <v-flex xs6 sm4>
@@ -144,6 +143,9 @@ import ApiDriver from "../../ApiDriver";
 import HttpResponse from "../../utils/HttpResponse";
 import CurrentUserValidation from "../../utils/CurrentUserValidation";
 import Loading from "../../components/utility/Loading";
+// import VueSocketIO from 'vue-socket.io';
+// import io from 'socket.io';
+
 export default {
   name: "ManualControl",
   data() {
@@ -168,16 +170,18 @@ export default {
       selectedScript: null,
 
       scripts: [
-          "Stow",
-          "Full Elevation Move",
-          "Hit Hard Stops",
-          "Hit Limit Switches",
-          "Full 360 Move",
-          "Return from Beyond Limit Switch",
-          "Return from Hard Stop",
-          "Calibration",
+          "Stow", // SCRIPT: STOW
+          "Snow Dump", // SCRIPT: DUMP
+          "Full Elevation Move", // SCRIPT: FULL_EV
+          "Full 360 Move, Clockwise", // SCRIPT: CLOCK
+          "Full 360 Move, Counterclockwise", // SCRIPT: COUNTER
+          "Calibration", // SCRIPT: CALIBRATE
           "Track Two Points",
-          "Hit Two Limit Switches at Once"
+          "Hit Hard Stops", 
+          "Hit Limit Switches",
+          "Hit Two Limit Switches at Once",
+          "Return from Beyond Limit Switch",
+          "Return from Hard Stop"
       ],
 
       rules: {
@@ -201,7 +205,7 @@ export default {
           "Must be between 0 and 90"
       }
     };
-  },
+  }, 
   methods: {
     clearForm() {
         (this.rightAscHours = null),
@@ -283,24 +287,29 @@ export default {
           this.azimuth = parseFloat(this.azimuth) + parseFloat(this.jogDelta);
         }
       }
-      this.updateRightAsc();
+      // this.updateRightAsc();
 
-      if (val != 0 && jogSubmits) {
-        submit(0);
+      if (val != 0 && this.jogSubmits) {
+        this.submit(0);
       }
     },
     submit(val) {
       // This method will use a TCP client to send commands to the telescope.
       console.log("Submit Reached!");
+
+      // Create connection
+
+      // TODO: That
+
       if(val == 0) {
           // COORDS
           if(this.mode === "Right Ascension and Declination") {
             if(this.rightAscHours >= 0 && this.rightAscHours < 24 && this.rightAscMinutes >= 0 && this.rightAscMinutes < 60 && this.declination >= -90 && this.declination <= 90) {
-              console.log("Valid Right Asc and Declination Jog Move input");
+              console.log("Valid Right Asc and Declination Jog Move input! Submitting: " + this.rightAscHours + " " + this.rightAscMinutes + " " + this.declination);
             }
           } else if(this.mode === "Azimuth and Elevation") {
             if(this.azimuth >= 0 && this.azimuth < 360 && this.elevation >= 0 && this.elevation <= 90) {
-              console.log("Valid Azimuth and Elavation Jog Move input");
+              console.log("Valid Azimuth and Elavation Jog Move input! Submitting: " + this.azimuth + " " + this.elevation );
             }            
           }
       } else if(val == 1) {
@@ -309,6 +318,10 @@ export default {
             console.log("Script Submit! submitting... " + this.selectedScript);
           }
       }
+
+      // Close connection
+      // TODO: That
+
     }
   },
   components: {
