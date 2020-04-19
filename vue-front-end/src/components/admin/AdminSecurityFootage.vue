@@ -59,7 +59,7 @@
                         <v-card dark color="#666666" height="50px">
                             <v-dialog hide-overlay transition="dialog-bottom-transition" v-model="video.thumbnailToggle">
                                 <v-btn color="primary darken-2" slot="activator">View Thumbnails</v-btn>
-                                <v-card dark color="#FFFFFF" height="600px">
+                                <v-card dark color="#666666" height="600px">
                                     <v-card-text>
                                         <div class="security-footage-text">
                                             Thumbnails from {{video.recordCreatedTimestamp}}
@@ -67,7 +67,7 @@
                                         <v-img 
                                         :src="video.thumbnailPath"
                                         height="400px"
-                                        
+                                        contain
                                         ></v-img>
                                     </v-card-text>
                                 </v-card>
@@ -78,12 +78,13 @@
                         <v-card dark color="#666666" height="50px">
                             <v-dialog hide-overlay transition="dialog-bottom-transition" v-model="video.streamToggle">
                                 <v-btn color="primary darken-2" slot="activator">Stream Footage</v-btn>
-                                <v-card dark color="#FFFFFF" height="600px">
+                                <v-card dark color="#666666" height="600px">
                                     <v-card-text>
                                         <div class="security-footage-text">
                                             Footage from {{video.recordCreatedTimestamp}}
                                         </div>
-                                        <v-card color="#000000" height="500px"></v-card>
+                                        <!-- <v-card color="#000000" height="500px"></v-card> -->
+                                        <video width="759" height="506" :src="video.videoPath" type="video/mp4" controls frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></video>
                                     </v-card-text>
                                 </v-card>
                             </v-dialog>
@@ -179,7 +180,7 @@ export default {
 <style scoped>
 .security-footage-text {
     text-align: center;
-    color: black; 
+    color: white; 
     text-decoration-color: black;
 }
 </style>
