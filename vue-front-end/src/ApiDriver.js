@@ -1,5 +1,6 @@
 const axios = require('axios');
 import Headers from './utils/Headers';
+import SecretKey from './utils/SecretKey';
 let baseUrl = "http://api.ycpradiotelescope.com:8080/api/";
 
 export default {
@@ -172,8 +173,10 @@ export default {
     Astronomical: {
       namespace: "http://rtastronomicalapi-dev.us-east-2.elasticbeanstalk.com/",
       horizonCheck: function(data){
-        return axios.get("http://rtastronomicalapi-dev.us-east-2.elasticbeanstalk.com/HorizonCheck/" + 
-        "?year="+data.year+
+        return axios.get("http://rtastronomicalapi-dev.us-east-2.elasticbeanstalk.com/HorizonCheck/" + // hosted
+        // return axios.get("https://localhost:5001/HorizonCheck/" + // testing locally
+        "?key="+SecretKey.getKey()+
+        "&year="+data.year+
         "&month="+data.month+
         "&day="+data.day+
         "&hour="+data.hour+
@@ -186,9 +189,10 @@ export default {
       data, Headers.retrieveHeaders());
       }, 
       skyview: function(data) {
-        return axios.get("http://rtastronomicalapi-dev.us-east-2.elasticbeanstalk.com/SkyView/" + 
-        // return axios.get("https://localhost:5001/SkyView/" + 
-        "?year="+data.year+
+        return axios.get("http://rtastronomicalapi-dev.us-east-2.elasticbeanstalk.com/SkyView/" + // hosted
+        // return axios.get("https://localhost:5001/SkyView/" + // testing locally
+        "?key="+SecretKey.getKey()+
+        "&year="+data.year+
         "&month="+data.month+
         "&day="+data.day+
         "&hour="+data.hour+
