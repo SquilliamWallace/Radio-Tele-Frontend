@@ -188,8 +188,8 @@ export default {
         return axios.get(this.namespace + "/" + "listBetweenCreatedDates?lowerDate=" + lowerDate + "&upperDate=" + upperDate, Headers.retrieveHeaders())
       }
     },
-    login: function(data) {
-      return axios.post("http://api.ycpradiotelescope.com:8080/login?email=" + data.username.value + "&password=" + data.password.value, JSON.stringify(data))
+    login: function(username, password, data) {
+      return axios.post("http://api.ycpradiotelescope.com:8080/login?email=" + username + "&password=" + password, JSON.stringify(data))
     },
     logout: function () {
       return axios.post(baseUrl + "logout", {}, Headers.retrieveHeaders())
