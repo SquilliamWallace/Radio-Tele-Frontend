@@ -20,9 +20,11 @@
                           :error="data.username.hasError"
                           :error-messages="data.username.errorMessage"
                           label="Email"
+                          ref="email"
                           required
                           outline
-                          browser-autocomplete
+                          browser-autocomplete    
+                          v-on:keydown.enter.native="submit"
                         ></v-text-field>
                       </v-flex>
                       <v-flex xs12>
@@ -35,6 +37,7 @@
                           type="password"
                           required
                           outline
+                          v-on:keydown.enter.native="submit"  
                         ></v-text-field>
                       </v-flex>
                       <v-flex>
@@ -119,8 +122,11 @@ export default {
       // Clear any errors
       this.clearErrors();
 
+      // Enocde any special characters in the password to avoid Fragment identifiers
+      var encodedPassword = encodeURIComponent(this.data.password.value);
+
       // Make the API call
-      ApiDriver.login(this.data)
+      ApiDriver.login(this.data.username.value, encodedPassword, this.data)
         .then(response => {
           let that = this;
 
@@ -201,10 +207,14 @@ export default {
       CustomErrorHandler.clearError(this.data.username);
       CustomErrorHandler.clearError(this.data.password);
       CustomErrorHandler.clearError(this.data.reqPassEmail);
+    },
+    setFocus() {
+      this.$refs.email.focus()
     }
   },
   mounted: function() {
     checkBrowser(this);
+    this.setFocus();
   }
 };
 </script>

@@ -158,10 +158,38 @@ export default {
         return axios.get(baseUrl + "authAdmin", Headers.retrieveHeaders());
       }
     },
+    VideoFiles: {
+      namespace: baseUrl + "video-files",
+      viewVideoFiles: function(lowerDate, upperDate) {
+        return axios.get(this.namespace + "/" + "listBetweenCreatedDates?lowerDate=" + lowerDate + "&upperDate=" + upperDate, Headers.retrieveHeaders())
+      }
+    },
+
     SensorStatus: {
       namespace: baseUrl + "sensor-status",
       getMostRecent: function() {
         return axios.get(this.namespace + "/" + "getMostRecent", Headers.retrieveHeaders())
+      }
+    },
+    SensorOverrides: {
+      namespace: baseUrl + "sensor-overrides",
+      retrieveOverrides: function() {
+        return axios.get(this.namespace + "/" + "retrieve", Headers.retrieveHeaders())
+      },
+      updateOverride: function(sensorName, overridden) {
+        return axios.post(this.namespace + "/" + sensorName + "/" + overridden, {}, Headers.retrieveHeaders())
+      }
+    },
+    Thresholds: {
+      namespace: baseUrl + "thresholds",
+      retrieveThresholds: function() {
+        return axios.get(this.namespace + "/" + "retrieve", Headers.retrieveHeaders())
+      },
+      retrieve: function (sensorName) {
+        return axios.get(this.namespace + "/" + sensorName + "/retrieve", Headers.retrieveHeaders())
+      },
+      updateThresholdByName: function(sensorName, maximum) {
+        return axios.post(this.namespace + "/" + sensorName + "/" + maximum, {}, Headers.retrieveHeaders())
       }
     },
     WeatherData: {
@@ -205,8 +233,8 @@ export default {
         data, Headers.retrieveHeaders());
       }
     },
-    login: function(data) {
-      return axios.post("http://api.ycpradiotelescope.com:8080/login?email=" + data.username.value + "&password=" + data.password.value, JSON.stringify(data))
+    login: function(username, password, data) {
+      return axios.post("http://api.ycpradiotelescope.com:8080/login?email=" + username + "&password=" + password, JSON.stringify(data))
     },
     logout: function () {
       return axios.post(baseUrl + "logout", {}, Headers.retrieveHeaders())
