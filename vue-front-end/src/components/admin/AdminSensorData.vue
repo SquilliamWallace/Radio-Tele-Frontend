@@ -240,7 +240,6 @@ export default {
         },
         overrideSensor(sensor) {
             var s = "";
-
             if (sensor.name == 'gate') {
                 s = "GATE";
             }
@@ -463,6 +462,10 @@ export default {
         this.retrieveStatuses();
         this.retrieveOverrides();
         this.getThresholds();
+    },
+    beforeUpdate: function() {
+    },
+    updated: function() {
     },
     components: {
         Loading
