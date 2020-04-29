@@ -122,8 +122,11 @@ export default {
       // Clear any errors
       this.clearErrors();
 
+      // Enocde any special characters in the password to avoid Fragment identifiers
+      var encodedPassword = encodeURIComponent(this.data.password.value);
+
       // Make the API call
-      ApiDriver.login(this.data)
+      ApiDriver.login(this.data.username.value, encodedPassword, this.data)
         .then(response => {
           let that = this;
 
