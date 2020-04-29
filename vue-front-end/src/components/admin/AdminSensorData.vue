@@ -463,7 +463,9 @@ export default {
         this.retrieveOverrides();
         this.getThresholds();
     },
+    //overrides and statuses need to be changed to persist on front end after page refresh
     beforeUpdate: function() {
+
     },
     updated: function() {
     },
