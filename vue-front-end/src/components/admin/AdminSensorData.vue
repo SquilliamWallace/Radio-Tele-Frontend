@@ -230,13 +230,10 @@ export default {
             })
         },
         setOverrides(dbData) {
-            for(var dbIndex in dbData) {                                              // iterate over all sensors brought in from database
-                console.log(''.concat("override dbIndex: ", dbIndex, " - ", dbData[dbIndex].sensorName, " - override=", dbData[dbIndex].overridden))
-                for(var localIndex of this.sensors){                                       // iterate over all local sensor variables
-                    console.log(''.concat("override localIndex: ", localIndex.refName))
-                    var localName = localIndex.displayName.toUpperCase().replace(/ /g, "_");
-                    if (localName == dbData[dbIndex].sensorName){   
-                        console.log("Found Match!");
+            for(var dbIndex in dbData) {                                                        // iterate over all sensors brought in from database
+                for(var localIndex of this.sensors){                                            // iterate over all local sensor variables
+                    var localName = localIndex.displayName.toUpperCase().replace(/ /g, "_");    // turn "sensor name" into "SENSOR_NAME"
+                    if (localName == dbData[dbIndex].sensorName){  
                         localIndex.override = dbData[dbIndex].overridden;                         //update override values
                     }
                 }
