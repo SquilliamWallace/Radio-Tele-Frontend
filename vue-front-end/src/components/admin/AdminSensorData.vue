@@ -64,7 +64,7 @@
                 <v-flex md>
                     <v-card-actions class="justify-start">
                         <div>
-                            <v-switch class="ma-0" inset label="Override" background-color="transparent" color="blue darken-5" v-model="sensor.override" @change="overrideSensor(sensor)"></v-switch>
+                            <v-switch class="ma-0" inset label="Override" background-color="transparent" color="blue darken-5" v-model="sensor.override" ></v-switch>
                         </div>
                     </v-card-actions>
                 </v-flex>
