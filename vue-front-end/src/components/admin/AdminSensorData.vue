@@ -64,7 +64,7 @@
                 <v-flex md>
                     <v-card-actions class="justify-start">
                         <div>
-                            <v-switch class="ma-0" inset label="Override" background-color="transparent" color="blue darken-5" v-model="sensor.override" @change="overrideSensor(sensor)"></v-switch>
+                            <v-switch class="ma-0" inset label="Override" background-color="transparent" color="blue darken-5" v-model="sensor.override" ></v-switch>
                         </div>
                     </v-card-actions>
                 </v-flex>
@@ -140,13 +140,13 @@ export default {
     methods:{
         getOverallStatus(dbData){
             this.overallStatus = 0;             // if all are OK, this remains unchanged
-            for (var index in dbData) {
-                if (this.sensorList.includes(index) && !this.isOverride(index.override)){   // Ignore if overriden or not sensor
-                    if (dbData[index] == 2){
+            for (var index in this.sensors) {
+                if (this.sensorList.includes(this.sensors[index].name) && !this.isOverride(this.sensors[index].override)){   // Ignore if overriden or not sensor
+                    if (this.sensors[index].status == 2){
                         this.overallStatus = 2;
                         return this.overallStatus;                     // if ERROR found, immediately return
                     }
-                    else if(dbData[index] == 1){
+                    else if(this.sensors[index].status == 1){
                         this.overallStatus = 1;
                         // console.log("Status 1 found: " + index);     // Logging for debugging purposes
                     }
@@ -230,13 +230,15 @@ export default {
             })
         },
         setOverrides(dbData) {
-            for(var dbIndex in dbData) {                                              // iterate over all sensors brought in from database
-                for(var localIndex of this.sensors){                                       // iterate over all local sensor variables
-                    if (dbIndex == localIndex.name){   
-                        localIndex.override = dbIndex.override;                         //update override values
+            for(var dbIndex in dbData) {                                                        // iterate over all sensors brought in from database
+                for(var localIndex of this.sensors){                                            // iterate over all local sensor variables
+                    var localName = localIndex.displayName.toUpperCase().replace(/ /g, "_");    // turn "sensor name" into "SENSOR_NAME"
+                    if (localName == dbData[dbIndex].sensorName){  
+                        localIndex.override = dbData[dbIndex].overridden;                         //update override values
                     }
                 }
             }
+            this.retrieveStatuses();    // the statuses depend on the override states
         },
         overrideSensor(sensor) {
             var s = "";
@@ -289,7 +291,7 @@ export default {
             console.log("Successfully retrieved new statuses for sensors!")
         },
         isOverride(val){
-            if (val == 1){ return true; }
+            if (val == 1 || val == true){ return true; }
             else {return false; }
         },
         getStatusColor(val) {
@@ -459,8 +461,7 @@ export default {
         },
     },
     mounted: function(){
-        this.retrieveStatuses();
-        this.retrieveOverrides();
+        this.retrieveOverrides();       // Statuses are updated ofter override states are retrieved
         this.getThresholds();
     },
     //overrides and statuses need to be changed to persist on front end after page refresh
