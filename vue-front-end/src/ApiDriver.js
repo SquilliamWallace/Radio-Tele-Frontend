@@ -207,5 +207,8 @@ export default {
     },
     feedback(data) {
       return axios.post(baseUrl + "feedback", data, Headers.retrieveHeaders());
+    },
+    middlemanConnection(data) {
+      return axios.get("https://localhost:5001/MiddlemanConnection?command=" + data.command);
     }
 }

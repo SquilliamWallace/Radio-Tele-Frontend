@@ -175,13 +175,13 @@ export default {
           "Full Elevation Move", // SCRIPT: FULL_EV
           "Full 360 Move, Clockwise", // SCRIPT: CLOCK
           "Full 360 Move, Counterclockwise", // SCRIPT: COUNTER
-          "Calibration", // SCRIPT: CALIBRATE
-          "Track Two Points",
+          "Calibration" // SCRIPT: CALIBRATE
+          /* "Track Two Points",
           "Hit Hard Stops", 
           "Hit Limit Switches",
           "Hit Two Limit Switches at Once",
           "Return from Beyond Limit Switch",
-          "Return from Hard Stop"
+          "Return from Hard Stop" */
       ],
 
       rules: {
@@ -297,30 +297,49 @@ export default {
       // This method will use a TCP client to send commands to the telescope.
       console.log("Submit Reached!");
 
-      // Create connection
-
-      // TODO: That
-
-      if(val == 0) {
-          // COORDS
-          if(this.mode === "Right Ascension and Declination") {
-            if(this.rightAscHours >= 0 && this.rightAscHours < 24 && this.rightAscMinutes >= 0 && this.rightAscMinutes < 60 && this.declination >= -90 && this.declination <= 90) {
-              console.log("Valid Right Asc and Declination Jog Move input! Submitting: " + this.rightAscHours + " " + this.rightAscMinutes + " " + this.declination);
+      if(val == 0 || val == 1) {
+        var selectedCommand = "";
+        if(val == 0) {
+            // COORDS
+            if(this.mode === "Right Ascension and Declination") {
+              if(this.rightAscHours >= 0 && this.rightAscHours < 24 && this.rightAscMinutes >= 0 && this.rightAscMinutes < 60 && this.declination >= -90 && this.declination <= 90) {
+                console.log("Valid Right Asc and Declination Jog Move input! Submitting: " + this.rightAscHours + " " + this.rightAscMinutes + " " + this.declination);
+                selectedCommand = "HOURS " + this.rightAscHours + " MINUTES " + this.rightAscMinutes + " DECLINATION " + this.declination; // TODO: get final format
+              }
+            } else if(this.mode === "Azimuth and Elevation") {
+              if(this.azimuth >= 0 && this.azimuth < 360 && this.elevation >= 0 && this.elevation <= 90) {
+                console.log("Valid Azimuth and Elavation Jog Move input! Submitting: " + this.azimuth + " " + this.elevation );
+                selectedCommand = "AZIMUTH " + this.azimuth + " ELEVATION " + this.elevation; // TODO: get final format
+              }            
             }
-          } else if(this.mode === "Azimuth and Elevation") {
-            if(this.azimuth >= 0 && this.azimuth < 360 && this.elevation >= 0 && this.elevation <= 90) {
-              console.log("Valid Azimuth and Elavation Jog Move input! Submitting: " + this.azimuth + " " + this.elevation );
-            }            
-          }
-      } else if(val == 1) {
-          // SCRIPTS
-          if(this.selectedScript != null){
-            console.log("Script Submit! submitting... " + this.selectedScript);
-          }
+        } else if(val == 1) {
+            // SCRIPTS
+            if(this.selectedScript != null){
+              if(this.selectedScript == "Stow") {
+                selectedCommand = "SCRIPT: STOW";
+              } else if (this.selectedScript == "Snow Dump") {
+                selectedCommand = "SCRIPT: DUMP";
+              } else if (this.selectedScript == "Full Elevation Move") {
+                selectedCommand = "SCRIPT: FULL_EV";
+              } else if (this.selectedScript == "Full 360 Move, Clockwise") {
+                selectedCommand = "SCRIPT: CLOCK";
+              } else if (this.selectedScript == "Full 360 Move, Counterclockwise") {
+                selectedCommand = "SCRIPT: COUNTER";
+              } else if (this.selectedScript == "Calibration") {
+                selectedCommand = "SCRIPT: CALIBRATE";
+              }
+              console.log("Script Submit! submitting... " + this.selectedScript);
+            }
+        }
+        let data = {
+          command: selectedCommand
+        };
+        var call = ApiDriver.middlemanConnection(data);
+        call.then(response => {
+          console.log(response);
+        }).catch(error => {console.log(error)});
       }
 
-      // Close connection
-      // TODO: That
 
     }
   },
