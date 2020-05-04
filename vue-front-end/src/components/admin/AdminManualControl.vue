@@ -91,6 +91,7 @@
           </v-layout>
           <!-- Button to update from fields -->
           <v-card-actions>
+            <v-btn color="red darken-1" @click="submit(2)">STOP</v-btn>
             <v-btn flat @click="submit(0)">Send Command</v-btn>
             <v-btn flat @click="submit(1)">Send Script</v-btn>
             <v-btn flat @click="clearForm">Clear Form</v-btn>
@@ -312,7 +313,7 @@ export default {
                 selectedCommand = "AZIMUTH " + this.azimuth + " ELEVATION " + this.elevation; // TODO: get final format
               }            
             }
-        } else if(val == 1) {
+        } else if (val == 1) {
             // SCRIPTS
             if(this.selectedScript != null){
               if(this.selectedScript == "Stow") {
@@ -330,6 +331,9 @@ export default {
               }
               console.log("Script Submit! submitting... " + this.selectedScript);
             }
+        } else if (val == 1) {
+          selectedCommand = "STOP_RT";
+          console.log("STOP TELESCOPE! submitting... " + selectedCommand);
         }
         let data = {
           command: selectedCommand
