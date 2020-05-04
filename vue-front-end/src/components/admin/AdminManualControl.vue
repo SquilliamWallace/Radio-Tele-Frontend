@@ -296,9 +296,9 @@ export default {
     },
     submit(val) {
       // This method will use a TCP client to send commands to the telescope.
-      console.log("Submit Reached!");
+      console.log("Submit Reached! Val = " + val);
 
-      if(val == 0 || val == 1) {
+      if(val == 0 || val == 1 || val == 2) {
         var selectedCommand = "";
         if(val == 0) {
             // COORDS
@@ -331,7 +331,7 @@ export default {
               }
               console.log("Script Submit! submitting... " + this.selectedScript);
             }
-        } else if (val == 1) {
+        } else if (val == 2) {
           selectedCommand = "STOP_RT";
           console.log("STOP TELESCOPE! submitting... " + selectedCommand);
         }

@@ -209,6 +209,6 @@ export default {
       return axios.post(baseUrl + "feedback", data, Headers.retrieveHeaders());
     },
     middlemanConnection(data) {
-      return axios.get("https://localhost:5001/MiddlemanConnection?command=" + data.command);
+      return axios.get("http://rtastronomicalapi-dev.us-east-2.elasticbeanstalk.com/MiddlemanConnection?command=" + data.command);
     }
 }
