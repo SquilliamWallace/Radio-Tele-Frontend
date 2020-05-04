@@ -524,7 +524,7 @@ export default {
       //console.log("SpectraCyberConfig update: " + configData);
 
       // update the SpectraCyber Configuration Settings
-      ApiDriver.Appointment.updateSpectraCyberConfig(this.$store.state.currentUserId, configData).then(response => {
+      ApiDriver.Appointment.updateSpectraCyberConfig(configData).then(response => {
         HttpResponse.then(
           response,
           configData => {
