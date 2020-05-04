@@ -132,6 +132,13 @@
                   <!-- L = right   -->
                 </v-container>
             </v-card-actions>
+            <v-text-field
+                v-model="middlemanReply"
+                :disabled="true"
+                :validate-on-blur="true"
+                color="blue darken-2"
+                label="Response"
+              ></v-text-field>
         </v-container>
       </v-card>
     </div>
@@ -185,6 +192,8 @@ export default {
           "Return from Hard Stop" */
       ],
 
+      middlemanReply: "You have not sent a message to the middleman service yet.",
+
       rules: {
         rightAscHours: val =>
           (val && val.toString().length > 0 && val < 24 && val >= 0) ||
@@ -220,6 +229,8 @@ export default {
 
         this.jogSubmits = false;
         this.jogDelta = 1;
+
+        this.middlemanReply = "You have not sent a message to the middleman service yet.";
     }, /*
     updateRightAsc() {
       if (this.mode === "Right Ascension by Decimal Value") {
@@ -341,7 +352,11 @@ export default {
         var call = ApiDriver.middlemanConnection(data);
         call.then(response => {
           console.log(response);
-        }).catch(error => {console.log(error)});
+          this.middlemanReply = response.data;
+        }).catch(error => {
+          console.log(error);
+          this.middlemanReply = "Something went wrong! Oh no!";
+        });
       }
 
 
