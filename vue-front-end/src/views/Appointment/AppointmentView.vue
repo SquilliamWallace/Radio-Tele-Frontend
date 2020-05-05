@@ -538,7 +538,7 @@ export default {
             this.$store.commit("loading", true);
 
             // Make the API call
-            ApiDriver.Appointment.viewSpectraCyberConfig(this.$store.state.currentUserId, this.data.spectracyberConfigId.value).then((response) => {
+            ApiDriver.Appointment.viewSpectraCyberConfig(this.data.spectracyberConfigId.value).then((response) => {
                 // Handle the server response
                 HttpResponse.then(response, (data) => {
                     console.log("SpectraCyberConfig: " + JSON.stringify(data))

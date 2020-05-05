@@ -42,6 +42,10 @@
           Manual Control
           <v-icon>input</v-icon>
         </v-tab>
+        <v-tab>
+          Security Footage
+          <v-icon>local_movies</v-icon>
+        </v-tab>
         
         <v-tab-item>
           <admin-log></admin-log>
@@ -75,6 +79,10 @@
           <admin-manual-control></admin-manual-control>
         </v-tab-item>
 
+        <v-tab-item>
+          <admin-security-footage></admin-security-footage>
+        </v-tab-item>
+
       </v-tabs>
 
   </div>
@@ -90,6 +98,7 @@ import CurrentUserValidation from '../utils/CurrentUserValidation';
 import AdminUserApproval from '../components/admin/AdminUserApproval.vue';
 import AdminAppointmentApproval from '../components/admin/AdminAppointmentApproval.vue';
 import CelestialBodies from '../components/admin/CelestialBodies.vue';
+import AdminSecurityFootage from '../components/admin/AdminSecurityFootage.vue';
 import AdminSensorData from '../components/admin/AdminSensorData.vue';
 import WeatherStation from "../components/admin/WeatherStation.vue";
 import AdminManualControl from "../components/admin/AdminManualControl.vue";
@@ -126,6 +135,7 @@ import Loading from "../components/utility/Loading";
         Loading,
         AdminAppointmentApproval,
         CelestialBodies,
+        AdminSecurityFootage,
         AdminSensorData,
         WeatherStation,
         AdminManualControl
