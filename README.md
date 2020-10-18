@@ -32,6 +32,9 @@ This makes a local repostory in the current directory.
 5. If the branch displayed at the bottom left does not say **development**, then click on it to open the branch selection dialogue box at the top. Then search for the **origin/development** branch and then select it to check out that branch.
 **Note**: Check package.json for any dependencies marked with a “^” before the version number, this indicates automatic updating and can lead to problems down the road.
 
+### Obtain the SecretKey component
+The frontend uses a "secret key" component to connect to AWS.  You will have to retrieve this from a team member who has access to it.  For security reasons, this cannot be pushed to GitHub.  The SecretKey.js file will go into the "utils" directory within the project.  The project will NOT compile without this file!
+
 ### Run the app
 1. In the terminal, make sure you are in the **vue-front-end** directory and then type the following commands to install, build, and run the web application locally.  
    `npm install`  
