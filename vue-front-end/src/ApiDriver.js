@@ -1,7 +1,8 @@
 const axios = require('axios');
 import Headers from './utils/Headers';
 import SecretKey from './utils/SecretKey';
-let baseUrl = "http://api.ycpradiotelescope.com:8080/api/";
+let baseUrl = "http://localhost:8080/api/";
+//http://api.ycpradiotelescope.com:8080/api/
 
 export default {
     //API endpoints go here
@@ -234,7 +235,8 @@ export default {
       }
     },
     login: function(username, password, data) {
-      return axios.post("http://api.ycpradiotelescope.com:8080/login?email=" + username + "&password=" + password, JSON.stringify(data))
+      //return axios.post("http://api.ycpradiotelescope.com:8080/login?email=" + username + "&password=" + password, JSON.stringify(data))
+      return axios.post("http://localhost:8080/login?email=" + username + "&password=" + password, JSON.stringify(data))
     },
     logout: function () {
       return axios.post(baseUrl + "logout", {}, Headers.retrieveHeaders())
