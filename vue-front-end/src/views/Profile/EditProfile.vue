@@ -105,7 +105,8 @@ export default {
       selectedNotificationType: "EMAIL",
       notificationTypes: [
             'EMAIL',
-            'SMS', 
+            'SMS',
+            'PUSHNOTIFICATION',
             'ALL'
       ]
     };
