@@ -49,6 +49,8 @@
                             <v-select
                             v-model="selectedNotificationType"
                             :items="notificationTypes"
+                            item-text="key"
+                            item-value="value"
                             label="Notification Type"
                             ></v-select>
                         </v-flex>
@@ -104,10 +106,10 @@ export default {
       confirmModal: false,
       selectedNotificationType: "EMAIL",
       notificationTypes: [
-            'EMAIL',
-            'SMS',
-            'PUSHNOTIFICATION',
-            'ALL'
+            {key: "Email", value: "EMAIL"},
+            {key: "SMS", value: "SMS"},
+            {key: "Push Notification", value: "PUSHNOTIFICATION"},
+            {key: "All", value: "ALL"}
       ]
     };
   },
