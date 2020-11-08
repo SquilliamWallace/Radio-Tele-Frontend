@@ -45,6 +45,9 @@ export default {
       changePassword: function(userId) {
         return axios.put(this.namespace + "/" + userId + "/changePassword", data, Headers.retrieveHeaders())
       },
+      approveOrDenyProfilePicture: function(userId, isApprove) {
+        return axios.post(baseUrl + "users/" + userId + "/profile-picture?isApprove=" + isApprove, {}, Headers.retrieveHeaders());
+      },
       ban: function(userId, message) {
         return axios.put(this.namespace + "/" + userId + "/ban?message=" + message, {}, Headers.retrieveHeaders());
       },
@@ -218,8 +221,8 @@ export default {
       data, Headers.retrieveHeaders());
       }, 
       skyview: function(data) {
-        return axios.get("http://rtastronomicalapi-dev.us-east-2.elasticbeanstalk.com/SkyView/" + // hosted
-        // return axios.get("https://localhost:5001/SkyView/" + // testing locally
+        //return axios.get("http://rtastronomicalapi-dev.us-east-2.elasticbeanstalk.com/SkyView/" + // hosted
+        return axios.get("https://localhost:5001/SkyView/" + // testing locally
         "?key="+SecretKey.getKey()+
         "&year="+data.year+
         "&month="+data.month+
