@@ -40,7 +40,7 @@
                 </v-list-tile-content>
                 <v-spacer></v-spacer>
                 <slot v-bind="user">
-                    <v-btn v-if="user.profilePictureApproved != true" 
+                    <v-btn v-if="user.profilePictureApproved === false" 
                     @click="confirmProfilePic = !confirmProfilePic, chosenUserId = user.id, chosenUserProfilePic = user.profilePicture, chosenUserName = user.firstName + ' ' + user.lastName">
                         Approve Profile Picture
                     </v-btn>
@@ -287,6 +287,7 @@ export default {
                         }
                     }
                 }
+                router.push("/admin");
             })
         },
         banUser(userId, message){
