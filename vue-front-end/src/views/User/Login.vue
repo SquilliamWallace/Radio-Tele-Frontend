@@ -24,9 +24,7 @@
                           required
                           outline
                           browser-autocomplete    
-                          v-on:keydown.enter.native="submit"
                         ></v-text-field>
-                        <!-- testing commit -->
                       </v-flex>
                       <v-flex xs12>
                         <v-text-field
@@ -37,8 +35,7 @@
                           label="Password"
                           type="password"
                           required
-                          outline
-                          v-on:keydown.enter.native="submit"  
+                          outline 
                         ></v-text-field>
                       </v-flex>
                       <v-flex>
@@ -101,11 +98,11 @@ export default {
     return {
       show: false,
       data: {
-        username: {
+        password: {
           value: "",
           hasError: false
         },
-        password: {
+        username: {
           value: "",
           hasError: false
         },
