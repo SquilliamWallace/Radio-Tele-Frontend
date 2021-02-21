@@ -40,6 +40,10 @@
                 </v-list-tile-content>
                 <v-spacer></v-spacer>
                 <slot v-bind="user">
+                    <v-btn v-if="user.profilePictureApproved === false" 
+                    @click="confirmProfilePic = !confirmProfilePic, chosenUserId = user.id, chosenUserProfilePic = user.profilePicture, chosenUserName = user.firstName + ' ' + user.lastName">
+                        Approve Profile Picture
+                    </v-btn>
                     <v-btn icon v-bind:href="'/#/users/' + user.id + '/view'">
                         <v-icon>account_circle</v-icon>
                     </v-btn>
@@ -60,8 +64,28 @@
             </v-list-tile>
         </v-list>
 
+        <!-- This dialog is called when the approve profile picture button is pressed -->
+        <v-dialog v-model = "confirmProfilePic" persistent max-width="600px">
+            <v-card>
+                <v-container>
+                    <v-flex xs12>
+                        <v-card-text class = "headline">
+                            Are you sure you want to approve {{chosenUserName}}'s profile picture?
+                        </v-card-text>
+                    </v-flex>
+                    <div style="width: 200px; height: 200px; border-radius: 100%; overflow: hidden; display: block; margin: 20px auto;">
+                        <img :src="chosenUserProfilePic" style="width: 100%;">
+                    </div>
+                    <v-btn @click="approveOrDenyProfilePicture(chosenUserId, 'true'), confirmProfilePic = false" color="green" >Approve</v-btn>
+                    <v-btn @click="approveOrDenyProfilePicture(chosenUserId, 'false'), confirmProfilePic = false" color="red" >Deny</v-btn>
+                    <v-btn @click.native="confirmProfilePic = false">Cancel</v-btn>
+                    
+                </v-container>
+            </v-card>
+        </v-dialog>
+
         
-            <!-- This dialog is called when the ban or unban button is pressed -->
+        <!-- This dialog is called when the ban or unban button is pressed -->
         <v-dialog v-model = "confirm" persistent max-width="600px">
             <v-card>
                 <v-container>
@@ -129,8 +153,10 @@ export default {
             viewUserId: '',
             hover: false,
             confirm: false,
+            confirmProfilePic: false,
             chosenUserId: '',
             chosenUserName: '',
+            chosenUserProfilePic: '',
             action: '',
             icon:'',
 
@@ -215,6 +241,7 @@ export default {
                     user.membershipRole = 'Pending Approval';
                 }
                 this.users.push(user);
+                console.log("URL for profile pic: " + user.profilePicture);
                 this.numPages = data.totalPages;
             }
             
@@ -250,6 +277,18 @@ export default {
             }else{
                 this.getUsers()
             }
+        },
+        approveOrDenyProfilePicture(userId, isApprove){
+            ApiDriver.User.approveOrDenyProfilePicture(userId, isApprove).then((response) => {
+                if(response.status === 200){
+                    for(var i in this.users){
+                        if(this.users[i].id === userId){
+                            this.users[i].profilePictureApproved = isApprove
+                        }
+                    }
+                }
+                router.push("/admin");
+            })
         },
         banUser(userId, message){
             ApiDriver.User.ban(userId, message).then((response) => {

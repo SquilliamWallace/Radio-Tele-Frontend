@@ -20,9 +20,10 @@
                           :error="data.username.hasError"
                           :error-messages="data.username.errorMessage"
                           label="Email"
+                          ref="email"
                           required
                           outline
-                          browser-autocomplete
+                          browser-autocomplete    
                         ></v-text-field>
                       </v-flex>
                       <v-flex xs12>
@@ -34,11 +35,11 @@
                           label="Password"
                           type="password"
                           required
-                          outline
+                          outline 
                         ></v-text-field>
                       </v-flex>
                       <v-flex>
-                        <v-btn large block color="primary" @click="submit">LOGIN</v-btn>
+                        <v-btn large block color="deep-purple" @click="submit">LOGIN</v-btn>
                       </v-flex>
                       <v-flex class="register-style" xs12>
                         <span color="primary" @click="registerRedirect">Register New Account</span>
@@ -97,11 +98,11 @@ export default {
     return {
       show: false,
       data: {
-        username: {
+        password: {
           value: "",
           hasError: false
         },
-        password: {
+        username: {
           value: "",
           hasError: false
         },
@@ -119,8 +120,11 @@ export default {
       // Clear any errors
       this.clearErrors();
 
+      // Enocde any special characters in the password to avoid Fragment identifiers
+      var encodedPassword = encodeURIComponent(this.data.password.value);
+
       // Make the API call
-      ApiDriver.login(this.data)
+      ApiDriver.login(this.data.username.value, encodedPassword, this.data)
         .then(response => {
           let that = this;
 
@@ -201,10 +205,14 @@ export default {
       CustomErrorHandler.clearError(this.data.username);
       CustomErrorHandler.clearError(this.data.password);
       CustomErrorHandler.clearError(this.data.reqPassEmail);
+    },
+    setFocus() {
+      this.$refs.email.focus()
     }
   },
   mounted: function() {
     checkBrowser(this);
+    this.setFocus();
   }
 };
 </script>
