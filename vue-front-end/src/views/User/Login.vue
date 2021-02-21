@@ -23,7 +23,8 @@
                           ref="email"
                           required
                           outline
-                          browser-autocomplete    
+                          browser-autocomplete
+                          v-on:keydown.enter.native="submit"  
                         ></v-text-field>
                       </v-flex>
                       <v-flex xs12>
@@ -35,7 +36,8 @@
                           label="Password"
                           type="password"
                           required
-                          outline 
+                          outline
+                          v-on:keydown.enter.native="submit"  
                         ></v-text-field>
                       </v-flex>
                       <v-flex>
@@ -117,6 +119,17 @@ export default {
   },
   methods: {
     submit() {
+      //check if username or password is blank before throwing error
+      if (this.data.username.value === "" || this.data.username.value === null) {
+              CustomErrorHandler.populateError(
+                this.data.username,
+                "Email field is empty"
+              );
+        return;
+      }
+      if (this.data.password.value === "" || this.data.password.value === null) {
+        return;
+      }
       // Clear any errors
       this.clearErrors();
 
@@ -134,10 +147,10 @@ export default {
             router.push("/home");
           } else {
             // Populate error messages for the form fields
-            CustomErrorHandler.populateError(
-              this.data.username,
-              this.generalErrorMessage
-            );
+              CustomErrorHandler.populateError(
+                this.data.username,
+                this.generalErrorMessage
+              );
             CustomErrorHandler.populateError(
               this.data.password,
               this.generalErrorMessage
@@ -146,10 +159,10 @@ export default {
         })
         .catch(error => {
           // Populate error messages for the form fields
-          CustomErrorHandler.populateError(
-            this.data.username,
-            this.generalErrorMessage
-          );
+              CustomErrorHandler.populateError(
+              this.data.username,
+              this.generalErrorMessage
+            );
           CustomErrorHandler.populateError(
             this.data.password,
             this.generalErrorMessage
