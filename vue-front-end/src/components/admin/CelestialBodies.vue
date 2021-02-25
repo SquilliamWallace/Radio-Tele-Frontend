@@ -27,6 +27,7 @@
   <div>
     <loading v-if="$store.state.isLoading"></loading>
     <v-card v-if="!$store.state.isLoading">
+      <!-- this may be needed, pushing to remember where this code is -->
       <v-layout row>
         <v-text-field
           v-model="searchParam"
