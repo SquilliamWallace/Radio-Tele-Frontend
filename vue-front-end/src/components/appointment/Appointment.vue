@@ -425,8 +425,8 @@
                 </v-form>
                 <img id="image0" class="image-style" v-bind:src="imgSrc0" v-if="showImage==true">
                 <img id="image1" class="image-style" v-bind:src="imgSrc1" v-if="showImage==true">
-                <canvas id="canvas0" width="360" height="180"></canvas>
-                <canvas id="canvas1" width="360" height="180"></canvas>
+                <canvas id="canvas0" width="720" height="180"></canvas>
+                <canvas id="canvas1" width="720" height="180"></canvas>
 
             </v-card>
     </v-dialog>
@@ -822,6 +822,7 @@ export default {
             context.fillRect(0, 0, canvas.width, canvas.height);
             // Draw the sun (you take the moon and you take the sun)
             this.addSun(document.getElementById("canvas0"), data0);
+            this.addTarget(document.getElementById("canvas0"), data0);
             /*var call = ApiDriver.Astronomical.skyview(data0);
             call.then(response => {
                 console.log(response);
@@ -849,31 +850,36 @@ export default {
             //let dateSunCalc = new Date(Date.UTC(1993, 9, 13));
             let JDSun = aa.julianday.getJulianDay(dateSunCalc);
             let equatorial = aa.sun.apparentEquatorialCoordinates(JDSun);
-            console.log(data);
-            console.log(equatorial);
             //let AST = aa.julianday.localSiderealTime(JDSun);
-            let sunHorizontal = aa.coordinates.transformEquatorialToHorizontal(JDSun, data.longitude, data.latitude, equatorial.declination, equatorial.declination);
+            let sunHorizontal = aa.coordinates.transformEquatorialToHorizontal(JDSun, data.longitude, data.latitude, equatorial.rightAscension, equatorial.declination);
             let context = canvas.getContext("2d");
             context.beginPath();
-            console.log(sunHorizontal);
-            context.arc(sunHorizontal.azimuth, sunHorizontal.altitude, 8, 0, 2 * Math.PI);
+            context.arc(canvas.width/2 + sunHorizontal.azimuth, sunHorizontal.altitude, 8, 0, 2 * Math.PI);
             context.fillStyle = 'yellow';
             context.fill();
         },
-        addMoon(canvas) {
+        addMoon() {
 
         },
-        addPlanets(canvas) {
+        addPlanets() {
 
         },
-        addStars(canvas) {
+        addStars() {
 
         },
         addEarthFeatures() {
 
         },
-        addTarget() {
-
+        addTarget(canvas, data) {
+            let dateCalc = new Date(Date.UTC(data.year, data.month, data.day, data.hour, data.minute));
+            let JD = aa.julianday.getJulianDay(dateCalc);
+            //dateCalc.Julian + AASDynamicalTime.DeltaT(dateCalc.Julian) / 86400.0;
+            let horizontal = aa.coordinates.transformEquatorialToHorizontal(JD, data.longitude, data.latitude, data.targetRA, data.targetDec);
+            let context = canvas.getContext("2d");
+            context.beginPath();
+            context.arc(canvas.width/2 + horizontal.azimuth, horizontal.altitude, 6, 0, 2 * Math.PI);
+            context.fillStyle = 'blue';
+            context.fill();
         },
         addCoordinates() {
 
