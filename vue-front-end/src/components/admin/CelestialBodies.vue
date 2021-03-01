@@ -117,6 +117,7 @@ import Loading from "../../components/utility/Loading";
 import CreateCelestialBody from "../../components/CreateCelestialBody.vue";
 import CustomErrorHandler from "../../utils/CustomErrorHandler.js";
 export default {
+  //needed for updating celestial bodies, add this to celestial_body_links branch for future reference
   name: "CelestialBodies",
   data() {
     return {
