@@ -425,17 +425,21 @@
                 </v-form>
                 <img id="image0" class="image-style" v-bind:src="imgSrc0" v-if="showImage==true">
                 <img id="image1" class="image-style" v-bind:src="imgSrc1" v-if="showImage==true">
+                <canvas id="canvas0" width="360" height="180"></canvas>
+                <canvas id="canvas1" width="360" height="180"></canvas>
+
             </v-card>
     </v-dialog>
 </template>
 
 <script>
-import Event from '../../main.js'
-import ApiDriver from '../../ApiDriver'
-import HttpResponse from '../../utils/HttpResponse'
-import CurrentUserValidation from '../../utils/CurrentUserValidation'
+import Event from '../../main.js';
+import ApiDriver from '../../ApiDriver';
+import HttpResponse from '../../utils/HttpResponse';
+import CurrentUserValidation from '../../utils/CurrentUserValidation';
 import router from '../../router';
 import CustomErrorHandler from '../../utils/CustomErrorHandler.js';
+import aa from 'astronomical-algorithms';
 export default {
     data() {
         name: 'Appointment'
@@ -498,7 +502,6 @@ export default {
             showImage: false,
             imgSrc0: '',
             imgSrc1: '',
-
             // Variables to keep track of chosen Appointment type
             type: 'Point',
             selectedType: '',
@@ -750,16 +753,16 @@ export default {
                     this.$emit('close-modal');
                     }, (status, errors) => {
                         if (parseInt(status) === 403) {
-                            HttpResponse.accessDenied(this)
+                            HttpResponse.accessDenied(this);
                         } else {
                             this.handleErrors(errors, form);
                         }
                     });
             });
-            this.startTime=''
-            this.startDate=''
-            this.endDate=''
-            this.endTime=''
+            this.startTime='';
+            this.startDate='';
+            this.endDate='';
+            this.endTime='';
         },
         handleNotVisible() {
             HttpResponse.generalError(this, "The appointment is not possible due to the target's position, which will be below the horizon during a portion of this appointment.", false);
@@ -806,7 +809,20 @@ export default {
                 latitude:  40.024409,
                 altitude: 395 // TODO: make longitude, latitude, and altitude dependant on the selected telescope.
             };
-            var call = ApiDriver.Astronomical.skyview(data0);
+            // test AA library is working as expected.
+            this.verifyAALib();
+            // set the canvas background color to black
+            let canvas = document.getElementById("canvas0");
+            let context = canvas.getContext("2d");
+            context.fillStyle = "black";
+            context.fillRect(0, 0, canvas.width, canvas.height);
+            canvas = document.getElementById("canvas1");
+            context = canvas.getContext("2d");
+            context.fillStyle = "black";
+            context.fillRect(0, 0, canvas.width, canvas.height);
+            // Draw the sun (you take the moon and you take the sun)
+            this.addSun(document.getElementById("canvas0"), data0);
+            /*var call = ApiDriver.Astronomical.skyview(data0);
             call.then(response => {
                 console.log(response);
                 this.imgSrc0 = 'data:image/bmp;base64,' + response.data.bytes;
@@ -815,8 +831,53 @@ export default {
                     this.imgSrc1 = 'data:image/bmp;base64,' + response.data.bytes;
                 }).catch(error => {console.log(error);}); 
                 this.showImage = true;
-            }).catch(error => {console.log(error);}); 
+            }).catch(error => {console.log(error);}); */
         }, 
+        verifyAALib() {
+            let UTCDate = new Date(Date.UTC(1993, 9, 13));
+            let jd = aa.julianday.getJulianDay(UTCDate);
+            let equ = aa.sun.apparentEquatorialCoordinates(jd);
+            console.log("Testing Astronomical Algorithms...\nRight Ascension : " + equ.rightAscension + " (Close to: 13.225389)\nDeclination     : " + equ.declination    + " (Close to: -7.78507)");
+            //let dateSunCalc = new Date(Date.UTC(1993, 9, 13));
+            //let JDSun = aa.julianday.getJulianDay(dateSunCalc);
+            //let equatorial = aa.sun.apparentEquatorialCoordinates(JDSun);
+            //console.log("Testing Astronomical Algorithms...\nRight Ascension : " + equatorial.rightAscension + " (Close to: 13.225389)\nDeclination     : " + equatorial.declination    + " (Close to: -7.78507)");
+        },
+        addSun(canvas, data) {
+            let bHighPrecision = false;
+            let dateSunCalc = new Date(Date.UTC(data.year, data.month, data.day, data.hour, data.minute));
+            //let dateSunCalc = new Date(Date.UTC(1993, 9, 13));
+            let JDSun = aa.julianday.getJulianDay(dateSunCalc);
+            let equatorial = aa.sun.apparentEquatorialCoordinates(JDSun);
+            console.log(data);
+            console.log(equatorial);
+            //let AST = aa.julianday.localSiderealTime(JDSun);
+            let sunHorizontal = aa.coordinates.transformEquatorialToHorizontal(JDSun, data.longitude, data.latitude, equatorial.declination, equatorial.declination);
+            let context = canvas.getContext("2d");
+            context.beginPath();
+            console.log(sunHorizontal);
+            context.arc(sunHorizontal.azimuth, sunHorizontal.altitude, 8, 0, 2 * Math.PI);
+            context.fillStyle = 'yellow';
+            context.fill();
+        },
+        addMoon(canvas) {
+
+        },
+        addPlanets(canvas) {
+
+        },
+        addStars(canvas) {
+
+        },
+        addEarthFeatures() {
+
+        },
+        addTarget() {
+
+        },
+        addCoordinates() {
+
+        },
         handleErrors(errors, formObj) {
             for (var field in errors) {
                 let message = errors[field][0];

@@ -13,15 +13,17 @@
   },
   "dependencies": {
     "@mdi/font": "^2.8.94",
-    "axios": "^0.18.0",
+    "astronomical-algorithms": "^1.1.4",
+    "axios": "^0.21.1",
     "babel-polyfill": "^6.26.0",
     "bluebird": "^3.5.3",
     "chart.js": "^2.7.3",
     "css-loader": "^1.0.1",
+    "is-obj": "^2.0.0",
     "karma": "^3.1.4",
     "material-design-icons": "^3.0.1",
     "moment-timezone": "^0.5.23",
-    "socket.io": "^2.3.0",
+    "socket.io": "^2.4.1",
     "vue": "^2.6.4",
     "vue-chartjs": "^3.4.0",
     "vue-full-calendar": "^2.7.0",
@@ -44,7 +46,7 @@
     "babel-preset-env": "^1.7.0",
     "chai": "^4.1.2",
     "html-webpack-plugin": "^3.2.0",
-    "parcel-bundler": "^1.11.0",
+    "parcel-bundler": "^1.12.4",
     "parcel-plugin-vue": "^1.5.0",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.1",
@@ -52,7 +54,7 @@
     "vue-template-compiler": "^2.6.4",
     "webpack": "^4.29.3",
     "webpack-cli": "^3.1.2",
-    "webpack-dev-server": "^3.1.10"
+    "webpack-dev-server": "^3.11.2"
   },
   "eslintConfig": {
     "root": true,
