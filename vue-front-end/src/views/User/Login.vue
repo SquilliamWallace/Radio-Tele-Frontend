@@ -20,9 +20,11 @@
                           :error="data.username.hasError"
                           :error-messages="data.username.errorMessage"
                           label="Email"
+                          ref="email"
                           required
                           outline
                           browser-autocomplete
+                          v-on:keydown.enter.native="submit"  
                         ></v-text-field>
                       </v-flex>
                       <v-flex xs12>
@@ -35,10 +37,11 @@
                           type="password"
                           required
                           outline
+                          v-on:keydown.enter.native="submit"  
                         ></v-text-field>
                       </v-flex>
                       <v-flex>
-                        <v-btn large block color="primary" @click="submit">LOGIN</v-btn>
+                        <v-btn large block color="deep-purple" @click="submit">LOGIN</v-btn>
                       </v-flex>
                       <v-flex class="register-style" xs12>
                         <span color="primary" @click="registerRedirect">Register New Account</span>
@@ -97,11 +100,11 @@ export default {
     return {
       show: false,
       data: {
-        username: {
+        password: {
           value: "",
           hasError: false
         },
-        password: {
+        username: {
           value: "",
           hasError: false
         },
@@ -116,11 +119,25 @@ export default {
   },
   methods: {
     submit() {
+      //check if username or password is blank before throwing error
+      if (this.data.username.value === "" || this.data.username.value === null) {
+              CustomErrorHandler.populateError(
+                this.data.username,
+                "Email field is empty"
+              );
+        return;
+      }
+      if (this.data.password.value === "" || this.data.password.value === null) {
+        return;
+      }
       // Clear any errors
       this.clearErrors();
 
+      // Enocde any special characters in the password to avoid Fragment identifiers
+      var encodedPassword = encodeURIComponent(this.data.password.value);
+
       // Make the API call
-      ApiDriver.login(this.data)
+      ApiDriver.login(this.data.username.value, encodedPassword, this.data)
         .then(response => {
           let that = this;
 
@@ -130,10 +147,10 @@ export default {
             router.push("/home");
           } else {
             // Populate error messages for the form fields
-            CustomErrorHandler.populateError(
-              this.data.username,
-              this.generalErrorMessage
-            );
+              CustomErrorHandler.populateError(
+                this.data.username,
+                this.generalErrorMessage
+              );
             CustomErrorHandler.populateError(
               this.data.password,
               this.generalErrorMessage
@@ -142,10 +159,10 @@ export default {
         })
         .catch(error => {
           // Populate error messages for the form fields
-          CustomErrorHandler.populateError(
-            this.data.username,
-            this.generalErrorMessage
-          );
+              CustomErrorHandler.populateError(
+              this.data.username,
+              this.generalErrorMessage
+            );
           CustomErrorHandler.populateError(
             this.data.password,
             this.generalErrorMessage
@@ -201,10 +218,14 @@ export default {
       CustomErrorHandler.clearError(this.data.username);
       CustomErrorHandler.clearError(this.data.password);
       CustomErrorHandler.clearError(this.data.reqPassEmail);
+    },
+    setFocus() {
+      this.$refs.email.focus()
     }
   },
   mounted: function() {
     checkBrowser(this);
+    this.setFocus();
   }
 };
 </script>
