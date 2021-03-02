@@ -440,6 +440,7 @@ import CurrentUserValidation from '../../utils/CurrentUserValidation';
 import router from '../../router';
 import CustomErrorHandler from '../../utils/CustomErrorHandler.js';
 import aa from 'astronomical-algorithms';
+import AAHelpers from '../../utils/AAHelpers.js';
 export default {
     data() {
         name: 'Appointment'
@@ -847,14 +848,18 @@ export default {
         addSun(canvas, data) {
             let bHighPrecision = false;
             let dateSunCalc = new Date(Date.UTC(data.year, data.month, data.day, data.hour, data.minute));
-            //let dateSunCalc = new Date(Date.UTC(1993, 9, 13));
-            let JDSun = aa.julianday.getJulianDay(dateSunCalc);
+            let JDSun = aa.julianday.getJulianDay(dateSunCalc) + aa.times.getDeltaT(aa.julianday.getJulianDay(dateSunCalc) / 86400.0);
             let equatorial = aa.sun.apparentEquatorialCoordinates(JDSun);
-            //let AST = aa.julianday.localSiderealTime(JDSun);
-            let sunHorizontal = aa.coordinates.transformEquatorialToHorizontal(JDSun, data.longitude, data.latitude, equatorial.rightAscension, equatorial.declination);
+            let sunRad = aa.earth.radiusVector(JDSun);
+            let AST = aa.julianday.localSiderealTime(JDSun, data.longitude);
+            let localHourAngle = AST - (data.longitude / 15) - equatorial.rightAscension;
+            let sunTopo = AAHelpers.transformEquatorialToTopocentric(equatorial.rightAscension, equatorial.declination, sunRad, data.longitude, data.latitude, data.altitude, JDSun);
+            let sunHorizontal = aa.coordinates.transformEquatorialToHorizontal(JDSun, sunTopo.y, localHourAngle, data.longitude, data.latitude);
+            console.log(JDSun + " " + data.longitude + " " + data.latitude + " " + localHourAngle + " " + sunTopo.y);
+            sunHorizontal.altitude += AAHelpers.refractionFromTrue(sunHorizontal.altitude, 1013, 10);
             let context = canvas.getContext("2d");
             context.beginPath();
-            context.arc(canvas.width/2 + sunHorizontal.azimuth, sunHorizontal.altitude, 8, 0, 2 * Math.PI);
+            context.arc(sunHorizontal.azimuth, sunHorizontal.altitude, 8, 0, 2 * Math.PI);
             context.fillStyle = 'yellow';
             context.fill();
         },
@@ -872,12 +877,12 @@ export default {
         },
         addTarget(canvas, data) {
             let dateCalc = new Date(Date.UTC(data.year, data.month, data.day, data.hour, data.minute));
-            let JD = aa.julianday.getJulianDay(dateCalc);
+            let JD = aa.julianday.getJulianDay(dateCalc) + aa.times.getDeltaT(aa.julianday.getJulianDay(dateCalc) / 86400.0);
             //dateCalc.Julian + AASDynamicalTime.DeltaT(dateCalc.Julian) / 86400.0;
             let horizontal = aa.coordinates.transformEquatorialToHorizontal(JD, data.longitude, data.latitude, data.targetRA, data.targetDec);
             let context = canvas.getContext("2d");
             context.beginPath();
-            context.arc(canvas.width/2 + horizontal.azimuth, horizontal.altitude, 6, 0, 2 * Math.PI);
+            context.arc(horizontal.azimuth, horizontal.altitude, 6, 0, 2 * Math.PI);
             context.fillStyle = 'blue';
             context.fill();
         },
