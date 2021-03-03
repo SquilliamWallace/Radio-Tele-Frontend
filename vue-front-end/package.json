@@ -9,7 +9,7 @@
     "build": "vue-cli-service build",
     "dev": "webpack-dev-server --mode=development",
     "lint": "vue-cli-service lint",
-    "test:unit": "vue-cli-service test:unit"
+    "test": "vue-cli-service test:unit"
   },
   "dependencies": {
     "@mdi/font": "^2.8.94",
@@ -44,8 +44,9 @@
     "@vue/test-utils": "^1.0.0-beta.20",
     "babel-plugin-transform-imports": "^1.5.0",
     "babel-preset-env": "^1.7.0",
-    "chai": "^4.1.2",
+    "chai": "^4.3.1",
     "html-webpack-plugin": "^3.2.0",
+    "mocha-junit-reporter": "^2.0.0",
     "parcel-bundler": "^1.12.4",
     "parcel-plugin-vue": "^1.5.0",
     "stylus": "^0.54.5",

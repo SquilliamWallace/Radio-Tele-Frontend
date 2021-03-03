@@ -43,7 +43,7 @@ export default{
         geographicalLatitude = this.degreesToRadians(geographicalLatitude);
 
         let u = Math.atan(0.99664719 * Math.tan(geographicalLatitude));
-        return 0.99664719 * Math.cos(u) + (height / 6378140 * Math.cos(geographicalLatitude));
+        return Math.cos(u) + (height / 6378140 * Math.cos(geographicalLatitude));
     },
     degreesToRadians: function(degrees) {
         return degrees * 0.017453292519943295769236907684886;
@@ -58,10 +58,12 @@ export default{
         return radians * 57.295779513082320876798154814105;
     },
     DMSToDegrees: function(degrees, minutes, seconds, bPositive = true) {
-        if (bPositive)
+        if (bPositive) {
             return degrees + minutes / 60 + seconds / 3600;
-        else
+        }
+        else {
             return -degrees - minutes / 60 - seconds / 3600;
+        }
     },
     mapTo0To24Range: function(hourAngle) {
         let fResult = this.IEEERemainder(hourAngle, 24);
@@ -71,7 +73,7 @@ export default{
     refractionFromTrue: function(altitude, pressure, temperature) {
         if (altitude <= -1.9006387000003735) altitude = -1.9006387000003735;
 
-        let value = 1 / (Math.tan(this.degreesToRadians(altitude + 7.31 / (altitude + 4.4)))) + 0.0013515;
+        let value = 1.02 / (Math.tan(this.degreesToRadians(altitude + 10.3 / (altitude + 5.11)))) + 0.0019279;
         value *= (pressure / 1010 * 283 / (273 + temperature));
         value /= 60;
         return value;

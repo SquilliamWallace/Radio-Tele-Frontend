@@ -855,7 +855,6 @@ export default {
             let localHourAngle = AST - (data.longitude / 15) - equatorial.rightAscension;
             let sunTopo = AAHelpers.transformEquatorialToTopocentric(equatorial.rightAscension, equatorial.declination, sunRad, data.longitude, data.latitude, data.altitude, JDSun);
             let sunHorizontal = aa.coordinates.transformEquatorialToHorizontal(JDSun, sunTopo.y, localHourAngle, data.longitude, data.latitude);
-            console.log(JDSun + " " + data.longitude + " " + data.latitude + " " + localHourAngle + " " + sunTopo.y);
             sunHorizontal.altitude += AAHelpers.refractionFromTrue(sunHorizontal.altitude, 1013, 10);
             let context = canvas.getContext("2d");
             context.beginPath();
