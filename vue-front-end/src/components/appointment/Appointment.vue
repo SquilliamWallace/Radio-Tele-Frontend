@@ -847,20 +847,33 @@ export default {
         },
         addSun(canvas, data) {
             let bHighPrecision = false;
-            let dateSunCalc = new Date(Date.UTC(data.year, data.month, data.day, data.hour, data.minute));
-            let JDSun = aa.julianday.getJulianDay(dateSunCalc) + aa.times.getDeltaT(aa.julianday.getJulianDay(dateSunCalc) / 86400.0);
+            let dateSunCalc = new Date(data.year, data.month-1, data.day, data.hour, data.minute);
+            console.log("dateSunCalc:  " + dateSunCalc + "\ndeltaT:   " + aa.times.getDeltaT(aa.julianday.getJulianDay(dateSunCalc)) + "\ngetJulianDay:   " + aa.julianday.getJulianDay(dateSunCalc));
+            let JDSun = aa.julianday.getJulianDay(dateSunCalc) + aa.times.getDeltaT(aa.julianday.getJulianDay(dateSunCalc)) / 86400.0;
             let equatorial = aa.sun.apparentEquatorialCoordinates(JDSun);
+            console.log("Equatorial:   " + equatorial);
             let sunRad = aa.earth.radiusVector(JDSun);
-            let AST = aa.julianday.localSiderealTime(JDSun, data.longitude);
-            let localHourAngle = AST - (data.longitude / 15) - equatorial.rightAscension;
             let sunTopo = AAHelpers.transformEquatorialToTopocentric(equatorial.rightAscension, equatorial.declination, sunRad, data.longitude, data.latitude, data.altitude, JDSun);
-            let sunHorizontal = aa.coordinates.transformEquatorialToHorizontal(JDSun, sunTopo.y, localHourAngle, data.longitude, data.latitude);
+            let AST = aa.julianday.localSiderealTime(JDSun, data.longitude); // 21.650924497684976 apparentgreenwichtime
+            console.log("AST:   " + AST);
+            //AST = this.convertToGreenwichSidereal(AST);
+            console.log("AST:   " + AST);
+            let localHourAngle = AST - (data.longitude / 15) - sunTopo.x;
+            console.log("localHourAngle:   " + localHourAngle);
+            console.log("\n\n" + JDSun + " " + data.longitude + " " + data.latitude + " " + sunTopo.x + " " + sunTopo.y);
+            let sunHorizontal = AAHelpers.transformEquatorialToHorizontal(AST, sunTopo.y, data.latitude);
+            console.log(sunHorizontal);
             sunHorizontal.altitude += AAHelpers.refractionFromTrue(sunHorizontal.altitude, 1013, 10);
             let context = canvas.getContext("2d");
             context.beginPath();
-            context.arc(sunHorizontal.azimuth, sunHorizontal.altitude, 8, 0, 2 * Math.PI);
+            context.arc(((sunHorizontal.azimuth + 180)%360) * 2, (90 - sunHorizontal.altitude) * 2, 8, 0, 2 * Math.PI);
             context.fillStyle = 'yellow';
             context.fill();
+        },
+        convertToGreenwichSidereal(localSiderealTime) {
+            let date = new Date();
+            let offset = date.getTimezoneOffset();
+            return localSiderealTime += (offset);
         },
         addMoon() {
 

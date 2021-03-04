@@ -33,6 +33,28 @@ export default{
         }
         return topocentric;
     },
+    transformEquatorialToHorizontal: function(localHourAngle, delta, latitude) {
+        localHourAngle = this.hoursToRadians(localHourAngle);
+        delta = this.degreesToRadians(delta);
+        latitude = this.degreesToRadians(latitude);
+
+        let horizontal = {
+            azimuth: this.radiansToDegrees(Math.atan2(Math.sin(localHourAngle), Math.cos(localHourAngle) * Math.sin(latitude) - Math.tan(delta) * Math.cos(latitude))),
+            altitude: this.radiansToDegrees(Math.asin(Math.sin(latitude) * Math.sin(delta) + Math.cos(latitude) * Math.cos(delta) * Math.cos(localHourAngle)))
+        }
+
+        if (horizontal.azimuth < 0) horizontal.azimuth += 360;
+
+        return horizontal;
+
+        /*
+          AAS2DCoordinate Horizontal = new AAS2DCoordinate { X = RadiansToDegrees(Math.Atan2(Math.Sin(LocalHourAngle), Math.Cos(LocalHourAngle) * Math.Sin(Latitude) - Math.Tan(Delta) * Math.Cos(Latitude))) };
+            if (Horizontal.X < 0)
+                Horizontal.X += 360;
+            Horizontal.Y = RadiansToDegrees(Math.Asin(Math.Sin(Latitude) * Math.Sin(Delta) + Math.Cos(Latitude) * Math.Cos(Delta) * Math.Cos(LocalHourAngle)));
+
+            return Horizontal;*/
+    },
     rhoSinThetaPrime: function(geographicalLatitude, height) {
         geographicalLatitude = this.degreesToRadians(geographicalLatitude);
 

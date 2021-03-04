@@ -1,4 +1,5 @@
 import aa from 'astronomical-algorithms';
+import { rightAscensionFromEcliptic } from 'astronomical-algorithms/dist/coordinates';
 import { expect } from 'chai'
 import AAHelpers from "../../src/utils/AAHelpers.js";
 
@@ -79,6 +80,13 @@ describe("Astronomical Algorithms Helper Functions", function() {
             expect(rhoCosThetaPrime).to.be.closeTo(0.767142099950896, 0.000005, 'Not close enough.');
             rhoCosThetaPrime = AAHelpers.rhoCosThetaPrime(-40, 300);
             expect(rhoCosThetaPrime).to.be.closeTo(0.767142099950896, 0.000005, 'Not close enough.');
+        });
+    });
+    describe("transformEquatorialToHorizontal", function() {
+        it("Returns horizontal azimuth and alititude from equatorial", function() {
+            let horizontal = AAHelpers.transformEquatorialToHorizontal(-1.1881043437742491, -7.41234636759815, 40.024409);
+            expect(horizontal.azimuth).to.be.closeTo(336.735945260335, 0.05, 'Not close enough.');
+            expect(horizontal.altitude).to.be.closeTo(39.789182442466, 0.05, 'Not close enough.');
         });
     });
 });
