@@ -811,7 +811,8 @@ export default {
                 altitude: 395 // TODO: make longitude, latitude, and altitude dependant on the selected telescope.
             };
             // test AA library is working as expected.
-            this.verifyAALib();
+            //this.verifyAALib();
+
             // set the canvas background color to black
             let canvas = document.getElementById("canvas0");
             let context = canvas.getContext("2d");
@@ -821,9 +822,13 @@ export default {
             context = canvas.getContext("2d");
             context.fillStyle = "black";
             context.fillRect(0, 0, canvas.width, canvas.height);
-            // Draw the sun (you take the moon and you take the sun)
+
+            // Draw the sky objects (you take the moon and you take the sun)
+            this.addMoon(document.getElementById("canvas0"), data0);
             this.addSun(document.getElementById("canvas0"), data0);
             this.addTarget(document.getElementById("canvas0"), data0);
+
+            // old implementation
             /*var call = ApiDriver.Astronomical.skyview(data0);
             call.then(response => {
                 console.log(response);
@@ -845,41 +850,55 @@ export default {
             //let equatorial = aa.sun.apparentEquatorialCoordinates(JDSun);
             //console.log("Testing Astronomical Algorithms...\nRight Ascension : " + equatorial.rightAscension + " (Close to: 13.225389)\nDeclination     : " + equatorial.declination    + " (Close to: -7.78507)");
         },
-        addSun(canvas, data) {
-            let bHighPrecision = false;
-            let dateSunCalc = new Date(data.year, data.month-1, data.day, data.hour, data.minute);
-            console.log("dateSunCalc:  " + dateSunCalc + "\ndeltaT:   " + aa.times.getDeltaT(aa.julianday.getJulianDay(dateSunCalc)) + "\ngetJulianDay:   " + aa.julianday.getJulianDay(dateSunCalc));
-            let JDSun = aa.julianday.getJulianDay(dateSunCalc) + aa.times.getDeltaT(aa.julianday.getJulianDay(dateSunCalc)) / 86400.0;
-            let equatorial = aa.sun.apparentEquatorialCoordinates(JDSun);
-            console.log("Equatorial:   " + equatorial);
-            let sunRad = aa.earth.radiusVector(JDSun);
-            let sunTopo = AAHelpers.transformEquatorialToTopocentric(equatorial.rightAscension, equatorial.declination, sunRad, data.longitude, data.latitude, data.altitude, JDSun);
-            let AST = aa.julianday.localSiderealTime(JDSun, data.longitude); // 21.650924497684976 apparentgreenwichtime
-            console.log("AST:   " + AST);
-            //AST = this.convertToGreenwichSidereal(AST);
-            console.log("AST:   " + AST);
-            let localHourAngle = AST - (data.longitude / 15) - sunTopo.x;
-            console.log("localHourAngle:   " + localHourAngle);
-            console.log("\n\n" + JDSun + " " + data.longitude + " " + data.latitude + " " + sunTopo.x + " " + sunTopo.y);
-            let sunHorizontal = AAHelpers.transformEquatorialToHorizontal(AST, sunTopo.y, data.latitude);
-            console.log(sunHorizontal);
-            sunHorizontal.altitude += AAHelpers.refractionFromTrue(sunHorizontal.altitude, 1013, 10);
-            let context = canvas.getContext("2d");
-            context.beginPath();
-            context.arc(((sunHorizontal.azimuth + 180)%360) * 2, (90 - sunHorizontal.altitude) * 2, 8, 0, 2 * Math.PI);
-            context.fillStyle = 'yellow';
-            context.fill();
-        },
-        convertToGreenwichSidereal(localSiderealTime) {
-            let date = new Date();
-            let offset = date.getTimezoneOffset();
-            return localSiderealTime += (offset);
-        },
-        addMoon() {
+        drawSkyObject(canvas, data, equatorial, julianDay, radiusVector, size, color) {
+            let topocentric = AAHelpers.transformEquatorialToTopocentric(equatorial.rightAscension, equatorial.declination, radiusVector, data.longitude, data.latitude, data.altitude, julianDay);
+            //console.log("Equatorial to Topocentric: ");
+            //console.log(topocentric);
+            //let AST = aa.julianday.localSiderealTime(julianDay, data.longitude);
+            let AST = AAHelpers.apparentGreenwichSiderealTime(julianDay);
+            let localHourAngle = AST - (data.longitude / 15) - topocentric.x;
+            //console.log("LocalHourAngle:   " + localHourAngle);
+            //console.log("AST: " + AST);
+            let horizontal = AAHelpers.transformEquatorialToHorizontal(localHourAngle, topocentric.y, data.latitude);
+            console.log("Equatorial to Horizontal:");
+            //console.log(horizontal);
+            horizontal.altitude += AAHelpers.refractionFromTrue(horizontal.altitude, 1013, 10);
+            //console.log("Horizontal after refraction: ");
+            //console.log(horizontal);
 
+            if (canvas) {
+                let context = canvas.getContext("2d");
+                context.beginPath();
+                context.arc(((horizontal.azimuth + 180)%360) * 2, (90 - horizontal.altitude) * 2, size, 0, 2 * Math.PI);
+                context.fillStyle = color;
+                context.fill();
+            }
+            
+            return {
+                azimuth: horizontal.azimuth,
+                altitude: horizontal.altitude
+            }
+        },
+        addSun(canvas, data) {
+            let dateSunCalc = new Date(data.year, data.month-1, data.day, (data.hour-4)%24, data.minute);
+            let JDSun = aa.julianday.getJulianDay(dateSunCalc) + aa.times.getDeltaT(aa.julianday.getJulianDay(dateSunCalc)) / 86400.0;
+            //console.log("JDsun: " + JDSun);
+            let equatorial = aa.sun.apparentEquatorialCoordinates(JDSun);
+            //console.log("Apparent equatorial coordinates:");
+            //console.log(equatorial);
+            let sunRad = aa.earth.radiusVector(JDSun);
+            //console.log("Sun Radius Vector:" + sunRad);
+            return this.drawSkyObject(canvas, data, equatorial, JDSun, sunRad, 8, "yellow");
+        },
+        addMoon(canvas, data) {
+            let dateMoonCalc = new Date(data.year, data.month-1, data.day, data.hour, data.minute);
+            let JDMoon = aa.julianday.getJulianDay(dateMoonCalc) + aa.times.getDeltaT(aa.julianday.getJulianDay(dateMoonCalc)) / 86400.0;
+            let equatorial = aa.moon.equatorialCoordinates(JDMoon);
+            let moonRad = aa.earth.radiusVector(JDMoon);
+            this.drawSkyObject(canvas, data, equatorial, JDMoon, moonRad, 8, "gray");
         },
         addPlanets() {
-
+            
         },
         addStars() {
 

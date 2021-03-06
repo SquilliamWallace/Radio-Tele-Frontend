@@ -55,38 +55,61 @@ describe("Astronomical Algorithms Helper Functions", function() {
             let hours = AAHelpers.mapTo0To24Range(5);
             expect(hours).to.equal(5);
         });
+        it("Returns close to 12 when 540.4531165150544 is passed through", function() {
+            let hours = AAHelpers.mapTo0To24Range(540.4531165150544);
+            expect(hours).to.be.closeTo(12.453116515054376, 0.0005, 'Not close enough');
+        });
     });
     describe("refractionFromTrue", function() {
         it("Returns refraction when altitude > -1.9006387", function() {
             let refraction = AAHelpers.refractionFromTrue(300, 1013, 10);
-            expect(refraction).to.be.closeTo(-0.00982528008640074, 0.0005, 'Not close enough.');
+            expect(refraction).to.be.closeTo(-0.00982528008640074, 0.0005, 'Not close enough');
         });
         it("Returns refraction when altitude <= -1.9006387 (-3)", function() {
             let refraction = AAHelpers.refractionFromTrue(-3, 1013, 10);
-            expect(refraction).to.be.closeTo(0.746371818326155, 0.0005, 'Not close enough.');
+            expect(refraction).to.be.closeTo(0.746371818326155, 0.0005, 'Not close enough');
         });
     });
     describe("rhoSinThetaPrime", function() {
         it("Calculates rhoSinThetaPrime", function() {
             let rhoSinThetaPrime = AAHelpers.rhoSinThetaPrime(40, 300);
-            expect(rhoSinThetaPrime).to.be.closeTo(0.639399626052731, 0.000005, 'Not close enough.');
+            expect(rhoSinThetaPrime).to.be.closeTo(0.639399626052731, 0.000005, 'Not close enough');
             rhoSinThetaPrime = AAHelpers.rhoSinThetaPrime(-40, 300);
-            expect(rhoSinThetaPrime).to.be.closeTo(-0.639399626052731, 0.000005, 'Not close enough.');
+            expect(rhoSinThetaPrime).to.be.closeTo(-0.639399626052731, 0.000005, 'Not close enough');
         });
     });
     describe("rhoCosThetaPrime", function() {
         it("Calculates rhoCosThetaPrime", function() {
             let rhoCosThetaPrime = AAHelpers.rhoCosThetaPrime(40, 300);
-            expect(rhoCosThetaPrime).to.be.closeTo(0.767142099950896, 0.000005, 'Not close enough.');
+            expect(rhoCosThetaPrime).to.be.closeTo(0.767142099950896, 0.000005, 'Not close enough');
             rhoCosThetaPrime = AAHelpers.rhoCosThetaPrime(-40, 300);
-            expect(rhoCosThetaPrime).to.be.closeTo(0.767142099950896, 0.000005, 'Not close enough.');
+            expect(rhoCosThetaPrime).to.be.closeTo(0.767142099950896, 0.000005, 'Not close enough');
         });
     });
     describe("transformEquatorialToHorizontal", function() {
-        it("Returns horizontal azimuth and alititude from equatorial", function() {
+        it("Converts equatorial coordinates to horizontal coordinates", function() {
             let horizontal = AAHelpers.transformEquatorialToHorizontal(-1.1881043437742491, -7.41234636759815, 40.024409);
-            expect(horizontal.azimuth).to.be.closeTo(336.735945260335, 0.05, 'Not close enough.');
-            expect(horizontal.altitude).to.be.closeTo(39.789182442466, 0.05, 'Not close enough.');
+            expect(horizontal.azimuth).to.be.closeTo(336.735945260335, 0.05, 'Not close enough');
+            expect(horizontal.altitude).to.be.closeTo(39.789182442466, 0.05, 'Not close enough');
+        });
+    });
+    describe("transformEquatorialToTopocentric", function() {
+        it("Converts equatorial coordinates to topocentric coordinates", function() {
+            let topo = AAHelpers.transformEquatorialToTopocentric(15, 10, 1.0165497738163836, -76.704564, 40.024409, 395, 2459409.208333);
+            expect(topo.x).to.be.closeTo(14.999976637180412, 0.05, 'Not close enough');
+            expect(topo.y).to.be.closeTo(9.998736472767662, 0.05, 'Not close enough');
+        });
+    });
+    describe("meanGreenwichSiderealTime", function() {
+        it("Gets the mean sidereal time in Greenwich", function() {
+            let greenwichSidereal = AAHelpers.meanGreenwichSiderealTime(2459409.208333);
+            expect(greenwichSidereal).to.be.closeTo(12.453116515054376, 0.05, 'Not close enough');
+        });
+    });
+    describe("apparentGreenwichSiderealTime", function() {
+        it("Gets the mean sidereal time in Greenwich", function() {
+            let greenwichSidereal = AAHelpers.apparentGreenwichSiderealTime(2459409.208333);
+            expect(greenwichSidereal).to.be.closeTo(12.452864005816734, 0.05, 'Not close enough');
         });
     });
 });

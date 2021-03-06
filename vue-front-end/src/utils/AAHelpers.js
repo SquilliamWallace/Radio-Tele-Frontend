@@ -2,16 +2,16 @@ import aa from 'astronomical-algorithms';
 
 export default{
     transformEquatorialToTopocentric: function(alpha, delta, distance, longitude, latitude, height, jd) {
-        console.log(alpha + " " + delta + " " + distance + " " + longitude + " " + latitude + " " + height + " " + jd);
+        //console.log(alpha + " " + delta + " " + distance + " " + longitude + " " + latitude + " " + height + " " + jd);
         const g_AAParallax_C1 = Math.sin(this.degreesToRadians(this.DMSToDegrees(0, 0, 8.794)));
-        console.log(g_AAParallax_C1);
+        //console.log(g_AAParallax_C1);
         let rhoSinThetaPrime = this.rhoSinThetaPrime(latitude, height);
         let rhoCosThetaPrime = this.rhoCosThetaPrime(latitude, height);
-        console.log(rhoSinThetaPrime + " " + rhoCosThetaPrime);
+        //console.log(rhoSinThetaPrime + " " + rhoCosThetaPrime);
 
         // calculate Sidereal time
         let theta = aa.julianday.localSiderealTime(jd, longitude);
-        console.log(theta);
+        //console.log(theta);
         // convert to radians
         delta = this.degreesToRadians(delta);
         let cosDelta = Math.cos(delta);
@@ -34,7 +34,7 @@ export default{
         return topocentric;
     },
     transformEquatorialToHorizontal: function(localHourAngle, delta, latitude) {
-        localHourAngle = this.hoursToRadians(localHourAngle);
+        localHourAngle = this.hoursToRadians(localHourAngle) + 5;
         delta = this.degreesToRadians(delta);
         latitude = this.degreesToRadians(latitude);
 
@@ -46,14 +46,6 @@ export default{
         if (horizontal.azimuth < 0) horizontal.azimuth += 360;
 
         return horizontal;
-
-        /*
-          AAS2DCoordinate Horizontal = new AAS2DCoordinate { X = RadiansToDegrees(Math.Atan2(Math.Sin(LocalHourAngle), Math.Cos(LocalHourAngle) * Math.Sin(Latitude) - Math.Tan(Delta) * Math.Cos(Latitude))) };
-            if (Horizontal.X < 0)
-                Horizontal.X += 360;
-            Horizontal.Y = RadiansToDegrees(Math.Asin(Math.Sin(Latitude) * Math.Sin(Delta) + Math.Cos(Latitude) * Math.Cos(Delta) * Math.Cos(LocalHourAngle)));
-
-            return Horizontal;*/
     },
     rhoSinThetaPrime: function(geographicalLatitude, height) {
         geographicalLatitude = this.degreesToRadians(geographicalLatitude);
@@ -102,5 +94,32 @@ export default{
     },
     IEEERemainder: function(dividend, divisor) {
         return dividend - (divisor * Math.round(dividend / divisor));
+    },
+    apparentGreenwichSiderealTime(jd) {
+        let meanObliquity = aa.nutation.meanObliquityOfEcliptic(jd);
+        //console.log(meanObliquity);
+        let trueObliquity = meanObliquity + aa.nutation.nutationInObliquity(jd) / 3600;
+        //console.log(trueObliquity);
+        let nutationInLongitude = aa.nutation.nutationInLongitude(jd);
+        //console.log(nutationInLongitude);
+
+        let value = this.meanGreenwichSiderealTime(jd) + (nutationInLongitude * Math.cos(this.degreesToRadians(trueObliquity)) / 54000);
+        return this.mapTo0To24Range(value);
+    },
+    meanGreenwichSiderealTime(jd) {
+        let JDDate = aa.julianday.getDate(jd);
+        //console.log(JDDate);
+        let JDMidnight = aa.julianday.julianDayMidnight(jd);
+        //console.log(JDMidnight + "     " + jd);
+        let T = (JDMidnight - 2451545) / 36525;
+        let TSquared = T * T;
+        let TCubed = T * T * T;
+        let value = 100.46061837 + (36000.770053608 * T) + (0.000387933 * TSquared) - (TCubed / 38710000);
+        //console.log(T + "     " + value);
+        value += (((((JDDate.getHours() + 4) % 24) * 15) + (JDDate.getMinutes() * 0.25) + ((JDDate.getSeconds() + (JDDate.getMilliseconds() / 1000)) * 0.0041666666666666666666666666666667)) * 1.00273790935);
+        //console.log(JDDate.getHours() + "!!!!" + JDDate.getMinutes() + "!!!!" + (JDDate.getSeconds() + (JDDate.getMilliseconds() / 1000)));
+        value = value / 15;
+        //console.log(value);
+        return this.mapTo0To24Range(value);
     }
 }
