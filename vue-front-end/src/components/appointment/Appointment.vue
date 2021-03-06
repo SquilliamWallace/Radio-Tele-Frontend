@@ -891,14 +891,15 @@ export default {
             return this.drawSkyObject(canvas, data, equatorial, JDSun, sunRad, 8, "yellow");
         },
         addMoon(canvas, data) {
-            let dateMoonCalc = new Date(data.year, data.month-1, data.day, data.hour, data.minute);
+            let dateMoonCalc = new Date(data.year, data.month-1, data.day, (data.hour-4)%24, data.minute);
             let JDMoon = aa.julianday.getJulianDay(dateMoonCalc) + aa.times.getDeltaT(aa.julianday.getJulianDay(dateMoonCalc)) / 86400.0;
             let equatorial = aa.moon.equatorialCoordinates(JDMoon);
             let moonRad = aa.earth.radiusVector(JDMoon);
             this.drawSkyObject(canvas, data, equatorial, JDMoon, moonRad, 8, "gray");
         },
-        addPlanets() {
-            
+        addPlanets(canvas, data) {
+            // Mercury (My favorite metal to eat!)
+
         },
         addStars() {
 
