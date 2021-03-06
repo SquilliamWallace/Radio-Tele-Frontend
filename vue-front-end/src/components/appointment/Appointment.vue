@@ -440,7 +440,9 @@ import CurrentUserValidation from '../../utils/CurrentUserValidation';
 import router from '../../router';
 import CustomErrorHandler from '../../utils/CustomErrorHandler.js';
 import aa from 'astronomical-algorithms';
+import * as timesUtils from 'astronomical-algorithms/dist/times/utils'
 import AAHelpers from '../../utils/AAHelpers.js';
+import { brightStars } from '../../utils/BrightStars.js';
 export default {
     data() {
         name: 'Appointment'
@@ -824,9 +826,18 @@ export default {
             context.fillRect(0, 0, canvas.width, canvas.height);
 
             // Draw the sky objects (you take the moon and you take the sun)
+            let startTimer = Date.now();
             this.addMoon(document.getElementById("canvas0"), data0);
             this.addSun(document.getElementById("canvas0"), data0);
+            this.addPlanets(document.getElementById("canvas0"), data0);
+            this.addStars(document.getElementById("canvas0"), data0)
             this.addTarget(document.getElementById("canvas0"), data0);
+            this.addMoon(document.getElementById("canvas1"), data1);
+            this.addSun(document.getElementById("canvas1"), data1);
+            this.addPlanets(document.getElementById("canvas1"), data1);
+            this.addStars(document.getElementById("canvas1"), data1)
+            this.addTarget(document.getElementById("canvas1"), data1);
+            alert("Drawn in " + (Date.now() - startTimer) + " milliseconds");
 
             // old implementation
             /*var call = ApiDriver.Astronomical.skyview(data0);
@@ -839,18 +850,8 @@ export default {
                 }).catch(error => {console.log(error);}); 
                 this.showImage = true;
             }).catch(error => {console.log(error);}); */
-        }, 
-        verifyAALib() {
-            let UTCDate = new Date(Date.UTC(1993, 9, 13));
-            let jd = aa.julianday.getJulianDay(UTCDate);
-            let equ = aa.sun.apparentEquatorialCoordinates(jd);
-            console.log("Testing Astronomical Algorithms...\nRight Ascension : " + equ.rightAscension + " (Close to: 13.225389)\nDeclination     : " + equ.declination    + " (Close to: -7.78507)");
-            //let dateSunCalc = new Date(Date.UTC(1993, 9, 13));
-            //let JDSun = aa.julianday.getJulianDay(dateSunCalc);
-            //let equatorial = aa.sun.apparentEquatorialCoordinates(JDSun);
-            //console.log("Testing Astronomical Algorithms...\nRight Ascension : " + equatorial.rightAscension + " (Close to: 13.225389)\nDeclination     : " + equatorial.declination    + " (Close to: -7.78507)");
         },
-        drawSkyObject(canvas, data, equatorial, julianDay, radiusVector, size, color) {
+        drawSkyObject(canvas, data, equatorial, julianDay, radiusVector, size, color, letter = null) {
             let topocentric = AAHelpers.transformEquatorialToTopocentric(equatorial.rightAscension, equatorial.declination, radiusVector, data.longitude, data.latitude, data.altitude, julianDay);
             //console.log("Equatorial to Topocentric: ");
             //console.log(topocentric);
@@ -860,18 +861,26 @@ export default {
             //console.log("LocalHourAngle:   " + localHourAngle);
             //console.log("AST: " + AST);
             let horizontal = AAHelpers.transformEquatorialToHorizontal(localHourAngle, topocentric.y, data.latitude);
-            console.log("Equatorial to Horizontal:");
+            //console.log("Equatorial to Horizontal:");
             //console.log(horizontal);
             horizontal.altitude += AAHelpers.refractionFromTrue(horizontal.altitude, 1013, 10);
             //console.log("Horizontal after refraction: ");
             //console.log(horizontal);
 
-            if (canvas) {
-                let context = canvas.getContext("2d");
-                context.beginPath();
-                context.arc(((horizontal.azimuth + 180)%360) * 2, (90 - horizontal.altitude) * 2, size, 0, 2 * Math.PI);
-                context.fillStyle = color;
-                context.fill();
+            if (horizontal.altitude > 0) {
+                if (canvas) {
+                    let context = canvas.getContext("2d");
+                    context.beginPath();
+                    context.arc(((horizontal.azimuth + 180)%360) * 2, (90 - horizontal.altitude) * 2, size, 0, 2 * Math.PI);
+                    context.fillStyle = color;
+                    context.fill();
+                    if (letter) {
+                        context.font = "12px Arial";
+                        context.fillText(letter, ((horizontal.azimuth + 180)%360) * 2, (90 - horizontal.altitude) * 2); 
+                    }
+                } else {
+                    console.log("Error drawing to canvas.");
+                }
             }
             
             return {
@@ -879,38 +888,150 @@ export default {
                 altitude: horizontal.altitude
             }
         },
+        drawLinesInSky(canvas, points, color) {
+            let context = canvas.getContext("2d");
+            context.beginPath();
+            for (let i = 0; i < points.length - 1; i++) {
+                context.moveTo(points[i].x, points[i].y);
+                context.lineTo(points[i + 1].x, points[i + 1].y);
+                context.strokeStyle = color;
+                context.stroke();
+            }
+        },
         addSun(canvas, data) {
             let dateSunCalc = new Date(data.year, data.month-1, data.day, (data.hour-4)%24, data.minute);
-            let JDSun = aa.julianday.getJulianDay(dateSunCalc) + aa.times.getDeltaT(aa.julianday.getJulianDay(dateSunCalc)) / 86400.0;
+            let JDSun = aa.julianday.getJulianDay(dateSunCalc) + timesUtils.getDeltaT(aa.julianday.getJulianDay(dateSunCalc)) / 86400.0;
             //console.log("JDsun: " + JDSun);
             let equatorial = aa.sun.apparentEquatorialCoordinates(JDSun);
             //console.log("Apparent equatorial coordinates:");
             //console.log(equatorial);
-            let sunRad = aa.earth.radiusVector(JDSun);
+            let sunRad = aa.earth.getRadiusVector(JDSun);
             //console.log("Sun Radius Vector:" + sunRad);
             return this.drawSkyObject(canvas, data, equatorial, JDSun, sunRad, 8, "yellow");
         },
         addMoon(canvas, data) {
             let dateMoonCalc = new Date(data.year, data.month-1, data.day, (data.hour-4)%24, data.minute);
-            let JDMoon = aa.julianday.getJulianDay(dateMoonCalc) + aa.times.getDeltaT(aa.julianday.getJulianDay(dateMoonCalc)) / 86400.0;
-            let equatorial = aa.moon.equatorialCoordinates(JDMoon);
-            let moonRad = aa.earth.radiusVector(JDMoon);
+            let JDMoon = aa.julianday.getJulianDay(dateMoonCalc) + timesUtils.getDeltaT(aa.julianday.getJulianDay(dateMoonCalc)) / 86400.0;
+            let equatorial = aa.earth.moon.getEquatorialCoordinates(JDMoon);
+            let moonRad = aa.earth.getRadiusVector(JDMoon);
             this.drawSkyObject(canvas, data, equatorial, JDMoon, moonRad, 8, "gray");
         },
         addPlanets(canvas, data) {
+            let datePlanetCalc = new Date(data.year, data.month-1, data.day, (data.hour-4)%24, data.minute);
+            let JDPlanet = aa.julianday.getJulianDay(datePlanetCalc) + timesUtils.getDeltaT(aa.julianday.getJulianDay(datePlanetCalc)) / 86400.0;
+            let planetEcliptic, planetEquatorial, planetRad;
+            //let diameterRatio = aa.sun.apparentDiameter(JDPlanet);
             // Mercury (My favorite metal to eat!)
+            
+            // Mars (To get more candy bars)
+            planetEcliptic = aa.mars.getEclipticCoordinates(JDPlanet);
+            planetEquatorial = aa.coordinates.transformEclipticToEquatorial(planetEcliptic.longitude, planetEcliptic.latitude, JDPlanet);
+            planetRad = aa.mars.getRadiusVector(JDPlanet);
+            this.drawSkyObject(canvas, data, planetEquatorial, JDPlanet, planetRad, 0, "red", "M");
 
+            // Jupiter (To get more...)
+            planetEcliptic = aa.jupiter.getEclipticCoordinates(JDPlanet);
+            planetEquatorial = aa.coordinates.transformEclipticToEquatorial(planetEcliptic.longitude, planetEcliptic.latitude, JDPlanet);
+            planetRad = aa.jupiter.getRadiusVector(JDPlanet);
+            this.drawSkyObject(canvas, data, planetEquatorial, JDPlanet, planetRad, 0, "violet", "J");
+
+            // Saturn (Don't got a funny one for this one, sorry guys)
+            planetEcliptic = aa.saturn.getEclipticCoordinates(JDPlanet);
+            planetEquatorial = aa.coordinates.transformEclipticToEquatorial(planetEcliptic.longitude, planetEcliptic.latitude, JDPlanet);
+            planetRad = aa.saturn.getRadiusVector(JDPlanet);
+            this.drawSkyObject(canvas, data, planetEquatorial, JDPlanet, planetRad, 0, "violet", "S");
+
+            // Uranus (ok)
+            planetEcliptic = aa.uranus.getEclipticCoordinates(JDPlanet);
+            planetEquatorial = aa.coordinates.transformEclipticToEquatorial(planetEcliptic.longitude, planetEcliptic.latitude, JDPlanet);
+            planetRad = aa.uranus.getRadiusVector(JDPlanet);
+            this.drawSkyObject(canvas, data, planetEquatorial, JDPlanet, planetRad, 0, "violet", "U");
+
+            // Neptune (this one is just my dog's name)
+            planetEcliptic = aa.neptune.getEclipticCoordinates(JDPlanet);
+            planetEquatorial = aa.coordinates.transformEclipticToEquatorial(planetEcliptic.longitude, planetEcliptic.latitude, JDPlanet);
+            planetRad = aa.neptune.getRadiusVector(JDPlanet);
+            this.drawSkyObject(canvas, data, planetEquatorial, JDPlanet, planetRad, 0, "violet", "N");
         },
-        addStars() {
+        addStars(canvas, data) {
+            let minimumDec = data.latitude - 90;
+            let dateCalc = new Date(data.year, data.month-1, data.day, (data.hour-4)%24, data.minute);
+            let jd = aa.julianday.getJulianDay(dateCalc) + timesUtils.getDeltaT(aa.julianday.getJulianDay(dateCalc)) / 86400.0;
+            let AST = AAHelpers.apparentGreenwichSiderealTime(jd);
 
+            let summerTriangle = [];
+            let orion = [];
+            let ursaMajor = [];
+            let cassiopeia = [];
+
+            let starsOfSummerTriangle = [ "Vega", "Deneb", "Altair" ];
+            let starsOfOrion = [ "Rigel", "Betelgeuse", "Bellatrix", "Saiph", "Mintaka", "Alnitak" ];
+            let starsOfUrsaMajor = [ "Alpha Ursae Majoris", "Beta Ursae Majoris", "Gamma Ursae Majoris", "Delta Ursae Majoris", "Epsilon Ursae Majoris", "Zeta Ursae Majoris" , "Eta Ursae Majoris" ];
+            let starsOfCassipeia = [ "Caph", "Schedar", "Cih", "Ruchbah", "Segin" ];
+
+            for (let star of brightStars) {
+                if (star.Dec > minimumDec) {
+                    let ra = AAHelpers.RaInDegrees(star.RA);
+                    let dec = star.Dec;
+                    let localHourAngle = AST - (data.longitude / 15) - ra/15;
+                    let horizontal = AAHelpers.transformEquatorialToHorizontal(localHourAngle, star.Dec, data.latitude);
+                    if (horizontal.altitude > 0) {
+                        let point = { x: horizontal.azimuth, y: horizontal.altitude };
+                        // draw the star
+                        if (canvas) {
+                            let context = canvas.getContext("2d");
+                            context.beginPath();
+                            context.arc(((point.x + 180)%360) * 2, (90 - point.y) * 2, AAHelpers.circleSize(star.VisualMag), 0, 2 * Math.PI);
+                            context.fillStyle = star.Color;
+                            context.fill();
+                        } else {
+                            console.log("Error drawing to canvas.");
+                        }
+                        if (starsOfUrsaMajor.includes(star.Name))
+                        {
+                            ursaMajor.push(point);
+                        }
+                        if (starsOfCassipeia.includes(star.Name2))
+                        {
+                            cassiopeia.push(point);
+                        }
+
+                        if (starsOfSummerTriangle.includes(star.Name2))
+                        {
+                            summerTriangle.push(point);
+                        }
+                        if (starsOfOrion.includes(star.Name2))
+                        {
+                            orion.push(point);
+                        }
+                        if (summerTriangle.length == 3)
+                        {
+                            summerTriangle.push(summerTriangle[0]);
+                            this.drawLinesInSky(canvas, summerTriangle, "darkgrey");
+                        }
+                        if (orion.length == 6)
+                        {
+                            orion.push(orion[0]);
+                            this.drawLinesInSky(canvas, orion, "darkgrey");
+                        }
+                        if (ursaMajor.length == 7)
+                        {
+                            this.drawLinesInSky(canvas, ursaMajor, "darkgrey");
+                        }
+                        if (cassiopeia.length == 5)
+                        {
+                            this.drawLinesInSky(canvas, cassiopeia, "darkgrey");
+                        }
+                    }
+                }
+            }
         },
         addEarthFeatures() {
 
         },
         addTarget(canvas, data) {
-            let dateCalc = new Date(Date.UTC(data.year, data.month, data.day, data.hour, data.minute));
-            let JD = aa.julianday.getJulianDay(dateCalc) + aa.times.getDeltaT(aa.julianday.getJulianDay(dateCalc) / 86400.0);
-            //dateCalc.Julian + AASDynamicalTime.DeltaT(dateCalc.Julian) / 86400.0;
+            let dateCalc = new Date(data.year, data.month-1, data.day, (data.hour-4)%24, data.minute);
+            let JD = aa.julianday.getJulianDay(dateCalc) + timesUtils.getDeltaT(aa.julianday.getJulianDay(dateCalc) / 86400.0);
             let horizontal = aa.coordinates.transformEquatorialToHorizontal(JD, data.longitude, data.latitude, data.targetRA, data.targetDec);
             let context = canvas.getContext("2d");
             context.beginPath();

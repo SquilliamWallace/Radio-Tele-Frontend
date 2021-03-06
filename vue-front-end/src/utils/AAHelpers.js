@@ -71,6 +71,12 @@ export default{
     radiansToDegrees: function(radians) {
         return radians * 57.295779513082320876798154814105;
     },
+    RaInDegrees(ra) {
+        let hours = parseInt((ra.substring(0, 2)));
+        let minutes = parseInt((ra.substring(3, 5)));
+
+        return (hours * 15) + (minutes / 4);
+    },
     DMSToDegrees: function(degrees, minutes, seconds, bPositive = true) {
         if (bPositive) {
             return degrees + minutes / 60 + seconds / 3600;
@@ -121,5 +127,24 @@ export default{
         value = value / 15;
         //console.log(value);
         return this.mapTo0To24Range(value);
-    }
+    },
+    circleSize(vm)
+        {
+            let i = 1;
+
+            if (vm < 0)
+            {
+                i = 4;
+            }
+            else if (vm < 1)
+            {
+                i = 3;
+            }
+            else if (vm < 2)
+            {
+                i = 2;
+            }
+
+            return i; 
+        }
 }
