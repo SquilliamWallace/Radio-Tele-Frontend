@@ -826,18 +826,16 @@ export default {
             context.fillRect(0, 0, canvas.width, canvas.height);
 
             // Draw the sky objects (you take the moon and you take the sun)
-            let startTimer = Date.now();
-            this.addMoon(document.getElementById("canvas0"), data0);
-            this.addSun(document.getElementById("canvas0"), data0);
             this.addPlanets(document.getElementById("canvas0"), data0);
             this.addStars(document.getElementById("canvas0"), data0)
             this.addTarget(document.getElementById("canvas0"), data0);
-            this.addMoon(document.getElementById("canvas1"), data1);
-            this.addSun(document.getElementById("canvas1"), data1);
+            this.addMoon(document.getElementById("canvas0"), data0);
+            this.addSun(document.getElementById("canvas0"), data0);
             this.addPlanets(document.getElementById("canvas1"), data1);
             this.addStars(document.getElementById("canvas1"), data1)
             this.addTarget(document.getElementById("canvas1"), data1);
-            alert("Drawn in " + (Date.now() - startTimer) + " milliseconds");
+            this.addMoon(document.getElementById("canvas1"), data1);
+            this.addSun(document.getElementById("canvas1"), data1);
 
             // old implementation
             /*var call = ApiDriver.Astronomical.skyview(data0);
@@ -1032,12 +1030,22 @@ export default {
         addTarget(canvas, data) {
             let dateCalc = new Date(data.year, data.month-1, data.day, (data.hour-4)%24, data.minute);
             let JD = aa.julianday.getJulianDay(dateCalc) + timesUtils.getDeltaT(aa.julianday.getJulianDay(dateCalc) / 86400.0);
-            let horizontal = aa.coordinates.transformEquatorialToHorizontal(JD, data.longitude, data.latitude, data.targetRA, data.targetDec);
+            let horizontal = AAHelpers.transformEquatorialToHorizontal(data.targetRA, data.targetDec, data.latitude);
+            let targetSize = 6;
             let context = canvas.getContext("2d");
             context.beginPath();
-            context.arc(horizontal.azimuth, horizontal.altitude, 6, 0, 2 * Math.PI);
-            context.fillStyle = 'blue';
-            context.fill();
+            context.arc(horizontal.azimuth, horizontal.altitude, targetSize, 0, 2 * Math.PI);
+            context.strokeStyle = "green";
+            context.lineWidth = 1;
+            context.imageSmoothing = false;
+            context.stroke();
+            context.moveTo(horizontal.azimuth - targetSize, horizontal.altitude);
+            context.lineTo(horizontal.azimuth + targetSize, horizontal.altitude);
+            context.stroke();
+            context.moveTo(horizontal.azimuth, horizontal.altitude - targetSize);
+            context.lineTo(horizontal.azimuth, horizontal.altitude + targetSize);
+            context.strokeStyle = "green";
+            context.stroke();
         },
         addCoordinates() {
 
