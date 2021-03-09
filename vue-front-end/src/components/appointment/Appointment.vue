@@ -826,11 +826,13 @@ export default {
             context.fillRect(0, 0, canvas.width, canvas.height);
 
             // Draw the sky objects (you take the moon and you take the sun)
+            this.addEarthFeatures(document.getElementById("canvas0"), data0);
             this.addPlanets(document.getElementById("canvas0"), data0);
             this.addStars(document.getElementById("canvas0"), data0)
             this.addTarget(document.getElementById("canvas0"), data0);
             this.addMoon(document.getElementById("canvas0"), data0);
             this.addSun(document.getElementById("canvas0"), data0);
+            this.addEarthFeatures(document.getElementById("canvas1"), data1);
             this.addPlanets(document.getElementById("canvas1"), data1);
             this.addStars(document.getElementById("canvas1"), data1)
             this.addTarget(document.getElementById("canvas1"), data1);
@@ -855,7 +857,7 @@ export default {
             //console.log(topocentric);
             //let AST = aa.julianday.localSiderealTime(julianDay, data.longitude);
             let AST = AAHelpers.apparentGreenwichSiderealTime(julianDay);
-            let localHourAngle = AST - (data.longitude / 15) - topocentric.x;
+            let localHourAngle = (AST - (data.longitude / 15) - topocentric.x);
             //console.log("LocalHourAngle:   " + localHourAngle);
             //console.log("AST: " + AST);
             let horizontal = AAHelpers.transformEquatorialToHorizontal(localHourAngle, topocentric.y, data.latitude);
@@ -971,7 +973,7 @@ export default {
                 if (star.Dec > minimumDec) {
                     let ra = AAHelpers.RaInDegrees(star.RA);
                     let dec = star.Dec;
-                    let localHourAngle = AST - (data.longitude / 15) - ra/15;
+                    let localHourAngle = (AST - (data.longitude / 15) - ra/15);
                     let horizontal = AAHelpers.transformEquatorialToHorizontal(localHourAngle, star.Dec, data.latitude);
                     if (horizontal.altitude > 0) {
                         let point = { x: horizontal.azimuth, y: horizontal.altitude };
@@ -1024,8 +1026,16 @@ export default {
                 }
             }
         },
-        addEarthFeatures() {
-
+        addEarthFeatures(canvas) {
+            let context = canvas.getContext("2d");
+            context.beginPath();
+            context.fillStyle = "gray";
+            context.font = "12px Arial";
+            context.fillText("N", 5, 176);
+            context.fillText("E", 185, 176); 
+            context.fillText("S", 365, 176); 
+            context.fillText("W", 545, 176); 
+            context.fillText("N", 705, 176);
         },
         addTarget(canvas, data) {
             let dateCalc = new Date(data.year, data.month-1, data.day, (data.hour-4)%24, data.minute);
