@@ -1,6 +1,8 @@
 const axios = require('axios');
 import Headers from './utils/Headers';
-let baseUrl = "https://prod-api.ycpradiotelescope.com/api/";
+import SecretKey from './utils/SecretKey';
+let baseUrl = "http://localhost:8080/api/";
+//http://api.ycpradiotelescope.com:8080/api/
 
 export default {
     //API endpoints go here
@@ -42,6 +44,9 @@ export default {
       },
       changePassword: function(userId) {
         return axios.put(this.namespace + "/" + userId + "/changePassword", data, Headers.retrieveHeaders())
+      },
+      approveOrDenyProfilePicture: function(userId, isApprove) {
+        return axios.post(baseUrl + "users/" + userId + "/profile-picture?isApprove=" + isApprove, {}, Headers.retrieveHeaders());
       },
       ban: function(userId, message) {
         return axios.put(this.namespace + "/" + userId + "/ban?message=" + message, {}, Headers.retrieveHeaders());
@@ -134,11 +139,11 @@ export default {
       sharedUsers: function(appointmentId, page, size) {
         return axios.get(this.namespace + "/" + appointmentId + "/viewers?page=" + page + "&size=" + size, Headers.retrieveHeaders())
       },
-      viewSpectraCyberConfig: function(userId, spectracyberConfigId) {
-        return axios.get(this.namespace + "/" + userId + "/" + spectracyberConfigId + "/spectracyberConfig", Headers.retrieveHeaders())
+      viewSpectraCyberConfig: function(spectracyberConfigId) {
+        return axios.get(this.namespace + "/" + spectracyberConfigId + "/spectracyberConfig", Headers.retrieveHeaders())
       },
-      updateSpectraCyberConfig: function(userId, data) {
-        return axios.put(baseUrl + "appointments/" + userId + "/spectracyberConfig", data, Headers.retrieveHeaders())
+      updateSpectraCyberConfig: function(data) {
+        return axios.put(this.namespace + "/spectracyberConfig", data, Headers.retrieveHeaders())
       }
     },
     Log: {
@@ -157,10 +162,26 @@ export default {
         return axios.get(baseUrl + "authAdmin", Headers.retrieveHeaders());
       }
     },
+    VideoFiles: {
+      namespace: baseUrl + "video-files",
+      viewVideoFiles: function(lowerDate, upperDate) {
+        return axios.get(this.namespace + "/" + "listBetweenCreatedDates?lowerDate=" + lowerDate + "&upperDate=" + upperDate, Headers.retrieveHeaders())
+      }
+    },
+
     SensorStatus: {
       namespace: baseUrl + "sensor-status",
       getMostRecent: function() {
         return axios.get(this.namespace + "/" + "getMostRecent", Headers.retrieveHeaders())
+      }
+    },
+    SensorOverrides: {
+      namespace: baseUrl + "sensor-overrides",
+      retrieveOverrides: function() {
+        return axios.get(this.namespace + "/" + "retrieve", Headers.retrieveHeaders())
+      },
+      updateOverride: function(sensorName, overridden) {
+        return axios.post(this.namespace + "/" + sensorName + "/" + overridden, {}, Headers.retrieveHeaders())
       }
     },
     Thresholds: {
@@ -198,5 +219,8 @@ export default {
     },
     feedback(data) {
       return axios.post(baseUrl + "feedback", data, Headers.retrieveHeaders());
+    },
+    middlemanConnection(data) {
+      return axios.get("http://rtastronomicalapi-dev.us-east-2.elasticbeanstalk.com/MiddlemanConnection" + "?key="+SecretKey.getKey() + "&command=" + data.command);
     }
 }

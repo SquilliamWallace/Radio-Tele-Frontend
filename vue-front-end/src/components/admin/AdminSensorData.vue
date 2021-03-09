@@ -64,7 +64,7 @@
                 <v-flex md>
                     <v-card-actions class="justify-start">
                         <div>
-                            <v-switch class="ma-0" inset label="Override" background-color="transparent" color="blue darken-5" v-model="sensor.override" @change="resetStatuses()"></v-switch>
+                            <v-switch class="ma-0" inset label="Override" background-color="transparent" color="blue darken-5" v-model="sensor.override" ></v-switch>
                         </div>
                     </v-card-actions>
                 </v-flex>
@@ -140,13 +140,13 @@ export default {
     methods:{
         getOverallStatus(dbData){
             this.overallStatus = 0;             // if all are OK, this remains unchanged
-            for (var index in dbData) {
-                if (this.sensorList.includes(index) && !this.isOverride(index.override)){   // Ignore if overriden or not sensor
-                    if (dbData[index] == 2){
+            for (var index in this.sensors) {
+                if (this.sensorList.includes(this.sensors[index].name) && !this.isOverride(this.sensors[index].override)){   // Ignore if overriden or not sensor
+                    if (this.sensors[index].status == 2){
                         this.overallStatus = 2;
                         return this.overallStatus;                     // if ERROR found, immediately return
                     }
-                    else if(dbData[index] == 1){
+                    else if(this.sensors[index].status == 1){
                         this.overallStatus = 1;
                         // console.log("Status 1 found: " + index);     // Logging for debugging purposes
                     }
@@ -168,8 +168,7 @@ export default {
                     if (dbIndex == localIndex.name){   
                         // console.log("Found: " + dbIndex);                               // We have found the matching sensor
                         localIndex.status = dbData[dbIndex];                                 // set the status value
-                        localIndex.override = dbIndex.override;                              // set the override
-                        if (this.isOverride(dbIndex.override)){
+                        if (this.isOverride(localIndex.override)){
                             localIndex.statusColor = "orange";                             // set the status color to orange for override
                             localIndex.statusText = "OVERRIDE";                            // set the status text to OVERRIDE
                         }
@@ -207,20 +206,92 @@ export default {
                 })
             })
         },
-        resetStatuses() {
-            // This part is going to have to be redone when overrides are implemented
-            for(var dbIndex of this.dbData) {                                              // iterate over all sensors brought in fromd database
-                for(var localIndex of this.sensors){                                       // iterate over all local sensor variables
-                    if (dbIndex.name == localIndex.name){                                  // We have found the matching sensor
-                        dbIndex.override = localIndex.override ;                           // Copy the local override value back into the database
-                        /* Here is where we would send an HTTP request to the back end updating the new override value */
+        retrieveOverrides() {
+            // Make the API call
+            ApiDriver.SensorOverrides.retrieveOverrides().then((response) => {
+                // Handle the server response
+                HttpResponse.then(response, (data) => {
+                    // Populate the data and set the store's boolean back to false
+                    // console.log("Data Returned: " + JSON.stringify(data.data));  // Logging for debugging purposes
+                    this.setOverrides(data.data);
+                    this.$store.commit("loading", false)
+                }, (status, errors) => {
+                    // Access Denied
+                    if (parseInt(status) === 403) {
+                        // Call the generic access denied handler
+                        HttpResponse.accessDenied(this);
+                    } 
+                    // Not Found
+                    else if (parseInt(status) === 404) {
+                        // Call the generic invalid resource id handler
+                        HttpResponse.notFound(this, errors);
+                    }
+                })
+            })
+        },
+        setOverrides(dbData) {
+            for(var dbIndex in dbData) {                                                        // iterate over all sensors brought in from database
+                for(var localIndex of this.sensors){                                            // iterate over all local sensor variables
+                    var localName = localIndex.displayName.toUpperCase().replace(/ /g, "_");    // turn "sensor name" into "SENSOR_NAME"
+                    if (localName == dbData[dbIndex].sensorName){  
+                        localIndex.override = dbData[dbIndex].overridden;                         //update override values
                     }
                 }
             }
+            this.retrieveStatuses();    // the statuses depend on the override states
+        },
+        overrideSensor(sensor) {
+            var s = "";
+            if (sensor.name == 'gate') {
+                s = "GATE";
+            }
+            else if (sensor.name == 'proximity') {
+                s = "PROXIMITY";
+            }
+            else if (sensor.name == 'azimuthMotor') {
+                s = "AZIMUTH_MOTOR";
+            }
+            else if (sensor.name == 'elevationMotor') {
+                s = "ELEVATION_MOTOR";
+            }
+            else if (sensor.name == 'weatherStation') {
+                s = "WEATHER_STATION";
+            }
+
+            ApiDriver.SensorOverrides.updateOverride(s, Boolean(sensor.override)).then((response) =>{
+                HttpResponse.then(response, (data) => {
+                        this.$swal({
+                        title: '<span style="color:#f0ead6">Sensor Overridden<span>',
+                        html: '<span style="color:#f0ead6">The sensor has been overridden <span>',
+                        type: 'success',
+                        background: '#302f2f'
+                    });
+                    this.$emit('input');
+                }, (status, errors) => {
+                    if(parseInt(status)==403){
+                        HttpResponse.accessDenied(this)
+                    } else if(parseInt(status)==404){
+                        HttpResponse.notFound(this, errors)
+                    } else {
+                        for(var field in errors) {
+                            let message = errors[field][0]
+                        }
+                        HttpResponse.generalError(this, message, false)
+                    }
+                })
+            }).catch((error) => {
+            // Handle an erroneous API call
+                console.log(error)
+                let message = "An error occurred when loading this observation";
+                HttpResponse.generalError(this, message, true);
+            });
+
+            this.retrieveOverrides();
             this.retrieveStatuses();                                                                 // Update the front-end
+            console.log("Successfully retrieved new statuses for sensors!")
         },
         isOverride(val){
-            if (val == 1){ return true; }
+            if (val == 1 || val == true){ return true; }
             else {return false; }
         },
         getStatusColor(val) {
@@ -390,8 +461,14 @@ export default {
         },
     },
     mounted: function(){
-        this.retrieveStatuses();
+        this.retrieveOverrides();       // Statuses are updated ofter override states are retrieved
         this.getThresholds();
+    },
+    //overrides and statuses need to be changed to persist on front end after page refresh
+    beforeUpdate: function() {
+
+    },
+    updated: function() {
     },
     components: {
         Loading
