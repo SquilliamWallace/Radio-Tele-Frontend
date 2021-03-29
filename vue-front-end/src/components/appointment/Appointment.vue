@@ -976,12 +976,12 @@ export default {
                     let localHourAngle = (AST - (data.longitude / 15) - ra/15);
                     let horizontal = AAHelpers.transformEquatorialToHorizontal(localHourAngle, star.Dec, data.latitude);
                     if (horizontal.altitude > 0) {
-                        let point = { x: horizontal.azimuth, y: horizontal.altitude };
+                        let point = { x: (horizontal.azimuth + 180)%360 * 2, y: (90 - horizontal.altitude) * 2 };
                         // draw the star
                         if (canvas) {
                             let context = canvas.getContext("2d");
                             context.beginPath();
-                            context.arc(((point.x + 180)%360) * 2, (90 - point.y) * 2, AAHelpers.circleSize(star.VisualMag), 0, 2 * Math.PI);
+                            context.arc(point.x, point.y, AAHelpers.circleSize(star.VisualMag), 0, 2 * Math.PI);
                             context.fillStyle = star.Color;
                             context.fill();
                         } else {

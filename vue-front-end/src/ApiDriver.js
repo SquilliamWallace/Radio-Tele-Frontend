@@ -258,6 +258,13 @@ export default {
     },
     middlemanConnection(data) {
       //return axios.get("http://rtastronomicalapi-dev.us-east-2.elasticbeanstalk.com/MiddlemanConnection" + "?key="+SecretKey.getKey() + "&command=" + data.command);
-      return axios.get("https://localhost:5001/MiddlemanConnection/" + "?key="+SecretKey.getKey() + "&command=" + data.command) // testing locally
+      //return axios.get("http://174.54.227.14:5000" + "?key="+SecretKey.getKey() + "&command=" + data.command) // testing locally
+      const https = require('https');
+      const instance = axios.create({
+        httpsAgent: new https.Agent({  
+          rejectUnauthorized: false
+        })
+      });
+      return instance.get("https://174.54.227.14:5000/" + "?command=" + data.command, Headers.retreiveMiddlemanHeaders());
     }
 }
