@@ -329,11 +329,18 @@ export default {
                 vue.start is a moment Object of the first date viewable in the view
                 vue.end is a moment Object of the last date viewable in the view
             */
+            //the backend expects ISO formatted time without the time
+            //cut everything at "T"
+            var startTime = new Date(vue.start).toISOString();
+            var endTime = new Date(vue.end).toISOString();
+            let startTimeIndexOfT = startTime.indexOf("T");
+            let endTimeIndexOfT = endTime.indexOf("T");
             let data = {
                 telescopeId: id,
-                startTime: new Date(vue.start).toUTCString(),
-                endTime: new Date(vue.end).toUTCString()
+                startTime: startTime.substring(0, startTimeIndexOfT),
+                endTime: endTime.substring(0, endTimeIndexOfT)
             }
+            console.log("LOOK HERE" + data.startTime);
             // Set the $store variable loading to true to display loading screen, as we call the backend and wait for response
             this.$store.commit("loading", true)
             // This sets the telescopeId of the page to the id. Used for initializing the data of this.telescopeId when they first choose a telescope to view
