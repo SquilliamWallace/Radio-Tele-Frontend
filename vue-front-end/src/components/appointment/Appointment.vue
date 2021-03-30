@@ -924,8 +924,11 @@ export default {
             // Mercury (My favorite metal to eat!)
             
             // Mars (To get more candy bars)
+            //console.log("JDPlanet:   " + JDPlanet);
             planetEcliptic = aa.mars.getEclipticCoordinates(JDPlanet);
             planetEquatorial = aa.coordinates.transformEclipticToEquatorial(planetEcliptic.longitude, planetEcliptic.latitude, JDPlanet);
+            //console.log(planetEcliptic);
+            //console.log(planetEquatorial);
             planetRad = aa.mars.getRadiusVector(JDPlanet);
             this.drawSkyObject(canvas, data, planetEquatorial, JDPlanet, planetRad, 0, "red", "M");
 
@@ -941,13 +944,13 @@ export default {
             planetRad = aa.saturn.getRadiusVector(JDPlanet);
             this.drawSkyObject(canvas, data, planetEquatorial, JDPlanet, planetRad, 0, "violet", "S");
 
-            // Uranus (ok)
+            // Uranus
             planetEcliptic = aa.uranus.getEclipticCoordinates(JDPlanet);
             planetEquatorial = aa.coordinates.transformEclipticToEquatorial(planetEcliptic.longitude, planetEcliptic.latitude, JDPlanet);
             planetRad = aa.uranus.getRadiusVector(JDPlanet);
             this.drawSkyObject(canvas, data, planetEquatorial, JDPlanet, planetRad, 0, "violet", "U");
 
-            // Neptune (this one is just my dog's name)
+            // Neptune
             planetEcliptic = aa.neptune.getEclipticCoordinates(JDPlanet);
             planetEquatorial = aa.coordinates.transformEclipticToEquatorial(planetEcliptic.longitude, planetEcliptic.latitude, JDPlanet);
             planetRad = aa.neptune.getRadiusVector(JDPlanet);
@@ -1038,22 +1041,28 @@ export default {
             context.fillText("N", 705, 176);
         },
         addTarget(canvas, data) {
-            let dateCalc = new Date(data.year, data.month-1, data.day, (data.hour-4)%24, data.minute);
+            let dateCalc = new Date(data.year, data.month-1, data.day, (data.hour), data.minute);
+            console.log("dateCalc: "+dateCalc);
             let JD = aa.julianday.getJulianDay(dateCalc) + timesUtils.getDeltaT(aa.julianday.getJulianDay(dateCalc) / 86400.0);
-            let horizontal = AAHelpers.transformEquatorialToHorizontal(data.targetRA, data.targetDec, data.latitude);
+            let AST = AAHelpers.apparentGreenwichSiderealTime(JD);
+            console.log("AST: "+AST);
+            let localHourAngle = (AST + (data.longitude / 15) - (data.targetRA/15));
+            console.log("localHourAngle: "+localHourAngle);
+            let horizontal = AAHelpers.transformEquatorialToHorizontal(localHourAngle, data.targetDec, data.latitude);
             let targetSize = 6;
+            let point = { x: ((horizontal.azimuth + 180)%360) * 2, y: (90 - horizontal.altitude) * 2 };
             let context = canvas.getContext("2d");
             context.beginPath();
-            context.arc(horizontal.azimuth, horizontal.altitude, targetSize, 0, 2 * Math.PI);
+            context.arc(point.x, point.y, targetSize, 0, 2 * Math.PI);
             context.strokeStyle = "green";
             context.lineWidth = 1;
             context.imageSmoothing = false;
             context.stroke();
-            context.moveTo(horizontal.azimuth - targetSize, horizontal.altitude);
-            context.lineTo(horizontal.azimuth + targetSize, horizontal.altitude);
+            context.moveTo(point.x - targetSize, point.y);
+            context.lineTo(point.x + targetSize, point.y);
             context.stroke();
-            context.moveTo(horizontal.azimuth, horizontal.altitude - targetSize);
-            context.lineTo(horizontal.azimuth, horizontal.altitude + targetSize);
+            context.moveTo(point.x, point.y - targetSize);
+            context.lineTo(point.x, point.y + targetSize);
             context.strokeStyle = "green";
             context.stroke();
         },
