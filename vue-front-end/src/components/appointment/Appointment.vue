@@ -829,13 +829,19 @@ export default {
             this.addEarthFeatures(document.getElementById("canvas0"), data0);
             this.addPlanets(document.getElementById("canvas0"), data0);
             this.addStars(document.getElementById("canvas0"), data0)
-            this.addTarget(document.getElementById("canvas0"), data0);
+            let horizonCheck = this.addTarget(document.getElementById("canvas0"), data0);
+            if (horizonCheck > 0) {
+                this.startVisible = true;
+            }
             this.addMoon(document.getElementById("canvas0"), data0);
             this.addSun(document.getElementById("canvas0"), data0);
             this.addEarthFeatures(document.getElementById("canvas1"), data1);
             this.addPlanets(document.getElementById("canvas1"), data1);
             this.addStars(document.getElementById("canvas1"), data1)
-            this.addTarget(document.getElementById("canvas1"), data1);
+            horizonCheck = this.addTarget(document.getElementById("canvas1"), data1);
+            if (horizonCheck > 0) {
+                this.endVisible = true;
+            }
             this.addMoon(document.getElementById("canvas1"), data1);
             this.addSun(document.getElementById("canvas1"), data1);
 
@@ -1065,6 +1071,7 @@ export default {
             context.lineTo(point.x, point.y + targetSize);
             context.strokeStyle = "green";
             context.stroke();
+            return point.y;
         },
         addCoordinates() {
 
