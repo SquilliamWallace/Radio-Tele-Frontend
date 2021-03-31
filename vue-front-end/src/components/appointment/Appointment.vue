@@ -829,7 +829,7 @@ export default {
             // Draw the sky objects (you take the moon and you take the sun)
             //this.notVisible = false;
             this.addEarthFeatures(document.getElementById("canvas0"), data0);
-            this.addPlanets(document.getElementById("canvas0"), data0);
+            //this.addPlanets(document.getElementById("canvas0"), data0);
             this.addStars(document.getElementById("canvas0"), data0)
             let horizonCheck_0 = this.addTarget(document.getElementById("canvas0"), data0);
             if (horizonCheck_0 > 0 && horizonCheck_0 < 180) {
@@ -839,7 +839,7 @@ export default {
             this.addMoon(document.getElementById("canvas0"), data0);
             this.addSun(document.getElementById("canvas0"), data0);
             this.addEarthFeatures(document.getElementById("canvas1"), data1);
-            this.addPlanets(document.getElementById("canvas1"), data1);
+            //this.addPlanets(document.getElementById("canvas1"), data1);
             this.addStars(document.getElementById("canvas1"), data1)
             let horizonCheck_1 = this.addTarget(document.getElementById("canvas1"), data1);
             if (horizonCheck_1 > 0 && horizonCheck_1 < 180) {
