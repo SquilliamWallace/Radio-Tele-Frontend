@@ -28,7 +28,7 @@ export default {
         return axios.put(this.namespace + "/activate?token=" + token, {}, Headers.retrieveHeaders());
       },
       register: function (data) {
-        return axios.post(this.namespace, data, Headers.retrieveHeaders());
+        return axios.post(this.namespace, data, Headers.retrieveNonAuthHeaders());
       },
       get: function(userId) {
         return axios.get(this.namespace + "/" + userId, Headers.retrieveHeaders());
