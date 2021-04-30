@@ -661,60 +661,13 @@ export default {
                     latitude:  40.024409,
                     altitude: 395 // TODO: make longitude, latitude, and altitude dependant on the selected telescope.
                 };
-                // var call0 = ApiDriver.Astronomical.horizonCheck(data0);
-                // call0.then(response => {
-                //     startVisible = response.data.visible;
-                //     console.log(response.data);
-                //     if(response.data.visible == false)
-                //         this.notVisible = true;
-                //     console.log(this.notVisible);})
-                //     var call1 = ApiDriver.Astronomical.horizonCheck(data1);
-                //     call1.then(response => {
-                //         startVisible = response.data.visible;
-                //         console.log(response.data);
-                //         if(response.data.visible == false)
-                //             this.notVisible = true;
-                //         console.log(this.notVisible);
-                //         if(this.type == "Raster Scan") {
-                //             var call2 = ApiDriver.Astronomical.horizonCheck(data2);
-                //             call2.then(response => {
-                //                 startVisible = response.data.visible;
-                //                 console.log(response.data);
-                //                 if(response.data.visible == false)
-                //                     this.notVisible = true;
-                //                 var call3 = ApiDriver.Astronomical.horizonCheck(data3)
-                //                 call3.then(response => {
-                //                     endVisible = response.data.visible;
-                //                     console.log(response.data);
-                //                     if(response.data.visible == false)
-                //                         this.notVisible = true;
-                //                     if(this.notVisible == true) {
-                //                         this.handleNotVisible();
-                //                     } else {
-                //                         this.makeSubmission();
-                //                     }
-                //                 })
-                //                 .catch(error => {console.log(error);});
-                //             })
-                //             .catch(error => {console.log(error);})
-                //         } else {
-                //             if(this.notVisible == true) {
-                //                 this.handleNotVisible();
-                //             } else {
-                //                 this.makeSubmission();
-                //             }
-                //         }
-                // }).catch(error => {console.log(error);})
-                // .catch(error => {console.log(error);})
-            } else {
-                // this.notVisible = this.form.elevation < 0.0
-                // if(this.notVisible == true) {
-                //     this.handleNotVisible();
-                // } else {
-                //     this.makeSubmission();
-                // }
             }
             console.log("Hit 3");
+            if(this.notVisible == true) {
+                this.handleNotVisible();
+            } else {
+                this.makeSubmission();
+            }
         },
         makeSubmission() {
             // set up form to send to back end with data from form obj
