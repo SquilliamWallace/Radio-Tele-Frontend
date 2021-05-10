@@ -678,8 +678,8 @@ export default {
             }
             let form = {
                 userId: this.$store.state.currentUserId,
-                startTime: new Date(this.start).toUTCString(),
-                endTime: new Date(this.end).toUTCString(),
+                startTime: new Date(this.start).toISOString(),
+                endTime: new Date(this.end).toISOString(),
                 telescopeId: this.telescopes.indexOf(this.telescopeName) + 1,
                 isPublic: !this.form.isPrivate.value,
                 hours: this.form.rightAscension.hours,
