@@ -85,7 +85,7 @@ export default {
           type: 'error',
           background: '#302f2f'
         }).then(response => {
-            router.push('/')
+            router.push('/login')
         });
       }
   },

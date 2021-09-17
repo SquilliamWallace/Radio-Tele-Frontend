@@ -90,7 +90,7 @@
                         color="blue darken-2"
                         label="Account Type"
                         required
-                        hint="Any user account type other than 'Guest' will require the approval of an administrator"
+                        hint=""
                         persistent-hint
                         ></v-select>
                     </v-flex>
