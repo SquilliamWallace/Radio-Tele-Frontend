@@ -329,10 +329,15 @@ export default {
                 vue.start is a moment Object of the first date viewable in the view
                 vue.end is a moment Object of the last date viewable in the view
             */
+            //updated how time is being formatted, split on "T"
+            var startTime = new Date(vue.start).toISOString();
+            var endTime = new Date(vue.end).toISOString();
+            let startTimeIndexOfT = startTime.indexOf("T");
+            let endTimeIndexOfT = endTime.indexOf("T");
             let data = {
                 telescopeId: id,
-                startTime: new Date(vue.start).toUTCString(),
-                endTime: new Date(vue.end).toUTCString()
+                startTime: startTime.substring(0, startTimeIndexOfT),
+                endTime: endTime.substring(0, endTimeIndexOfT)
             }
             // Set the $store variable loading to true to display loading screen, as we call the backend and wait for response
             this.$store.commit("loading", true)
