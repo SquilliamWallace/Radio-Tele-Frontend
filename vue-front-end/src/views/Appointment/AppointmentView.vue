@@ -500,31 +500,51 @@ export default {
             this.appointment.start.value = this.data.startTime.value
             this.appointment.end.value = this.data.endTime.value
             // I apologize for this, it's gross but i had no other choice, the v-time and date pickers are very particular about the values they can model to
+            
+            //split the strings containing date, time, and AM/PM flag into array
             this.startArray = this.appointment.start.value.split(" ")
             this.endArray = this.appointment.end.value.split(" ")
+
+            //Split the start date into array
             this.startDateArray = this.startArray[0].split("-")
+            
+            //Reformat date value
             this.appointment.startDate.value = this.startDateArray[2] + "-" + this.startDateArray[0] + "-" + this.startDateArray[1]
             this.startTimeArray = this.startArray[1].split(":")
-            if(this.startArray[2] == "PM" && this.startTimeArray[0] !== "12" && !this.startTimeArray[1] !== "00"){
+
+            //Fix hour based on AM/PM for start time
+            if(this.startArray[2] == "PM" && this.startTimeArray[0] !== "12"){
                 this.startPmHour = parseInt(this.startTimeArray[0], 10) +12;
                 this.startTimeArray[0] = this.startPmHour.toString();
             }
-            else if(this.startArray[2] == "AM" && this.startTimeArray[0] == "12" && this.startTimeArray[1] == "00"){
+            else if(this.startArray[2] == "AM" && this.startTimeArray[0] == "12"){
                 this.startPmHour = parseInt(this.startTimeArray[0], 10) - 12;
                 this.startTimeArray[0] = this.startPmHour.toString() + "0";
             }
+
+            //Format start time
             this.appointment.startTime.value= this.startTimeArray[0] + ":" + this.startTimeArray[1]
+
+            //Split end date into array
             this.endDateArray = this.startArray[0].split("-")
+
+            //Format end date value
             this.appointment.endDate.value = this.endDateArray[2] + "-" + this.endDateArray[0] + "-" + this.endDateArray[1]
+
+            //Split end time into array
             this.endTimeArray = this.endArray[1].split(":")
-            if(this.endArray[2] == "PM" && this.endTimeArray[0] !== "12" && !this.endTimeArray[1] !== "00"){
+
+            //Fix hour based on AM/pm for end time
+            if(this.endArray[2] == "PM" && this.endTimeArray[0] !== "12"){
                 this.endPmHour = parseInt(this.endTimeArray[0], 10) +12;
                 this.endTimeArray[0] = this.endPmHour;
             }
-            else if(this.endArray[2] == "AM" && this.endTimeArray[0] == "12" && this.endTimeArray[1] == "00"){
+            else if(this.endArray[2] == "AM" && this.endTimeArray[0] == "12"){
                 this.endPmHour = parseInt(this.endTimeArray[0], 10) - 12;
                 this.endTimeArray[0] = this.endPmHour.toString() + "0";
             }
+
+            //Set remaining values
             this.appointment.endTime.value= this.endTimeArray[0] + ":" + this.endTimeArray[1]
             this.appointment.telescopeId.value = this.data.telescopeId.value
             this.appointment.rightAscension.hours = this.data.rightAscension.hours
