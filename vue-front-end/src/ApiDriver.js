@@ -1,7 +1,9 @@
 const axios = require('axios');
 import Headers from './utils/Headers';
+import SecretKey from './utils/SecretKey';
+let baseUrl = "http://localhost:8080/api/";
+//let baseUrl = "http://api.ycpradiotelescope.com:8080/api/";
 
-let baseUrl = "http://api.ycpradiotelescope.com:8080/api/";
 export default {
     //API endpoints go here
     CelestialBodies: {
@@ -26,7 +28,7 @@ export default {
         return axios.put(this.namespace + "/activate?token=" + token, {}, Headers.retrieveHeaders());
       },
       register: function (data) {
-        return axios.post(this.namespace, data, Headers.retrieveHeaders());
+        return axios.post(this.namespace, data, Headers.retrieveNonAuthHeaders());
       },
       get: function(userId) {
         return axios.get(this.namespace + "/" + userId, Headers.retrieveHeaders());
@@ -42,6 +44,9 @@ export default {
       },
       changePassword: function(userId) {
         return axios.put(this.namespace + "/" + userId + "/changePassword", data, Headers.retrieveHeaders())
+      },
+      approveOrDenyProfilePicture: function(userId, isApprove) {
+        return axios.post(baseUrl + "users/" + userId + "/profile-picture?isApprove=" + isApprove, {}, Headers.retrieveHeaders());
       },
       ban: function(userId, message) {
         return axios.put(this.namespace + "/" + userId + "/ban?message=" + message, {}, Headers.retrieveHeaders());
@@ -85,8 +90,8 @@ export default {
       create: function (data, type) {
         return axios.post(this.namespace + "/schedule/" + type, data, Headers.retrieveHeaders())
       },
-      request: function (data) {
-        return axios.post(this.namespace + "/request", data, Headers.retrieveHeaders())
+      request: function (data, type) {
+        return axios.post(this.namespace + "/request/" + type, data, Headers.retrieveHeaders())
       },
       unapprovedRequest: function (pageNumber, pageSize) {
         return axios.get(this.namespace + "/listRequested?page=" + pageNumber + "&size=" + pageSize, Headers.retrieveHeaders())
@@ -133,6 +138,12 @@ export default {
       },
       sharedUsers: function(appointmentId, page, size) {
         return axios.get(this.namespace + "/" + appointmentId + "/viewers?page=" + page + "&size=" + size, Headers.retrieveHeaders())
+      },
+      viewSpectraCyberConfig: function(spectracyberConfigId) {
+        return axios.get(this.namespace + "/" + spectracyberConfigId + "/spectracyberConfig", Headers.retrieveHeaders())
+      },
+      updateSpectraCyberConfig: function(data) {
+        return axios.put(this.namespace + "/spectracyberConfig", data, Headers.retrieveHeaders())
       }
     },
     Log: {
@@ -151,9 +162,84 @@ export default {
         return axios.get(baseUrl + "authAdmin", Headers.retrieveHeaders());
       }
     },
+    VideoFiles: {
+      namespace: baseUrl + "video-files",
+      viewVideoFiles: function(lowerDate, upperDate) {
+        return axios.get(this.namespace + "/" + "listBetweenCreatedDates?lowerDate=" + lowerDate + "&upperDate=" + upperDate, Headers.retrieveHeaders())
+      }
+    },
 
-    login: function(data) {
-      return axios.post("http://api.ycpradiotelescope.com:8080/login?email=" + data.username.value + "&password=" + data.password.value, JSON.stringify(data))
+    SensorStatus: {
+      namespace: baseUrl + "sensor-status",
+      getMostRecent: function() {
+        return axios.get(this.namespace + "/" + "getMostRecent", Headers.retrieveHeaders())
+      }
+    },
+    SensorOverrides: {
+      namespace: baseUrl + "sensor-overrides",
+      retrieveOverrides: function() {
+        return axios.get(this.namespace + "/" + "retrieve", Headers.retrieveHeaders())
+      },
+      updateOverride: function(sensorName, overridden) {
+        return axios.post(this.namespace + "/" + sensorName + "/" + overridden, {}, Headers.retrieveHeaders())
+      }
+    },
+    Thresholds: {
+      namespace: baseUrl + "thresholds",
+      retrieveThresholds: function() {
+        return axios.get(this.namespace + "/" + "retrieve", Headers.retrieveHeaders())
+      },
+      retrieve: function (sensorName) {
+        return axios.get(this.namespace + "/" + sensorName + "/retrieve", Headers.retrieveHeaders())
+      },
+      updateThresholdByName: function(sensorName, maximum) {
+        return axios.post(this.namespace + "/" + sensorName + "/" + maximum, {}, Headers.retrieveHeaders())
+      }
+    },
+    WeatherData: {
+      namespace: baseUrl + "weather-data",
+      listWeatherDataBetweenDates: function(lowerDate, upperDate) {
+        return axios.get(this.namespace + "/" + "listBetweenCreatedDates?lowerDate=" + lowerDate + "&upperDate=" + upperDate, Headers.retrieveHeaders())
+      }
+    },
+    Astronomical: {
+      namespace: "http://rtastronomicalapi-dev.us-east-2.elasticbeanstalk.com/",
+      horizonCheck: function(data){
+        //return axios.get("http://rtastronomicalapi-dev.us-east-2.elasticbeanstalk.com/HorizonCheck/" + // hosted
+        return axios.get("https://localhost:5001/HorizonCheck/" + // testing locally
+        "?key="+SecretKey.getKey()+
+        "&year="+data.year+
+        "&month="+data.month+
+        "&day="+data.day+
+        "&hour="+data.hour+
+        "&minute="+data.minute+
+        "&targetRA="+data.targetRA+
+        "&targetDec="+data.targetDec+
+        "&longitude="+data.longitude+
+        "&latitude="+data.latitude+
+        "&altitude="+data.altitude, 
+      data, Headers.retrieveHeaders());
+      }, 
+      skyview: function(data) {
+       // return axios.get("http://rtastronomicalapi-dev.us-east-2.elasticbeanstalk.com/SkyView/" + // hosted
+        return axios.get("https://localhost:5001/SkyView/" + // testing locally
+        "?key="+SecretKey.getKey()+
+        "&year="+data.year+
+        "&month="+data.month+
+        "&day="+data.day+
+        "&hour="+data.hour+
+        "&minute="+data.minute+
+        "&targetRA="+data.targetRA+
+        "&targetDec="+data.targetDec+
+        "&longitude="+data.longitude+
+        "&latitude="+data.latitude+
+        "&altitude="+data.altitude, 
+        data, Headers.retrieveHeaders());
+      }
+    },
+    login: function(username, password, data) {
+      //return axios.post("http://api.ycpradiotelescope.com:8080/login?email=" + username + "&password=" + password, JSON.stringify(data))
+      return axios.post("http://localhost:8080/login?email=" + username + "&password=" + password, JSON.stringify(data))
     },
     logout: function () {
       return axios.post(baseUrl + "logout", {}, Headers.retrieveHeaders())
@@ -169,5 +255,16 @@ export default {
     },
     feedback(data) {
       return axios.post(baseUrl + "feedback", data, Headers.retrieveHeaders());
+    },
+    middlemanConnection(data) {
+      //return axios.get("http://rtastronomicalapi-dev.us-east-2.elasticbeanstalk.com/MiddlemanConnection" + "?key="+SecretKey.getKey() + "&command=" + data.command);
+      //return axios.get("http://174.54.227.14:5000" + "?key="+SecretKey.getKey() + "&command=" + data.command) // testing locally
+      const https = require('https');
+      const instance = axios.create({
+        httpsAgent: new https.Agent({  
+          rejectUnauthorized: false
+        })
+      });
+      return instance.get("https://174.54.227.14:5000/" + "?command=" + data.command, Headers.retreiveMiddlemanHeaders());
     }
 }

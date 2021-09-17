@@ -109,7 +109,7 @@
                         required
                         ></v-select>
                     </v-flex>
-                    <v-flex xs12 sm3 v-if="type === 'Point'">
+                    <v-flex xs12 sm4 v-if="type === 'Point'">
                         <v-text-field
                         v-model="form.rightAscension.hours"
                         :rules="[rules.rightAscHours]"
@@ -127,7 +127,7 @@
                      <!--
                         Same as Right Ascension Hours, except checks for minutes error handling
                     -->
-                    <v-flex xs12 sm3 v-if="type === 'Point'">
+                    <v-flex xs12 sm4 v-if="type === 'Point'">
                         <v-text-field
                         v-model="form.rightAscension.minutes"
                         :rules="[rules.rightAscMinutes]"
@@ -145,6 +145,7 @@
                      <!--
                         Same as Right Ascension Hours, except checks for seconds error handling
                     -->
+                    <!--
                     <v-flex xs12 sm3 v-if="type === 'Point'">
                         <v-text-field
                         v-model="form.rightAscension.seconds"
@@ -158,13 +159,14 @@
                         type="number"
                         required
                         ></v-text-field>
-                    </v-flex>
+                    </v-flex> 
+                    -->
                      <!-- Pretty much same as Right Ascension 
                      
                         onkeypress='return event.charCode == 45 || (event.charCode >= 48 && event.charCode <= 57)'
                             Only allow numerical inputs and - (minus) as input can be negative
                      -->
-                    <v-flex xs12 sm3 v-if="type === 'Point'">
+                    <v-flex xs12 sm4 v-if="type === 'Point'">
                         <v-text-field
                         v-model="form.declination.value"
                         :rules="[rules.numRequired]"
@@ -245,7 +247,7 @@
                         Conditionally display two sets of Coordinate fields
                         (Hours, Minutes, Seconds, Right Ascension, Declination)
                     -->
-                        <v-flex xs12 sm2 row v-if="type === 'Raster Scan'">
+                        <v-flex xs12 sm4 row v-if="type === 'Raster Scan'">
                         <v-text-field
                         v-model="form.firstCoordinate.hours"
                         :rules="[rules.rightAscHours]"
@@ -261,7 +263,7 @@
                         ></v-text-field>
                     </v-flex>
 
-                    <v-flex xs12 sm2 v-if="type === 'Raster Scan'">
+                    <v-flex xs12 sm4 v-if="type === 'Raster Scan'">
                         <v-text-field
                         v-model="form.firstCoordinate.minutes"
                         :rules="[rules.rightAscMinutes]"
@@ -277,6 +279,7 @@
                         ></v-text-field>
                     </v-flex>
                      
+                    <!--
                     <v-flex xs12 sm2 v-if="type === 'Raster Scan'">
                         <v-text-field
                         v-model="form.firstCoordinate.seconds"
@@ -291,10 +294,11 @@
                         required
                         ></v-text-field>
                     </v-flex>
+                    -->
                     
                     
 
-                    <v-flex xs12 sm6 v-if="type === 'Raster Scan'">
+                    <v-flex xs12 sm4 v-if="type === 'Raster Scan'">
                         <v-text-field
                         v-model="form.firstCoordinate.declination"
                         :rules="[rules.numRequired]"
@@ -311,7 +315,7 @@
 
                     <v-spacer></v-spacer>
 
-                    <v-flex xs12 sm2 v-if="type === 'Raster Scan'">
+                    <v-flex xs12 sm4 v-if="type === 'Raster Scan'">
                         <v-text-field
                         v-model="form.secondCoordinate.hours"
                         :rules="[rules.rightAscHours]"
@@ -327,7 +331,7 @@
                         ></v-text-field>
                     </v-flex>
 
-                    <v-flex xs12 sm2 v-if="type === 'Raster Scan'">
+                    <v-flex xs12 sm4 v-if="type === 'Raster Scan'">
                         <v-text-field
                         v-model="form.secondCoordinate.minutes"
                         :rules="[rules.rightAscMinutes]"
@@ -343,6 +347,7 @@
                         ></v-text-field>
                     </v-flex>
                      
+                    <!--
                     <v-flex xs12 sm2 v-if="type === 'Raster Scan'">
                         <v-text-field
                         v-model="form.secondCoordinate.seconds"
@@ -357,9 +362,10 @@
                         required
                         ></v-text-field>
                     </v-flex>
+                    -->
                     
 
-                    <v-flex xs12 sm6 v-if="type === 'Raster Scan'">
+                    <v-flex xs12 sm4 v-if="type === 'Raster Scan'">
                         <v-text-field
                         v-model="form.secondCoordinate.declination"
                         :rules="[rules.numRequired]"
@@ -384,8 +390,12 @@
                         v-model="form.isPrivate.value"
                         color="green"
                         label="Private"
-                        >
-                        </v-checkbox>
+                        ></v-checkbox>
+                        <v-checkbox v-if="this.$store.state.isAdmin"
+                        v-model="form.isSecondary.value"
+                        color="green"
+                        label="Secondary"
+                        ></v-checkbox>
                     </v-flex>
                     <!--
                         Simple drop down select menu to choose which telescope you want to schedule your appointment for
@@ -397,26 +407,43 @@
                     <!-- Cancel resets form and closes Modal -->
                     <v-btn flat @click="resetForm">Cancel</v-btn>
                     <v-spacer></v-spacer>
+                    
+                    <!-- Allow users to call the visualization API --> 
+                    <v-btn flat 
+                    :disabled="!formIsValid"
+                    @click="visualize">Visualize</v-btn>
+                    <v-spacer></v-spacer>
+
                     <!-- Submit sends the form to backend to be verified -->
                     <v-btn
-                    :disabled="!formIsValid"
+                    :disabled="checkNotVisible"
                     flat
                     color="primary"
                     type="submit"
                     >Schedule</v-btn>
                 </v-card-actions>
+                <input type="checkbox" v-model="notVisible" hidden=true>
                 </v-form>
+                <img id="image0" class="image-style" v-bind:src="imgSrc0" v-if="showImage==true">
+                <img id="image1" class="image-style" v-bind:src="imgSrc1" v-if="showImage==true">
+                <canvas id="canvas0" width="720" height="180"></canvas>
+                <canvas id="canvas1" width="720" height="180"></canvas>
+
             </v-card>
     </v-dialog>
 </template>
 
 <script>
-import Event from '../../main.js'
-import ApiDriver from '../../ApiDriver'
-import HttpResponse from '../../utils/HttpResponse'
-import CurrentUserValidation from '../../utils/CurrentUserValidation'
+import Event from '../../main.js';
+import ApiDriver from '../../ApiDriver';
+import HttpResponse from '../../utils/HttpResponse';
+import CurrentUserValidation from '../../utils/CurrentUserValidation';
 import router from '../../router';
 import CustomErrorHandler from '../../utils/CustomErrorHandler.js';
+import aa from 'astronomical-algorithms';
+import * as timesUtils from 'astronomical-algorithms/dist/times/utils'
+import AAHelpers from '../../utils/AAHelpers.js';
+import { brightStars } from '../../utils/BrightStars.js';
 export default {
     data() {
         name: 'Appointment'
@@ -436,10 +463,13 @@ export default {
                 isPrivate: {
                     value: false
                 },
+                isSecondary: {
+                    value: false
+                },
                 rightAscension: {
                     hours: null,
                     minutes: null,
-                    seconds: null,
+                    // seconds: null,
                     hasError: false
                 },
                 declination: {
@@ -455,23 +485,27 @@ export default {
                 firstCoordinate: {
                     hours: null,
                     minutes: null,
-                    seconds: null,
+                    // seconds: null,
                     rightAscension: null,
                     declination: null
                 },
                 secondCoordinate: {
                     hours: null,
                     minutes: null,
-                    seconds: null,
+                    // seconds: null,
                     rightAscension: null,
                     declination: null
                 }
             },
+            priority: '',
             startDate: '',
             startTime: '',
             endDate: '',
             endTime: '',
-
+            notVisible: true,
+            showImage: false,
+            imgSrc0: '',
+            imgSrc1: '',
             // Variables to keep track of chosen Appointment type
             type: 'Point',
             selectedType: '',
@@ -513,20 +547,22 @@ export default {
         resetForm() {
             this.updatedTime = false;
             this.form.isPrivate.value = false;
+            this.form.isSecondary.value = false;
+            this.priority = '';
             this.form.rightAscension.hours = null;
             this.form.rightAscension.minutes = null;
-            this.form.rightAscension.seconds = null;
+            // this.form.rightAscension.seconds = null;
             this.form.declination.value = null;
             this.form.azimuth.value = null;
             this.form.elevation.value = null;
             this.form.firstCoordinate.hours = null;
             this.form.firstCoordinate.minutes = null;
-            this.form.firstCoordinate.seconds = null;
+            // this.form.firstCoordinate.seconds = null;
             this.form.firstCoordinate.rightAscension = null;
             this.form.firstCoordinate.declination = null;
             this.form.secondCoordinate.hours = null;
             this.form.secondCoordinate.minutes = null;
-            this.form.secondCoordinate.seconds = null;
+            // this.form.secondCoordinate.seconds = null;
             this.form.secondCoordinate.rightAscension = null;
             this.form.secondCoordinate.declination = null;
             this.startTime='';
@@ -535,9 +571,14 @@ export default {
             this.endTime='';
             this.selectedType = null;
             this.selectedBody = null;
+            this.notVisible = true;
+            this.imgSrc0 = '';
+            this.imgSrc1 = '';
+            this.showImage = false;
             this.clearErrors();
             this.$emit('close-modal');
         },
+
         // Method to submit to back end
         submit() {
             // Clears the errors first to make sure that if backend sends back any errors we only display the current errors
@@ -551,22 +592,106 @@ export default {
             // Handles making the selected Appointment Type string compatible with the back-end
             this.handleType();
 
+            if(this.type != "Drift Scan") {
+                console.log("Hit 1");
+                var tempTargetRA = 0
+                var tempTargetDec = 0
+                if(this.type == "Point") {
+                    tempTargetRA = (this.form.rightAscension.hours * 15.0 + this.form.rightAscension.minutes * 0.25);
+                    tempTargetDec = this.form.declination.value;
+                }
+                else if(this.type == "Celestial Body") {
+                    tempTargetRA = (this.bodies[0].hours * 15.0 + this.bodies[0].minutes * 0.25);
+                    tempTargetDec = this.bodies[0].declination;
+                    console.log(this.bodies);
+                }
+                else if(this.type == "Raster Scan") {
+                    tempTargetRA = (this.form.firstCoordinate.hours * 15.0 + this.form.firstCoordinate.minutes * 0.25);
+                    tempTargetDec = this.form.firstCoordinate.declination;
+                }
+                console.log("Hit 2");
+
+                let data0 = {
+                    year:   this.startDate.substring(0, 4), 
+                    month:  this.startDate.substring(5, 7), 
+                    day:    this.startDate.substring(8, 10), 
+                    hour:   this.startTime.substring(0, 2),
+                    minute: this.startTime.substring(3, 5),
+                    targetRA:   tempTargetRA, 
+                    targetDec:  tempTargetDec,
+                    longitude: -76.704564,
+                    latitude:  40.024409,
+                    altitude: 395 // TODO: make longitude, latitude, and altitude dependant on the selected telescope.
+                };
+                let data1 = {
+                    year:   this.endDate.substring(0, 4), 
+                    month:  this.endDate.substring(5, 7), 
+                    day:    this.endDate.substring(8, 10), 
+                    hour:   this.endTime.substring(0, 2),
+                    minute: this.endTime.substring(3, 5),
+                    targetRA:   tempTargetRA, 
+                    targetDec:  tempTargetDec,
+                    longitude: -76.704564,
+                    latitude:  40.024409,
+                    altitude: 395 // TODO: make longitude, latitude, and altitude dependant on the selected telescope.
+                };
+                var tempTargetRA2 = (this.form.secondCoordinate.hours * 15.0 + this.form.secondCoordinate.minutes * 0.25);
+                var tempTargetDec2 = this.form.secondCoordinate.declination;
+                let data2 = {
+                    year:   this.startDate.substring(0, 4), 
+                    month:  this.startDate.substring(5, 7), 
+                    day:    this.startDate.substring(8, 10), 
+                    hour:   this.startTime.substring(0, 2),
+                    minute: this.startTime.substring(3, 5),
+                    targetRA:   tempTargetRA2, 
+                    targetDec:  tempTargetDec2,
+                    longitude: -76.704564,
+                    latitude:  40.024409,
+                    altitude: 395 // TODO: make longitude, latitude, and altitude dependant on the selected telescope.
+                };
+                let data3 = {
+                    year:   this.endDate.substring(0, 4), 
+                    month:  this.endDate.substring(5, 7), 
+                    day:    this.endDate.substring(8, 10), 
+                    hour:   this.endTime.substring(0, 2),
+                    minute: this.endTime.substring(3, 5),
+                    targetRA:   tempTargetRA2, 
+                    targetDec:  tempTargetDec2,
+                    longitude: -76.704564,
+                    latitude:  40.024409,
+                    altitude: 395 // TODO: make longitude, latitude, and altitude dependant on the selected telescope.
+                };
+            }
+            console.log("Hit 3");
+            if(this.notVisible == true) {
+                this.handleNotVisible();
+            } else {
+                this.makeSubmission();
+            }
+        },
+        makeSubmission() {
             // set up form to send to back end with data from form obj
+            if(this.form.isSecondary.value) {
+                this.priority = 'SECONDARY';
+            } else {
+                this.priority = 'PRIMARY';
+            }
             let form = {
                 userId: this.$store.state.currentUserId,
-                startTime: new Date(this.start).toUTCString(),
-                endTime: new Date(this.end).toUTCString(),
+                startTime: new Date(this.start).toISOString(),
+                endTime: new Date(this.end).toISOString(),
                 telescopeId: this.telescopes.indexOf(this.telescopeName) + 1,
                 isPublic: !this.form.isPrivate.value,
                 hours: this.form.rightAscension.hours,
                 minutes: this.form.rightAscension.minutes,
-                seconds: this.form.rightAscension.seconds,
+                // seconds: this.form.rightAscension.seconds,
                 declination: this.form.declination.value,
                 celestialBodyId: this.selectedBody,
                 azimuth: this.form.azimuth.value,
                 elevation: this.form.elevation.value,
                 coordinates: this.coordinates,
-                priority: 'PRIMARY'
+                priority: this.priority,
+                type: this.type
             };
                         
             // Call appropriate API CALL and send form in json format
@@ -583,16 +708,334 @@ export default {
                     this.$emit('close-modal');
                     }, (status, errors) => {
                         if (parseInt(status) === 403) {
-                            HttpResponse.accessDenied(this)
+                            HttpResponse.accessDenied(this);
                         } else {
                             this.handleErrors(errors, form);
                         }
                     });
             });
-            this.startTime=''
-            this.startDate=''
-            this.endDate=''
-            this.endTime=''
+            this.startTime='';
+            this.startDate='';
+            this.endDate='';
+            this.endTime='';
+        },
+        handleNotVisible() {
+            HttpResponse.generalError(this, "The appointment is not possible due to the target's position, which will be below the horizon during a portion of this appointment.", false);
+            this.resetForm();
+        },
+        visualize() {
+            let startVisible = false
+            let endVisible = false
+            var tempTargetRA = 0
+            var tempTargetDec = 0
+            if(this.type == "Point") {
+                tempTargetRA = (this.form.rightAscension.hours * 15.0 + this.form.rightAscension.minutes * 0.25);
+                tempTargetDec = this.form.declination.value;
+            }
+            else if(this.type == "Celestial Body") {
+                tempTargetRA = (this.bodies[0].hours * 15.0 + this.bodies[0].minutes * 0.25);
+                tempTargetDec = this.bodies[0].declination;
+                console.log(this.bodies);
+            }
+            else if(this.type == "Raster Scan") {
+                tempTargetRA = (this.form.firstCoordinate.hours * 15.0 + this.form.firstCoordinate.minutes * 0.25);
+                tempTargetDec = this.form.firstCoordinate.declination;
+            }
+
+            let data0 = {
+                year:   this.startDate.substring(0, 4), 
+                month:  this.startDate.substring(5, 7), 
+                day:    this.startDate.substring(8, 10), 
+                hour:   this.startTime.substring(0, 2),
+                minute: this.startTime.substring(3, 5),
+                targetRA:   tempTargetRA, 
+                targetDec:  tempTargetDec,
+                longitude: -76.704564,
+                latitude:  40.024409,
+                altitude: 395 // TODO: make longitude, latitude, and altitude dependant on the selected telescope.
+            };
+            let data1 = {
+                year:   this.endDate.substring(0, 4), 
+                month:  this.endDate.substring(5, 7), 
+                day:    this.endDate.substring(8, 10), 
+                hour:   this.endTime.substring(0, 2),
+                minute: this.endTime.substring(3, 5),
+                targetRA:   tempTargetRA, 
+                targetDec:  tempTargetDec,
+                longitude: -76.704564,
+                latitude:  40.024409,
+                altitude: 395 // TODO: make longitude, latitude, and altitude dependant on the selected telescope.
+            };
+            // test AA library is working as expected.
+            //this.verifyAALib();
+
+            // set the canvas background color to black
+            let canvas = document.getElementById("canvas0");
+            let context = canvas.getContext("2d");
+            context.fillStyle = "black";
+            context.fillRect(0, 0, canvas.width, canvas.height);
+            canvas = document.getElementById("canvas1");
+            context = canvas.getContext("2d");
+            context.fillStyle = "black";
+            context.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Draw the sky objects (you take the moon and you take the sun)
+            //this.notVisible = false;
+            this.addEarthFeatures(document.getElementById("canvas0"), data0);
+            //this.addPlanets(document.getElementById("canvas0"), data0);
+            this.addStars(document.getElementById("canvas0"), data0)
+            let horizonCheck_0 = this.addTarget(document.getElementById("canvas0"), data0);
+            if (horizonCheck_0 > 0 && horizonCheck_0 < 180) {
+                startVisible = true;
+                console.log(horizonCheck_0);
+            }
+            this.addMoon(document.getElementById("canvas0"), data0);
+            this.addSun(document.getElementById("canvas0"), data0);
+            this.addEarthFeatures(document.getElementById("canvas1"), data1);
+            //this.addPlanets(document.getElementById("canvas1"), data1);
+            this.addStars(document.getElementById("canvas1"), data1)
+            let horizonCheck_1 = this.addTarget(document.getElementById("canvas1"), data1);
+            if (horizonCheck_1 > 0 && horizonCheck_1 < 180) {
+                endVisible = true;
+                console.log(horizonCheck_1);
+            }
+            this.addMoon(document.getElementById("canvas1"), data1);
+            this.addSun(document.getElementById("canvas1"), data1);
+            if(startVisible == true && endVisible == true){
+                this.notVisible = false;
+            }else{
+                this.notVisible = true;
+            }
+            // old implementation
+            /*var call = ApiDriver.Astronomical.skyview(data0);
+            call.then(response => {
+                console.log(response);
+                this.imgSrc0 = 'data:image/bmp;base64,' + response.data.bytes;
+                var call = ApiDriver.Astronomical.skyview(data1);
+                call.then(response => {
+                    this.imgSrc1 = 'data:image/bmp;base64,' + response.data.bytes;
+                }).catch(error => {console.log(error);}); 
+                this.showImage = true;
+            }).catch(error => {console.log(error);}); */
+        },
+        drawSkyObject(canvas, data, equatorial, julianDay, radiusVector, size, color, letter = null) {
+            let topocentric = AAHelpers.transformEquatorialToTopocentric(equatorial.rightAscension, equatorial.declination, radiusVector, data.longitude, data.latitude, data.altitude, julianDay);
+            //console.log("Equatorial to Topocentric: ");
+            //console.log(topocentric);
+            //let AST = aa.julianday.localSiderealTime(julianDay, data.longitude);
+            let AST = AAHelpers.apparentGreenwichSiderealTime(julianDay);
+            let localHourAngle = (AST - (data.longitude / 15) - topocentric.x);
+            //console.log("LocalHourAngle:   " + localHourAngle);
+            //console.log("AST: " + AST);
+            let horizontal = AAHelpers.transformEquatorialToHorizontal(localHourAngle, topocentric.y, data.latitude);
+            //console.log("Equatorial to Horizontal:");
+            //console.log(horizontal);
+            horizontal.altitude += AAHelpers.refractionFromTrue(horizontal.altitude, 1013, 10);
+            //console.log("Horizontal after refraction: ");
+            //console.log(horizontal);
+
+            if (horizontal.altitude > 0) {
+                if (canvas) {
+                    let context = canvas.getContext("2d");
+                    context.beginPath();
+                    context.arc(((horizontal.azimuth + 180)%360) * 2, (90 - horizontal.altitude) * 2, size, 0, 2 * Math.PI);
+                    context.fillStyle = color;
+                    context.fill();
+                    if (letter) {
+                        context.font = "12px Arial";
+                        context.fillText(letter, ((horizontal.azimuth + 180)%360) * 2, (90 - horizontal.altitude) * 2); 
+                    }
+                } else {
+                    console.log("Error drawing to canvas.");
+                }
+            }
+            
+            return {
+                azimuth: horizontal.azimuth,
+                altitude: horizontal.altitude
+            }
+        },
+        drawLinesInSky(canvas, points, color) {
+            let context = canvas.getContext("2d");
+            context.beginPath();
+            for (let i = 0; i < points.length - 1; i++) {
+                context.moveTo(points[i].x, points[i].y);
+                context.lineTo(points[i + 1].x, points[i + 1].y);
+                context.strokeStyle = color;
+                context.stroke();
+            }
+        },
+        addSun(canvas, data) {
+            let dateSunCalc = new Date(data.year, data.month-1, data.day, (data.hour-4)%24, data.minute);
+            let JDSun = aa.julianday.getJulianDay(dateSunCalc) + timesUtils.getDeltaT(aa.julianday.getJulianDay(dateSunCalc)) / 86400.0;
+            //console.log("JDsun: " + JDSun);
+            let equatorial = aa.sun.apparentEquatorialCoordinates(JDSun);
+            //console.log("Apparent equatorial coordinates:");
+            //console.log(equatorial);
+            let sunRad = aa.earth.getRadiusVector(JDSun);
+            //console.log("Sun Radius Vector:" + sunRad);
+            return this.drawSkyObject(canvas, data, equatorial, JDSun, sunRad, 8, "yellow");
+        },
+        addMoon(canvas, data) {
+            let dateMoonCalc = new Date(data.year, data.month-1, data.day, (data.hour-4)%24, data.minute);
+            let JDMoon = aa.julianday.getJulianDay(dateMoonCalc) + timesUtils.getDeltaT(aa.julianday.getJulianDay(dateMoonCalc)) / 86400.0;
+            let equatorial = aa.earth.moon.getEquatorialCoordinates(JDMoon);
+            let moonRad = aa.earth.getRadiusVector(JDMoon);
+            this.drawSkyObject(canvas, data, equatorial, JDMoon, moonRad, 8, "gray");
+        },
+        addPlanets(canvas, data) {
+            let datePlanetCalc = new Date(data.year, data.month-1, data.day, (data.hour-4)%24, data.minute);
+            let JDPlanet = aa.julianday.getJulianDay(datePlanetCalc) + timesUtils.getDeltaT(aa.julianday.getJulianDay(datePlanetCalc)) / 86400.0;
+            let planetEcliptic, planetEquatorial, planetRad;
+            //let diameterRatio = aa.sun.apparentDiameter(JDPlanet);
+            // Mercury (My favorite metal to eat!)
+            
+            // Mars (To get more candy bars)
+            //console.log("JDPlanet:   " + JDPlanet);
+            planetEcliptic = aa.mars.getEclipticCoordinates(JDPlanet);
+            planetEquatorial = aa.coordinates.transformEclipticToEquatorial(planetEcliptic.longitude, planetEcliptic.latitude, JDPlanet);
+            //console.log(planetEcliptic);
+            //console.log(planetEquatorial);
+            planetRad = aa.mars.getRadiusVector(JDPlanet);
+            this.drawSkyObject(canvas, data, planetEquatorial, JDPlanet, planetRad, 0, "red", "M");
+
+            // Jupiter (To get more...)
+            planetEcliptic = aa.jupiter.getEclipticCoordinates(JDPlanet);
+            planetEquatorial = aa.coordinates.transformEclipticToEquatorial(planetEcliptic.longitude, planetEcliptic.latitude, JDPlanet);
+            planetRad = aa.jupiter.getRadiusVector(JDPlanet);
+            this.drawSkyObject(canvas, data, planetEquatorial, JDPlanet, planetRad, 0, "violet", "J");
+
+            // Saturn (Don't got a funny one for this one, sorry guys)
+            planetEcliptic = aa.saturn.getEclipticCoordinates(JDPlanet);
+            planetEquatorial = aa.coordinates.transformEclipticToEquatorial(planetEcliptic.longitude, planetEcliptic.latitude, JDPlanet);
+            planetRad = aa.saturn.getRadiusVector(JDPlanet);
+            this.drawSkyObject(canvas, data, planetEquatorial, JDPlanet, planetRad, 0, "violet", "S");
+
+            // Uranus
+            planetEcliptic = aa.uranus.getEclipticCoordinates(JDPlanet);
+            planetEquatorial = aa.coordinates.transformEclipticToEquatorial(planetEcliptic.longitude, planetEcliptic.latitude, JDPlanet);
+            planetRad = aa.uranus.getRadiusVector(JDPlanet);
+            this.drawSkyObject(canvas, data, planetEquatorial, JDPlanet, planetRad, 0, "violet", "U");
+
+            // Neptune
+            planetEcliptic = aa.neptune.getEclipticCoordinates(JDPlanet);
+            planetEquatorial = aa.coordinates.transformEclipticToEquatorial(planetEcliptic.longitude, planetEcliptic.latitude, JDPlanet);
+            planetRad = aa.neptune.getRadiusVector(JDPlanet);
+            this.drawSkyObject(canvas, data, planetEquatorial, JDPlanet, planetRad, 0, "violet", "N");
+        },
+        addStars(canvas, data) {
+            let minimumDec = data.latitude - 90;
+            let dateCalc = new Date(data.year, data.month-1, data.day, (data.hour-4)%24, data.minute);
+            let jd = aa.julianday.getJulianDay(dateCalc) + timesUtils.getDeltaT(aa.julianday.getJulianDay(dateCalc)) / 86400.0;
+            let AST = AAHelpers.apparentGreenwichSiderealTime(jd);
+
+            let summerTriangle = [];
+            let orion = [];
+            let ursaMajor = [];
+            let cassiopeia = [];
+
+            let starsOfSummerTriangle = [ "Vega", "Deneb", "Altair" ];
+            let starsOfOrion = [ "Rigel", "Betelgeuse", "Bellatrix", "Saiph", "Mintaka", "Alnitak" ];
+            let starsOfUrsaMajor = [ "Alpha Ursae Majoris", "Beta Ursae Majoris", "Gamma Ursae Majoris", "Delta Ursae Majoris", "Epsilon Ursae Majoris", "Zeta Ursae Majoris" , "Eta Ursae Majoris" ];
+            let starsOfCassipeia = [ "Caph", "Schedar", "Cih", "Ruchbah", "Segin" ];
+
+            for (let star of brightStars) {
+                if (star.Dec > minimumDec) {
+                    let ra = AAHelpers.RaInDegrees(star.RA);
+                    let dec = star.Dec;
+                    let localHourAngle = (AST - (data.longitude / 15) - ra/15);
+                    let horizontal = AAHelpers.transformEquatorialToHorizontal(localHourAngle, star.Dec, data.latitude);
+                    if (horizontal.altitude > 0) {
+                        let point = { x: (horizontal.azimuth + 180)%360 * 2, y: (90 - horizontal.altitude) * 2 };
+                        // draw the star
+                        if (canvas) {
+                            let context = canvas.getContext("2d");
+                            context.beginPath();
+                            context.arc(point.x, point.y, AAHelpers.circleSize(star.VisualMag), 0, 2 * Math.PI);
+                            context.fillStyle = star.Color;
+                            context.fill();
+                        } else {
+                            console.log("Error drawing to canvas.");
+                        }
+                        if (starsOfUrsaMajor.includes(star.Name))
+                        {
+                            ursaMajor.push(point);
+                        }
+                        if (starsOfCassipeia.includes(star.Name2))
+                        {
+                            cassiopeia.push(point);
+                        }
+
+                        if (starsOfSummerTriangle.includes(star.Name2))
+                        {
+                            summerTriangle.push(point);
+                        }
+                        if (starsOfOrion.includes(star.Name2))
+                        {
+                            orion.push(point);
+                        }
+                        if (summerTriangle.length == 3)
+                        {
+                            summerTriangle.push(summerTriangle[0]);
+                            this.drawLinesInSky(canvas, summerTriangle, "darkgrey");
+                        }
+                        if (orion.length == 6)
+                        {
+                            orion.push(orion[0]);
+                            this.drawLinesInSky(canvas, orion, "darkgrey");
+                        }
+                        if (ursaMajor.length == 7)
+                        {
+                            this.drawLinesInSky(canvas, ursaMajor, "darkgrey");
+                        }
+                        if (cassiopeia.length == 5)
+                        {
+                            this.drawLinesInSky(canvas, cassiopeia, "darkgrey");
+                        }
+                    }
+                }
+            }
+        },
+        addEarthFeatures(canvas) {
+            let context = canvas.getContext("2d");
+            context.beginPath();
+            context.fillStyle = "gray";
+            context.font = "12px Arial";
+            context.fillText("N", 5, 176);
+            context.fillText("E", 185, 176); 
+            context.fillText("S", 365, 176); 
+            context.fillText("W", 545, 176); 
+            context.fillText("N", 705, 176);
+        },
+        addTarget(canvas, data) {
+            let dateCalc = new Date(data.year, data.month-1, data.day, (data.hour), data.minute);
+            console.log("dateCalc: "+dateCalc);
+            let JD = aa.julianday.getJulianDay(dateCalc) + timesUtils.getDeltaT(aa.julianday.getJulianDay(dateCalc) / 86400.0);
+            let AST = AAHelpers.apparentGreenwichSiderealTime(JD);
+            console.log("AST: "+AST);
+            let localHourAngle = (AST + (data.longitude / 15) - (data.targetRA/15));
+            console.log("localHourAngle: "+localHourAngle);
+            let horizontal = AAHelpers.transformEquatorialToHorizontal(localHourAngle, data.targetDec, data.latitude);
+            let targetSize = 6;
+            let point = { x: ((horizontal.azimuth + 180)%360) * 2, y: (90 - horizontal.altitude) * 2 };
+            let context = canvas.getContext("2d");
+            context.beginPath();
+            context.arc(point.x, point.y, targetSize, 0, 2 * Math.PI);
+            context.strokeStyle = "green";
+            context.lineWidth = 1;
+            context.imageSmoothing = false;
+            context.stroke();
+            context.moveTo(point.x - targetSize, point.y);
+            context.lineTo(point.x + targetSize, point.y);
+            context.stroke();
+            context.moveTo(point.x, point.y - targetSize);
+            context.lineTo(point.x, point.y + targetSize);
+            context.strokeStyle = "green";
+            context.stroke();
+            return point.y;
+        },
+        addCoordinates() {
+
         },
         handleErrors(errors, formObj) {
             for (var field in errors) {
@@ -607,8 +1050,14 @@ export default {
                    formObj.startTime = this.start
                    formObj.endTime = this.end
                    formObj.telescope = this.telescopeName
+                   formObj.celestialBodyName = this.searchInput
                    //Sends the information of the form to the requestAppointment function on Scheduler Page.
                    this.$emit('request-appointment', formObj)
+                   // Extra second is needed to transfer coordinates for Raster Scans
+                   if (formObj.type == "Raster Scan"){
+                       sleep(1000); 
+                   }
+                   // console.log("Appointment.vue: " + JSON.stringify(formObj));
                    this.resetForm()
                 } else {
                     HttpResponse.generalError(this, message, false)
@@ -702,35 +1151,50 @@ export default {
                     this.endDate &&
                     this.form.rightAscension.hours,
                     this.form.rightAscension.minutes,
-                    this.form.rightAscension.seconds,
+                    // this.form.rightAscension.seconds,
                     this.form.declination.value
                 )
             }
             else if(this.type == 'Celestial Body') {
                 return (
+                    this.startTime &&
+                    this.endTime &&
+                    this.startDate &&
+                    this.endDate &&
                     this.selectedBody
                 )
             }
             else if(this.type == 'Drift Scan') {
                 return (
+                    this.startTime &&
+                    this.endTime &&
+                    this.startDate &&
+                    this.endDate &&
                     this.form.elevation.value,
                     this.form.azimuth.value
                 )
             }
             else if(this.type == 'Raster Scan') {
                 return (
+                    this.startTime &&
+                    this.endTime &&
+                    this.startDate &&
+                    this.endDate &&
                     this.form.firstCoordinate.hours,
                     this.form.firstCoordinate.minutes,
-                    this.form.firstCoordinate.seconds,
+                    // this.form.firstCoordinate.seconds,
                     this.form.firstCoordinate.rightAscension,
                     this.form.firstCoordinate.declination,
                     this.form.secondCoordinate.hours,
                     this.form.secondCoordinate.minutes,
-                    this.form.secondCoordinate.seconds,
+                    // this.form.secondCoordinate.seconds,
                     this.form.secondCoordinate.rightAscension,
                     this.form.secondCoordinate.declination
                 )
             }
+        },
+        checkNotVisible(){
+        return this.notVisible;
         }
     },
 

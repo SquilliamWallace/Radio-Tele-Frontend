@@ -11,5 +11,13 @@ export default {
                 'Authorization': store.getters.token
             }
         }
+    },
+    //allows for new account creating without needed to update token
+    retrieveNonAuthHeaders: function() {
+        return { 
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
     }
 }

@@ -234,7 +234,7 @@ export default {
             // Properly format the time and date before we pass it to the create-modal
             this.event.startTime = moment(Obj.start).format('HH:mm');
             this.event.startDate = moment(Obj.start).format('YYYY-MM-DD')
-            this.event.endTime = moment(Obj.end).format('HH:mm');
+            this.event.endTime = moment(Obj.end).subtract(1, 'minute').format('HH:mm'); // Subtract 1 minute to avoid overlapping
             this.event.endDate = moment(Obj.end).format('YYYY-MM-DD')
 
             // Set openCreateModal to true so that Appointment.vue component displays
@@ -264,6 +264,7 @@ export default {
                 id: id,
                 end: new Date(data.endTime),
                 public: data.isPublic,
+                secondary: data.isSecondary,
                 start: new Date(data.startTime),
                 telescopeId: data.telescopeId,
                 userId: data.userId,
@@ -328,10 +329,14 @@ export default {
                 vue.start is a moment Object of the first date viewable in the view
                 vue.end is a moment Object of the last date viewable in the view
             */
+            var startTime = new Date(vue.start).toISOString();
+            var endTime = new Date(vue.end).toISOString();
+            let startTimeIndexOfT = startTime.indexOf("T");
+            let endTimeIndexOfT = endTime.indexOf("T");
             let data = {
                 telescopeId: id,
-                startTime: new Date(vue.start).toUTCString(),
-                endTime: new Date(vue.end).toUTCString()
+                startTime: startTime.substring(0, startTimeIndexOfT),
+                endTime: endTime.substring(0, endTimeIndexOfT)
             }
             // Set the $store variable loading to true to display loading screen, as we call the backend and wait for response
             this.$store.commit("loading", true)
@@ -352,10 +357,19 @@ export default {
                             
                             // If you are the owner of the event display "Your Observation" as title and make background color Green
                             if (element.userId == this.$store.state.currentUserId) {
-                                title = "Your Observation";
+                                if(element.priority == "Secondary") {
+                                    title = "Your Secondary Observation";
+                                } else {
+                                    title = "Your Observation";
+                                }
                                 backgroundColor = "green";
                             }
-                            // If you are not the owner, and it is a public event: set background color to defaul and the title to the name of the owner
+                            // If the appointment is secondary, set it to purple! 
+                            else if (element.priority == "Secondary") {
+                                title = "Secondary Observation";
+                                backgroundColor = "purple";
+                            }
+                            // If you are not the owner, and it is a public event: set background color to default and the title to the name of the owner
                             else if (element.public) {
                                 backgroundColor = "";
                                 title = element.userFirstName + " " + element.userLastName;
@@ -371,6 +385,8 @@ export default {
                                     title = "Private Observation"
                                 }
                             }
+
+                            // console.log(element);
                             
                             // Set an eventData object with appropriate fields for calendar
                             var eventData = {
@@ -387,7 +403,12 @@ export default {
                             }
                             
                             // Push the event to this.events to be rendered.
-                            this.events.push(eventData);
+                            if(element.priority == "Secondary" && !this.$store.state.isAdmin) {
+
+                            } else {
+                                this.events.push(eventData);
+                            }
+                            
                         }
                         // Set the $store.loading to false to switch back to displaying content of page.
                         this.$store.commit("loading", false);
