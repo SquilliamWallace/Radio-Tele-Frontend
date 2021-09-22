@@ -248,6 +248,11 @@ export default {
                     work: "Back-end, AWS",
                     liked: "Working with the team and having a great deal of responsibility"
                 },
+                {   name: "Anthony Beddia",
+                    major: "Computer Science",
+                    work: "Front-end, Back-end, AWS",
+                    liked: "Getting real world experiences and working with actual clients"
+                },
                 {
                     name: "Rathana Pim",
                     major: "Computer Science",

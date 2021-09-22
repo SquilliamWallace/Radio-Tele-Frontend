@@ -27,7 +27,7 @@
                                         </v-card-subtitle>
                                         <v-card-text>
                                             <v-form>
-                                                <div v-if="sensor.windThreshold != null || sensor.tempThreshold != null || sensor.vibrationThreshold != null || sensor.currentThreshold != null">
+                                                <div v-if="sensor.windThreshold != null || sensor.tempThreshold != null || sensor.vibrationThreshold != null || sensor.currentThreshold || sensor.humidityThreshold != null">
                                                     <div v-if="sensor.windThreshold != null">
                                                         <v-text-field label="Wind Threshold" v-model="sensor.windThreshold"></v-text-field>
                                                         <v-btn color="primary darken-2" class="mr-4" @click="submitThreshold(sensor.id, 0)">Submit Wind Threshold</v-btn>
@@ -43,6 +43,10 @@
                                                     <div v-if="sensor.currentThreshold != null">
                                                         <v-text-field label="Current Threshold" v-model="sensor.currentThreshold"></v-text-field>
                                                         <v-btn color="primary darken-2" class="mr-4" @click="submitThreshold(sensor.id, 3)">Submit Current Threshold</v-btn>
+                                                    </div>
+                                                    <div v-if="sensor.humidityThreshold != null">
+                                                        <v-text-field label= "Humidity Threshold" v-model="sensor.humidityThreshold"></v-text-field>
+                                                        <v-btn color="primary darken-2" class="mr-4" @click="submitThreshold(sensor.id, 4)">Submit Humidity Threshold</v-btn>
                                                     </div>
                                                 </div>
                                                 <div v-else>
@@ -96,15 +100,17 @@ export default {
                 'proximity',
                 'azimuthMotor',
                 'elevationMotor',
-                'weatherStation'
+                'weatherStation',
+                'tempSensor'
             ],
 
             sensors: [
-                { id: 1, refName: 'NO_REF', displayName: 'Gate', name: 'gate', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, windThreshold: null, tempThreshold: null, vibrationThreshold: null, currentThreshold: null },
-                { id: 2, refName: 'NO_REF', displayName: 'Proximity', name: 'proximity', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, windThreshold: null, tempThreshold: null, vibrationThreshold: null, currentThreshold: null },
-                { id: 3, refName: 'AZ_MOTOR', displayName: 'Azimuth Motor', name: 'azimuthMotor', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, windThreshold: null, tempThreshold: 81, vibrationThreshold: 2, currentThreshold: 7 },
-                { id: 4, refName: 'ELEV_MOTOR', displayName: 'Elevation Motor', name: 'elevationMotor', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, windThreshold: null, tempThreshold: 81, vibrationThreshold: 2, currentThreshold: 7 },
-                { id: 5, refName: 'NO_REF', displayName: 'Weather Station', name: 'weatherStation', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, windThreshold: 80, tempThreshold: null, vibrationThreshold: null, currentThreshold: null }
+                { id: 1, refName: 'NO_REF', displayName: 'Gate', name: 'gate', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, windThreshold: null, tempThreshold: null, vibrationThreshold: null, currentThreshold: null, humidityThreshold: null},
+                { id: 2, refName: 'NO_REF', displayName: 'Proximity', name: 'proximity', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, windThreshold: null, tempThreshold: null, vibrationThreshold: null, currentThreshold: null, humidityThreshold: null },
+                { id: 3, refName: 'AZ_MOTOR', displayName: 'Azimuth Motor', name: 'azimuthMotor', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, windThreshold: null, tempThreshold: 81, vibrationThreshold: 2, currentThreshold: 7, humidityThreshold: null },
+                { id: 4, refName: 'ELEV_MOTOR', displayName: 'Elevation Motor', name: 'elevationMotor', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, windThreshold: null, tempThreshold: 81, vibrationThreshold: 2, currentThreshold: 7, humidityThreshold: null },
+                { id: 5, refName: 'NO_REF', displayName: 'Weather Station', name: 'weatherStation', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, windThreshold: 80, tempThreshold: null, vibrationThreshold: null, currentThreshold: null, humidityThreshold: null },
+                { id: 6, refName: 'TEMP_SENSOR', displayName: 'Temp/Humidity', name: 'tempSensor', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, windThreshold: null, tempThreshold: 81, vibrationThreshold: null, currentThreshold: null, humidityThreshold: null, humidityThreshold: 100}
             ],
 
             // status values
@@ -112,7 +118,8 @@ export default {
             proximityStatus: 0,
             azimuthStatus: 0, 
             elevationStatus: 0, 
-            weatherStatus: 0, 
+            weatherStatus: 0,
+            tempStatus: 0, 
 
             // status colors
             gateStatColor: "green",
@@ -120,12 +127,15 @@ export default {
             azimuthStatColor: "red",
             elevationStatColor: "green",
             weatherStatColor: "red",
+            tempStatColor: "red",
+
             // status text
             gateStatText: "OK",
             proximityStatText: "WARNING",
             azimuthStatText: "ERROR", 
             elevationStatText: "OK",
             weatherStatText: "ERROR",
+            tempStatText: "WARNING",
 
             // imported data
             dbData: [
@@ -133,7 +143,8 @@ export default {
                 // {   id: 2, name: "Proximity", dataType: "tinyint", description: "Resembles status of proximity sensor", value: 1, override: 0 },
                 // {   id: 3, name: "Azimuth Motor", dataType: "tinyint", description: "Resembles status of azimuth motor", value: 2, override: 0 },
                 // {   id: 4, name: "Elevation Motor", dataType: "tinyint", description: "Resembles status of elevation motor", value: 0, override: 0 },
-                // {   id: 5, name: "Weather Station", dataType: "tinyint", description: "Resembles status of weather station", value: 2, override: 0 }
+                // {   id: 5, name: "Weather Station", dataType: "tinyint", description: "Resembles status of weather station", value: 2, override: 0 },
+                // {   id: 6, name: "Temp Sensor", dataType: "tinyint", description: "Resembles status of temperatures", value: 0, override: 0 }
             ]
         }
     },
@@ -256,6 +267,9 @@ export default {
             }
             else if (sensor.name == 'weatherStation') {
                 s = "WEATHER_STATION";
+            }
+            else if (sensor.name == 'tempSensor') {
+                s = "TEMP_SENSOR";
             }
 
             ApiDriver.SensorOverrides.updateOverride(s, Boolean(sensor.override)).then((response) =>{
@@ -395,6 +409,11 @@ export default {
                         this.sensors[4].windThreshold = data[index].maximum;
                         console.log("Successfully retrieved wind threshold!")
                 }
+                if (data[index].sensorName.includes("TEMP_SENSOR")){
+                    // Set the Temp Threshold
+                        this.sensors[6].tempThreshold = data[index].maximum;
+                        console.log("Successfully retrieved temp threshold!")
+                }
             }
         },
         setThreshold(thresholdName, thresholdValue) {
@@ -456,6 +475,16 @@ export default {
                 if (thresholdNumber == 0) {
                     this.setThreshold("WIND", this.sensors[id - 1].windThreshold);
                     console.log("Successfully set wind threshold!")
+                }
+            }
+            else if (id == 6) {
+                if (thresholdNumber == 0) {
+                    this.setThreshold("TEMP", this.sensors[id - 1].tempThreshold);
+                    console.log("Successfully set temp threshold!")
+                }
+                else if (thresholdNumber == 1) {
+                    this.setThreshold("HUMIDITY", this.sensors[id - 1].humidityThreshold);
+                    console.log("Successfully set humidity threshold!")
                 }
             }
         },
