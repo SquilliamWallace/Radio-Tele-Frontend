@@ -106,7 +106,7 @@ export default {
                 { id: 3, refName: 'AZ_MOTOR', displayName: 'Azimuth Motor', name: 'azimuthMotor', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, windThreshold: null, tempThreshold: 81, vibrationThreshold: 2, currentThreshold: 7 },
                 { id: 4, refName: 'ELEV_MOTOR', displayName: 'Elevation Motor', name: 'elevationMotor', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, windThreshold: null, tempThreshold: 81, vibrationThreshold: 2, currentThreshold: 7 },
                 { id: 5, refName: 'NO_REF', displayName: 'Weather Station', name: 'weatherStation', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, windThreshold: 80, tempThreshold: null, vibrationThreshold: null, currentThreshold: null },
-                { id: 6, refName: 'TEMP_SENSOR', displayName: 'Temperature Sensor', name: 'tempSensor', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, windThreshold: null, tempThreshold: 81, vibrationThreshold: null, currentThreshold: null }
+                { id: 6, refName: 'TEMP_SENSOR', displayName: 'Temp Sensor', name: 'tempSensor', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, windThreshold: null, tempThreshold: 81, vibrationThreshold: null, currentThreshold: null }
             ],
 
             // status values
