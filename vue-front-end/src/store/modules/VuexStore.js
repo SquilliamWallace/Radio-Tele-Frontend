@@ -19,6 +19,7 @@ const store = new Vuex.Store({
         isResearcher: false,
         isMember: false,
         isAdmin: false,
+        isAlumni: false,
         isLoading: false,
         currentPage: "",
         information: "",
@@ -44,6 +45,8 @@ const store = new Vuex.Store({
                     state.isMember = true
                 } else if (data.roles[idx].authority === "ROLE_ADMIN") {
                     state.isAdmin = true
+                } else if (data.roles[idx].authority === "ROLE_ALUMNUS"){
+                    state.isAlumni = true
                 }
             }
         },
@@ -55,6 +58,7 @@ const store = new Vuex.Store({
             state.isResearcher = false;
             state.isMember = false;
             state.isAdmin = false;
+            state.isAlumni = false;
             state.token = null
         },
         loading(state, value) {
