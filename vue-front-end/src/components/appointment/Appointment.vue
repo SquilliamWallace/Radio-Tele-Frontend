@@ -1055,7 +1055,7 @@ export default {
                    this.$emit('request-appointment', formObj)
                    // Extra second is needed to transfer coordinates for Raster Scans
                    if (formObj.type == "Raster Scan"){
-                       sleep(1000); 
+                        setTimeout(() => {console.log("Waiting extra second for raster scan"); }, 1000);
                    }
                    // console.log("Appointment.vue: " + JSON.stringify(formObj));
                    this.resetForm()
