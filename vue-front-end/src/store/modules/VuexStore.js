@@ -45,7 +45,7 @@ const store = new Vuex.Store({
                     state.isMember = true
                 } else if (data.roles[idx].authority === "ROLE_ADMIN") {
                     state.isAdmin = true
-                } else if (data.roles[idx].authority === "ROLE_ALUMNUS"){
+                } else if (data.roles[idx].authority === "ROLE_ALUMNI"){
                     state.isAlumni = true
                 }
             }
