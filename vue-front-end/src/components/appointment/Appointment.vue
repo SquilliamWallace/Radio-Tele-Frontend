@@ -416,26 +416,34 @@
 
                     <!-- Submit sends the form to backend to be verified -->
                     <v-btn
-                    :disabled="!formIsValid"
+                    :disabled="checkNotVisible"
                     flat
                     color="primary"
                     type="submit"
                     >Schedule</v-btn>
                 </v-card-actions>
+                <input type="checkbox" v-model="notVisible" hidden=true>
                 </v-form>
                 <img id="image0" class="image-style" v-bind:src="imgSrc0" v-if="showImage==true">
                 <img id="image1" class="image-style" v-bind:src="imgSrc1" v-if="showImage==true">
+                <canvas id="canvas0" width="720" height="180"></canvas>
+                <canvas id="canvas1" width="720" height="180"></canvas>
+
             </v-card>
     </v-dialog>
 </template>
 
 <script>
-import Event from '../../main.js'
-import ApiDriver from '../../ApiDriver'
-import HttpResponse from '../../utils/HttpResponse'
-import CurrentUserValidation from '../../utils/CurrentUserValidation'
+import Event from '../../main.js';
+import ApiDriver from '../../ApiDriver';
+import HttpResponse from '../../utils/HttpResponse';
+import CurrentUserValidation from '../../utils/CurrentUserValidation';
 import router from '../../router';
 import CustomErrorHandler from '../../utils/CustomErrorHandler.js';
+import aa from 'astronomical-algorithms';
+import * as timesUtils from 'astronomical-algorithms/dist/times/utils'
+import AAHelpers from '../../utils/AAHelpers.js';
+import { brightStars } from '../../utils/BrightStars.js';
 export default {
     data() {
         name: 'Appointment'
@@ -494,11 +502,10 @@ export default {
             startTime: '',
             endDate: '',
             endTime: '',
-            notVisible: false,
+            notVisible: true,
             showImage: false,
             imgSrc0: '',
             imgSrc1: '',
-
             // Variables to keep track of chosen Appointment type
             type: 'Point',
             selectedType: '',
@@ -564,7 +571,7 @@ export default {
             this.endTime='';
             this.selectedType = null;
             this.selectedBody = null;
-            this.notVisible = false;
+            this.notVisible = true;
             this.imgSrc0 = '';
             this.imgSrc1 = '';
             this.showImage = false;
@@ -585,8 +592,6 @@ export default {
             // Handles making the selected Appointment Type string compatible with the back-end
             this.handleType();
 
-            var startVisible = true
-            var endVisible = true
             if(this.type != "Drift Scan") {
                 console.log("Hit 1");
                 var tempTargetRA = 0
@@ -656,60 +661,13 @@ export default {
                     latitude:  40.024409,
                     altitude: 395 // TODO: make longitude, latitude, and altitude dependant on the selected telescope.
                 };
-                var call0 = ApiDriver.Astronomical.horizonCheck(data0);
-                call0.then(response => {
-                    startVisible = response.data.visible;
-                    console.log(response.data);
-                    if(response.data.visible == false)
-                        this.notVisible = true;
-                    console.log(this.notVisible);})
-                    var call1 = ApiDriver.Astronomical.horizonCheck(data1);
-                    call1.then(response => {
-                        startVisible = response.data.visible;
-                        console.log(response.data);
-                        if(response.data.visible == false)
-                            this.notVisible = true;
-                        console.log(this.notVisible);
-                        if(this.type == "Raster Scan") {
-                            var call2 = ApiDriver.Astronomical.horizonCheck(data2);
-                            call2.then(response => {
-                                startVisible = response.data.visible;
-                                console.log(response.data);
-                                if(response.data.visible == false)
-                                    this.notVisible = true;
-                                var call3 = ApiDriver.Astronomical.horizonCheck(data3)
-                                call3.then(response => {
-                                    endVisible = response.data.visible;
-                                    console.log(response.data);
-                                    if(response.data.visible == false)
-                                        this.notVisible = true;
-                                    if(this.notVisible == true) {
-                                        this.handleNotVisible();
-                                    } else {
-                                        this.makeSubmission();
-                                    }
-                                })
-                                .catch(error => {console.log(error);});
-                            })
-                            .catch(error => {console.log(error);})
-                        } else {
-                            if(this.notVisible == true) {
-                                this.handleNotVisible();
-                            } else {
-                                this.makeSubmission();
-                            }
-                        }
-                }).catch(error => {console.log(error);})
-                .catch(error => {console.log(error);})
-            } else {
-                this.notVisible = this.form.elevation < 0.0
-                if(this.notVisible == true) {
-                    this.handleNotVisible();
-                } else {
-                    this.makeSubmission();
-                }
             }
             console.log("Hit 3");
+            if(this.notVisible == true) {
+                this.handleNotVisible();
+            } else {
+                this.makeSubmission();
+            }
         },
         makeSubmission() {
             // set up form to send to back end with data from form obj
@@ -720,8 +678,8 @@ export default {
             }
             let form = {
                 userId: this.$store.state.currentUserId,
-                startTime: new Date(this.start).toUTCString(),
-                endTime: new Date(this.end).toUTCString(),
+                startTime: new Date(this.start).toISOString(),
+                endTime: new Date(this.end).toISOString(),
                 telescopeId: this.telescopes.indexOf(this.telescopeName) + 1,
                 isPublic: !this.form.isPrivate.value,
                 hours: this.form.rightAscension.hours,
@@ -750,22 +708,24 @@ export default {
                     this.$emit('close-modal');
                     }, (status, errors) => {
                         if (parseInt(status) === 403) {
-                            HttpResponse.accessDenied(this)
+                            HttpResponse.accessDenied(this);
                         } else {
                             this.handleErrors(errors, form);
                         }
                     });
             });
-            this.startTime=''
-            this.startDate=''
-            this.endDate=''
-            this.endTime=''
+            this.startTime='';
+            this.startDate='';
+            this.endDate='';
+            this.endTime='';
         },
         handleNotVisible() {
             HttpResponse.generalError(this, "The appointment is not possible due to the target's position, which will be below the horizon during a portion of this appointment.", false);
             this.resetForm();
         },
         visualize() {
+            let startVisible = false
+            let endVisible = false
             var tempTargetRA = 0
             var tempTargetDec = 0
             if(this.type == "Point") {
@@ -806,7 +766,48 @@ export default {
                 latitude:  40.024409,
                 altitude: 395 // TODO: make longitude, latitude, and altitude dependant on the selected telescope.
             };
-            var call = ApiDriver.Astronomical.skyview(data0);
+            // test AA library is working as expected.
+            //this.verifyAALib();
+
+            // set the canvas background color to black
+            let canvas = document.getElementById("canvas0");
+            let context = canvas.getContext("2d");
+            context.fillStyle = "black";
+            context.fillRect(0, 0, canvas.width, canvas.height);
+            canvas = document.getElementById("canvas1");
+            context = canvas.getContext("2d");
+            context.fillStyle = "black";
+            context.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Draw the sky objects (you take the moon and you take the sun)
+            //this.notVisible = false;
+            this.addEarthFeatures(document.getElementById("canvas0"), data0);
+            //this.addPlanets(document.getElementById("canvas0"), data0);
+            this.addStars(document.getElementById("canvas0"), data0)
+            let horizonCheck_0 = this.addTarget(document.getElementById("canvas0"), data0);
+            if (horizonCheck_0 > 0 && horizonCheck_0 < 180) {
+                startVisible = true;
+                console.log(horizonCheck_0);
+            }
+            this.addMoon(document.getElementById("canvas0"), data0);
+            this.addSun(document.getElementById("canvas0"), data0);
+            this.addEarthFeatures(document.getElementById("canvas1"), data1);
+            //this.addPlanets(document.getElementById("canvas1"), data1);
+            this.addStars(document.getElementById("canvas1"), data1)
+            let horizonCheck_1 = this.addTarget(document.getElementById("canvas1"), data1);
+            if (horizonCheck_1 > 0 && horizonCheck_1 < 180) {
+                endVisible = true;
+                console.log(horizonCheck_1);
+            }
+            this.addMoon(document.getElementById("canvas1"), data1);
+            this.addSun(document.getElementById("canvas1"), data1);
+            if(startVisible == true && endVisible == true){
+                this.notVisible = false;
+            }else{
+                this.notVisible = true;
+            }
+            // old implementation
+            /*var call = ApiDriver.Astronomical.skyview(data0);
             call.then(response => {
                 console.log(response);
                 this.imgSrc0 = 'data:image/bmp;base64,' + response.data.bytes;
@@ -815,8 +816,227 @@ export default {
                     this.imgSrc1 = 'data:image/bmp;base64,' + response.data.bytes;
                 }).catch(error => {console.log(error);}); 
                 this.showImage = true;
-            }).catch(error => {console.log(error);}); 
-        }, 
+            }).catch(error => {console.log(error);}); */
+        },
+        drawSkyObject(canvas, data, equatorial, julianDay, radiusVector, size, color, letter = null) {
+            let topocentric = AAHelpers.transformEquatorialToTopocentric(equatorial.rightAscension, equatorial.declination, radiusVector, data.longitude, data.latitude, data.altitude, julianDay);
+            //console.log("Equatorial to Topocentric: ");
+            //console.log(topocentric);
+            //let AST = aa.julianday.localSiderealTime(julianDay, data.longitude);
+            let AST = AAHelpers.apparentGreenwichSiderealTime(julianDay);
+            let localHourAngle = (AST - (data.longitude / 15) - topocentric.x);
+            //console.log("LocalHourAngle:   " + localHourAngle);
+            //console.log("AST: " + AST);
+            let horizontal = AAHelpers.transformEquatorialToHorizontal(localHourAngle, topocentric.y, data.latitude);
+            //console.log("Equatorial to Horizontal:");
+            //console.log(horizontal);
+            horizontal.altitude += AAHelpers.refractionFromTrue(horizontal.altitude, 1013, 10);
+            //console.log("Horizontal after refraction: ");
+            //console.log(horizontal);
+
+            if (horizontal.altitude > 0) {
+                if (canvas) {
+                    let context = canvas.getContext("2d");
+                    context.beginPath();
+                    context.arc(((horizontal.azimuth + 180)%360) * 2, (90 - horizontal.altitude) * 2, size, 0, 2 * Math.PI);
+                    context.fillStyle = color;
+                    context.fill();
+                    if (letter) {
+                        context.font = "12px Arial";
+                        context.fillText(letter, ((horizontal.azimuth + 180)%360) * 2, (90 - horizontal.altitude) * 2); 
+                    }
+                } else {
+                    console.log("Error drawing to canvas.");
+                }
+            }
+            
+            return {
+                azimuth: horizontal.azimuth,
+                altitude: horizontal.altitude
+            }
+        },
+        drawLinesInSky(canvas, points, color) {
+            let context = canvas.getContext("2d");
+            context.beginPath();
+            for (let i = 0; i < points.length - 1; i++) {
+                context.moveTo(points[i].x, points[i].y);
+                context.lineTo(points[i + 1].x, points[i + 1].y);
+                context.strokeStyle = color;
+                context.stroke();
+            }
+        },
+        addSun(canvas, data) {
+            let dateSunCalc = new Date(data.year, data.month-1, data.day, (data.hour-4)%24, data.minute);
+            let JDSun = aa.julianday.getJulianDay(dateSunCalc) + timesUtils.getDeltaT(aa.julianday.getJulianDay(dateSunCalc)) / 86400.0;
+            //console.log("JDsun: " + JDSun);
+            let equatorial = aa.sun.apparentEquatorialCoordinates(JDSun);
+            //console.log("Apparent equatorial coordinates:");
+            //console.log(equatorial);
+            let sunRad = aa.earth.getRadiusVector(JDSun);
+            //console.log("Sun Radius Vector:" + sunRad);
+            return this.drawSkyObject(canvas, data, equatorial, JDSun, sunRad, 8, "yellow");
+        },
+        addMoon(canvas, data) {
+            let dateMoonCalc = new Date(data.year, data.month-1, data.day, (data.hour-4)%24, data.minute);
+            let JDMoon = aa.julianday.getJulianDay(dateMoonCalc) + timesUtils.getDeltaT(aa.julianday.getJulianDay(dateMoonCalc)) / 86400.0;
+            let equatorial = aa.earth.moon.getEquatorialCoordinates(JDMoon);
+            let moonRad = aa.earth.getRadiusVector(JDMoon);
+            this.drawSkyObject(canvas, data, equatorial, JDMoon, moonRad, 8, "gray");
+        },
+        addPlanets(canvas, data) {
+            let datePlanetCalc = new Date(data.year, data.month-1, data.day, (data.hour-4)%24, data.minute);
+            let JDPlanet = aa.julianday.getJulianDay(datePlanetCalc) + timesUtils.getDeltaT(aa.julianday.getJulianDay(datePlanetCalc)) / 86400.0;
+            let planetEcliptic, planetEquatorial, planetRad;
+            //let diameterRatio = aa.sun.apparentDiameter(JDPlanet);
+            // Mercury (My favorite metal to eat!)
+            
+            // Mars (To get more candy bars)
+            //console.log("JDPlanet:   " + JDPlanet);
+            planetEcliptic = aa.mars.getEclipticCoordinates(JDPlanet);
+            planetEquatorial = aa.coordinates.transformEclipticToEquatorial(planetEcliptic.longitude, planetEcliptic.latitude, JDPlanet);
+            //console.log(planetEcliptic);
+            //console.log(planetEquatorial);
+            planetRad = aa.mars.getRadiusVector(JDPlanet);
+            this.drawSkyObject(canvas, data, planetEquatorial, JDPlanet, planetRad, 0, "red", "M");
+
+            // Jupiter (To get more...)
+            planetEcliptic = aa.jupiter.getEclipticCoordinates(JDPlanet);
+            planetEquatorial = aa.coordinates.transformEclipticToEquatorial(planetEcliptic.longitude, planetEcliptic.latitude, JDPlanet);
+            planetRad = aa.jupiter.getRadiusVector(JDPlanet);
+            this.drawSkyObject(canvas, data, planetEquatorial, JDPlanet, planetRad, 0, "violet", "J");
+
+            // Saturn (Don't got a funny one for this one, sorry guys)
+            planetEcliptic = aa.saturn.getEclipticCoordinates(JDPlanet);
+            planetEquatorial = aa.coordinates.transformEclipticToEquatorial(planetEcliptic.longitude, planetEcliptic.latitude, JDPlanet);
+            planetRad = aa.saturn.getRadiusVector(JDPlanet);
+            this.drawSkyObject(canvas, data, planetEquatorial, JDPlanet, planetRad, 0, "violet", "S");
+
+            // Uranus
+            planetEcliptic = aa.uranus.getEclipticCoordinates(JDPlanet);
+            planetEquatorial = aa.coordinates.transformEclipticToEquatorial(planetEcliptic.longitude, planetEcliptic.latitude, JDPlanet);
+            planetRad = aa.uranus.getRadiusVector(JDPlanet);
+            this.drawSkyObject(canvas, data, planetEquatorial, JDPlanet, planetRad, 0, "violet", "U");
+
+            // Neptune
+            planetEcliptic = aa.neptune.getEclipticCoordinates(JDPlanet);
+            planetEquatorial = aa.coordinates.transformEclipticToEquatorial(planetEcliptic.longitude, planetEcliptic.latitude, JDPlanet);
+            planetRad = aa.neptune.getRadiusVector(JDPlanet);
+            this.drawSkyObject(canvas, data, planetEquatorial, JDPlanet, planetRad, 0, "violet", "N");
+        },
+        addStars(canvas, data) {
+            let minimumDec = data.latitude - 90;
+            let dateCalc = new Date(data.year, data.month-1, data.day, (data.hour-4)%24, data.minute);
+            let jd = aa.julianday.getJulianDay(dateCalc) + timesUtils.getDeltaT(aa.julianday.getJulianDay(dateCalc)) / 86400.0;
+            let AST = AAHelpers.apparentGreenwichSiderealTime(jd);
+
+            let summerTriangle = [];
+            let orion = [];
+            let ursaMajor = [];
+            let cassiopeia = [];
+
+            let starsOfSummerTriangle = [ "Vega", "Deneb", "Altair" ];
+            let starsOfOrion = [ "Rigel", "Betelgeuse", "Bellatrix", "Saiph", "Mintaka", "Alnitak" ];
+            let starsOfUrsaMajor = [ "Alpha Ursae Majoris", "Beta Ursae Majoris", "Gamma Ursae Majoris", "Delta Ursae Majoris", "Epsilon Ursae Majoris", "Zeta Ursae Majoris" , "Eta Ursae Majoris" ];
+            let starsOfCassipeia = [ "Caph", "Schedar", "Cih", "Ruchbah", "Segin" ];
+
+            for (let star of brightStars) {
+                if (star.Dec > minimumDec) {
+                    let ra = AAHelpers.RaInDegrees(star.RA);
+                    let dec = star.Dec;
+                    let localHourAngle = (AST - (data.longitude / 15) - ra/15);
+                    let horizontal = AAHelpers.transformEquatorialToHorizontal(localHourAngle, star.Dec, data.latitude);
+                    if (horizontal.altitude > 0) {
+                        let point = { x: (horizontal.azimuth + 180)%360 * 2, y: (90 - horizontal.altitude) * 2 };
+                        // draw the star
+                        if (canvas) {
+                            let context = canvas.getContext("2d");
+                            context.beginPath();
+                            context.arc(point.x, point.y, AAHelpers.circleSize(star.VisualMag), 0, 2 * Math.PI);
+                            context.fillStyle = star.Color;
+                            context.fill();
+                        } else {
+                            console.log("Error drawing to canvas.");
+                        }
+                        if (starsOfUrsaMajor.includes(star.Name))
+                        {
+                            ursaMajor.push(point);
+                        }
+                        if (starsOfCassipeia.includes(star.Name2))
+                        {
+                            cassiopeia.push(point);
+                        }
+
+                        if (starsOfSummerTriangle.includes(star.Name2))
+                        {
+                            summerTriangle.push(point);
+                        }
+                        if (starsOfOrion.includes(star.Name2))
+                        {
+                            orion.push(point);
+                        }
+                        if (summerTriangle.length == 3)
+                        {
+                            summerTriangle.push(summerTriangle[0]);
+                            this.drawLinesInSky(canvas, summerTriangle, "darkgrey");
+                        }
+                        if (orion.length == 6)
+                        {
+                            orion.push(orion[0]);
+                            this.drawLinesInSky(canvas, orion, "darkgrey");
+                        }
+                        if (ursaMajor.length == 7)
+                        {
+                            this.drawLinesInSky(canvas, ursaMajor, "darkgrey");
+                        }
+                        if (cassiopeia.length == 5)
+                        {
+                            this.drawLinesInSky(canvas, cassiopeia, "darkgrey");
+                        }
+                    }
+                }
+            }
+        },
+        addEarthFeatures(canvas) {
+            let context = canvas.getContext("2d");
+            context.beginPath();
+            context.fillStyle = "gray";
+            context.font = "12px Arial";
+            context.fillText("N", 5, 176);
+            context.fillText("E", 185, 176); 
+            context.fillText("S", 365, 176); 
+            context.fillText("W", 545, 176); 
+            context.fillText("N", 705, 176);
+        },
+        addTarget(canvas, data) {
+            let dateCalc = new Date(data.year, data.month-1, data.day, (data.hour), data.minute);
+            console.log("dateCalc: "+dateCalc);
+            let JD = aa.julianday.getJulianDay(dateCalc) + timesUtils.getDeltaT(aa.julianday.getJulianDay(dateCalc) / 86400.0);
+            let AST = AAHelpers.apparentGreenwichSiderealTime(JD);
+            console.log("AST: "+AST);
+            let localHourAngle = (AST + (data.longitude / 15) - (data.targetRA/15));
+            console.log("localHourAngle: "+localHourAngle);
+            let horizontal = AAHelpers.transformEquatorialToHorizontal(localHourAngle, data.targetDec, data.latitude);
+            let targetSize = 6;
+            let point = { x: ((horizontal.azimuth + 180)%360) * 2, y: (90 - horizontal.altitude) * 2 };
+            let context = canvas.getContext("2d");
+            context.beginPath();
+            context.arc(point.x, point.y, targetSize, 0, 2 * Math.PI);
+            context.strokeStyle = "green";
+            context.lineWidth = 1;
+            context.imageSmoothing = false;
+            context.stroke();
+            context.moveTo(point.x - targetSize, point.y);
+            context.lineTo(point.x + targetSize, point.y);
+            context.stroke();
+            context.moveTo(point.x, point.y - targetSize);
+            context.lineTo(point.x, point.y + targetSize);
+            context.strokeStyle = "green";
+            context.stroke();
+            return point.y;
+        },
+        addCoordinates() {
+
+        },
         handleErrors(errors, formObj) {
             for (var field in errors) {
                 let message = errors[field][0];
@@ -835,7 +1055,7 @@ export default {
                    this.$emit('request-appointment', formObj)
                    // Extra second is needed to transfer coordinates for Raster Scans
                    if (formObj.type == "Raster Scan"){
-                       sleep(1000); 
+                        setTimeout(() => {console.log("Waiting extra second for raster scan"); }, 1000);
                    }
                    // console.log("Appointment.vue: " + JSON.stringify(formObj));
                    this.resetForm()
@@ -972,6 +1192,9 @@ export default {
                     this.form.secondCoordinate.declination
                 )
             }
+        },
+        checkNotVisible(){
+        return this.notVisible;
         }
     },
 
