@@ -29,7 +29,7 @@ Do some research on these plugins to learn how to effectively use them. Especial
 `git clone https://github.com/YCPRadioTelescope/Radio-Tele-Frontend.git`  
 This makes a local repostory in the current directory.
 4. From the tabs at the top, select *File* --> *Open Folder* and then select the **vue-front-end** folder inside of the **Radio-Tele-Frontend** folder that was just cloned. The files should now appear in the file explorer on the left.
-5. If the branch displayed at the bottom left does not say **development**, then click on it to open the branch selection dialogue box at the top. Then search for the **origin/development** branch and then select it to check out that branch.
+5. If the branch displayed at the bottom left does not say **master**, then click on it to open the branch selection dialogue box at the top. Then search for the **origin/master** branch and then select it to check out that branch.
 **Note**: Check package.json for any dependencies marked with a “^” before the version number, this indicates automatic updating and can lead to problems down the road.
 
 ### Obtain the SecretKey component
