@@ -127,7 +127,7 @@ export default {
             }
             
             // On clicking the drawer, check if the user is an Admin
-            if(this.$store.state.isAdmin && this.items.length < 6){
+            if((this.$store.state.isAdmin || this.$store.state.isAlumni) && this.items.length < 6){
                 this.items.push({ title: 'Administration', path: '/admin' })
             }
         },
