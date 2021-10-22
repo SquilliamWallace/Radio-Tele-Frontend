@@ -52,7 +52,7 @@ To setup the back-end, see <https://github.com/YCPRadioTelescope/RT-Contracts>
 ### Changing the Front-End to use the Local Back-End Application
 With the local back-end application installed, you will need to update the ApiDriver.js file in the "src" directory to handle local API requests.  Do this by commenting out `let baseUrl = "http://api.ycpradiotelescope.com:8080/api/` and replacing it with `let baseUrl = "http://localhost:8080/api/";`.  Do the same with any other references to `http://api.ycpradiotelescope.com:8080/api/` if applicable.
 
-# Additionoal Information
+# Additional Information
 ### Learn Vue.JS
 * To start your own vue project, see <https://cli.vuejs.org/guide/creating-a-project.html#vue-create>
 * To understand the mechanics of Vue.JS, see <https://vuejs.org/v2/guide/>
