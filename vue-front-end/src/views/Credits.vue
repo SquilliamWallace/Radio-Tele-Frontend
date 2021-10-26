@@ -6,8 +6,8 @@
                 <v-flex xs6 v-for="dev in devInfo" :key="dev.id">
                     <v-card justify-center>
                         <v-card-title class="headline">{{dev.name}} : {{dev.major}}</v-card-title>
-                        <v-card-text class="align-left subheading font-weight-thin">{{dev.work}}</v-card-text>
-                        <v-card-text class="align-left subheading font-weight-thin">One of the most interesting parts of the project was {{dev.liked}}</v-card-text>
+                        <v-card-text class="align-left subheading font-weight-thin">Team: {{dev.work}}</v-card-text>
+                        <v-card-text class="align-left subheading font-weight-thin">Enjoyed:  {{dev.liked}}</v-card-text>
                     </v-card>
                 </v-flex>
             </v-layout>
@@ -29,12 +29,23 @@ export default {
                 {
                     name: "Alyssa McDevitt",
                     major: "Computer Science",
-                    work: "The mobile application",
-                    liked: "Working with AWS, learning the quirks of React Native, learning more about astronomy"
+                    work: "Mobile App",
+                    liked: "Working with AWS, learning the quirks of React Native, learning more about astronomy."
                 },
                 {
                     name: "Andrew Georgiou",
-                    major: "Computer Sciennce",
+                    major: "Computer Science",
+                    work: "Control Room",
+                    liked: "Control Room"
+                },
+                {   name: "Anthony Beddia",
+                    major: "Computer Science",
+                    work: "Front-end, Back-end, AWS",
+                    liked: "Getting real world experiences and working with actual clients"
+                },
+                {
+                    name: "Brett Kearny",
+                    major: "Computer Science",
                     work: "Control Room",
                     liked: "Control Room"
                 },
@@ -47,8 +58,8 @@ export default {
                 {
                     name: "Cody Spath",
                     major: "Computer Science",
-                    work: "Liked integration between the back-end, front-end and control room, as well as learning about deploying an application to production",
-                    liked: "learning about and incorporating new technologies"
+                    work: "Software Lead / Control Room",
+                    liked: "Learning about and incorporating new technologies."
                 },
                 {
                     name: "Dakota Hilbert",
@@ -57,22 +68,28 @@ export default {
                     liked: "Learning Vue.js, Node.js and working on a large team."
                 },
                 {
+                    name: "Dan Palmieri",
+                    major: "Computer Science",
+                    work: "Control Room Lead",
+                    liked: "Learning Vue.js, Node.js and working on a large team."
+                },
+                {
                     name: "Darin Gordon",
-                    major: "_",
-                    work: "_",
-                    liked: "_"
+                    major: "Unlisted",
+                    work: "Unlisted",
+                    liked: "Unlisted"
                 },
                 {
                     name: "David Henry",
                     major: "Computer Science",
                     work: "Liked playing with the scale model Radio Telescope",
-                    liked: "being able to work on a great project with amazing people"
+                    liked: "Being able to work on a great project with amazing people"
                 },
                 {
                     name: "Derek McClellan",
                     major: "Computer Science",
                     work: "Liked learning Vue.js and the instant gratification that comes with web development",
-                    liked: "leading a team of talented people to work towards deployment and integration"
+                    liked: "Leading a team of talented people to work towards deployment and integration"
                 },
                 {
                     name: "Devin Retzlaff",
@@ -81,10 +98,16 @@ export default {
                     liked: "Working on a project in which I had a lot of helpful previous work experience"
                 },
                 {
+                    name: "Dylan Bieber",
+                    major: "Computer Science",
+                    work: "Mobile App",
+                    liked: "Mobile App"
+                },
+                {
                     name: "Ed Nardo",
                     major: "Computer Science",
-                    work: "The mobile application",
-                    liked: "_"
+                    work: "Mobile App",
+                    liked: "Unlisted"
                 },
                 {
                     name: "Ezra Moore",
@@ -102,13 +125,19 @@ export default {
                     name: "Garrett Ruths",
                     major: "Computer Science",
                     work: "Liked learning in the unity engine, despite the headaches it caused",
-                    liked: "being able to work in a large scale team environment"
+                    liked: "Being able to work in a large scale team environment"
                 },
                 {
                     name: "Greg Plachno",
                     major: "Computer Science",
                     work: "Simulation",
                     liked: "nModBus4"
+                },
+                {
+                    name: "Jack Anderson",
+                    major: "Computer Science / Mathematics",
+                    work: "Control Room",
+                    liked: "Control Room"
                 },
                 {
                     name: "Jacob Majeski",
@@ -118,21 +147,21 @@ export default {
                 },
                 {
                     name: "Jacob Minor",
-                    major: "_",
-                    work: "_",
-                    liked: "_"
+                    major: "Electrical Engineering",
+                    work: "ECE Lead",
+                    liked: "ECE Lead"
                 },
                 {
                     name: "Jason Constantine",
                     major: "Computer Science",
-                    work: "The mobile application",
+                    work: "Mobile App",
                     liked: "Learning a new language and learning about API's"
                 },
                 {
                     name: "Jason Pierpont",
-                    major: "_",
-                    work: "_",
-                    liked: "_"
+                    major: "Unlisted",
+                    work: "Unlisted",
+                    liked: "Unlisted"
                 },
                 {
                     name: "Jason Porter",
@@ -142,9 +171,9 @@ export default {
                 },
                 {
                     name: "Jessie Furey",
-                    major: "_",
-                    work: "_",
-                    liked: "_"
+                    major: "Unlisted",
+                    work: "Unlisted",
+                    liked: "Unlisted"
                 },
                 {
                     name: "Joel Horne",
@@ -154,9 +183,15 @@ export default {
                 },
                 {
                     name: "Jon Myer",
-                    major: "_",
-                    work: "_",
-                    liked: "_"
+                    major: "Computer Science",
+                    work: "General",
+                    liked: "General"
+                },
+                {
+                    name: "Jon Steck",
+                    major: "Computer Science",
+                    work: "Virtual Reality and Simulation Lead",
+                    liked: "Virtual Reality and Simulation Lead"
                 },
                 {
                     name: "Joseph Hopkins",
@@ -172,19 +207,19 @@ export default {
                 },
                 {
                     name: "Joshua Sowa",
-                    major: "_",
-                    work: "_",
-                    liked: "_"
+                    major: "Unlisted",
+                    work: "Unlisted",
+                    liked: "Unlisted"
                 },
                 {
                     name: "Karl Andrand",
-                    major: "_",
-                    work: "_",
-                    liked: "_"
+                    major: "Unlisted",
+                    work: "Unlisted",
+                    liked: "Unlisted"
                 },
                 {
                     name: "Kate Kennelly",
-                    major: "Computer Science and Mathematics",
+                    major: "Computer Science / Mathematics",
                     work: "Control Room Application",
                     liked: "Being able to see each step of the process from end to end and understanding how it all works together"
                 },
@@ -198,7 +233,7 @@ export default {
                     name: "Logan Ferree",
                     major: "Computer Science",
                     work: "Liked learning about Kotlin for the back-end software, and being able to break 75% of the unit tests",
-                    liked: "learning new technologies and working on a large project"
+                    liked: "Learning new technologies and working on a large project"
                 },
                 {
                     name: "Lucas Gartrell",
@@ -208,9 +243,9 @@ export default {
                 },
                 {
                     name: "Marcos Rivera",
-                    major: "_",
-                    work: "_",
-                    liked: "_"
+                    major: "Unlisted",
+                    work: "Unlisted",
+                    liked: "Unlisted"
                 },
                 {
                     name: "Marie Kiley",
@@ -222,7 +257,7 @@ export default {
                     name: "Nick Vandemark",
                     major: "Computer Engineering/Computer Science",
                     work: "Liked integrating the control room software with all the hardware",
-                    liked: "working with a bunch of smart people"
+                    liked: "Working with a bunch of smart people"
                 },
                 {
                     name: "Nolan Hamilton",
@@ -238,20 +273,15 @@ export default {
                 },
                 {
                     name: "Philip Nelson",
-                    major: "",
-                    work: "",
-                    liked: ""
+                    major: "Unlisted",
+                    work: "Unlisted",
+                    liked: "Unlisted"
                 },
                 {
                     name: "Quintin Herb",
                     major: "Computer Science",
                     work: "Back-end, AWS",
                     liked: "Working with the team and having a great deal of responsibility"
-                },
-                {   name: "Anthony Beddia",
-                    major: "Computer Science",
-                    work: "Front-end, Back-end, AWS",
-                    liked: "Getting real world experiences and working with actual clients"
                 },
                 {
                     name: "Rathana Pim",
@@ -261,27 +291,33 @@ export default {
                 },
                 {
                     name: "Richard Hopkins",
-                    major: "_",
-                    work: "_",
-                    liked: "_"
+                    major: "Unlisted",
+                    work: "Unlisted",
+                    liked: "Unlisted"
                 },
                 {
                     name: "Thomas Albert",
-                    major: "_",
-                    work: "_",
-                    liked: "_"
+                    major: "Unlisted",
+                    work: "Unlisted",
+                    liked: "Unlisted"
                 },
                 {
                     name: "Travis Jones",
                     major: "Computer Engineering",
                     work: "Liked working on the control room software",
-                    liked: "the interdisciplinary coordination"
+                    liked: "The interdisciplinary coordination"
+                },
+                {
+                    name: "Dakota Hilbert",
+                    major: "Computer Science",
+                    work: "Control Room",
+                    liked: "Control Room"
                 },
                 {
                     name: "William Taylor",
-                    major: "_",
-                    work: "_",
-                    liked: "_"
+                    major: "Unlisted",
+                    work: "Unlisted",
+                    liked: "Unlisted"
                 },
                 {
                     name: "Zack Henry",
