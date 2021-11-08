@@ -14,7 +14,7 @@
     <v-checkbox v-model="SensorInitData" label="Counterbalance Accelerometer" value="7"></v-checkbox>
     <v-text-field v-model="DataRetTimeout" label="Data Retrieval Timeout (seconds)" outlined></v-text-field>
     <v-text-field v-model="InitTimeout" label="Initialization Timeout (seconds)" outlined></v-text-field>
-    <v-btn>Submit</v-btn>
+    <v-btn @click="webSocketTest">Submit</v-btn>
 </v-card>
 
 </div>
@@ -34,6 +34,11 @@ export default {
         InitTimeout: null,
     }
   },
+    methods:{
+        webSocketTest(){
+            ApiDriver.webSocket();
+        }
+  }
 };
 </script>
 <style scoped>
