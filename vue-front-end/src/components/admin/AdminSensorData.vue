@@ -75,6 +75,7 @@
             </v-layout>
         </div>
     </v-container>
+    <v-btn @click="sendSensorData(sensors)">TEST WEBSOCKET BUTTON</v-btn>
 </v-card>
 
 </div>
@@ -149,6 +150,9 @@ export default {
         }
     },
     methods:{
+        webSocketTest(command){
+            ApiDriver.webSocket(command);
+        },
         getOverallStatus(dbData){
             this.overallStatus = 0;             // if all are OK, this remains unchanged
             for (var index in this.sensors) {
@@ -488,6 +492,70 @@ export default {
                 }
             }
         },
+
+            //         sensors: [
+            //     { id: 1, refName: 'NO_REF', displayName: 'Gate', name: 'gate', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, windThreshold: null, tempThreshold: null, vibrationThreshold: null, currentThreshold: null, humidityThreshold: null},
+            //     { id: 2, refName: 'NO_REF', displayName: 'Proximity', name: 'proximity', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, windThreshold: null, tempThreshold: null, vibrationThreshold: null, currentThreshold: null, humidityThreshold: null },
+            //     { id: 3, refName: 'AZ_MOTOR', displayName: 'Azimuth Motor', name: 'azimuthMotor', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, windThreshold: null, tempThreshold: 81, vibrationThreshold: 2, currentThreshold: 7, humidityThreshold: null },
+            //     { id: 4, refName: 'ELEV_MOTOR', displayName: 'Elevation Motor', name: 'elevationMotor', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, windThreshold: null, tempThreshold: 81, vibrationThreshold: 2, currentThreshold: 7, humidityThreshold: null },
+            //     { id: 5, refName: 'NO_REF', displayName: 'Weather Station', name: 'weatherStation', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, windThreshold: 80, tempThreshold: null, vibrationThreshold: null, currentThreshold: null, humidityThreshold: null },
+            //     { id: 6, refName: 'TEMP_SENSOR', displayName: 'Temp/Humidity', name: 'tempSensor', status: 0, statusColor: '', statusText: '', override: 0, thresholdToggle: false, windThreshold: null, tempThreshold: 81, vibrationThreshold: null, currentThreshold: null, humidityThreshold: 100}
+            // ],
+
+        sendSensorData(sensors){
+            const AllSensorData = [];
+            for(var i = 0; i < 14; i++){
+                AllSensorData[i] = 0;
+            }
+
+            for(var x = 0; x < 14; x++){
+                if(sensors.id){
+                    AllSensorData[0] = sensors[x].id;
+                }
+                if(sensors.refName){
+                    AllSensorData[1] = sensors[x].refName;
+                }
+                if(sensors.displayName){
+                    AllSensorData[2] = sensors[x].displayName;
+                }
+                if(sensors.name){
+                    AllSensorData[3] = sensors[x].name;
+                }
+                if(sensors.status){
+                    AllSensorData[4] = sensors[x].staus;
+                }
+                if(sensors.statusColor){
+                    AllSensorData[5] = sensors[x].statusColor;
+                }
+                if(sensors.statusText){
+                    AllSensorData[6] = sensors[x].statusText;
+                }
+                if(sensors.override){
+                    AllSensorData[7] = sensors[x].override;
+                }
+                if(sensors.thresholdToggle){
+                    AllSensorData[8] = sensors[x].thresholdToggle;
+                }
+                if(sensors.windThreshold){
+                    AllSensorData[9] = sensors[x].windThreshold;
+                }
+                if(sensors.tempThreshold){
+                    AllSensorData[10] = sensors[x].tempThreshold;
+                }
+                if(sensors.vibrationThreshold){
+                    AllSensorData[11] = sensors[x].vibrationThreshold;
+                }
+                if(sensors.currentThreshold){
+                    AllSensorData[12] = sensors[x].currentThreshold;
+                }
+                if(sensors.humidityThreshold){
+                    AllSensorData[13] = sensors[x].humidityThreshold;
+                }
+            }
+
+            var InitCommand = "VERSION | SENSOR_INIT | " + AllSensorData.toString() + " | " + new Date().toUTCString;
+            this.webSocketTest(InitCommand);
+        }
     },
     mounted: function(){
         this.retrieveOverrides();       // Statuses are updated ofter override states are retrieved
