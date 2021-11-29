@@ -5,24 +5,21 @@
     <v-container grid text-xs-center>
         <v-card-title primary-title class="justify-center">Sensor Network Sensor Initialization</v-card-title>
     </v-container>
+
     <v-container fluid>
-        <v-checkbox v-model="sensorInit.AzimuthTemperature" label="Azimuth Temperature"></v-checkbox>
+        <v-checkbox v-model="sensorInit.ElevationEncoder" label="Elevation Encoder"></v-checkbox>
+        <v-checkbox v-model="sensorInit.AzimuthEncoder" label="Azimuth Encoder"></v-checkbox>
         <v-checkbox v-model="sensorInit.ElevationTemperature" label="Elevation Temperature"></v-checkbox>
+        <v-checkbox v-model="sensorInit.AzimuthTemperature" label="Azimuth Temperature"></v-checkbox>
         <v-checkbox v-model="sensorInit.AzimuthAccelerometer" label="Azimuth Accelerometer"></v-checkbox>
         <v-checkbox v-model="sensorInit.ElevationAccelerometer" label="Elevation Accelerometer"></v-checkbox>
         <v-checkbox v-model="sensorInit.CounterbalanceAccelerometer" label="Counterbalance Accelerometer"></v-checkbox>
-        <v-checkbox v-model="sensorInit.AzimuthEncoder" label="Azimuth Encoder"></v-checkbox>
-        <v-checkbox v-model="sensorInit.ElevationEncoder" label="Elevation Encoder"></v-checkbox>
-    </v-container>
-    <v-container>
-        <input v-model="sensorInit.InitTimeout" placeholder="Initialization Timeout (seconds)" name="InitTimeout">
-    </v-container>
-    <v-container>
-        <input v-model="sensorInit.RetTimeOut" placeholder="Data Retrieval Timeout (seconds)" name="DataRetTimeout">
+        <input v-model="sensorInit.RetTimeOut" placeholder="Data Retrieval Timeout (seconds)" name="DataRetTimeout" class="textbox">    
+        <input v-model="sensorInit.InitTimeout" placeholder="Initialization Timeout (seconds)" name="InitTimeout" class="textbox">
     </v-container>
 
-    <v-btn @click="fillSensorInitData(sensorInit)">TEST WEBSOCKET BUTTON</v-btn>
 
+    <v-btn @click="fillSensorInitData(sensorInit)">Submit</v-btn>
 </v-card>
 
 </div>
@@ -37,7 +34,6 @@ export default {
     name: 'SensorInit',
     data () {
     return {
-        Command: "SCRIPT: STOW",
         sensorInit: {
             ElevationEncoder: false,
             AzimuthEncoder: false,
@@ -61,39 +57,45 @@ export default {
                 SensorInitData[i] = 0;
             }
 
-            if(sensorInit.AzimuthTemperature){
+            if(sensorInit.ElevationEncoder){
                 SensorInitData[0] = 1;
             }
-            if(sensorInit.ElevationTemperature){
+            if(sensorInit.AzimuthEncoder){
                 SensorInitData[1] = 1;
             }
-            if(sensorInit.AzimuthAccelerometer){
+            if(sensorInit.ElevationTemperature){
                 SensorInitData[2] = 1;
             }
-            if(sensorInit.ElevationAccelerometer){
+            if(sensorInit.AzimuthTemperature){
                 SensorInitData[3] = 1;
             }
-            if(sensorInit.CounterbalanceAccelerometer){
+            if(sensorInit.AzimuthAccelerometer){
                 SensorInitData[4] = 1;
             }
-            if(sensorInit.AzimuthEncoder){
+            if(sensorInit.ElevationAccelerometer){
                 SensorInitData[5] = 1;
             }
-            if(sensorInit.ElevationEncoder){
+            if(sensorInit.CounterbalanceAccelerometer){
                 SensorInitData[6] = 1;
             }
-            if(sensorInit.InitTimeout != null){
+            if(sensorInit.RetTimeOut != null){
                 SensorInitData[7] = sensorInit.InitTimeout;
             }
-            if(sensorInit.RetTimeOut != null){
+            if(sensorInit.InitTimeout != null){
                 SensorInitData[8] = sensorInit.RetTimeOut;
             }
 
-            var InitCommand = "VERSION | SENSOR_INIT | " + SensorInitData.toString() + " | " + new Date().toUTCString;
+            var InitCommand = "1.0 | SENSOR_INIT | " + SensorInitData.toString() + " | " + "TIME"
             this.webSocketTest(InitCommand);      
         }
   }
 };
 </script>
 <style scoped>
+.textbox{
+    width: 100%;
+    height: 50px;
+    border-color: white;
+    color: white;
+}
 </style>
