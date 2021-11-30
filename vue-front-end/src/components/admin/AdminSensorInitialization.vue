@@ -19,7 +19,7 @@
     </v-container>
 
 
-    <v-btn @click="fillSensorInitData(sensorInit)">Submit</v-btn>
+    <v-btn :disabled="bothInputFieldsFilled" @click="fillSensorInitData(sensorInit)">Submit</v-btn>
 </v-card>
 
 </div>
@@ -46,7 +46,12 @@ export default {
             InitTimeout: null,
         }
     }
-  },
+    },
+    computed:{
+        bothInputFieldsFilled(){
+            return !(this.sensorInit.RetTimeOut != null && this.sensorInit.RetTimeOut != 0 && this.sensorInit.InitTimeout !=null && this.sensorInit.InitTimeout != 0)
+        }
+    },
     methods:{
         webSocketTest(command){
             ApiDriver.webSocket(command);
@@ -88,7 +93,7 @@ export default {
             var InitCommand = "1.0 | SENSOR_INIT | " + SensorInitData.toString() + " | " + "TIME"
             this.webSocketTest(InitCommand);      
         }
-  }
+    }
 };
 </script>
 <style scoped>

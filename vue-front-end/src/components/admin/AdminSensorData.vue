@@ -75,7 +75,7 @@
             </v-layout>
         </div>
     </v-container>
-    <v-btn @click="sendSensorData(sensors)">TEST WEBSOCKET BUTTON</v-btn>
+    <v-btn @click="sendSensorData(sensors)">Submit</v-btn>
 </v-card>
 
 </div>
