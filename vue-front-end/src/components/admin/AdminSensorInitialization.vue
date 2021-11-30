@@ -53,7 +53,7 @@ export default {
         }
     },
     methods:{
-        webSocketTest(command){
+        sendCommand(command){
             ApiDriver.webSocket(command);
         },
         fillSensorInitData(sensorInit){
@@ -91,7 +91,7 @@ export default {
             }
 
             var InitCommand = "1.0 | SENSOR_INIT | " + SensorInitData.toString() + " | " + "TIME"
-            this.webSocketTest(InitCommand);      
+            this.sendCommand(InitCommand);      
         }
     }
 };

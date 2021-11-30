@@ -321,29 +321,31 @@ export default {
             } else if(this.mode === "Azimuth and Elevation") {
               if(this.azimuth >= 0 && this.azimuth < 360 && this.elevation >= 0 && this.elevation <= 90) {
                 console.log("Valid Azimuth and Elavation Jog Move input! Submitting: " + this.azimuth + " " + this.elevation );
-                selectedCommand = "AZIMUTH " + this.azimuth + " ELEVATION " + this.elevation; // TODO: get final format
+                selectedCommand = "1.0|ORIENTATION_MOVE| AZ " + this.azimuth + "| EL " + this.elevation + "| TIME"; // TODO: get final format
+                ApiDriver.webSocket(selectedCommand);
               }            
             }
         } else if (val == 1) {
             // SCRIPTS
             if(this.selectedScript != null){
               if(this.selectedScript == "Stow") {
-                selectedCommand = "SCRIPT: STOW";
+                selectedCommand = "1.0 | SCRIPT | STOW | TIME";
               } else if (this.selectedScript == "Snow Dump") {
-                selectedCommand = "SCRIPT: DUMP";
+                selectedCommand = "1.0 | SCRIPT | DUMP | TIME";
               } else if (this.selectedScript == "Full Elevation Move") {
-                selectedCommand = "SCRIPT: FULL_EV";
+                selectedCommand = "1.0 | SCRIPT | FULL_EV | TIME";
               } else if (this.selectedScript == "Full 360 Move, Clockwise") {
-                selectedCommand = "SCRIPT: CLOCK";
+                selectedCommand = "1.0 | SCRIPT | CLOCK | TIME";
               } else if (this.selectedScript == "Full 360 Move, Counterclockwise") {
-                selectedCommand = "SCRIPT: COUNTER";
+                selectedCommand = "1.0 | SCRIPT | COUNTER | TIME";
               } else if (this.selectedScript == "Calibration") {
-                selectedCommand = "SCRIPT: CALIBRATE";
+                selectedCommand = "1.0 | SCRIPT | CALIBRATE | TIME";
               }
+              ApiDriver.webSocket(selectedCommand);
               console.log("Script Submit! submitting... " + this.selectedScript);
             }
         } else if (val == 2) {
-          selectedCommand = "STOP_RT";
+          selectedCommand = "1.0 | STOP_RT | TIME";
           console.log("STOP TELESCOPE! submitting... " + selectedCommand);
         }
         let data = {
