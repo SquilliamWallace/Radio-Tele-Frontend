@@ -103,36 +103,7 @@
                 <v-flex xs6 sm4>
                     <v-select v-model="selectedScript" :items="scripts" color="blue darken-2" label="Script" required></v-select>
                 </v-flex>
-            <v-card-actions>
-                <!-- Buttons to jog by Right Asc and Declination -->
-                <v-container>
-                  <v-btn flat @click="update(2)">Declination Pos</v-btn>
-                  <!-- J = up      -->
-                  <br />
-                  <v-btn flat @click="update(1)">Right Asc Neg</v-btn>
-                  <!-- H = left    -->
-                  <v-btn flat @click="update(3)">Declination Neg</v-btn>
-                  <!-- K = down    -->
-                  <v-btn flat @click="update(4)">Right Asc Pos</v-btn>
-                  <!-- L = right   -->
-                </v-container>
-
-                <v-spacer></v-spacer>
-
-                <!-- Buttons to jog by Azimuth and Elevation -->
-                <v-container>
-                  <v-btn flat @click="update(6)">Elevation Pos</v-btn>
-                  <!-- J = up      -->
-                  <br />
-                  <v-btn flat @click="update(5)">Azimuth Neg</v-btn>
-                  <!-- H = left    -->
-                  <v-btn flat @click="update(7)">Elevation Neg</v-btn>
-                  <!-- K = down    -->
-                  <v-btn flat @click="update(8)">Azimuth Pos</v-btn>
-                  <!-- L = right   -->
-                </v-container>
-            </v-card-actions>
-            <v-text-field
+              <v-text-field
                 v-model="middlemanReply"
                 :disabled="true"
                 :validate-on-blur="true"
@@ -335,9 +306,9 @@ export default {
               } else if (this.selectedScript == "Full Elevation Move") {
                 selectedCommand = "1.0 | SCRIPT | FULL_EV | TIME";
               } else if (this.selectedScript == "Full 360 Move, Clockwise") {
-                selectedCommand = "1.0 | SCRIPT | CLOCK | TIME";
+                selectedCommand = "1.0 | SCRIPT | FULL_CLOCK | TIME";
               } else if (this.selectedScript == "Full 360 Move, Counterclockwise") {
-                selectedCommand = "1.0 | SCRIPT | COUNTER | TIME";
+                selectedCommand = "1.0 | SCRIPT | FULL_COUNTER | TIME";
               } else if (this.selectedScript == "Calibration") {
                 selectedCommand = "1.0 | SCRIPT | CALIBRATE | TIME";
               }
