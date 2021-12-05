@@ -41,6 +41,7 @@
                         :error-messages=form.minutes.errorMessage
                     ></v-text-field>
                     <!-- <span style="color:red;font-size:12px">{{formErrors.min}}</span> -->
+                    <!--
                     <v-text-field
                         v-model="form.seconds.value"
                         label="Seconds"
@@ -49,6 +50,7 @@
                         :error=form.seconds.hasError
                         :error-messages=form.seconds.errorMessage
                     ></v-text-field>
+                    -->
                     <!-- <span style="color:red;font-size:12px">{{formErrors.sec}}</span> -->
                     <v-container>
                     <v-btn @click="cancel" color="Red" dark >Cancel</v-btn>
@@ -80,7 +82,7 @@ export default {
                 this.form.declination.value = this.updateFormVals.dec
                 this.form.hours.value = this.updateFormVals.hour
                 this.form.minutes.value = this.updateFormVals.min
-                this.form.seconds.value = this.updateFormVals.sec
+                // this.form.seconds.value = this.updateFormVals.sec
                 this.useUpdateCall = true
         }
     },
@@ -102,12 +104,12 @@ export default {
                    value: '',
                    hasError: false,
                    errorMsg: ""
-               },
+               },/*
                seconds:{
                    value: '',
                    hasError: false,
                    errorMsg: ""
-               },
+               },*/
                declination:{
                    value: '',
                    hasError: false,
@@ -139,7 +141,7 @@ export default {
                 name: this.form.name.value,
                 hours: this.form.hours.value,
                 minutes: this.form.minutes.value,
-                seconds: this.form.seconds.value,
+                // seconds: this.form.seconds.value,
                 declination: this.form.declination.value
             })
             ApiDriver.CelestialBodies.updateCB(this.updateFormVals.id, data).then((response) => {
@@ -177,6 +179,7 @@ export default {
                     } else{
                         this.form.minutes.errorMsg = ""
                     }
+                    /*
                     if(errors.SECONDS){
                         this.form.seconds.hasError = true
                         for(var index in errors.SECONDS){
@@ -185,6 +188,7 @@ export default {
                     } else{
                         this.form.seconds.errorMsg = ""
                     }
+                    */
                     if(errors.NAME){
                         this.form.name.hasError = true
                         for(var index in errors.NAME){
@@ -212,7 +216,7 @@ export default {
                 name: this.form.name.value,
                 hours: this.form.hours.value,
                 minutes: this.form.minutes.value,
-                seconds: this.form.seconds.value,
+                // seconds: this.form.seconds.value,
                 declination: this.form.declination.value
             })
 
@@ -250,7 +254,7 @@ export default {
                         }
                     } else{
                         this.form.minutes.errorMsg = ""
-                    }
+                    }/*
                     if(errors.SECONDS){
                         this.form.seconds.hasError = true
                         for(var index in errors.SECONDS){
@@ -258,7 +262,7 @@ export default {
                         }
                     } else{
                         this.form.seconds.errorMsg = ""
-                    }
+                    }*/
                     if(errors.NAME){
                         this.form.name.hasError = true
                         for(var index in errors.NAME){
@@ -293,7 +297,7 @@ export default {
                   CustomErrorHandler.populateError(this.form.minutes, message);
               } else if (field === "SECONDS") {
                   CustomErrorHandler.populateError(this.form.seconds, message);
-              }else if (field === "DECLINATION") {
+              } else if (field === "DECLINATION") {
                   CustomErrorHandler.populateError(this.form.declination, message);
             }  
           }
@@ -307,13 +311,13 @@ export default {
             CustomErrorHandler.clearError(this.form.declination);
             CustomErrorHandler.clearError(this.form.hours);
             CustomErrorHandler.clearError(this.form.minutes);
-            CustomErrorHandler.clearError(this.form.seconds);
+            // CustomErrorHandler.clearError(this.form.seconds);
 
             this.form.name.value = ""
             this.form.declination.value = ""
             this.form.hours.value = ""
             this.form.minutes.value = ""
-            this.form.seconds.value = ""
+            // this.form.seconds.value = ""
         },
       cancel() {
           this.celestialBodyForm = false

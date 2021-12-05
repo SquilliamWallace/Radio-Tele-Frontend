@@ -93,7 +93,7 @@ export default {
                 router.push('/home')
             }
             else{
-                router.push('/')
+                router.push('/login')
             }
         },
         submit() {
@@ -111,7 +111,7 @@ export default {
         logout() {
             ApiDriver.logout();
             this.$store.commit("logout");
-            router.push('/');
+            router.push('/landingpage');
         },
         toggleInfo() {
             this.showInfo = !this.showInfo;
@@ -127,7 +127,7 @@ export default {
             }
             
             // On clicking the drawer, check if the user is an Admin
-            if(this.$store.state.isAdmin && this.items.length < 6){
+            if((this.$store.state.isAdmin || this.$store.state.isAlumni) && this.items.length < 6){
                 this.items.push({ title: 'Administration', path: '/admin' })
             }
         },
