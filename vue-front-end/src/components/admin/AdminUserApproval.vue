@@ -24,10 +24,7 @@
                         </v-list-tile-content>
                         <v-spacer></v-spacer>
                         <v-btn 
-                            @click="confirm = !confirm, userCompany = user.userInfo.company, userEmail = user.userInfo.email, userFirst = user.userInfo.
-                                            firstName, userLast = user.userInfo.lastName, userId = user.userInfo.id, userPhone = user.userInfo.phoneNumber, 
-                                            userStatus = user.userInfo.status, userRequestedRole =user.role.charAt(0) + user.role.slice(1).toLowerCase(),
-                                            form.roleId.value = user.id">
+                            @click="userIndex(user),confirm = !confirm">
                             Choose Role
                         </v-btn>
                     </v-list-tile>
@@ -106,7 +103,7 @@
                             Select the role you wish to assign to this user.
                         </v-card-text>
                         <v-select
-                            item-value= this.userRequestedRole
+                            item-value= accountTypes[0]
                             :items="accountTypes"
                             required
                             v-model="form.assignedRole.value"
@@ -141,7 +138,7 @@ export default {
                     value: ""
                 },
                 assignedRole: {
-                    value: ""
+                    value: "Guest"
                 }
             },
             users: [],
@@ -209,6 +206,17 @@ export default {
             this.pageDisplay = page;
             this.users = [];
             this.getUnapprovedUsers();
+        },
+        userIndex(user){
+            this.userCompany = user.userInfo.company 
+            this.userEmail = user.userInfo.email 
+            this.userFirst = user.userInfo.firstName 
+            this.userLast = user.userInfo.lastName 
+            this.userId = user.userInfo.id 
+            this.userPhone = user.userInfo.phoneNumber 
+            this.userStatus = user.userInfo.status 
+            this.userRequestedRole =user.role.charAt(0) + user.role.slice(1).toLowerCase()
+            this.form.roleId.value = user.id
         }
     },
     mounted: function(){

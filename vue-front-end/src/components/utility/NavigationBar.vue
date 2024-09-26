@@ -93,7 +93,7 @@ export default {
                 router.push('/home')
             }
             else{
-                router.push('/')
+                router.push('/login')
             }
         },
         submit() {
@@ -111,7 +111,7 @@ export default {
         logout() {
             ApiDriver.logout();
             this.$store.commit("logout");
-            router.push('/');
+            router.push('/landingpage');
         },
         toggleInfo() {
             this.showInfo = !this.showInfo;

@@ -45,6 +45,15 @@
                                 v-on:keyup.enter="updateInformation">
                             </v-text-field>
                         </v-flex>
+                        <v-flex xs12>
+                            <v-select
+                            v-model="selectedNotificationType"
+                            :items="notificationTypes"
+                            item-text="key"
+                            item-value="value"
+                            label="Notification Type"
+                            ></v-select>
+                        </v-flex>
                     </v-container>
                     <v-card-actions>
                         <v-btn color="primary" @click="updateInformation">Save</v-btn>
@@ -88,9 +97,20 @@ export default {
         company: {
           value: "",
           hasError: false
+        },
+        notificationType: {
+            value: "",
+            hasError: false
         }
       },
-      confirmModal: false
+      confirmModal: false,
+      selectedNotificationType: "EMAIL",
+      notificationTypes: [
+            {key: "Email", value: "EMAIL"},
+            {key: "SMS", value: "SMS"},
+            {key: "Push Notification", value: "PUSHNOTIFICATION"},
+            {key: "All", value: "ALL"}
+      ]
     };
   },
   methods: {
@@ -103,6 +123,8 @@ export default {
         this.profile.lastName.value = data.lastName;
         this.profile.phone.value = data.phoneNumber;
         this.profile.company.value = data.company;
+        this.profile.notificationType.value = data.notificationType;
+        this.selectedNotificationType = this.profile.notificationType.value;
     },
     retrieveInformation() {
         let that = this;
@@ -140,7 +162,8 @@ export default {
             firstName: this.profile.firstName.value,
             lastName: this.profile.lastName.value,
             phoneNumber: this.profile.phone.value,
-            company: this.profile.company.value
+            company: this.profile.company.value,
+            notificationType: this.selectedNotificationType
         };
         // Call the update api method
         ApiDriver.User.update(data.id, JSON.stringify(data)).then(response => {

@@ -3,7 +3,7 @@ import { Line } from 'vue-chartjs'
 
 export default {
   extends: Line,
-  props: ['chartdata', 'styles'],
+  props: ['value', 'styles'],
   data() {
       return {
           datacollection: {
@@ -23,15 +23,15 @@ export default {
                 xAxes: [{
                     display: true,
                     scaleLabel: {
-                    display: true,
-                    labelString: 'Time of Capture'
+                        display: true,
+                        labelString: 'Time of Capture'
                     }
                 }],
                 yAxes: [{
                     display: true,
                     scaleLabel: {
-                    display: true,
-                    labelString: 'Signal Intensity'
+                        display: true,
+                        labelString: 'Signal Intensity'
                     }
                 }]
             }
@@ -39,7 +39,7 @@ export default {
     }
   },
   mounted () {
-    this.renderChart(this.chartdata, this.options)
+    this.renderChart(this.value, this.options)
   }
 }
 </script>

@@ -2,7 +2,7 @@
 <div>
     <navigation-bar></navigation-bar>
     <loading v-show="$store.state.isLoading"></loading>
-    <v-card v-show="!$store.state.isLoading" flat>
+    <v-card v-show="!$store.state.isLoading" flat  width="100%">
         <v-card-title v-if="completedAppointments.length === 0" primary-title class="justify-center">
             <span class="headline">No Completed Observations!</span>
         </v-card-title>
@@ -14,23 +14,23 @@
                 <a href="/#/scheduler">Click here to schedule an observation</a>
             </div>
         </v-card-text>
-         <v-card-title v-else>
+         <div v-else>
             <v-list two-line>
                 <v-list-tile class="list-item" v-for="appointment in completedAppointments" :key="appointment.id" v-bind:href="'/#/appointments/' + appointment.id + '/view'">
                     <v-list-tile-content v-if="completedAppointments.length > 0">
                         <v-list-tile-title v-if="appointment.celestialBody">
                             Appointment #{{ appointment.id }}
                         </v-list-tile-title>
-                        <v-list-tile-title v-if="appointment.coordinates">
-                            Coordinates: {{ appointment.coordinates }}
-                        </v-list-tile-title>
+                        <v-list-tile-sub-title>
+                            Type: {{ appointment.type }}
+                        </v-list-tile-sub-title>
                         <v-list-tile-sub-title>
                             Appointment Time: {{ appointment.startTime }} - {{ appointment.endTime }}
                         </v-list-tile-sub-title>
                     </v-list-tile-content>
                 </v-list-tile>
             </v-list>
-        </v-card-title>
+         </div>
     </v-card>
     <br>
     <div class="text-xs-center">
@@ -87,6 +87,7 @@ export default {
                 .then(response => {
                     // Handle the server response
                     HttpResponse.then(response, data => {
+                        console.log(data)
                         // Populate the data and set the store's boolean back to false
                         this.last = data.data.last;
                         this.populateData(data.data);

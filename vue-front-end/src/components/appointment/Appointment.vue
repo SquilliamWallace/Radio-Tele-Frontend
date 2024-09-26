@@ -1,4 +1,4 @@
-<template dark>
+<template>
     <!-- 
         Define the v-dialog that will pop up when an appointment is being created
 
@@ -76,15 +76,6 @@
                     <!--
                         Same as Start Time above
                     -->
-                    <!-- <v-flex xs12 sm6>
-                        <v-text-field
-                        v-model="eventObj.end"
-                        :rules="[rules.dateRequired]"
-                        color="blue darken-2"
-                        label="End Time"
-                        required
-                        ></v-text-field>
-                    </v-flex> -->
                     <!--
                         Right Ascension Hours
                         v-model="form.rightAscension.hours"
@@ -99,7 +90,26 @@
                         onkeypress='return event.charCode >= 48 && event.charCode <= 57'
                             Only allow numbers to be inputted into the form (0 through 9)
                     -->
-                    <v-flex xs12 sm4>
+                    <v-flex xs12 sm6>
+                        <v-select
+                        v-model="telescopeName"
+                        :items="telescopes"
+                        color="blue darken-2"
+                        label="Telescope"
+                        required
+                        ></v-select>
+                    </v-flex>
+                    
+                    <v-flex xs12 sm6>
+                        <v-select
+                        v-model="type"
+                        :items="types"
+                        color="blue darken-2"
+                        label="Appointment Type"
+                        required
+                        ></v-select>
+                    </v-flex>
+                    <v-flex xs12 sm4 v-if="type === 'Point'">
                         <v-text-field
                         v-model="form.rightAscension.hours"
                         :rules="[rules.rightAscHours]"
@@ -117,7 +127,7 @@
                      <!--
                         Same as Right Ascension Hours, except checks for minutes error handling
                     -->
-                    <v-flex xs12 sm4>
+                    <v-flex xs12 sm4 v-if="type === 'Point'">
                         <v-text-field
                         v-model="form.rightAscension.minutes"
                         :rules="[rules.rightAscMinutes]"
@@ -135,7 +145,8 @@
                      <!--
                         Same as Right Ascension Hours, except checks for seconds error handling
                     -->
-                    <v-flex xs12 sm4>
+                    <!--
+                    <v-flex xs12 sm3 v-if="type === 'Point'">
                         <v-text-field
                         v-model="form.rightAscension.seconds"
                         :rules="[rules.rightAscSeconds]"
@@ -148,13 +159,14 @@
                         type="number"
                         required
                         ></v-text-field>
-                    </v-flex>
+                    </v-flex> 
+                    -->
                      <!-- Pretty much same as Right Ascension 
                      
                         onkeypress='return event.charCode == 45 || (event.charCode >= 48 && event.charCode <= 57)'
                             Only allow numerical inputs and - (minus) as input can be negative
                      -->
-                    <v-flex xs12 sm6>
+                    <v-flex xs12 sm4 v-if="type === 'Point'">
                         <v-text-field
                         v-model="form.declination.value"
                         :rules="[rules.numRequired]"
@@ -168,6 +180,206 @@
                         required
                         ></v-text-field>
                     </v-flex>
+
+                    <!-- [Celestial Body]
+                        Conditionally display Celestial Body Selection field  
+
+                        :items="bodies", item-text="name", item-value="id" {
+                            Sets the items in the list to the items in the bodies object,
+                            makes the text that appear in the selection the value of bodies.name,
+                            and sets the variable bound to the model (selectedBody) to bodies.id
+                        } 
+                        :search-input.sync="searchInput" {
+                            Sets the searchInput variable to the text the user types. This is monitored
+                            with a watcher below, and calls the getCelestialBodies method whenever a user
+                            enters text (i.e. autocomplete)
+                        }
+                        placeholder="..." {
+                            Sets the placeholder text in the text box to the text inside of the quotes.
+                        }  
+                        hide-no-data {
+                            Prevents an ugly popup from showing when the user hasn't entered in any text.
+                        }
+                    -->
+                    <v-flex xs12 sm6 v-if="type === 'Celestial Body'">
+                        <v-autocomplete
+                        v-model="selectedBody"
+                        label="Celestial Body"
+                        :items="bodies"
+                        item-text="name"
+                        item-value="id"
+                        :search-input.sync="searchInput"
+                        placeholder="Enter the name of a Celestial Body"
+                        hide-no-data>
+                        </v-autocomplete>
+                     </v-flex>
+
+                    <!-- [Drift Scan]
+                        Conditionally display Azimuth and Elevation fields
+                    -->
+                    <v-flex xs12 sm6 v-if="type === 'Drift Scan'">
+                        <v-text-field
+                        v-model="form.azimuth.value"
+                        :validate-on-blur="true"
+                        color="blue darken-2"
+                        label="Azimuth"
+                        type="number"
+                        onkeypress='return event.charCode >= 48 && event.charCode <= 57'
+                        :rules="[rules.azimuth]"
+                        required
+                        ></v-text-field>
+                    </v-flex>
+
+                    <v-flex xs12 sm6 v-if="type === 'Drift Scan'">
+                        <v-text-field
+                        v-model="form.elevation.value"
+                        :validate-on-blur="true"
+                        color="blue darken-2"
+                        label="Elevation"
+                        type="number"
+                        onkeypress='return event.charCode >= 48 && event.charCode <= 57'
+                        :rules="[rules.elevation]"
+                        required
+                        ></v-text-field>
+                    </v-flex>
+
+                    <!-- [Raster Scan]
+                        Conditionally display two sets of Coordinate fields
+                        (Hours, Minutes, Seconds, Right Ascension, Declination)
+                    -->
+                        <v-flex xs12 sm4 row v-if="type === 'Raster Scan'">
+                        <v-text-field
+                        v-model="form.firstCoordinate.hours"
+                        :rules="[rules.rightAscHours]"
+                        :validate-on-blur="true"
+                        color="blue darken-2"
+                        :error=form.rightAscension.hasError
+                        :error-messages=form.rightAscension.errorMessage
+                        onkeypress='return event.charCode >= 48 && event.charCode <= 57'
+                        label="Coordinate 1 Hours"
+                        type="number"
+                        class="number"
+                        required
+                        ></v-text-field>
+                    </v-flex>
+
+                    <v-flex xs12 sm4 v-if="type === 'Raster Scan'">
+                        <v-text-field
+                        v-model="form.firstCoordinate.minutes"
+                        :rules="[rules.rightAscMinutes]"
+                        :validate-on-blur="true"
+                        color="blue darken-2"
+                        :error=form.rightAscension.hasError
+                        :error-messages=form.rightAscension.errorMessage
+                        onkeypress='return event.charCode >= 48 && event.charCode <= 57'
+                        label="Coordinate 1 Minutes"
+                        type="number"
+                        class="number"
+                        required
+                        ></v-text-field>
+                    </v-flex>
+                     
+                    <!--
+                    <v-flex xs12 sm2 v-if="type === 'Raster Scan'">
+                        <v-text-field
+                        v-model="form.firstCoordinate.seconds"
+                        :rules="[rules.rightAscSeconds]"
+                        :validate-on-blur="true"
+                        color="blue darken-2"
+                        :error=form.rightAscension.hasError
+                        :error-messages=form.rightAscension.errorMessage
+                        onkeypress='return event.charCode >= 48 && event.charCode <= 57'
+                        label="Coordinate 1 Seconds"
+                        type="number"
+                        required
+                        ></v-text-field>
+                    </v-flex>
+                    -->
+                    
+                    
+
+                    <v-flex xs12 sm4 v-if="type === 'Raster Scan'">
+                        <v-text-field
+                        v-model="form.firstCoordinate.declination"
+                        :rules="[rules.numRequired]"
+                        :validate-on-blur="true"
+                        color="blue darken-2"
+                        :error=form.declination.hasError
+                        :error-messages=form.declination.errorMessage
+                        onkeypress='return event.charCode == 45 || (event.charCode >= 48 && event.charCode <= 57)'
+                        label="Coordinate 1 Declination"
+                        type="number"
+                        required
+                        ></v-text-field>
+                    </v-flex>
+
+                    <v-spacer></v-spacer>
+
+                    <v-flex xs12 sm4 v-if="type === 'Raster Scan'">
+                        <v-text-field
+                        v-model="form.secondCoordinate.hours"
+                        :rules="[rules.rightAscHours]"
+                        :validate-on-blur="true"
+                        color="blue darken-2"
+                        :error=form.rightAscension.hasError
+                        :error-messages=form.rightAscension.errorMessage
+                        onkeypress='return event.charCode >= 48 && event.charCode <= 57'
+                        label="Coordinate 2 Hours"
+                        type="number"
+                        class="number"
+                        required
+                        ></v-text-field>
+                    </v-flex>
+
+                    <v-flex xs12 sm4 v-if="type === 'Raster Scan'">
+                        <v-text-field
+                        v-model="form.secondCoordinate.minutes"
+                        :rules="[rules.rightAscMinutes]"
+                        :validate-on-blur="true"
+                        color="blue darken-2"
+                        :error=form.rightAscension.hasError
+                        :error-messages=form.rightAscension.errorMessage
+                        onkeypress='return event.charCode >= 48 && event.charCode <= 57'
+                        label="Coordinate 2 Minutes"
+                        type="number"
+                        class="number"
+                        required
+                        ></v-text-field>
+                    </v-flex>
+                     
+                    <!--
+                    <v-flex xs12 sm2 v-if="type === 'Raster Scan'">
+                        <v-text-field
+                        v-model="form.secondCoordinate.seconds"
+                        :rules="[rules.rightAscSeconds]"
+                        :validate-on-blur="true"
+                        color="blue darken-2"
+                        :error=form.rightAscension.hasError
+                        :error-messages=form.rightAscension.errorMessage
+                        onkeypress='return event.charCode >= 48 && event.charCode <= 57'
+                        label="Coordinate 2 Seconds"
+                        type="number"
+                        required
+                        ></v-text-field>
+                    </v-flex>
+                    -->
+                    
+
+                    <v-flex xs12 sm4 v-if="type === 'Raster Scan'">
+                        <v-text-field
+                        v-model="form.secondCoordinate.declination"
+                        :rules="[rules.numRequired]"
+                        :validate-on-blur="true"
+                        color="blue darken-2"
+                        :error=form.declination.hasError
+                        :error-messages=form.declination.errorMessage
+                        onkeypress='return event.charCode == 45 || (event.charCode >= 48 && event.charCode <= 57)'
+                        label="Coordinate 2 Declination"
+                        type="number"
+                        required
+                        ></v-text-field>
+                    </v-flex>
+
                     <!--
                         v-if="this.$store.state.isResearcher || this.$store.state.isAdmin"
                         only display this part of the form if current user is researcher or admin
@@ -178,28 +390,30 @@
                         v-model="form.isPrivate.value"
                         color="green"
                         label="Private"
-                        >
-                        </v-checkbox>
+                        ></v-checkbox>
+                        <v-checkbox v-if="this.$store.state.isAdmin"
+                        v-model="form.isSecondary.value"
+                        color="green"
+                        label="Secondary"
+                        ></v-checkbox>
                     </v-flex>
                     <!--
                         Simple drop down select menu to choose which telescope you want to schedule your appointment for
                         Added to form to make sure user knows which telescope they are scheduling for
                     -->
-                    <v-flex xs12 sm6>
-                        <v-select
-                        v-model="telescopeName"
-                        :items="telescopes"
-                        color="blue darken-2"
-                        label="Telescope"
-                        required
-                        ></v-select>
-                    </v-flex>
                     </v-layout>
                 </v-container>
                 <v-card-actions>
                     <!-- Cancel resets form and closes Modal -->
                     <v-btn flat @click="resetForm">Cancel</v-btn>
                     <v-spacer></v-spacer>
+                    
+                    <!-- Allow users to call the visualization API --> 
+                    <v-btn flat 
+                    :disabled="!formIsValid"
+                    @click="visualize">Visualize</v-btn>
+                    <v-spacer></v-spacer>
+
                     <!-- Submit sends the form to backend to be verified -->
                     <v-btn
                     :disabled="!formIsValid"
@@ -209,6 +423,8 @@
                     >Schedule</v-btn>
                 </v-card-actions>
                 </v-form>
+                <img id="image0" class="image-style" v-bind:src="imgSrc0" v-if="showImage==true">
+                <img id="image1" class="image-style" v-bind:src="imgSrc1" v-if="showImage==true">
             </v-card>
     </v-dialog>
 </template>
@@ -229,25 +445,71 @@ export default {
                 "Scale Model Radio Telescope",
                 "Virtual Radio Telescope"
             ],
+            types: [
+                "Point",
+                "Celestial Body",
+                "Drift Scan",
+                "Raster Scan"
+            ],
             form: {
                 isPrivate: {
+                    value: false
+                },
+                isSecondary: {
                     value: false
                 },
                 rightAscension: {
                     hours: null,
                     minutes: null,
-                    seconds: null,
+                    // seconds: null,
                     hasError: false
                 },
                 declination: {
                     value: null,
                     hasError: false
+                },
+                azimuth: {
+                    value: null
+                },
+                elevation: {
+                    value: null
+                },
+                firstCoordinate: {
+                    hours: null,
+                    minutes: null,
+                    // seconds: null,
+                    rightAscension: null,
+                    declination: null
+                },
+                secondCoordinate: {
+                    hours: null,
+                    minutes: null,
+                    // seconds: null,
+                    rightAscension: null,
+                    declination: null
                 }
             },
+            priority: '',
             startDate: '',
             startTime: '',
             endDate: '',
             endTime: '',
+            notVisible: false,
+            showImage: false,
+            imgSrc0: '',
+            imgSrc1: '',
+
+            // Variables to keep track of chosen Appointment type
+            type: 'Point',
+            selectedType: '',
+
+            // Variables to keep track of chosen Celestial Body
+            bodies: [],
+            selectedBody: '',
+            searchInput: '',
+
+            // Variable to store our pair of coordinates for Drift Scans
+            coordinates: [],
 
             // Variable to keep track of whether or not we've updated our start/end times 
             updatedTime: false,
@@ -259,7 +521,9 @@ export default {
                 rightAscHours: val => (val && val.toString().length > 0 && val < 24 && val >= 0) || 'Must be between 0 and 23 hours',
                 rightAscMinutes: val => (val && val.toString().length > 0 && val < 60 && val >= 0) || 'Must be between 0 and 59 minutes',
                 rightAscSeconds: val => (val && val.toString().length > 0 && val < 60 && val >= 0) || 'Must be between 0 and 59 seconds',
-                numRequired: val => (val && val.toString().length > 0 && val <=90 && val >= -90) || 'Must be between 90 and -90'
+                numRequired: val => (val && val.toString().length > 0 && val <=90 && val >= -90) || 'Must be between 90 and -90',
+                azimuth: val => (val && val.toString().length > 0 && val >= 0 && val < 360) || 'Must be between 0 and 360',
+                elevation: val => (val && val.toString().length > 0 && val >= 0 && val <= 90) || 'Must be between 0 and 90'
             },
             snackbar: false,
         }
@@ -276,20 +540,184 @@ export default {
         resetForm() {
             this.updatedTime = false;
             this.form.isPrivate.value = false;
+            this.form.isSecondary.value = false;
+            this.priority = '';
             this.form.rightAscension.hours = null;
             this.form.rightAscension.minutes = null;
-            this.form.rightAscension.seconds = null;
+            // this.form.rightAscension.seconds = null;
             this.form.declination.value = null;
+            this.form.azimuth.value = null;
+            this.form.elevation.value = null;
+            this.form.firstCoordinate.hours = null;
+            this.form.firstCoordinate.minutes = null;
+            // this.form.firstCoordinate.seconds = null;
+            this.form.firstCoordinate.rightAscension = null;
+            this.form.firstCoordinate.declination = null;
+            this.form.secondCoordinate.hours = null;
+            this.form.secondCoordinate.minutes = null;
+            // this.form.secondCoordinate.seconds = null;
+            this.form.secondCoordinate.rightAscension = null;
+            this.form.secondCoordinate.declination = null;
+            this.startTime='';
+            this.startDate='';
+            this.endDate='';
+            this.endTime='';
+            this.selectedType = null;
+            this.selectedBody = null;
+            this.notVisible = false;
+            this.imgSrc0 = '';
+            this.imgSrc1 = '';
+            this.showImage = false;
             this.clearErrors();
             this.$emit('close-modal');
         },
+
         // Method to submit to back end
         submit() {
             // Clears the errors first to make sure that if backend sends back any errors we only display the current errors
             this.start = this.startDate + " " + this.startTime;
             this.end = this.endDate + " " + this.endTime;
             this.clearErrors();
+            
+            // Clear the coordinates array to prevent duplicates
+            this.coordinates = [];
+
+            // Handles making the selected Appointment Type string compatible with the back-end
+            this.handleType();
+
+            var startVisible = true
+            var endVisible = true
+            if(this.type != "Drift Scan") {
+                console.log("Hit 1");
+                var tempTargetRA = 0
+                var tempTargetDec = 0
+                if(this.type == "Point") {
+                    tempTargetRA = (this.form.rightAscension.hours * 15.0 + this.form.rightAscension.minutes * 0.25);
+                    tempTargetDec = this.form.declination.value;
+                }
+                else if(this.type == "Celestial Body") {
+                    tempTargetRA = (this.bodies[0].hours * 15.0 + this.bodies[0].minutes * 0.25);
+                    tempTargetDec = this.bodies[0].declination;
+                    console.log(this.bodies);
+                }
+                else if(this.type == "Raster Scan") {
+                    tempTargetRA = (this.form.firstCoordinate.hours * 15.0 + this.form.firstCoordinate.minutes * 0.25);
+                    tempTargetDec = this.form.firstCoordinate.declination;
+                }
+                console.log("Hit 2");
+
+                let data0 = {
+                    year:   this.startDate.substring(0, 4), 
+                    month:  this.startDate.substring(5, 7), 
+                    day:    this.startDate.substring(8, 10), 
+                    hour:   this.startTime.substring(0, 2),
+                    minute: this.startTime.substring(3, 5),
+                    targetRA:   tempTargetRA, 
+                    targetDec:  tempTargetDec,
+                    longitude: -76.704564,
+                    latitude:  40.024409,
+                    altitude: 395 // TODO: make longitude, latitude, and altitude dependant on the selected telescope.
+                };
+                let data1 = {
+                    year:   this.endDate.substring(0, 4), 
+                    month:  this.endDate.substring(5, 7), 
+                    day:    this.endDate.substring(8, 10), 
+                    hour:   this.endTime.substring(0, 2),
+                    minute: this.endTime.substring(3, 5),
+                    targetRA:   tempTargetRA, 
+                    targetDec:  tempTargetDec,
+                    longitude: -76.704564,
+                    latitude:  40.024409,
+                    altitude: 395 // TODO: make longitude, latitude, and altitude dependant on the selected telescope.
+                };
+                var tempTargetRA2 = (this.form.secondCoordinate.hours * 15.0 + this.form.secondCoordinate.minutes * 0.25);
+                var tempTargetDec2 = this.form.secondCoordinate.declination;
+                let data2 = {
+                    year:   this.startDate.substring(0, 4), 
+                    month:  this.startDate.substring(5, 7), 
+                    day:    this.startDate.substring(8, 10), 
+                    hour:   this.startTime.substring(0, 2),
+                    minute: this.startTime.substring(3, 5),
+                    targetRA:   tempTargetRA2, 
+                    targetDec:  tempTargetDec2,
+                    longitude: -76.704564,
+                    latitude:  40.024409,
+                    altitude: 395 // TODO: make longitude, latitude, and altitude dependant on the selected telescope.
+                };
+                let data3 = {
+                    year:   this.endDate.substring(0, 4), 
+                    month:  this.endDate.substring(5, 7), 
+                    day:    this.endDate.substring(8, 10), 
+                    hour:   this.endTime.substring(0, 2),
+                    minute: this.endTime.substring(3, 5),
+                    targetRA:   tempTargetRA2, 
+                    targetDec:  tempTargetDec2,
+                    longitude: -76.704564,
+                    latitude:  40.024409,
+                    altitude: 395 // TODO: make longitude, latitude, and altitude dependant on the selected telescope.
+                };
+                var call0 = ApiDriver.Astronomical.horizonCheck(data0);
+                call0.then(response => {
+                    startVisible = response.data.visible;
+                    console.log(response.data);
+                    if(response.data.visible == false)
+                        this.notVisible = true;
+                    console.log(this.notVisible);})
+                    var call1 = ApiDriver.Astronomical.horizonCheck(data1);
+                    call1.then(response => {
+                        startVisible = response.data.visible;
+                        console.log(response.data);
+                        if(response.data.visible == false)
+                            this.notVisible = true;
+                        console.log(this.notVisible);
+                        if(this.type == "Raster Scan") {
+                            var call2 = ApiDriver.Astronomical.horizonCheck(data2);
+                            call2.then(response => {
+                                startVisible = response.data.visible;
+                                console.log(response.data);
+                                if(response.data.visible == false)
+                                    this.notVisible = true;
+                                var call3 = ApiDriver.Astronomical.horizonCheck(data3)
+                                call3.then(response => {
+                                    endVisible = response.data.visible;
+                                    console.log(response.data);
+                                    if(response.data.visible == false)
+                                        this.notVisible = true;
+                                    if(this.notVisible == true) {
+                                        this.handleNotVisible();
+                                    } else {
+                                        this.makeSubmission();
+                                    }
+                                })
+                                .catch(error => {console.log(error);});
+                            })
+                            .catch(error => {console.log(error);})
+                        } else {
+                            if(this.notVisible == true) {
+                                this.handleNotVisible();
+                            } else {
+                                this.makeSubmission();
+                            }
+                        }
+                }).catch(error => {console.log(error);})
+                .catch(error => {console.log(error);})
+            } else {
+                this.notVisible = this.form.elevation < 0.0
+                if(this.notVisible == true) {
+                    this.handleNotVisible();
+                } else {
+                    this.makeSubmission();
+                }
+            }
+            console.log("Hit 3");
+        },
+        makeSubmission() {
             // set up form to send to back end with data from form obj
+            if(this.form.isSecondary.value) {
+                this.priority = 'SECONDARY';
+            } else {
+                this.priority = 'PRIMARY';
+            }
             let form = {
                 userId: this.$store.state.currentUserId,
                 startTime: new Date(this.start).toUTCString(),
@@ -298,12 +726,18 @@ export default {
                 isPublic: !this.form.isPrivate.value,
                 hours: this.form.rightAscension.hours,
                 minutes: this.form.rightAscension.minutes,
-                seconds: this.form.rightAscension.seconds,
-                declination: this.form.declination.value
+                // seconds: this.form.rightAscension.seconds,
+                declination: this.form.declination.value,
+                celestialBodyId: this.selectedBody,
+                azimuth: this.form.azimuth.value,
+                elevation: this.form.elevation.value,
+                coordinates: this.coordinates,
+                priority: this.priority,
+                type: this.type
             };
-            
+                        
             // Call appropriate API CALL and send form in json format
-            ApiDriver.Appointment.create(JSON.stringify(form)).then((response) => {
+            ApiDriver.Appointment.create(JSON.stringify(form), this.selectedType).then((response) => {
                 HttpResponse.then(response, (data) => {
                     // If returns SUCCESS
                     this.snackbar = true;
@@ -322,8 +756,67 @@ export default {
                         }
                     });
             });
-            
+            this.startTime=''
+            this.startDate=''
+            this.endDate=''
+            this.endTime=''
         },
+        handleNotVisible() {
+            HttpResponse.generalError(this, "The appointment is not possible due to the target's position, which will be below the horizon during a portion of this appointment.", false);
+            this.resetForm();
+        },
+        visualize() {
+            var tempTargetRA = 0
+            var tempTargetDec = 0
+            if(this.type == "Point") {
+                tempTargetRA = (this.form.rightAscension.hours * 15.0 + this.form.rightAscension.minutes * 0.25);
+                tempTargetDec = this.form.declination.value;
+            }
+            else if(this.type == "Celestial Body") {
+                tempTargetRA = (this.bodies[0].hours * 15.0 + this.bodies[0].minutes * 0.25);
+                tempTargetDec = this.bodies[0].declination;
+                console.log(this.bodies);
+            }
+            else if(this.type == "Raster Scan") {
+                tempTargetRA = (this.form.firstCoordinate.hours * 15.0 + this.form.firstCoordinate.minutes * 0.25);
+                tempTargetDec = this.form.firstCoordinate.declination;
+            }
+
+            let data0 = {
+                year:   this.startDate.substring(0, 4), 
+                month:  this.startDate.substring(5, 7), 
+                day:    this.startDate.substring(8, 10), 
+                hour:   this.startTime.substring(0, 2),
+                minute: this.startTime.substring(3, 5),
+                targetRA:   tempTargetRA, 
+                targetDec:  tempTargetDec,
+                longitude: -76.704564,
+                latitude:  40.024409,
+                altitude: 395 // TODO: make longitude, latitude, and altitude dependant on the selected telescope.
+            };
+            let data1 = {
+                year:   this.endDate.substring(0, 4), 
+                month:  this.endDate.substring(5, 7), 
+                day:    this.endDate.substring(8, 10), 
+                hour:   this.endTime.substring(0, 2),
+                minute: this.endTime.substring(3, 5),
+                targetRA:   tempTargetRA, 
+                targetDec:  tempTargetDec,
+                longitude: -76.704564,
+                latitude:  40.024409,
+                altitude: 395 // TODO: make longitude, latitude, and altitude dependant on the selected telescope.
+            };
+            var call = ApiDriver.Astronomical.skyview(data0);
+            call.then(response => {
+                console.log(response);
+                this.imgSrc0 = 'data:image/bmp;base64,' + response.data.bytes;
+                var call = ApiDriver.Astronomical.skyview(data1);
+                call.then(response => {
+                    this.imgSrc1 = 'data:image/bmp;base64,' + response.data.bytes;
+                }).catch(error => {console.log(error);}); 
+                this.showImage = true;
+            }).catch(error => {console.log(error);}); 
+        }, 
         handleErrors(errors, formObj) {
             for (var field in errors) {
                 let message = errors[field][0];
@@ -337,12 +830,37 @@ export default {
                    formObj.startTime = this.start
                    formObj.endTime = this.end
                    formObj.telescope = this.telescopeName
+                   formObj.celestialBodyName = this.searchInput
                    //Sends the information of the form to the requestAppointment function on Scheduler Page.
                    this.$emit('request-appointment', formObj)
+                   // Extra second is needed to transfer coordinates for Raster Scans
+                   if (formObj.type == "Raster Scan"){
+                       sleep(1000); 
+                   }
+                   // console.log("Appointment.vue: " + JSON.stringify(formObj));
                    this.resetForm()
                 } else {
                     HttpResponse.generalError(this, message, false)
                 }
+            }
+        },
+        handleType() {
+            // Handle setting up the proper API call to the back-end
+            if(this.type == "Point") {
+                this.selectedType = "coordinate";
+            }
+            else if(this.type == "Celestial Body") {
+                this.selectedType = "celestial-body";
+            }
+            else if(this.type == "Drift Scan") {
+                this.selectedType = "drift-scan";
+            }
+            else if(this.type == "Raster Scan") {
+                this.selectedType = "raster-scan";
+                
+                // Add the two sets of coordinates to a single array to send to the back-end
+                this.coordinates.push(this.form.firstCoordinate);
+                this.coordinates.push(this.form.secondCoordinate);
             }
         },
         clearErrors() {
@@ -367,36 +885,111 @@ export default {
                     this.updatedTime = false;
                 }
             } 
-            // Otherwise, clear our start and end times, since we didn't need to recieve an event,
-            // and our local start and end times may contain data from a previously passed event
-            else if (Object.keys(this.dragEvent).length == 0){
-                this.startTime = '';
-                this.endTime = '';
-                this.startDate = '';
-                this.endDate = '';
+        },
+
+        // Methods to grab our celestial bodies and push them into the bodies[] list
+        getCelestialBodies(searchParam) {
+            this.bodies = [];
+            this.$store.commit("loading", true);
+            ApiDriver.CelestialBodies.searchCB(0, 25, searchParam, "name")
+            .then(response => {
+                HttpResponse.then(
+                    response,
+                    data => {
+                    this.populateData(data.data);
+                    this.$store.commit("loading", false);
+                    },
+                    (status, errors) => {}
+                );
+            })
+            .catch(error => {
+                this.$swal({
+                    title: '<span style="color:#f0ead6">Error!<span>',
+                    html:
+                    '<span style="color:#f0ead6">An error occurred when loading the celestial bodies list<span>',
+                    type: "error",
+                    background: "#302f2f"
+                }).then(response => {
+                    CurrentUserValidation.validateCurrentUser(this.$store);
+                });
+            });
+        },
+        populateData(data) {
+            for (var index in data.content) {
+                let body = data.content[index];
+                this.bodies.push(body);
             }
         }
     },
     computed: {
         formIsValid() {
-            return (
-                this.startTime &&
-                this.endTime &&
-                this.startDate &&
-                this.endDate &&
-                this.form.rightAscension.hours,
-                this.form.rightAscension.minutes,
-                this.form.rightAscension.seconds,
-                this.form.declination.value
-            )
+            if(this.type == 'Point') {    
+                return (
+                    this.startTime &&
+                    this.endTime &&
+                    this.startDate &&
+                    this.endDate &&
+                    this.form.rightAscension.hours,
+                    this.form.rightAscension.minutes,
+                    // this.form.rightAscension.seconds,
+                    this.form.declination.value
+                )
+            }
+            else if(this.type == 'Celestial Body') {
+                return (
+                    this.startTime &&
+                    this.endTime &&
+                    this.startDate &&
+                    this.endDate &&
+                    this.selectedBody
+                )
+            }
+            else if(this.type == 'Drift Scan') {
+                return (
+                    this.startTime &&
+                    this.endTime &&
+                    this.startDate &&
+                    this.endDate &&
+                    this.form.elevation.value,
+                    this.form.azimuth.value
+                )
+            }
+            else if(this.type == 'Raster Scan') {
+                return (
+                    this.startTime &&
+                    this.endTime &&
+                    this.startDate &&
+                    this.endDate &&
+                    this.form.firstCoordinate.hours,
+                    this.form.firstCoordinate.minutes,
+                    // this.form.firstCoordinate.seconds,
+                    this.form.firstCoordinate.rightAscension,
+                    this.form.firstCoordinate.declination,
+                    this.form.secondCoordinate.hours,
+                    this.form.secondCoordinate.minutes,
+                    // this.form.secondCoordinate.seconds,
+                    this.form.secondCoordinate.rightAscension,
+                    this.form.secondCoordinate.declination
+                )
+            }
         }
     },
-    
+
     updated: function() {
         // Update our start and end times based on the passed in prop from Scheduler.vue
         // This is only necessary in the case of a drag-n-drop appointment, and only needs to be called once
         if(!this.updatedTime) {
             this.updateTime();
+        }
+    },
+
+    // Watch for the selected Appt Type to change, and clear the form object of past data when it does
+    watch:  {
+        type() {
+            console.log("appt type changed");
+        },
+        searchInput(key) {
+            this.getCelestialBodies(key);
         }
     }
 }
